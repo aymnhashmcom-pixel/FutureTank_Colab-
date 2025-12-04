@@ -1,0 +1,43 @@
+:root{
+  --sky:#dff6ff; --accent:#00a2ff; --text:#033b50;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family: 'Tahoma', 'Noto Naskh Arabic', sans-serif;background:linear-gradient(180deg,#f7fdff,#e8f7ff);color:var(--text);padding:18px}
+.app{max-width:1000px;margin:0 auto}
+.top{display:flex;justify-content:space-between;align-items:center;padding:14px 18px;border-radius:12px;background:linear-gradient(90deg,#f8fdff,#eef9ff);box-shadow:0 6px 18px rgba(3,59,80,0.06)}
+.brand{display:flex;gap:12px;align-items:center}
+.logo-wrap{width:64px;height:64px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;padding:6px}
+.company{font-weight:800;font-size:20px;color:var(--accent)}
+.tag{font-size:13px;color:#316a88}
+.company-info{font-size:13px;color:#235a75;text-align:left}
+main{margin-top:18px}
+.form-panel{background:#fff;padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(3,59,80,0.04)}
+.row{display:grid;grid-template-columns:1fr;gap:8px}
+.row.side{display:flex;gap:12px}
+.row label, .form-panel label{font-size:13px;color:#2f5f73;margin-top:6px}
+input, textarea{width:100%;padding:10px;border-radius:10px;border:1px solid #e6f6fb;background:#fbfeff;font-size:14px}
+textarea{min-height:80px;resize:vertical}
+.items{width:100%;border-collapse:collapse;margin-top:10px}
+.items th{background:#f7fdff;color:#2d677f;padding:10px;text-align:right;border:1px solid #eef9ff}
+.items td{padding:8px;border:1px solid #f0f7fb;text-align:right}
+.items input{width:100%;padding:6px;border-radius:6px;border:1px solid #eef9ff}
+.quick-add{display:flex;gap:8px;margin-top:10px}
+.quick-add input{width:100px}
+.quick-add button{background:var(--accent);color:#fff;border-radius:8px;padding:10px 12px;border:0;cursor:pointer}
+.totals{display:flex;flex-direction:column;gap:6px;margin-top:14px;font-weight:700}
+.totals .grand{font-size:18px;color:#072b3a}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+button{background:var(--accent);color:#fff;border:0;padding:10px 14px;border-radius:10px;cursor:pointer;font-weight:700}
+button.secondary{background:#fff;color:var(--accent);border:1px solid var(--accent)}
+.footer{margin-top:18px;text-align:center;color:#5d8fa6}
+
+/* print area style (used by html2pdf) */
+.print-template{width:210mm;min-height:297mm;padding:20mm;background:#fff;color:#033b50;font-family: 'Tahoma', sans-serif}
+.print-header{display:flex;justify-content:space-between;align-items:center}
+.print-header .company{font-size:22px}
+.print-table{width:100%;border-collapse:collapse;margin-top:10px}
+.print-table th, .print-table td{border:1px solid #e6f6fb;padding:8px;text-align:right}
+
+/* hide on print controls */
+@media print{ .no-print{display:none} .app{padding:0} }
+@media (max-width:720px){ .row.side{flex-direction:column} .company-info{text-align:right} .quick-add{flex-direction:column} }
