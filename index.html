@@ -1,104 +1,0 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>FutureTank — نظام الفواتير</title>
-<link rel="stylesheet" href="styles.css">
-</head>
-<body>
-<div class="app">
-  <header class="top">
-    <div class="brand">
-      <!-- لو عندك logo.svg ضع اسمه بدل inline SVG أدناه أو ارفع ملف logo.svg -->
-      <div class="logo-wrap" aria-hidden="true">
-        <svg width="64" height="64" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#dff6ff"/><stop offset="1" stop-color="#9ee1ff"/></linearGradient></defs>
-          <rect width="120" height="120" rx="18" fill="url(#g)"/>
-          <path d="M42 6c-6 8-12 12-12 22 0 14 12 24 24 24s24-10 24-24c0-10-9-14-18-34-6 8-9 9-18 12z" fill="#2fa9ff"/>
-        </svg>
-      </div>
-      <div>
-        <div class="company">FutureTank</div>
-        <div class="tag">نظام الفواتير</div>
-      </div>
-    </div>
-
-    <div class="company-info">
-      <div>السجل التجاري: <strong>40893</strong></div>
-      <div>البطاقة الضريبية: <strong>055-356-369</strong></div>
-      <div>هاتف/واتساب: <strong>01150402031</strong></div>
-    </div>
-  </header>
-
-  <main>
-    <section class="form-panel">
-      <div class="row">
-        <label>اسم العميل</label>
-        <input id="custName" placeholder="اسم العميل (مثال: أستاذ/ يوسف)">
-
-        <label>العنوان</label>
-        <input id="custAddr" placeholder="عنوان العميل">
-
-        <label>بريد العميل (اختياري)</label>
-        <input id="custMail" placeholder="email@example.com">
-      </div>
-
-      <div class="row side">
-        <div>
-          <label>رقم الفاتورة</label>
-          <input id="invNumber" placeholder="INV0001">
-        </div>
-        <div>
-          <label>التاريخ</label>
-          <input id="invDate" type="date">
-        </div>
-      </div>
-
-      <h4>البنود</h4>
-      <table id="itemsTable" class="items">
-        <thead>
-          <tr><th>الوصف</th><th>سعر الوحدة</th><th>الكمية</th><th>خصم %</th><th>المجموع</th><th class="no-print">حذف</th></tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-
-      <div class="quick-add">
-        <input id="qDesc" placeholder="وصف سريع">
-        <input id="qPrice" type="number" placeholder="السعر">
-        <input id="qQty" type="number" placeholder="الكمية" value="1">
-        <input id="qDisc" type="number" placeholder="خصم %" value="0">
-        <button id="qAdd">أضف بند</button>
-      </div>
-
-      <label>ملاحظات</label>
-      <textarea id="notes" placeholder="ملاحظات (اختياري)"></textarea>
-
-      <div class="totals">
-        <div>الإجمالي: <span id="subtotal">0.00</span> ج.م</div>
-        <div>إجمالي الخصم: <span id="totalDisc">0.00</span> ج.م</div>
-        <div class="grand">المبلغ المستحق: <span id="grandTotal">0.00</span> ج.م</div>
-      </div>
-
-      <div class="actions no-print">
-        <button id="saveBtn">💾 حفظ</button>
-        <button id="loadBtn">📂 تحميل آخر</button>
-        <button id="newBtn">🆕 فاتورة جديدة</button>
-        <button id="pdfBtn">⬇️ تنزيل PDF</button>
-        <button id="shareBtn">📤 مشاركة (واتساب)</button>
-        <button id="printBtn">🖨️ طباعة</button>
-      </div>
-    </section>
-
-    <!-- الفاتورة المراد توليد PDF منها (مخبأة لكنه نفس الـ DOM لسهولة التوليد) -->
-    <section id="printArea" class="print-area" aria-hidden="true"></section>
-  </main>
-
-  <footer class="footer no-print">صفحة فواتير — FutureTank</footer>
-</div>
-
-<!-- html2pdf -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
-<script src="script.js"></script>
-</body>
-</html>
