@@ -1,45 +1,128 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FutureTank - Home</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>FutureTank - فيوتشر تانك</title>
+
     <style>
         body {
-            font-family: sans-serif;
-            background: #f5faff;
+            margin: 0;
+            font-family: 'Tahoma', sans-serif;
+            background: #ffffff;
+            color: #0a4b78;
+        }
+
+        header {
+            background: linear-gradient(135deg, #009ffd, #00c6ff);
+            padding: 25px;
             text-align: center;
-            padding: 40px;
-        }
-        h1 {
-            color: #0077ff;
-            margin-bottom: 40px;
-        }
-        .btn {
-            display: block;
-            width: 260px;
-            margin: 15px auto;
-            padding: 15px;
-            background: #0077ff;
             color: white;
+        }
+
+        .logo {
+            font-size: 42px;
+            font-weight: bold;
+        }
+
+        .water-icon {
+            font-size: 60px;
+        }
+
+        .slogan {
+            margin-top: 10px;
             font-size: 20px;
+        }
+
+        section {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            background: #009ffd;
+            color: white;
+            padding: 15px 30px;
+            margin-top: 20px;
             border-radius: 10px;
             text-decoration: none;
-            transition: 0.2s;
+            font-size: 22px;
         }
-        .btn:hover {
-            background: #005fcc;
+
+        .services, .products, .contact, .payment {
+            background: #f4faff;
+            margin: 20px auto;
+            padding: 25px;
+            border-radius: 15px;
+            width: 90%;
+            max-width: 700px;
+            box-shadow: 0 0 10px #d6ecff;
+        }
+
+        h2 {
+            color: #0077b6;
+        }
+
+        footer {
+            background: #e3f4ff;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+            color: #0a4b78;
+            font-size: 14px;
         }
     </style>
 </head>
+
 <body>
 
-    <h1>FutureTank</h1>
+    <!-- HEADER -->
+    <header>
+        <div class="water-icon">💧🤲</div>
+        <div class="logo">FutureTank</div>
+        <div class="slogan">"نقاء الماء هو هدفنا"</div>
+    </header>
 
-    <a href="assistant.html" class="btn">🤖 المساعد الذكي</a>
-    <a href="billing.html" class="btn">📄 إنشاء الفواتير</a>
-    <a href="dashboard.html" class="btn">🛠 لوحة التحكم</a>
+    <!-- BUTTON: ASSISTANT -->
+    <section>
+        <a class="btn" href="assistant.html">🤖 التحدث مع المساعد الذكي</a>
+    </section>
+
+    <!-- SERVICES -->
+    <section class="services">
+        <h2>خدمات فيوتشر تانك</h2>
+        <p>✔ توريد خزانات المياه</p>
+        <p>✔ تركيب خزانات المياه</p>
+        <p>✔ صيانة وإصلاح الخزانات</p>
+        <p>✔ تطهير وتعقيم خزانات المياه</p>
+        <p>✔ توريد وتركيب وصيانة فلاتر المياه</p>
+    </section>
+
+    <!-- PRODUCTS -->
+    <section class="products">
+        <h2>منتجاتنا</h2>
+        <p>💧 خزانات مياه</p>
+        <p>💧 فلاتر مياه منزلية وصناعية</p>
+    </section>
+
+    <!-- PAYMENT -->
+    <section class="payment">
+        <h2>طرق الدفع</h2>
+        <p>💳 اتصالات كاش: 01150402031</p>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="contact">
+        <h2>التواصل</h2>
+        <p>📞 اتصال: 01150402031</p>
+        <p>💬 واتساب: 01150402031</p>
+    </section>
+
+    <footer>
+        © 2025 FutureTank — جميع الحقوق محفوظة
+    </footer>
 
 </body>
 </html>
