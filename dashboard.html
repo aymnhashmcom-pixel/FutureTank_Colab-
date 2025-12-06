@@ -1,1 +1,85 @@
-<html><body><h1>Dashboard</h1></body></html>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة التحكم - FutureTank</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #eef7ff;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0066cc;
+            margin-bottom: 20px;
+        }
+
+        .box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 14px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            background: #0066cc;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #004d99;
+        }
+
+        pre {
+            background: #f5f5f5;
+            padding: 15px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🛠 لوحة التحكم</h1>
+
+    <div class="box">
+        <h2>📁 بيانات النظام (database.json)</h2>
+        <pre id="dbContent">... جاري التحميل</pre>
+        <button class="btn" onclick="reloadDB()">🔄 تحديث البيانات</button>
+        <button class="btn" onclick="clearDB()" style="background:#cc0000">🗑 مسح جميع البيانات</button>
+    </div>
+
+    <script>
+        async function reloadDB() {
+            try {
+                let res = await fetch("database.json");
+                let data = await res.json();
+                document.getElementById("dbContent").textContent = JSON.stringify(data, null, 4);
+            } catch (e) {
+                document.getElementById("dbContent").textContent = "⚠ لا يمكن تحميل قاعدة البيانات";
+            }
+        }
+
+        async function clearDB() {
+            alert("⚠ تنبيه: GitHub Pages لا يسمح بالكتابة داخل الملفات.\nالمسح سيكون يدوي فقط داخل الملف.");
+        }
+
+        reloadDB();
+    </script>
+
+</body>
+
+</html>
