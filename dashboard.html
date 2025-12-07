@@ -1,153 +1,87 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>لوحة التحكم — FutureTank</title>
-<style>
-  body{font-family:tahoma;background:#f0fbff;padding:16px;color:#043348}
-  .box{max-width:980px;margin:10px auto;background:#fff;padding:14px;border-radius:12px}
-  input,textarea,select{width:100%;padding:8px;margin-top:6px;border-radius:8px;border:1px solid #dfeff8}
-  button{background:#009ffd;color:#fff;padding:8px 12px;border-radius:8px;border:0;cursor:pointer;margin-top:8px}
-  .row{display:flex;gap:12px;flex-wrap:wrap}
-  .col{flex:1;min-width:200px}
-  table{width:100%;border-collapse:collapse;margin-top:8px}
-  table th,td{padding:8px;border-bottom:1px solid #eef9ff;text-align:right}
-</style>
-</head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>لوحة التحكم — FutureTank</title><link rel="stylesheet" href="styles.css"></head>
 <body>
-<div class="box">
-  <h2>لوحة التحكم (محلي)</h2>
-  <div id="authArea">
-    <label>كلمة مرور الدخول:</label>
-    <input id="passInput" placeholder="اكتب كلمة المرور">
-    <button onclick="login()">دخول</button>
-    <p style="font-size:13px;color:#666">ملاحظة: هذه حماية محلية. كلمة المرور الافتراضية: <strong>future2025</strong></p>
-  </div>
+  <div class="container">
+    <div class="card">
+      <h2>لوحة التحكم (محلي)</h2>
+      <div id="authArea">
+        <label>كلمة مرور الدخول:</label><input id="passInput" placeholder="كلمة المرور">
+        <button class="btn" onclick="login()">دخول</button>
+        <p style="font-size:13px;color:#666">كلمة المرور الافتراضية: <strong>future2025</strong></p>
+      </div>
 
-  <div id="adminArea" style="display:none">
-    <h3>معلومات العلامة التجارية</h3>
-    <label>الاسم العربي</label><input id="b_ar">
-    <label>الاسم الإنجليزي</label><input id="b_en">
-    <label>الشعار (slogan)</label><input id="b_slogan">
-    <label>رقم الدفع (اتصالات كاش)</label><input id="paynum">
-    <label>رفع اللوجو (صورة):</label><input type="file" id="logoFile">
-    <button onclick="saveBrand()">حفظ البيانات</button>
+      <div id="adminArea" style="display:none">
+        <h3>معلومات العلامة التجارية</h3>
+        <label>الاسم العربي</label><input id="b_ar">
+        <label>الاسم الإنجليزي</label><input id="b_en">
+        <label>الشعار (slogan)</label><input id="b_slogan">
+        <label>رقم الدفع (اتصالات كاش)</label><input id="paynum">
+        <label>رفع اللوجو</label><input type="file" id="logoFile">
+        <button class="btn" onclick="saveBrand()">حفظ العلامة</button>
 
-    <hr>
-    <h3>المنتجات</h3>
-    <div style="display:flex;gap:8px;flex-wrap:wrap">
-      <div class="col">
+        <hr>
+        <h3>المنتجات</h3>
         <label>اسم المنتج</label><input id="prod_name">
         <label>السعر</label><input id="prod_price" type="number">
-        <label>رابط الصورة</label><input id="prod_img" placeholder="رابط أو ارفع صورة في الاسفل">
-        <button onclick="addProduct()">أضف منتج</button>
-      </div>
-      <div class="col">
-        <label>رفع صورة منتج</label><input type="file" id="prodFile">
+        <label>رابط الصورة (اختياري)</label><input id="prod_img">
+        <label>رفع صورة للمنتج</label><input type="file" id="prodFile">
+        <button class="btn" onclick="addProduct()">أضف منتج</button>
+        <div id="productsList"></div>
+
+        <hr>
+        <h3>الخدمات</h3>
+        <label>اسم الخدمة</label><input id="svc_name">
+        <label>السعر</label><input id="svc_price" type="number">
+        <label>الوصف</label><input id="svc_desc">
+        <button class="btn" onclick="addService()">أضف خدمة</button>
+        <div id="servicesList"></div>
+
+        <hr>
+        <h3>الطلبات والفواتير</h3>
+        <button class="btn" onclick="showOrders()">عرض الطلبات</button>
+        <button class="btn" onclick="showInvoices()">عرض الفواتير</button>
+        <div id="ordersArea"></div>
+
+        <hr>
+        <button class="btn" onclick="exportData()">تصدير JSON</button>
+        <button class="btn" onclick="importData()">استيراد JSON</button>
+        <button class="btn" onclick="logout()">خروج</button>
       </div>
     </div>
-    <div id="productsList"></div>
-
-    <hr>
-    <h3>الخدمات</h3>
-    <label>اسم الخدمة</label><input id="svc_name">
-    <label>السعر</label><input id="svc_price" type="number">
-    <label>الوصف</label><input id="svc_desc">
-    <button onclick="addService()">أضف خدمة</button>
-    <div id="servicesList"></div>
-
-    <hr>
-    <h3>الطلبات والفواتير</h3>
-    <button onclick="showOrders()">عرض الطلبات</button>
-    <button onclick="showInvoices()">عرض الفواتير المحفوظة</button>
-    <div id="ordersArea"></div>
-
-    <hr>
-    <button onclick="exportData()">تصدير JSON (حفظ نسخة)</button>
-    <button onclick="importData()">استيراد JSON (تحميل ملف)</button>
-    <button onclick="logout()">خروج</button>
   </div>
-</div>
 
 <script>
 const STORAGE_KEY='FutureTank_data_v1';
 const INV_KEY='FutureTank_invoices_v1';
-const ORD_KEY='FutureTank_orders';
-const ADMIN_PASS='future2025'; // غيّرها لو حبيت
+const ORD_KEY='FutureTank_orders_v1';
+const ADMIN_PASS='future2025';
 
-function login(){
-  const p=document.getElementById('passInput').value;
-  if(p===ADMIN_PASS){ document.getElementById('authArea').style.display='none'; document.getElementById('adminArea').style.display='block'; loadAll(); }
-  else alert('كلمة مرور خاطئة');
-}
-
+function login(){ const p=document.getElementById('passInput').value; if(p===ADMIN_PASS){ document.getElementById('authArea').style.display='none'; document.getElementById('adminArea').style.display='block'; loadAll(); } else alert('كلمة مرور خاطئة'); }
 function logout(){ document.getElementById('adminArea').style.display='none'; document.getElementById('authArea').style.display='block'; }
 
-function loadAll(){
-  const raw=localStorage.getItem(STORAGE_KEY);
-  const data = raw ? JSON.parse(raw) : null;
-  if(data){
-    document.getElementById('b_ar').value = data.brand.name_ar || '';
-    document.getElementById('b_en').value = data.brand.name_en || '';
-    document.getElementById('b_slogan').value = data.brand.slogan || '';
-    document.getElementById('paynum').value = data.paymentNumber || '';
-  }
-  renderProducts();
-  renderServices();
-}
+function loadOrInit(){ let raw=localStorage.getItem(STORAGE_KEY); if(!raw){ localStorage.setItem(STORAGE_KEY, JSON.stringify({brand:{name_ar:'فيوتشر تانك',name_en:'FutureTank',slogan:'نقاء الماء هو هدفنا'},paymentNumber:'01150402031',products:[],services:[] })); raw=localStorage.getItem(STORAGE_KEY); } return JSON.parse(raw); }
+function saveAll(d){ localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); loadAll(); }
 
-function saveBrand(){
-  const d = loadOrInit();
-  d.brand.name_ar = document.getElementById('b_ar').value;
-  d.brand.name_en = document.getElementById('b_en').value;
-  d.brand.slogan = document.getElementById('b_slogan').value;
-  d.paymentNumber = document.getElementById('paynum').value;
-  // logo upload
-  const f = document.getElementById('logoFile').files[0];
-  if(f){ const r = new FileReader(); r.onload = e => { localStorage.setItem('FutureTank_logoData', e.target.result); saveAndAlert(d); }; r.readAsDataURL(f); }
-  else saveAndAlert(d);
-}
-function saveAndAlert(d){ localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); alert('تم الحفظ'); loadAll(); }
-function loadOrInit(){ let r = localStorage.getItem(STORAGE_KEY); if(!r){ localStorage.setItem(STORAGE_KEY, JSON.stringify({brand:{name_ar:'فيوتشر تانك',name_en:'FutureTank',slogan:'نقاء الماء هو هدفنا'},paymentNumber:'01150402031',products:[],services:[] })); r = localStorage.getItem(STORAGE_KEY); } return JSON.parse(r); }
+function loadAll(){ const d=loadOrInit(); document.getElementById('b_ar').value=d.brand.name_ar||''; document.getElementById('b_en').value=d.brand.name_en||''; document.getElementById('b_slogan').value=d.brand.slogan||''; document.getElementById('paynum').value=d.paymentNumber||''; renderProducts(); renderServices(); }
 
-/* products */
-function addProduct(){
-  const n=document.getElementById('prod_name').value, p=Number(document.getElementById('prod_price').value||0), img=document.getElementById('prod_img').value;
-  if(!n||p<=0) return alert('اكتب اسم وسعر صحيح');
-  const d=loadOrInit(); const id='p'+Date.now(); d.products.push({id,name:n,price:p,img:img||'https://via.placeholder.com/400x300'}); localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); renderProducts(); alert('تمت الإضافة');
-}
-document.getElementById('prodFile')?.addEventListener('change', function(e){
-  const f = e.target.files[0]; if(!f) return;
-  const r=new FileReader(); r.onload = ev => {
-    // store in localStorage as image and create a product entry with that image if name/price provided
-    const dataUrl = ev.target.result;
-    localStorage.setItem('FutureTank_lastUpload', dataUrl);
-    alert('تم رفع الصورة، الآن ضع اسم وسعر واضغط أضف منتج (سيستخدم الصورة المرفوعة تلقائيًا إذا حقل الصورة فارغ)');
-  }; r.readAsDataURL(f);
-});
+function saveBrand(){ const d=loadOrInit(); d.brand.name_ar = document.getElementById('b_ar').value; d.brand.name_en = document.getElementById('b_en').value; d.brand.slogan = document.getElementById('b_slogan').value; d.paymentNumber = document.getElementById('paynum').value; const f=document.getElementById('logoFile').files[0]; if(f){ const r=new FileReader(); r.onload=e=>{ localStorage.setItem('FutureTank_logoData', e.target.result); saveAll(d); alert('تم حفظ العلامة والشعار'); }; r.readAsDataURL(f); } else { saveAll(d); alert('تم حفظ العلامة'); } }
 
-function renderProducts(){
-  const d = loadOrInit();
-  const list = d.products || [];
-  let html = '<table><thead><tr><th>اسم</th><th>سعر</th><th>صورة</th><th>حذف</th></tr></thead><tbody>';
-  list.forEach(p => { html += `<tr><td>${p.name}</td><td>${p.price}</td><td style="width:140px"><img src="${p.img}" style="width:120px;height:70px;object-fit:cover;border-radius:6px"></td><td><button onclick="delProduct('${p.id}')">حذف</button></td></tr>`; });
-  html += '</tbody></table>';
-  document.getElementById('productsList').innerHTML = html;
-}
+function addProduct(){ const name=document.getElementById('prod_name').value; const price=Number(document.getElementById('prod_price').value||0); const img=document.getElementById('prod_img').value || localStorage.getItem('FutureTank_lastUpload') || 'https://via.placeholder.com/400x300'; if(!name||price<=0) return alert('ادخل اسم وسعر'); const d=loadOrInit(); const id='p'+Date.now(); d.products.push({id,name,price,img}); localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); renderProducts(); alert('تمت الإضافة'); }
+document.getElementById('prodFile')?.addEventListener('change', function(e){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ localStorage.setItem('FutureTank_lastUpload', ev.target.result); alert('تم رفع الصورة. استخدمها عند إضافة المنتج أو ضع رابط الصورة.'); }; r.readAsDataURL(f); });
+
+function renderProducts(){ const d=loadOrInit(); let html='<table><thead><tr><th>اسم</th><th>سعر</th><th>صورة</th><th>حذف</th></tr></thead><tbody>'; (d.products||[]).forEach(p=> html+=`<tr><td>${p.name}</td><td>${p.price}</td><td style="width:140px"><img src="${p.img}" style="width:120px;height:70px;object-fit:cover;border-radius:6px"></td><td><button class="btn" onclick="delProduct('${p.id}')">حذف</button></td></tr>`); html+='</tbody></table>'; document.getElementById('productsList').innerHTML=html; }
 function delProduct(id){ if(!confirm('حذف المنتج؟')) return; const d=loadOrInit(); d.products = d.products.filter(x=>x.id!==id); localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); renderProducts(); }
 
-/* services */
-function addService(){ const n=document.getElementById('svc_name').value, p=Number(document.getElementById('svc_price').value||0), desc=document.getElementById('svc_desc').value; if(!n||p<=0) return alert('ادخل اسم وسعر'); const d=loadOrInit(); d.services.push({id:'s'+Date.now(),name:n,price:p,desc}); localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); renderServices(); alert('تمت الإضافة'); }
-function renderServices(){ const d=loadOrInit(); let html='<table><thead><tr><th>الخدمة</th><th>السعر</th><th>حذف</th></tr></thead><tbody>'; (d.services||[]).forEach(s=> html+=`<tr><td>${s.name}</td><td>${s.price}</td><td><button onclick="delService('${s.id}')">حذف</button></td></tr>`); html+='</tbody></table>'; document.getElementById('servicesList').innerHTML = html; }
+function addService(){ const name=document.getElementById('svc_name').value; const price=Number(document.getElementById('svc_price').value||0); const desc=document.getElementById('svc_desc').value; if(!name||price<=0) return alert('اكتب اسم وسعر'); const d=loadOrInit(); d.services.push({id:'s'+Date.now(),name,price,desc}); localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); renderServices(); alert('تمت الإضافة'); }
+function renderServices(){ const d=loadOrInit(); let html='<table><thead><tr><th>الخدمة</th><th>السعر</th><th>حذف</th></tr></thead><tbody>'; (d.services||[]).forEach(s=> html+=`<tr><td>${s.name}</td><td>${s.price}</td><td><button class="btn" onclick="delService('${s.id}')">حذف</button></td></tr>`); html+='</tbody></table>'; document.getElementById('servicesList').innerHTML=html; }
 function delService(id){ if(!confirm('حذف الخدمة؟')) return; const d=loadOrInit(); d.services = d.services.filter(x=>x.id!==id); localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); renderServices(); }
 
-/* orders / invoices */
-function showOrders(){ const o=JSON.parse(localStorage.getItem(ORD_KEY)||'[]'); let html='<h4>الطلبات</h4>'; if(o.length===0) html+='<p>لا توجد طلبات</p>'; else { html+='<ul>'; o.forEach(ord=> html+=`<li><strong>${ord.id}</strong> — ${ord.date} — ${ord.total} ج.م <pre style="background:#f7f9fb;padding:8px">${JSON.stringify(ord.items,null,2)}</pre></li>`); html+='</ul>'; } document.getElementById('ordersArea').innerHTML = html; }
-function showInvoices(){ const inv=JSON.parse(localStorage.getItem(INV_KEY)||'[]'); let html='<h4>الفواتير</h4>'; if(inv.length===0) html+='<p>لا توجد فواتير</p>'; else { html+='<ul>'; inv.forEach(i=> html+=`<li><strong>${i.id}</strong> — ${i.date} — ${i.name} — <pre style="background:#f7f9fb;padding:6px">${JSON.stringify(i.items,null,2)}</pre></li>`); html+='</ul>'; } document.getElementById('ordersArea').innerHTML = html; }
+function showOrders(){ const o=JSON.parse(localStorage.getItem(ORD_KEY)||'[]'); let html='<h4>الطلبات</h4>'; if(o.length===0) html+='<p>لا توجد طلبات</p>'; else { html+='<ul>'; o.forEach(ord=> html+=`<li><strong>${ord.id}</strong> — ${ord.date} — ${ord.total} ج.م <pre style="background:#f7f9fb;padding:8px">${JSON.stringify(ord.items,null,2)}</pre></li>`); html+='</ul>'; } document.getElementById('ordersArea').innerHTML=html; }
+function showInvoices(){ const inv=JSON.parse(localStorage.getItem(INV_KEY)||'[]'); let html='<h4>الفواتير</h4>'; if(inv.length===0) html+='<p>لا توجد فواتير</p>'; else { html+='<ul>'; inv.forEach(i=> html+=`<li><strong>${i.id}</strong> — ${i.date} — ${i.name} — <pre style="background:#f7f9fb;padding:6px">${JSON.stringify(i.items,null,2)}</pre></li>`); html+='</ul>'; } document.getElementById('ordersArea').innerHTML=html; }
 
-/* export / import */
 function exportData(){ const data = localStorage.getItem(STORAGE_KEY) || '{}'; const blob = new Blob([data], {type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='futuretank_data.json'; a.click(); }
-function importData(){ const input = document.createElement('input'); input.type='file'; input.accept='application/json'; input.onchange = e => { const f = e.target.files[0]; const r = new FileReader(); r.onload = ev => { localStorage.setItem(STORAGE_KEY, ev.target.result); alert('تم الاستيراد. سيتم إعادة تحميل البيانات.'); loadAll(); }; r.readAsText(f); }; input.click(); }
+function importData(){ const input=document.createElement('input'); input.type='file'; input.accept='application/json'; input.onchange = e => { const f=e.target.files[0]; const r=new FileReader(); r.onload = ev => { localStorage.setItem(STORAGE_KEY, ev.target.result); alert('تم الاستيراد.'); loadAll(); }; r.readAsText(f); }; input.click(); }
 </script>
 </body>
 </html>
