@@ -1,94 +1,82 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>إنشاء الفواتير - FutureTank</title>
-
-    <style>
-        body {
-            font-family: sans-serif;
-            background: #f0f8ff;
-            padding: 20px;
-        }
-        h1 {
-            text-align: center;
-            color: #0077ff;
-        }
-        .invoice-box {
-            background: #fff;
-            padding: 20px;
-            border-radius: 12px;
-            max-width: 600px;
-            margin: auto;
-            border: 1px solid #ddd;
-        }
-        input, select, button {
-            width: 100%;
-            padding: 12px;
-            margin: 8px 0;
-            border-radius: 10px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-        }
-        button {
-            background: #0077ff;
-            color: #fff;
-            border: none;
-            cursor: pointer;
-        }
-        button:hover {
-            background: #005fcc;
-        }
-    </style>
-
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>انشاء فاتورة — FutureTank</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  body{font-family:tahoma;background:#f7fdff;padding:18px;color:#043348}
+  .box{max-width:820px;margin:12px auto;background:#fff;padding:16px;border-radius:12px}
+  input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #e6f6fb;margin-top:8px}
+  button{background:#009ffd;color:#fff;padding:10px 14px;border-radius:8px;border:0;cursor:pointer;margin-top:8px}
+  table{width:100%;border-collapse:collapse;margin-top:8px}
+  table th,table td{padding:6px;border:1px solid #f0f7fb;text-align:right}
+</style>
 </head>
 <body>
+<div class="box">
+  <h2>إنشاء فاتورة</h2>
+  <label>اسم العميل</label><input id="custName">
+  <label>العنوان</label><input id="custAddr">
+  <label>البند (وصف)</label><input id="itemDesc" placeholder="مثال: تطهير وتعقيم خزان">
+  <label>سعر الوحدة</label><input id="itemPrice" type="number">
+  <label>الكمية</label><input id="itemQty" type="number" value="1">
+  <button onclick="addItem()">أضف بند</button>
 
-<h1>📄 إنشاء فاتورة</h1>
+  <table id="itemsTable"><thead><tr><th>الوصف</th><th>سعر الوحدة</th><th>كمية</th><th>المجموع</th></tr></thead><tbody></tbody></table>
 
-<div class="invoice-box">
-
-    <label>اسم العميل</label>
-    <input type="text" id="name">
-
-    <label>الخدمة</label>
-    <select id="service">
-        <option value="تنظيف خزانات">تنظيف خزانات</option>
-        <option value="تعقيم خزانات">تعقيم خزانات</option>
-        <option value="فحص خزانات">فحص خزانات</option>
-    </select>
-
-    <label>السعر (جنيه)</label>
-    <input type="number" id="price">
-
-    <button onclick="generateInvoice()">إنشاء فاتورة</button>
-
-    <hr>
-
-    <div id="result"></div>
-
+  <div style="text-align:right;margin-top:8px">
+    <div>الإجمالي: <span id="subtotal">0</span> ج.م</div>
+    <button onclick="saveInvoice()">حفظ الفاتورة</button>
+    <button onclick="downloadPDF()">تنزيل PDF</button>
+  </div>
 </div>
 
+<!-- html2pdf -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
 <script>
-function generateInvoice() {
-    let name = document.getElementById("name").value;
-    let service = document.getElementById("service").value;
-    let price = document.getElementById("price").value;
+const INV_KEY = 'FutureTank_invoices_v1';
+function loadInvoices(){ return JSON.parse(localStorage.getItem(INV_KEY)||'[]'); }
+function saveInvoices(arr){ localStorage.setItem(INV_KEY, JSON.stringify(arr)); }
 
-    if (name.trim() === "" || price.trim() === "") {
-        alert("من فضلك أكمل البيانات");
-        return;
-    }
-
-    document.getElementById("result").innerHTML = `
-        <h3>✔ تم إنشاء الفاتورة</h3>
-        <p><b>العميل:</b> ${name}</p>
-        <p><b>الخدمة:</b> ${service}</p>
-        <p><b>السعر:</b> ${price} جنيه</p>
-    `;
+let items = [];
+function addItem(){
+  const desc = document.getElementById('itemDesc').value.trim();
+  const price = Number(document.getElementById('itemPrice').value||0);
+  const qty = Number(document.getElementById('itemQty').value||1);
+  if(!desc || price<=0) return alert('اكتب وصف وسعر صحيح');
+  items.push({desc,price,qty});
+  renderItems();
+}
+function renderItems(){
+  const tbody = document.querySelector('#itemsTable tbody');
+  tbody.innerHTML='';
+  let sum=0;
+  items.forEach(it=>{ const line = it.price*it.qty; sum+=line; tbody.innerHTML += `<tr><td>${it.desc}</td><td>${it.price.toLocaleString()}</td><td>${it.qty}</td><td>${line.toLocaleString()}</td></tr>`; });
+  document.getElementById('subtotal').innerText = sum.toLocaleString();
+}
+function saveInvoice(){
+  const name = document.getElementById('custName').value.trim();
+  const addr = document.getElementById('custAddr').value.trim();
+  if(!name || items.length===0) return alert('اكتب اسم العميل واضف بند على الاقل');
+  const inv = {id:'INV'+Date.now(),date:new Date().toLocaleString(),name,addr,items};
+  const arr = loadInvoices(); arr.push(inv); saveInvoices(arr);
+  alert('تم حفظ الفاتورة محليًا');
+  // also push to main data storage (optional)
+  const data = JSON.parse(localStorage.getItem('FutureTank_data_v1')||'{}');
+  data.lastInvoiceId = inv.id; localStorage.setItem('FutureTank_data_v1', JSON.stringify(data));
+}
+function downloadPDF(){
+  const el = document.createElement('div');
+  let html = `<div style="padding:12px;font-family:tahoma;color:#043348"><h2>فاتورة</h2><div>العميل: ${document.getElementById('custName').value||'—'}</div><div>تاريخ: ${new Date().toLocaleString()}</div><table style="width:100%;border-collapse:collapse;margin-top:8px"><thead><tr><th>الوصف</th><th>سعر</th><th>كمية</th><th>المجموع</th></tr></thead><tbody>`;
+  let total=0;
+  items.forEach(it=>{ const line=it.price*it.qty; total+=line; html+=`<tr><td>${it.desc}</td><td>${it.price.toLocaleString()}</td><td>${it.qty}</td><td>${line.toLocaleString()}</td></tr>`; });
+  html+=`</tbody></table><div style="text-align:right;font-weight:800;margin-top:8px">الإجمالي: ${total.toLocaleString()} ج.م</div></div>`;
+  el.innerHTML = html; document.body.appendChild(el);
+  html2pdf().from(el).save();
+  document.body.removeChild(el);
 }
 </script>
-
 </body>
 </html>
