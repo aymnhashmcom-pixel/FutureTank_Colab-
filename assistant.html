@@ -1,1 +1,36 @@
 
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>المساعد — فيوتشر تانك</title>
+<link rel="stylesheet" href="styles.css"></head><body>
+<header class="top"><div class="brand"><div class="logo-wrap" aria-hidden="true"><svg width="64" height="64" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#dff6ff"/><stop offset="1" stop-color="#9ee1ff"/></linearGradient></defs><rect width="120" height="120" rx="18" fill="url(#g)"/><path d="M42 6c-6 8-12 12-12 22 0 14 12 24 24 24s24-10 24-24c0-10-9-14-18-34-6 8-9 9-18 12z" fill="#2fa9ff"/></svg></div><div><div class="company">فيوتشرتانك</div><div class="tag">نقاء الماء هو هدفنا</div></div></div></header>
+<main class="hero">
+  <h2>🤖 المساعد الذكي</h2>
+  <div id="chat" class="card">
+    <div id="messages" style="min-height:120px"></div>
+    <div class="row">
+      <input id="prompt" placeholder="اكتب سؤالك هنا (مثال: ما هي خدماتكم؟)" />
+      <button id="send" class="btn">إرسال</button>
+    </div>
+  </div>
+  <div style="margin-top:12px">
+    <button id="speakWelcome" class="buy">تشغيل رسالة ترحيب صوتية</button>
+  </div>
+</main>
+<script src="lang.js"></script>
+<script>
+function append(msg, who='user'){ const d=document.createElement('div'); d.style.padding='6px 0'; d.innerText = (who==='user'?'أنت: ':'المساعد: ')+msg; document.getElementById('messages').appendChild(d); }
+function knowledgeReply(text){
+  const db = JSON.parse(localStorage.getItem('ft_db')||'{}');
+  const t = text.toLowerCase();
+  if(t.includes('خدمات')||t.includes('services')) return (db.services && db.services.length)? db.services.map(s=>s.name).join(' • ') : 'توريد/تركيب/صيانة/تعقيم';
+  if(t.includes('منتج')||t.includes('product')) return (db.products && db.products.length)? db.products.map(p=>p.name).join(' • ') : 'خزانات وفلاتر';
+  if(t.includes('كيف') && t.includes('ادفع')) return 'طريقة الدفع: اتصالات كاش على رقم ' + (db.company && db.company.phone || '01150402031');
+  if(t.includes('اتصال')||t.includes('واتس')||t.includes('phone')) return 'هاتف/واتساب: ' + (db.company && db.company.phone || '01150402031');
+  if(t.includes('حجز')||t.includes('book')) return 'للحجز استخدم زر "احجز خدمة الآن" في الصفحة الرئيسية أو اتصل ' + (db.company && db.company.phone || '01150402031');
+  return 'أنا هنا للمساعدة — اسألني عن: الخدمات، المنتجات، الحجز، أو طرق الدفع.';
+}
+document.getElementById('send').addEventListener('click', ()=>{ const q=document.getElementById('prompt').value.trim(); if(!q) return; append(q,'user'); const r = knowledgeReply(q); setTimeout(()=>append(r,'bot'),400); document.getElementById('prompt').value=''; });
+document.getElementById('speakWelcome').addEventListener('click', ()=>{ const db = JSON.parse(localStorage.getItem('ft_db')||'{}'); const txt = db.welcome || 'أهلاً بكم في فيوتشرتانك. نقاء الماء هو هدفنا. كيف أساعدك اليوم؟'; if('speechSynthesis' in window){ const u = new SpeechSynthesisUtterance(txt); u.lang = 'ar-SA'; speechSynthesis.speak(u); } else alert('البرنامج لا يدعم تشغيل الصوت في هذا المتصفح'); });
+</script>
+</body></html>
