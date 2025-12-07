@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -6,374 +5,163 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>FutureTank — فيوتشر تانك</title>
   <style>
-    :root{
-      --sky-1:#e9f7ff;
-      --sky-2:#dff6ff;
-      --accent:#009ffd;
-      --dark:#043348;
-      --card:#ffffff;
-    }
-    *{box-sizing:border-box}
-    body{
-      margin:0;
-      font-family: 'Tahoma', Arial, sans-serif;
-      background:var(--sky-1);
-      color:var(--dark);
-      -webkit-font-smoothing:antialiased;
-    }
-
-    header{
-      background:linear-gradient(90deg,var(--accent),#00c6ff);
-      color:white;
-      padding:28px 16px;
-      text-align:center;
-      box-shadow:0 6px 20px rgba(0,100,160,0.08);
-    }
-    .logo-wrap{
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      gap:14px;
-    }
-    .logo-img{
-      width:86px;height:86px;border-radius:16px;background:linear-gradient(180deg,#dff6ff,#bfefff);display:flex;align-items:center;justify-content:center;font-size:46px;
-      box-shadow:0 6px 20px rgba(0,0,0,0.08);
-    }
-    .brand{
-      text-align:center;
-    }
-    .brand h1{margin:0;font-size:24px;font-weight:800;letter-spacing:0.6px}
+    :root{--sky:#e9f7ff;--accent:#009ffd;--dark:#043348}
+    body{margin:0;font-family:tahoma, Arial;background:var(--sky);color:var(--dark)}
+    header{background:linear-gradient(90deg,var(--accent),#00c6ff);color:#fff;padding:28px 16px;text-align:center}
+    .logo-box{display:flex;align-items:center;gap:16px;justify-content:center}
+    #logoImg{width:92px;height:92px;border-radius:14px;background:linear-gradient(180deg,#dff6ff,#bfefff);display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 6px 20px rgba(0,0,0,0.08)}
+    .brand h1{margin:0;font-size:24px;font-weight:800}
     .brand p{margin:6px 0 0 0;font-size:14px;opacity:0.95}
-
-    main{padding:18px}
-    .hero{
-      max-width:1000px;margin:18px auto;padding:18px;border-radius:14px;background:var(--card);box-shadow:0 8px 30px rgba(3,59,80,0.04);text-align:center;
-    }
-    .hero p.lead{color:rgba(3,59,80,0.85);margin:10px auto 0;max-width:760px}
-    .btn{
-      display:inline-block;background:var(--accent);color:white;padding:12px 22px;border-radius:12px;text-decoration:none;font-weight:700;margin-top:16px;transition:0.15s;
-    }
-    .btn:hover{transform:translateY(-3px)}
-    .row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:18px}
-    .card{background:var(--card);border-radius:12px;padding:16px;width:320px;box-shadow:0 6px 20px rgba(3,59,80,0.04);text-align:right}
-    .card h3{margin:0 0 10px 0;color:var(--dark)}
-    .small{font-size:13px;color:#235a75;margin-top:8px}
-
-    /* PRODUCTS list */
-    .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:14px;margin-top:14px}
-    .product{
-      background:linear-gradient(180deg, #fff, #fbfeff);border-radius:10px;padding:12px;border:1px solid #eef9ff;text-align:center;
-    }
-    .product img{width:100%;height:110px;object-fit:cover;border-radius:8px}
-    .product h4{margin:10px 0 6px}
-    .price{font-weight:800;color:var(--accent)}
-    .product .buy{margin-top:8px;background:var(--accent);color:#fff;padding:8px 10px;border-radius:8px;display:inline-block;text-decoration:none}
-
-    /* SERVICES list */
-    .services-list{list-style:none;padding:0;margin:0}
-    .services-list li{padding:10px 6px;border-bottom:1px dashed #eef9ff}
-
-    /* cart button */
+    main{padding:18px;max-width:1000px;margin:18px auto}
+    .hero{background:#fff;padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(3,59,80,0.04);text-align:center}
+    .btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;margin:8px;font-weight:700}
+    .card{background:#fff;border-radius:12px;padding:12px;margin-top:14px;box-shadow:0 6px 20px rgba(3,59,80,0.04);text-align:right}
+    .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:10px}
+    .product{background:linear-gradient(180deg,#fff,#fbfeff);border-radius:10px;padding:10px;text-align:center;border:1px solid #eef9ff}
+    footer{text-align:center;padding:20px;color:#235a75}
     .cart-btn{position:fixed;left:16px;bottom:18px;background:var(--accent);color:#fff;padding:12px 14px;border-radius:50px;box-shadow:0 8px 20px rgba(0,120,255,0.2);font-weight:700;cursor:pointer;z-index:1200}
-
-    footer{margin-top:26px;text-align:center;padding:20px;color:#235a75;background:transparent}
-
-    /* Modal */
+    /* modal basic (same modal used by index or assistant/billing) */
     .modal-back{position:fixed;inset:0;background:rgba(2,20,30,0.45);display:none;align-items:center;justify-content:center;z-index:2000}
     .modal{background:#fff;border-radius:12px;padding:18px;max-width:920px;width:94%;max-height:86vh;overflow:auto}
-    .modal h2{margin:0 0 8px 0}
     .close{float:left;background:#eee;border-radius:8px;padding:6px 10px;cursor:pointer}
-
-    /* cart table */
-    table{width:100%;border-collapse:collapse}
-    table th,table td{padding:8px;border-bottom:1px solid #f0f7fb;text-align:right}
-
-    @media (max-width:720px){ .card{width:100%} .logo-img{width:68px;height:68px;font-size:40px} }
+    @media(max-width:720px){#logoImg{width:72px;height:72px;font-size:34px}}
   </style>
 </head>
 <body>
-
   <header>
-    <div class="logo-wrap">
-      <div class="logo-img" id="logoImg" title="لوجو الشركة">💧🤲</div>
+    <div class="logo-box">
+      <div id="logoImg" title="لوجو الشركة">💧🤲</div>
       <div class="brand">
-        <h1>فيوتشر تانك — FutureTank</h1>
-        <p class="slogan">نقاء الماء هو هدفنا</p>
+        <h1 id="brandName">فيوتشر تانك — FutureTank</h1>
+        <p id="brandSlogan">نقاء الماء هو هدفنا</p>
       </div>
     </div>
   </header>
 
   <main>
     <div class="hero">
-      <h2 style="margin:0">حلول متكاملة للمياه — خزانات وفلاتر</h2>
-      <p class="lead">نقدّم توريد وتركيب وصيانة وخدمات تعقيم لخزانات المياه وفلاتر المياه مع ضمانات واضحة وجودة معتمدة.</p>
+      <h2>حلول متكاملة للمياه — خزانات وفلاتر</h2>
+      <p id="lead">نقدّم توريد وتركيب وصيانة وخدمات تعقيم لخزانات المياه وفلات المياه مع ضمانات واضحة وجودة معتمدة.</p>
 
-      <div class="row">
-        <a href="assistant.html" class="btn">🤖 التحدث مع المساعد الذكي</a>
+      <div style="margin-top:14px">
+        <a class="btn" href="assistant.html">🤖 التحدث مع المساعد الذكي</a>
         <button class="btn" onclick="openProducts()">🛍️ تعرف على منتجاتنا</button>
         <button class="btn" onclick="openShop()">🛒 تسوق الآن</button>
         <button class="btn" onclick="openServices()">🧰 تعرف على خدماتنا</button>
         <button class="btn" onclick="openBook()">📅 احجز خدمة الآن</button>
       </div>
 
-      <div class="row" style="margin-top:22px">
-        <div class="card">
+      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px">
+        <div class="card" style="width:320px">
           <h3>المنتجات</h3>
-          <p class="small">خزانات مياه — فلاتر مياه</p>
-          <p class="small">ضمان على المنتجات: <strong>10 سنوات</strong></p>
+          <p>خزانات مياه — فلاتر مياه</p>
+          <p>ضمان على المنتجات: <strong>10 سنوات</strong></p>
         </div>
-
-        <div class="card">
+        <div class="card" style="width:320px">
           <h3>أعمال الصيانة</h3>
-          <p class="small">ضمان على أعمال الصيانة: <strong>5 سنوات</strong></p>
-          <p class="small">تعقيم بخيارات مطابقة لمعايير وزارة الصحة المصرية</p>
+          <p>ضمان على أعمال الصيانة: <strong>5 سنوات</strong></p>
+          <p>تعقيم بمواصفات وزارة الصحة المصرية</p>
         </div>
       </div>
     </div>
 
-    <!-- QUICK SECTIONS -->
-    <section style="max-width:1000px;margin:18px auto;">
-      <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
-        <div style="width:320px" class="card">
-          <h3>لماذا تختارنا؟</h3>
-          <p class="small">خبرة، التزام بالمواصفات، وضمانات مطمئنة للعملاء.</p>
+    <!-- containers used by modals -->
+    <div id="modalBack" class="modal-back">
+      <div class="modal" id="modalContent">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+          <h2 id="modalTitle">القائمة</h2>
+          <div><button class="close" onclick="closeModal()">إغلاق ✖</button></div>
         </div>
-        <div style="width:320px" class="card">
-          <h3>طرق الدفع</h3>
-          <p class="small">اتصالات كاش: <strong>01150402031</strong></p>
-        </div>
-        <div style="width:320px" class="card">
-          <h3>تواصل معنا</h3>
-          <p class="small">هاتف/واتساب: <strong>01150402031</strong></p>
-        </div>
+        <div id="modalBody"></div>
       </div>
-    </section>
+    </div>
+
   </main>
 
   <button class="cart-btn" onclick="openCart()">🛒 <span id="cartCount">0</span></button>
 
-  <footer>
-    © 2025 FutureTank — فيوتشر تانك — جميع الحقوق محفوظة
-  </footer>
-
-  <!-- MODALS: products / shop / services / booking / cart -->
-  <div class="modal-back" id="modalBack">
-    <div class="modal" id="modalContent">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <h2 id="modalTitle">القائمة</h2>
-        <div>
-          <button class="close" onclick="closeModal()">إغلاق ✖</button>
-        </div>
-      </div>
-
-      <div id="modalBody">
-        <!-- dynamic -->
-      </div>
-    </div>
-  </div>
+  <footer>© 2025 FutureTank — فيوتشر تانك — جميع الحقوق محفوظة</footer>
 
 <script>
-/* --------- Data layer: read from localStorage (admin can change) or fallback to defaults --------- */
+/* ---------- Data layer (shared with dashboard) ---------- */
 const STORAGE_KEY = 'FutureTank_data_v1';
+const CART_KEY = 'FutureTank_cart_v1';
 
-const defaultData = {
+const defaults = {
+  brand:{name_ar:'فيوتشر تانك', name_en:'FutureTank', slogan:'نقاء الماء هو هدفنا'},
+  paymentNumber:'01150402031',
   products:[
-    { id:'p1', name:'خزان مياه 1000 لتر', price:2200, img:'https://via.placeholder.com/400x300?text=خزان+1000L', category:'خزانات'},
-    { id:'p2', name:'فلتر مياه منزلي 7 مراحل', price:1850, img:'https://via.placeholder.com/400x300?text=فلتر+7+مراحل', category:'فلاتر'},
-    { id:'p3', name:'فلتر صناعي 20 لتر/دقيقة', price:9200, img:'https://via.placeholder.com/400x300?text=فلتر+صناعي', category:'فلاتر'}
+    {id:'p1',name:'خزان مياه 1000 لتر',price:2200,img:'https://via.placeholder.com/400x300?text=خزان+1000L',category:'خزانات'},
+    {id:'p2',name:'فلتر مياه منزلي 7 مراحل',price:1850,img:'https://via.placeholder.com/400x300?text=فلتر+7+مراحل',category:'فلاتر'}
   ],
   services:[
-    { id:'s1', name:'توريد وتركيب خزانات المياه', price:300, desc:'توريد وتركيب وفق المواصفات'},
-    { id:'s2', name:'صيانة وإصلاح خزانات المياه', price:450, desc:'تشخيص وصيانة شاملة'},
-    { id:'s3', name:'تطهير وتعقيم خزانات مياه الشرب', price:300, desc:'مطبق لمعايير وزارة الصحة المصرية'},
-    { id:'s4', name:'توريد وتركيب فلاتر المياه', price:1200, desc:'فلتر منزلي مع التركيب'},
-    { id:'s5', name:'صيانة وإصلاح فلاتر المياه', price:400, desc:'صيانة فلتر وتغيير فلاتر'}
-  ],
-  paymentNumber: '01150402031',
-  brand: { name_ar:'فيوتشر تانك', name_en:'FutureTank', slogan:'نقاء الماء هو هدفنا' }
+    {id:'s1',name:'توريد وتركيب خزانات المياه',price:300,desc:'توريد وتركيب وفق المواصفات'},
+    {id:'s2',name:'صيانة وإصلاح خزانات المياه',price:450,desc:'تشخيص وصيانة شاملة'},
+    {id:'s3',name:'تطهير وتعقيم خزانات مياه الشرب',price:300,desc:'مطابق لمعايير وزارة الصحة المصرية'},
+    {id:'s4',name:'توريد وتركيب فلاتر المياه',price:1200,desc:''},
+    {id:'s5',name:'صيانة وإصلاح فلاتر المياه',price:400,desc:''}
+  ]
 };
 
-function loadData(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw){
-      return JSON.parse(raw);
-    }
-  }catch(e){}
-  // fallback: copy default so modifications don't alter original object
-  return JSON.parse(JSON.stringify(defaultData));
-}
+function loadData(){ try{const raw=localStorage.getItem(STORAGE_KEY); if(raw) return JSON.parse(raw);}catch(e){} localStorage.setItem(STORAGE_KEY, JSON.stringify(defaults)); return JSON.parse(JSON.stringify(defaults)); }
+function saveData(d){ localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
 
-function saveData(data){
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-}
-
-/* --------- CART --------- */
-const CART_KEY = 'FutureTank_cart_v1';
-function loadCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
+/* ---------- cart ---------- */
+function loadCart(){ return JSON.parse(localStorage.getItem(CART_KEY)||'[]'); }
 function saveCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateCartCount(); }
-function updateCartCount(){ const c = loadCart(); document.getElementById('cartCount').innerText = c.reduce((s,i)=> s + i.qty, 0); }
+function updateCartCount(){ const c=loadCart(); document.getElementById('cartCount').innerText = c.reduce((s,i)=> s + i.qty, 0); }
 
-/* --------- UI actions --------- */
-function openModal(title,bodyHtml){
-  document.getElementById('modalTitle').innerText = title;
-  document.getElementById('modalBody').innerHTML = bodyHtml;
-  document.getElementById('modalBack').style.display = 'flex';
-}
-function closeModal(){
-  document.getElementById('modalBack').style.display='none';
-}
+/* ---------- modal helpers ---------- */
+function openModal(title, html){ document.getElementById('modalTitle').innerText = title; document.getElementById('modalBody').innerHTML = html; document.getElementById('modalBack').style.display='flex'; }
+function closeModal(){ document.getElementById('modalBack').style.display='none'; }
 
-/* --------- Products / Shop --------- */
-function renderProductsList(){
-  const data = loadData();
-  let html = `<div style="text-align:right"><p style="margin:0 0 10px">المنتجات المتاحة — ضمان على المنتجات: <strong>10 سنوات</strong></p>`;
-  html += `<div class="products-grid">`;
-  data.products.forEach(p=>{
-    html += `<div class="product">
-      <img src="${p.img}" alt="${p.name}">
-      <h4>${p.name}</h4>
-      <div class="price">${p.price.toLocaleString()} ج.م</div>
-      <div style="margin-top:6px"><a class="buy" href="#" onclick="addToCart('${p.id}', 'product');return false;">أضف للسلة</a></div>
-    </div>`;
-  });
-  html += `</div></div>`;
-  return html;
+/* ---------- products ---------- */
+function renderProducts(){
+  const d=loadData(); let html=`<div style="text-align:right"><p>المنتجات — ضمان 10 سنوات</p><div class="products-grid">`;
+  d.products.forEach(p=> html+=`<div class="product"><img src="${p.img}" alt="${p.name}" style="width:100%;height:110px;object-fit:cover;border-radius:8px"><h4>${p.name}</h4><div class="price">${p.price.toLocaleString()} ج.م</div><div style="margin-top:8px"><a class="buy" href="#" onclick="addToCart('${p.id}')">أضف للسلة</a></div></div>`);
+  html+='</div></div>'; return html;
 }
-function openProducts(){ openModal('منتجاتنا', renderProductsList() + `<div style="margin-top:12px;text-align:left"><button class="btn" onclick="openShop();closeModal();">🛒 الذهاب إلى السلة والتسوق</button></div>`); }
+function openProducts(){ openModal('منتجاتنا', renderProducts() + `<div style="margin-top:12px;text-align:left"><button class="btn" onclick="openShop();closeModal();">🛒 الذهاب إلى السلة</button></div>`); }
+function addToCart(id){ let c=loadCart(); const idx=c.findIndex(i=>i.id===id); if(idx>-1) c[idx].qty++; else c.push({id,qty:1}); saveCart(c); alert('تمت الإضافة للسلة'); }
 
+/* ---------- shop / cart ---------- */
 function openShop(){
-  const data = loadData();
-  let html = `<h3>سلة التسوق / التسوق الآن</h3>`;
-  const cart = loadCart();
-  if(cart.length===0){
-    html += `<p>السلة فارغة حالياً. يمكنك إضافة منتجات من صفحة المنتجات.</p>`;
-  }
-  html += `<table><thead><tr><th>المنتج</th><th>الكمية</th><th>السعر</th></tr></thead><tbody>`;
+  const d=loadData(); const cart=loadCart(); let html=`<h3>سلة التسوق</h3>`;
+  if(cart.length===0) html+='<p>السلة فارغة</p>';
+  html += `<table style="width:100%"><thead><tr><th>المنتج</th><th>كمية</th><th>السعر</th></tr></thead><tbody>`;
   let total=0;
-  cart.forEach(item=>{
-    const product = data.products.find(p=>p.id===item.id) || data.services.find(s=>s.id===item.id) || {};
-    const line = (product.price||0)*item.qty;
-    total += line;
-    html += `<tr><td>${product.name||item.name}</td><td>${item.qty}</td><td>${line.toLocaleString()} ج.م</td></tr>`;
-  });
-  html += `</tbody></table>`;
-  html += `<div style="text-align:right;margin-top:12px;font-weight:800">الإجمالي: ${total.toLocaleString()} ج.م</div>`;
-  html += `<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="checkout()">🔖 الدفع الآن</button><button class="btn" onclick="clearCart()">🗑 تفريغ السلة</button></div>`;
+  cart.forEach(it=>{ const item = d.products.find(p=>p.id===it.id) || d.services.find(s=>s.id===it.id) || {}; const line=(item.price||0)*it.qty; total+=line; html+=`<tr><td>${item.name}</td><td>${it.qty}</td><td>${line.toLocaleString()} ج.م</td></tr>`; });
+  html+='</tbody></table>';
+  html+=`<div style="text-align:right;font-weight:800;margin-top:8px">الإجمالي: ${total.toLocaleString()} ج.م</div>`;
+  html+=`<div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="checkout()">🔖 الدفع الآن</button><button class="btn" onclick="clearCart()">🗑 تفريغ السلة</button></div>`;
   openModal('التسوق', html);
 }
-
-function addToCart(id, type){
-  let cart = loadCart();
-  const idx = cart.findIndex(i=>i.id===id);
-  if(idx>-1) cart[idx].qty++;
-  else cart.push({id, qty:1, type});
-  saveCart(cart);
-  alert('تمت الإضافة للسلة');
-}
-
-/* --------- Services / Booking --------- */
-function renderServicesList(){
-  const data = loadData();
-  let html = `<p style="margin:0 0 8px">خدماتنا المتاحة:</p><ul class="services-list">`;
-  data.services.forEach(s=>{
-    html += `<li><strong>${s.name}</strong><div style="font-size:13px;color:#456">${s.desc||''}</div><div style="margin-top:6px;color:var(--accent);font-weight:800">${s.price.toLocaleString()} ج.م</div><div style="margin-top:6px"><button class="btn" onclick="addServiceToCart('${s.id}');">احجز هذه الخدمة</button></div></li>`;
-  });
-  html += `</ul>`;
-  return html;
-}
-function openServices(){ openModal('خدماتنا', renderServicesList() + `<div style="margin-top:10px;color:#235a75">الضمان على أعمال الصيانة: <strong>5 سنوات</strong></div>`); }
-
-function addServiceToCart(id){
-  let cart = loadCart();
-  const idx = cart.findIndex(i=>i.id===id);
-  if(idx>-1) cart[idx].qty++;
-  else cart.push({id, qty:1, type:'service'});
-  saveCart(cart);
-  alert('تمت إضافة الخدمة إلى السلة');
-}
-function openBook(){ openModal('احجز خدمة الآن', renderServicesList() + `<div style="margin-top:12px"><small>بعد الضغط على احجز، ستظهر السلة لإتمام الدفع عبر اتصالات كاش.</small></div>`); }
-
-/* --------- Checkout / Payment --------- */
-function checkout(){
-  const data = loadData();
-  const cart = loadCart();
-  if(cart.length===0){ alert('السلة فارغة'); return; }
-  let total = 0;
-  cart.forEach(it=>{
-    const product = data.products.find(p=>p.id===it.id) || data.services.find(s=>s.id===it.id) || {};
-    total += (product.price||0)*it.qty;
-  });
-  const html = `<div>
-     <p>المبلغ المستحق: <strong>${total.toLocaleString()} ج.م</strong></p>
-     <p>طريقة الدفع: <strong>اتصالات كاش</strong></p>
-     <p>رقم الدفع / الحساب: <strong>${data.paymentNumber}</strong></p>
-     <p>لإتمام الدفع: أرسل إيصال الدفع عبر واتساب إلى نفس الرقم: <strong>${data.paymentNumber}</strong></p>
-     <div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end">
-       <button class="btn" onclick="confirmOrder()">✅ تم الدفع — إرسال إشعار</button>
-       <button class="btn" onclick="closeModal()">إلغاء</button>
-     </div>
-  </div>`;
-  openModal('الدفع', html);
-}
-
-function confirmOrder(){
-  // For now simulate order: clear cart and show message
-  const cart = loadCart();
-  if(cart.length===0){ alert('السلة فارغة'); closeModal(); return; }
-  // create fake order record into localStorage (orders key)
-  const orders = JSON.parse(localStorage.getItem('FutureTank_orders')||'[]');
-  const data = loadData();
-  let total = 0; const items = [];
-  cart.forEach(it=>{
-    const product = data.products.find(p=>p.id===it.id) || data.services.find(s=>s.id===it.id) || {};
-    items.push({id: it.id, name: product.name || 'منتج', qty: it.qty, price: product.price || 0});
-    total += (product.price||0) * it.qty;
-  });
-  orders.push({ id: 'ORD' + Date.now(), date:new Date().toLocaleString(), items, total });
-  localStorage.setItem('FutureTank_orders', JSON.stringify(orders));
-  saveCart([]); // clears
-  closeModal();
-  alert('تم تسجيل الطلب بنجاح. يرجى إتمام الدفع عبر اتصالات كاش وإرسال الإيصال على رقم ' + data.paymentNumber);
-}
-
-/* --------- Cart utilities --------- */
-function openCart(){
-  const data = loadData();
-  const cart = loadCart();
-  if(cart.length===0){
-    openModal('السلة','<p>السلة فارغة.</p>');
-    return;
-  }
-  let html = `<table><thead><tr><th>المنتج/الخدمة</th><th>الكمية</th><th>السعر</th></tr></thead><tbody>`;
-  let total = 0;
-  cart.forEach(it=>{
-    const product = data.products.find(p=>p.id===it.id) || data.services.find(s=>s.id===it.id) || {};
-    const line = (product.price||0) * it.qty;
-    total += line;
-    html += `<tr><td>${product.name||'—'}</td><td>${it.qty}</td><td>${line.toLocaleString()} ج.م</td></tr>`;
-  });
-  html += `</tbody></table><div style="text-align:right;margin-top:12px;font-weight:800">المجموع: ${total.toLocaleString()} ج.م</div>`;
-  html += `<div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="checkout()">🔖 الدفع</button><button class="btn" onclick="clearCart()">🗑 تفريغ السلة</button></div>`;
-  openModal('سلة التسوق', html);
-}
-
 function clearCart(){ if(confirm('هل تريد تفريغ السلة؟')){ saveCart([]); closeModal(); alert('تم تفريغ السلة'); } }
 
-/* --------- Admin integration note: dashboard.html can edit data in localStorage using STORAGE_KEY --------- */
+/* ---------- services / booking ---------- */
+function renderServices(){ const d=loadData(); let html='<ul style="list-style:none;padding:0">'; d.services.forEach(s=> html+=`<li style="padding:8px;border-bottom:1px dashed #eef9ff"><strong>${s.name}</strong><div style="font-size:13px">${s.desc||''}</div><div style="color:var(--accent);font-weight:800;margin-top:6px">${s.price.toLocaleString()} ج.م</div><div style="margin-top:6px"><button class="btn" onclick="addToCart('${s.id}')">احجز هذه الخدمة</button></div></li>`); html+='</ul>'; return html; }
+function openServices(){ openModal('خدماتنا', renderServices() + `<div style="margin-top:10px;color:#235a75">الضمان على أعمال الصيانة: <strong>5 سنوات</strong></div>`); }
+function openBook(){ openModal('احجز خدمة الآن', renderServices() + `<div style="margin-top:12px"><small>بعد الضغط على احجز، إتمام الدفع عبر اتصالات كاش على الرقم الظاهر.</small></div>`); }
 
-/* init */
-document.addEventListener('DOMContentLoaded', ()=>{
+/* ---------- checkout simulated ---------- */
+function checkout(){
+  const d=loadData(); const cart=loadCart(); if(cart.length===0){ alert('السلة فارغة'); return; }
+  let total=0; cart.forEach(it=>{ const item=d.products.find(p=>p.id===it.id)||d.services.find(s=>s.id===it.id)||{}; total += (item.price||0)*it.qty; });
+  const html=`<div><p>المبلغ المستحق: <strong>${total.toLocaleString()} ج.م</strong></p><p>طريقة الدفع: <strong>اتصالات كاش</strong></p><p>رقم الدفع: <strong>${d.paymentNumber}</strong></p><div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="confirmOrder()">✅ تم الدفع — إشعار</button><button class="btn" onclick="closeModal()">إلغاء</button></div></div>`;
+  openModal('الدفع', html);
+}
+function confirmOrder(){ const cart=loadCart(); if(cart.length===0){ alert('السلة فارغة'); closeModal(); return; } const orders=JSON.parse(localStorage.getItem('FutureTank_orders')||'[]'); const d=loadData(); let total=0; const items=[]; cart.forEach(it=>{ const itm=d.products.find(p=>p.id===it.id)||d.services.find(s=>s.id===it.id)||{}; items.push({id:it.id,name:itm.name||'—',qty:it.qty,price:itm.price||0}); total += (itm.price||0)*it.qty; }); orders.push({id:'ORD'+Date.now(),date:new Date().toLocaleString(),items,total}); localStorage.setItem('FutureTank_orders',JSON.stringify(orders)); saveCart([]); closeModal(); alert('تم تسجيل الطلب. يرجى ارسال إيصال الدفع على رقم ' + d.paymentNumber); }
+
+/* ---------- init ---------- */
+document.addEventListener('DOMContentLoaded',()=>{
   updateCartCount();
-  // try to load brand override from localStorage (allows dashboard to change logo or names)
   const d = loadData();
-  if(d.brand && d.brand.name_ar) document.querySelector('.brand h1').innerText = d.brand.name_ar + ' — ' + (d.brand.name_en||'FutureTank');
-  if(d.brand && d.brand.slogan) document.querySelector('.slogan').innerText = d.brand.slogan;
-  // logo image as dataURL if saved
+  if(d.brand && d.brand.name_ar) document.getElementById('brandName').innerText = d.brand.name_ar + ' — ' + (d.brand.name_en||'FutureTank');
+  if(d.brand && d.brand.slogan) document.getElementById('brandSlogan').innerText = d.brand.slogan;
+  // logo override (set by dashboard as dataURL)
   const logoData = localStorage.getItem('FutureTank_logoData');
-  if(logoData) document.getElementById('logoImg').style.backgroundImage = `url(${logoData})`, document.getElementById('logoImg').innerText='';
+  if(logoData){ const el = document.getElementById('logoImg'); el.style.backgroundImage = `url(${logoData})`; el.innerText=''; el.style.backgroundSize='cover'; }
 });
 </script>
-
 </body>
 </html>
