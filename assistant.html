@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>المساعد الذكي — FutureTank</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+  .box{max-width:900px;margin:18px auto;background:#fff;padding:16px;border-radius:12px;box-shadow:0 8px 30px rgba(3,59,80,0.04)}
+  #chat{height:420px;overflow:auto;padding:12px;border:1px solid #eef9ff;border-radius:8px;background:#fbfeff}
+  .input{display:flex;gap:8px;margin-top:10px}
+  input{flex:1;padding:12px;border-radius:8px;border:1px solid #dfeff8}
+  button{padding:10px 14px;background:var(--accent);border:none;color:#fff;border-radius:8px;cursor:pointer}
+  .msg{margin:8px 0}
+  .me{color:#075;text-align:right}
+  .bot{color:#025;text-align:left}
+  .suggest{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+  .suggest button{background:#eef9ff;color:var(--accent-2);border-radius:8px;border:1px solid #d6f0ff;padding:6px 10px;cursor:pointer}
+</style>
+</head>
+<body>
+<div class="box">
+  <h2>🤖 المساعد الذكي — فيوتشر تانك</h2>
+  <div id="chat"></div>
+  <div class="suggest" id="suggestions"></div>
+  <div class="input">
+    <input id="inputText" placeholder='اكتب سؤالك... مثل: "ما هي خدماتكم؟" أو "أريد حجز تعقيم"'>
+    <button onclick="send()">إرسال</button>
+  </div>
+</div>
+
+<script>
+const STORAGE_KEY='FutureTank_data_v1';
+
+function loadData(){ try{const r=localStorage.getItem(STORAGE_KEY); if(r) return JSON.parse(r);}catch(e){} return null; }
+function postUser(t){ const c=document.getElementById('chat'); c.innerHTML += `<div class="msg me"><b>أنت:</b> ${escapeHtml(t)}</div>`; c.scrollTop=c.scrollHeight; }
+function postBot(html){ const c=document.getElementById('chat'); c.innerHTML += `<div class="msg bot"><b>المساعد:</b> ${html}</div>`; c.scrollTop=c.scrollHeight; trySpeak(stripTags(html)); }
+function escapeHtml(s){ return s.replace(/[&<>"']/g, (m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
+
+function send(){ const el=document.getElementById('inputText'); const txt=el.value.trim(); if(!txt) return; postUser(txt); el.value=''; setTimeout(()=> respond(txt), 300); }
+
+function stripTags(s){ return s.replace(/<[^>]*>?/gm, ''); }
+function trySpeak(txt){
+  try{
+    const data = loadData();
+    const speakEnabled = true;
+    if(!speakEnabled) return;
+    if('speechSynthesis' in window && txt){
+      const u = new SpeechSynthesisUtterance(txt);
+      const voices = window.speechSynthesis.getVoices();
+      const ar = voices.find(v=>/arabic|ar-SA|ar_EG/i.test(v.lang) || /Arabic/i.test(v.name));
+      if(ar) u.voice = ar;
+      u.lang = 'ar-SA';
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    }
+  }catch(e){}
+}
+
+function respond(text){
+  const data = loadData() || {};
+  const brand = data.brand && data.brand.name_ar ? data.brand.name_ar : 'فيوتشر تانك';
+  const phone = data.paymentNumber || '01150402031';
+  const t = text.toLowerCase();
+
+  // suggestions
+  const suggs = ['ما هي خدماتكم؟','كيف أدفع؟','أريد حجز تعقيم','أريد فلتر منزلي'];
+  const sugArea = document.getElementById('suggestions'); sugArea.innerHTML=''; suggs.forEach(s=>{ const b=document.createElement('button'); b.innerText=s; b.onclick=()=>{ postUser(s); respond(s); }; sugArea.appendChild(b); });
+
+  if(/\b(خدم|خدمات|توريد|تركيب|صيانة|تعقيم|تطهير)\b/.test(t)){
+    const services = (data.services||[]).map(s=>`• ${s.name}`).join('<br>');
+    postBot(`نقدّم الخدمات التالية:<br>${services}<br><br>للحجز اكتب: "احجز" ثم اسم الخدمة، أو اضغط زر "احجز خدمة الآن" في الموقع.`);
+    return;
+  }
+
+  if(/\b(منتج|فلتر|خزان|منتجات|سعر)\b/.test(t)){
+    const products = (data.products||[]).map(p=>`• ${p.name} — ${p.price.toLocaleString()} ج.م`).join('<br>');
+    postBot(`المنتجات المتاحة:<br>${products}<br><br>لإضافة منتج للسلة اكتب: "أضف" ثم اسم المنتج أو استخدم زر "تسوق الآن".`);
+    return;
+  }
+
+  if(/\b(دفع|كاش|اتصالات)\b/.test(t)){
+    postBot(`طريقة الدفع: اتصالات كاش على الرقم ${phone}. بعد الدفع أرسل إيصال الدفع عبر واتساب إلى نفس الرقم.`);
+    return;
+  }
+
+  if(/\b(حجز|احجز|اريد احجز)\b/.test(t)){
+    const svc = (data.services||[]).find(s => text.toLowerCase().includes(s.name.toLowerCase().split(' ')[0]));
+    if(svc){
+      postBot(`حسنًا، يبدو أنك تريد: ${svc.name}. السعر: ${svc.price} ج.م. لإتمام الحجز اضغط "احجز خدمة الآن" أو اكتب "أضف ${svc.name}".`);
+    } else {
+      postBot(`للحجز، اكتب اسم الخدمة المرغوبة أو اضغط "احجز خدمة الآن" في الموقع.`);
+    }
+    return;
+  }
+
+  if(/\b(من انتم|من نحن|من انت|من أنتم)\b/.test(t)){
+    postBot(`${brand} — نقدم حلول المياه: توريد/تركيب/صيانة/تعقيم خزانات وفلاتر. الشعار: "${(data.brand&&data.brand.slogan)||'نقاء الماء هو هدفنا'}".`);
+    return;
+  }
+
+  if(/\b(فاتورة|invoice|فاتورة)\b/.test(t)){
+    postBot(`يمكنك إنشاء فاتورة عبر صفحة الفواتير. هل تريد رابط الفواتير الآن؟`);
+    return;
+  }
+
+  postBot(`أنا هنا للمساعدة — اسألني عن: الخدمات، المنتجات، الحجز، طرق الدفع أو الفواتير. مثال: "ما هي خدماتكم؟" أو "كيف أدفع؟"`);
+}
+</script>
+</body>
+</html>

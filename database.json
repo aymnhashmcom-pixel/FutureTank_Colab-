@@ -1,0 +1,26 @@
+{
+  "brand": {
+    "name_ar": "فيوتشر تانك",
+    "name_en": "FutureTank",
+    "slogan": "نقاء الماء هو هدفنا"
+  },
+  "paymentNumber": "01150402031",
+  "welcomeMessage": "أهلاً! مرحباً بك في فيوتشر تانك، كيف أساعدك اليوم؟",
+  "products": [
+    {
+      "id": "p1",
+      "name": "خزان مياه 1000 لتر",
+      "price": 2200,
+      "img": "https://via.placeholder.com/400x300",
+      "category": "خزانات"
+    }
+  ],
+  "services": [
+    {
+      "id": "s1",
+      "name": "توريد وتركيب خزانات المياه",
+      "price": 300,
+      "desc": "توريد وتركيب وفق المواصفات"
+    }
+  ]
+}

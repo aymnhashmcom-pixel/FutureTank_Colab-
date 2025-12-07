@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>إنشاء فاتورة — FutureTank</title><link rel="stylesheet" href="styles.css"></head>
+<body>
+  <div class="container">
+    <div class="card">
+      <h2>إنشاء فاتورة</h2>
+      <label>اسم العميل</label><input id="custName" placeholder="اسم العميل">
+      <label>العنوان</label><input id="custAddr" placeholder="العنوان">
+      <label>وصف البند</label><input id="itemDesc" placeholder="مثال: تطهير وتعقيم خزان">
+      <label>سعر الوحدة</label><input id="itemPrice" type="number">
+      <label>الكمية</label><input id="itemQty" type="number" value="1">
+      <button class="btn" onclick="addItem()">أضف بند</button>
+
+      <table id="itemsTable"><thead><tr><th>الوصف</th><th>السعر</th><th>كمية</th><th>المجموع</th></tr></thead><tbody></tbody></table>
+
+      <div style="text-align:right;margin-top:8px">
+        <div>الإجمالي: <span id="subtotal">0</span> ج.م</div>
+        <button class="btn" onclick="saveInvoice()">حفظ الفاتورة</button>
+        <button class="btn" onclick="downloadPDF()">تنزيل PDF</button>
+      </div>
+    </div>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+const INV_KEY='FutureTank_invoices_v1';
+let items=[];
+function addItem(){
+  const desc=document.getElementById('itemDesc').value.trim();
+  const price=Number(document.getElementById('itemPrice').value||0);
+  const qty=Number(document.getElementById('itemQty').value||1);
+  if(!desc || price<=0) return alert('اكتب وصف وسعر صحيح');
+  items.push({desc,price,qty});
+  renderItems();
+}
+function renderItems(){
+  const body=document.querySelector('#itemsTable tbody'); body.innerHTML=''; let sum=0;
+  items.forEach(it=>{ const line=it.price*it.qty; sum+=line; body.innerHTML+=`<tr><td>${it.desc}</td><td>${it.price.toLocaleString()}</td><td>${it.qty}</td><td>${line.toLocaleString()}</td></tr>`; });
+  document.getElementById('subtotal').innerText=sum.toLocaleString();
+}
+function saveInvoice(){
+  const name=document.getElementById('custName').value.trim();
+  if(!name || items.length===0) return alert('اكتب اسم العميل واضف بند واحد على الاقل');
+  const inv={id:'INV'+Date.now(),date:new Date().toLocaleString(),name,items};
+  const arr=JSON.parse(localStorage.getItem(INV_KEY)||'[]'); arr.push(inv); localStorage.setItem(INV_KEY, JSON.stringify(arr));
+  alert('تم حفظ الفاتورة محلياً');
+}
+function downloadPDF(){
+  const el = document.createElement('div');
+  let html=`<div style="padding:12px;font-family:tahoma;color:#043348"><h2>فاتورة</h2><div>العميل: ${document.getElementById('custName').value||'—'}</div><div>تاريخ: ${new Date().toLocaleString()}</div><table style="width:100%;border-collapse:collapse;margin-top:8px"><thead><tr><th>الوصف</th><th>سعر</th><th>كمية</th><th>المجموع</th></tr></thead><tbody>`;
+  let total=0; items.forEach(it=>{ const line=it.price*it.qty; total+=line; html+=`<tr><td>${it.desc}</td><td>${it.price.toLocaleString()}</td><td>${it.qty}</td><td>${line.toLocaleString()}</td></tr>`; });
+  html+=`</tbody></table><div style="text-align:right;font-weight:800;margin-top:8px">الإجمالي: ${total.toLocaleString()} ج.م</div></div>`;
+  el.innerHTML=html; document.body.appendChild(el);
+  html2pdf().from(el).save();
+  document.body.removeChild(el);
+}
+</script>
+</body>
+</html>
