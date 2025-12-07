@@ -1,20 +1,18 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>المساعد الذكي — FutureTank</title>
+<link rel="stylesheet" href="styles.css">
 <style>
-  body{font-family:tahoma;background:#f4fbff;margin:0;padding:18px;color:#043348}
-  .box{max-width:900px;margin:12px auto;background:#fff;padding:16px;border-radius:12px;box-shadow:0 8px 30px rgba(3,59,80,0.04)}
-  #chat{height:420px;overflow:auto;padding:10px;border:1px solid #eef9ff;border-radius:8px;background:#fbfeff}
+  .box{max-width:900px;margin:18px auto;background:#fff;padding:16px;border-radius:12px;box-shadow:0 8px 30px rgba(3,59,80,0.04)}
+  #chat{height:420px;overflow:auto;padding:12px;border:1px solid #eef9ff;border-radius:8px;background:#fbfeff}
   .input{display:flex;gap:8px;margin-top:10px}
   input{flex:1;padding:12px;border-radius:8px;border:1px solid #dfeff8}
-  button{padding:10px 14px;background:#009ffd;border:none;color:#fff;border-radius:8px;cursor:pointer}
+  button{padding:10px 14px;background:var(--accent);border:none;color:#fff;border-radius:8px;cursor:pointer}
   .msg{margin:8px 0}
-  .me{color:#075; text-align:right}
-  .bot{color:#025; text-align:left}
+  .me{color:#075;text-align:right}
+  .bot{color:#025;text-align:left}
 </style>
 </head>
 <body>
@@ -22,90 +20,68 @@
   <h2>🤖 المساعد الذكي — فيوتشر تانك</h2>
   <div id="chat"></div>
   <div class="input">
-    <input id="inputText" placeholder="اكتب سؤالك... (مثال: ما هي خدماتكم؟ أو أريد حجز تعقيم)"/>
+    <input id="inputText" placeholder='اكتب سؤالك... مثل: "ما هي خدماتكم؟" أو "أريد حجز تعقيم"'>
     <button onclick="send()">إرسال</button>
   </div>
 </div>
 
 <script>
-/* small intent-based assistant using local data */
-function loadData(){ try{const r=localStorage.getItem('FutureTank_data_v1'); if(r) return JSON.parse(r);}catch(e){} return null; }
+const STORAGE_KEY='FutureTank_data_v1';
 
-function postUser(text){
-  const chat = document.getElementById('chat');
-  chat.innerHTML += `<div class="msg me"><b>أنت:</b> ${escapeHtml(text)}</div>`;
-  chat.scrollTop = chat.scrollHeight;
-}
-
-function postBot(html){
-  const chat = document.getElementById('chat');
-  chat.innerHTML += `<div class="msg bot"><b>المساعد:</b> ${html}</div>`;
-  chat.scrollTop = chat.scrollHeight;
-}
-
+function loadData(){ try{const r=localStorage.getItem(STORAGE_KEY); if(r) return JSON.parse(r);}catch(e){} return null; }
+function postUser(t){ const c=document.getElementById('chat'); c.innerHTML += `<div class="msg me"><b>أنت:</b> ${escapeHtml(t)}</div>`; c.scrollTop=c.scrollHeight; }
+function postBot(html){ const c=document.getElementById('chat'); c.innerHTML += `<div class="msg bot"><b>المساعد:</b> ${html}</div>`; c.scrollTop=c.scrollHeight; }
 function escapeHtml(s){ return s.replace(/[&<>"']/g, (m)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m])); }
 
-function send(){
-  const el = document.getElementById('inputText');
-  const txt = el.value.trim();
-  if(!txt) return;
-  postUser(txt);
-  el.value='';
-  respond(txt);
-}
+function send(){ const el=document.getElementById('inputText'); const txt=el.value.trim(); if(!txt) return; postUser(txt); el.value=''; setTimeout(()=> respond(txt), 300); }
 
 function respond(text){
-  // load company data
   const data = loadData() || {};
-  const brandName = (data.brand && data.brand.name_ar) ? data.brand.name_ar : 'فيوتشر تانك';
-  const phone = (data.paymentNumber||'01150402031');
-  const products = (data.products||[]).map(p=>p.name).slice(0,10);
-  const services = (data.services||[]).map(s=>s.name).slice(0,20);
-
+  const brand = data.brand && data.brand.name_ar ? data.brand.name_ar : 'فيوتشر تانك';
+  const phone = data.paymentNumber || '01150402031';
   const t = text.toLowerCase();
 
-  // patterns (very simple but practical)
+  // intents
   if(/\b(خدم|خدمات|توريد|تركيب|صيانة|تعقيم|تطهير)\b/.test(t)){
-    let list = services.map(s=>`• ${s}`).join('<br>');
-    postBot(`نقدّم الخدمات التالية:<br>${list}<br><br>للحجز اضغط زر "احجز خدمة الآن" في الصفحة أو اكتب "احجز" متبوعًا باسم الخدمة.`);
+    const services = (data.services||[]).map(s=>`• ${s.name}`).join('<br>');
+    postBot(`نقدّم الخدمات التالية:<br>${services}<br><br>للحجز اكتب: "احجز" ثم اسم الخدمة، أو اضغط زر "احجز خدمة الآن" في الموقع.`);
     return;
   }
 
-  if(/\b(منتج|فلتر|خزان|منتجات)\b/.test(t)){
-    let list = products.map(p=>`• ${p}`).join('<br>');
-    postBot(`منتجاتنا الرئيسية:<br>${list}<br><br>لمعرفة السعر أو لإضافته للسلة اكتب "أضف" واسم المنتج أو استخدم زر "تسوق الآن".`);
+  if(/\b(منتج|فلتر|خزان|منتجات|سعر)\b/.test(t)){
+    const products = (data.products||[]).map(p=>`• ${p.name} — ${p.price.toLocaleString()} ج.م`).join('<br>');
+    postBot(`المنتجات المتاحة:<br>${products}<br><br>لإضافة منتج للسلة اكتب: "أضف" ثم اسم المنتج أو استخدم زر "تسوق الآن".`);
     return;
   }
 
-  if(/\b(دفع|طريقة الدفع|كاش|اتصالات)\b/.test(t)){
-    postBot(`طريقة الدفع المتاحة: *اتصالات كاش* على الرقم: ${phone}. بعد الدفع أرسل إيصال الدفع على نفس الرقم عبر واتساب.`);
+  if(/\b(دفع|كاش|اتصالات)\b/.test(t)){
+    postBot(`طريقة الدفع: اتصالات كاش على الرقم ${phone}. بعد الدفع أرسل إيصال الدفع عبر واتساب إلى نفس الرقم.`);
     return;
   }
 
-  if(/\b(حجز|احجز|احجز خدمة)\b/.test(t)){
-    postBot(`للحجز أكتب اسم الخدمة التي تريد حجزها، أو اضغط "احجز خدمة الآن" في الصفحة. كما يمكنك الدفع عبر اتصالات كاش على ${phone}.`);
+  if(/\b(حجز|احجز|اريد احجز)\b/.test(t)){
+    // try to detect service name
+    const svc = (data.services||[]).find(s => text.toLowerCase().includes(s.name.toLowerCase().split(' ')[0]));
+    if(svc){
+      postBot(`حسنًا، يبدو أنك تريد: ${svc.name}. السعر: ${svc.price} ج.م. لإتمام الحجز اضغط "احجز خدمة الآن" أو اكتب "أضف ${svc.name}".`);
+    } else {
+      postBot(`للحجز، اكتب اسم الخدمة المرغوبة أو اضغط "احجز خدمة الآن" في الموقع.`);
+    }
     return;
   }
 
-  if(/\b(من انتم|من انتي|من نحن|من أنتم)\b/.test(t)){
-    postBot(`${brandName} — نقدم حلول المياه: توريد/تركيب/صيانة/تعقيم خزانات وفلاتر المياه. الشعار: "${(data.brand&&data.brand.slogan)||'نقاء الماء هو هدفنا'}".`);
+  if(/\b(من انتم|من نحن|من انت|من أنتم)\b/.test(t)){
+    postBot(`${brand} — نقدم حلول المياه: توريد/تركيب/صيانة/تعقيم خزانات وفلاتر. الشعار: "${(data.brand&&data.brand.slogan)||'نقاء الماء هو هدفنا'}".`);
     return;
   }
 
-  if(/\b(فاتورة|invoice|فاتور)\b/.test(t)){
-    postBot(`يمكنك إنشاء فاتورة عبر زر "تسوق الآن" أو عبر صفحة الفواتير. هل تريد رابط الفاتورة الآن؟`);
+  if(/\b(فاتورة|invoice|فاتورة)\b/.test(t)){
+    postBot(`يمكنك إنشاء فاتورة عبر صفحة الفواتير. هل تريد رابط الفواتير الآن؟`);
     return;
   }
 
-  // booking by name (e.g., "احجز تطهير وتعقيم خزانات مياه الشرب")
-  const svc = (data.services||[]).find(s=> text.includes(s.name) || text.includes(s.name.split(' ')[0]) );
-  if(svc){
-    postBot(`حسناً، أنت تطلب: ${svc.name} — السعر التقريبي: ${svc.price} ج.م. اضغط "احجز خدمة الآن" أو اكتب "أضف ${svc.name}" ليتم إضافتها للسلة.`);
-    return;
-  }
-
-  // fallback: generic helpful reply + suggestion buttons
-  postBot(`أنا هنا للمساعدة — اسألني عن: الخدمات، المنتجات، الحجز، أو طرق الدفع. على سبيل المثال اكتب: "ما هي خدماتكم؟" أو "كيف أدفع؟"`);
+  // fallback with suggestions
+  postBot(`أنا هنا للمساعدة — اسألني عن: الخدمات، المنتجات، الحجز، طرق الدفع أو الفواتير. مثال: "ما هي خدماتكم؟" أو "كيف أدفع؟"`);
 }
 </script>
 </body>
