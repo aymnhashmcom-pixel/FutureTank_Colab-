@@ -4,33 +4,13 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>FutureTank — فيوتشر تانك</title>
-  <style>
-    :root{--sky:#e9f7ff;--accent:#009ffd;--dark:#043348}
-    body{margin:0;font-family:tahoma, Arial;background:var(--sky);color:var(--dark)}
-    header{background:linear-gradient(90deg,var(--accent),#00c6ff);color:#fff;padding:28px 16px;text-align:center}
-    .logo-box{display:flex;align-items:center;gap:16px;justify-content:center}
-    #logoImg{width:92px;height:92px;border-radius:14px;background:linear-gradient(180deg,#dff6ff,#bfefff);display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 6px 20px rgba(0,0,0,0.08)}
-    .brand h1{margin:0;font-size:24px;font-weight:800}
-    .brand p{margin:6px 0 0 0;font-size:14px;opacity:0.95}
-    main{padding:18px;max-width:1000px;margin:18px auto}
-    .hero{background:#fff;padding:18px;border-radius:12px;box-shadow:0 8px 30px rgba(3,59,80,0.04);text-align:center}
-    .btn{display:inline-block;background:var(--accent);color:#fff;padding:12px 18px;border-radius:10px;text-decoration:none;margin:8px;font-weight:700}
-    .card{background:#fff;border-radius:12px;padding:12px;margin-top:14px;box-shadow:0 6px 20px rgba(3,59,80,0.04);text-align:right}
-    .products-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:10px}
-    .product{background:linear-gradient(180deg,#fff,#fbfeff);border-radius:10px;padding:10px;text-align:center;border:1px solid #eef9ff}
-    footer{text-align:center;padding:20px;color:#235a75}
-    .cart-btn{position:fixed;left:16px;bottom:18px;background:var(--accent);color:#fff;padding:12px 14px;border-radius:50px;box-shadow:0 8px 20px rgba(0,120,255,0.2);font-weight:700;cursor:pointer;z-index:1200}
-    /* modal basic (same modal used by index or assistant/billing) */
-    .modal-back{position:fixed;inset:0;background:rgba(2,20,30,0.45);display:none;align-items:center;justify-content:center;z-index:2000}
-    .modal{background:#fff;border-radius:12px;padding:18px;max-width:920px;width:94%;max-height:86vh;overflow:auto}
-    .close{float:left;background:#eee;border-radius:8px;padding:6px 10px;cursor:pointer}
-    @media(max-width:720px){#logoImg{width:72px;height:72px;font-size:34px}}
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <header>
-    <div class="logo-box">
-      <div id="logoImg" title="لوجو الشركة">💧🤲</div>
+
+  <header class="header">
+    <div class="logo-wrap">
+      <div id="logoImg" class="logo-img" title="لوجو الشركة">💧🤲</div>
       <div class="brand">
         <h1 id="brandName">فيوتشر تانك — FutureTank</h1>
         <p id="brandSlogan">نقاء الماء هو هدفنا</p>
@@ -38,12 +18,12 @@
     </div>
   </header>
 
-  <main>
+  <main class="container">
     <div class="hero">
       <h2>حلول متكاملة للمياه — خزانات وفلاتر</h2>
       <p id="lead">نقدّم توريد وتركيب وصيانة وخدمات تعقيم لخزانات المياه وفلات المياه مع ضمانات واضحة وجودة معتمدة.</p>
 
-      <div style="margin-top:14px">
+      <div class="row">
         <a class="btn" href="assistant.html">🤖 التحدث مع المساعد الذكي</a>
         <button class="btn" onclick="openProducts()">🛍️ تعرف على منتجاتنا</button>
         <button class="btn" onclick="openShop()">🛒 تسوق الآن</button>
@@ -51,41 +31,42 @@
         <button class="btn" onclick="openBook()">📅 احجز خدمة الآن</button>
       </div>
 
-      <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-top:16px">
-        <div class="card" style="width:320px">
+      <div class="row" style="margin-top:22px">
+        <div class="card">
           <h3>المنتجات</h3>
-          <p>خزانات مياه — فلاتر مياه</p>
-          <p>ضمان على المنتجات: <strong>10 سنوات</strong></p>
+          <p class="small">خزانات مياه — فلاتر مياه</p>
+          <p class="small">ضمان على المنتجات: <strong>10 سنوات</strong></p>
         </div>
-        <div class="card" style="width:320px">
+
+        <div class="card">
           <h3>أعمال الصيانة</h3>
-          <p>ضمان على أعمال الصيانة: <strong>5 سنوات</strong></p>
-          <p>تعقيم بمواصفات وزارة الصحة المصرية</p>
+          <p class="small">ضمان على أعمال الصيانة: <strong>5 سنوات</strong></p>
+          <p class="small">تعقيم بخيارات مطابقة لمعايير وزارة الصحة المصرية</p>
         </div>
       </div>
     </div>
-
-    <!-- containers used by modals -->
-    <div id="modalBack" class="modal-back">
-      <div class="modal" id="modalContent">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <h2 id="modalTitle">القائمة</h2>
-          <div><button class="close" onclick="closeModal()">إغلاق ✖</button></div>
-        </div>
-        <div id="modalBody"></div>
-      </div>
-    </div>
-
   </main>
 
   <button class="cart-btn" onclick="openCart()">🛒 <span id="cartCount">0</span></button>
-
   <footer>© 2025 FutureTank — فيوتشر تانك — جميع الحقوق محفوظة</footer>
 
+  <!-- MODAL -->
+  <div id="modalBack" class="modal-back">
+    <div class="modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
+        <h2 id="modalTitle">القائمة</h2>
+        <div><button class="close" onclick="closeModal()">إغلاق ✖</button></div>
+      </div>
+      <div id="modalBody"></div>
+    </div>
+  </div>
+
 <script>
-/* ---------- Data layer (shared with dashboard) ---------- */
+/* ========== Data layer (localStorage) ========== */
 const STORAGE_KEY = 'FutureTank_data_v1';
 const CART_KEY = 'FutureTank_cart_v1';
+const ORDERS_KEY = 'FutureTank_orders_v1';
+const INVOICES_KEY = 'FutureTank_invoices_v1';
 
 const defaults = {
   brand:{name_ar:'فيوتشر تانك', name_en:'FutureTank', slogan:'نقاء الماء هو هدفنا'},
@@ -98,37 +79,45 @@ const defaults = {
     {id:'s1',name:'توريد وتركيب خزانات المياه',price:300,desc:'توريد وتركيب وفق المواصفات'},
     {id:'s2',name:'صيانة وإصلاح خزانات المياه',price:450,desc:'تشخيص وصيانة شاملة'},
     {id:'s3',name:'تطهير وتعقيم خزانات مياه الشرب',price:300,desc:'مطابق لمعايير وزارة الصحة المصرية'},
-    {id:'s4',name:'توريد وتركيب فلاتر المياه',price:1200,desc:''},
-    {id:'s5',name:'صيانة وإصلاح فلاتر المياه',price:400,desc:''}
+    {id:'s4',name:'توريد وتركيب فلاتر المياه',price:1200,desc:'فلتر منزلي مع التركيب'},
+    {id:'s5',name:'صيانة وإصلاح فلاتر المياه',price:400,desc:'صيانة فلتر وتغيير فلاتر'}
   ]
 };
 
-function loadData(){ try{const raw=localStorage.getItem(STORAGE_KEY); if(raw) return JSON.parse(raw);}catch(e){} localStorage.setItem(STORAGE_KEY, JSON.stringify(defaults)); return JSON.parse(JSON.stringify(defaults)); }
+function loadData(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(raw) return JSON.parse(raw);
+  }catch(e){}
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaults));
+  return JSON.parse(JSON.stringify(defaults));
+}
 function saveData(d){ localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
 
-/* ---------- cart ---------- */
-function loadCart(){ return JSON.parse(localStorage.getItem(CART_KEY)||'[]'); }
+/* ========== cart ========= */
+function loadCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
 function saveCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateCartCount(); }
-function updateCartCount(){ const c=loadCart(); document.getElementById('cartCount').innerText = c.reduce((s,i)=> s + i.qty, 0); }
+function updateCartCount(){ const c = loadCart(); document.getElementById('cartCount').innerText = c.reduce((s,i)=> s + i.qty, 0); }
 
-/* ---------- modal helpers ---------- */
+/* ========== modal helpers ========= */
 function openModal(title, html){ document.getElementById('modalTitle').innerText = title; document.getElementById('modalBody').innerHTML = html; document.getElementById('modalBack').style.display='flex'; }
 function closeModal(){ document.getElementById('modalBack').style.display='none'; }
 
-/* ---------- products ---------- */
+/* ========== products / shop ========= */
 function renderProducts(){
-  const d=loadData(); let html=`<div style="text-align:right"><p>المنتجات — ضمان 10 سنوات</p><div class="products-grid">`;
-  d.products.forEach(p=> html+=`<div class="product"><img src="${p.img}" alt="${p.name}" style="width:100%;height:110px;object-fit:cover;border-radius:8px"><h4>${p.name}</h4><div class="price">${p.price.toLocaleString()} ج.م</div><div style="margin-top:8px"><a class="buy" href="#" onclick="addToCart('${p.id}')">أضف للسلة</a></div></div>`);
+  const d=loadData();
+  let html=`<div style="text-align:right"><p>المنتجات — ضمان 10 سنوات</p><div class="products-grid">`;
+  d.products.forEach(p=> html+=`<div class="product"><img src="${p.img}" alt="${p.name}"><h4>${p.name}</h4><div class="price">${p.price.toLocaleString()} ج.م</div><div style="margin-top:8px"><a class="btn" href="#" onclick="addToCart('${p.id}','product');return false;">أضف للسلة</a></div></div>`);
   html+='</div></div>'; return html;
 }
 function openProducts(){ openModal('منتجاتنا', renderProducts() + `<div style="margin-top:12px;text-align:left"><button class="btn" onclick="openShop();closeModal();">🛒 الذهاب إلى السلة</button></div>`); }
-function addToCart(id){ let c=loadCart(); const idx=c.findIndex(i=>i.id===id); if(idx>-1) c[idx].qty++; else c.push({id,qty:1}); saveCart(c); alert('تمت الإضافة للسلة'); }
+function addToCart(id,type='product'){ let c=loadCart(); const idx=c.findIndex(i=>i.id===id); if(idx>-1) c[idx].qty++; else c.push({id,qty:1,type}); saveCart(c); alert('تمت الإضافة للسلة'); }
 
-/* ---------- shop / cart ---------- */
+/* ========== shop / cart ========= */
 function openShop(){
   const d=loadData(); const cart=loadCart(); let html=`<h3>سلة التسوق</h3>`;
   if(cart.length===0) html+='<p>السلة فارغة</p>';
-  html += `<table style="width:100%"><thead><tr><th>المنتج</th><th>كمية</th><th>السعر</th></tr></thead><tbody>`;
+  html += `<table><thead><tr><th>المنتج</th><th>كمية</th><th>السعر</th></tr></thead><tbody>`;
   let total=0;
   cart.forEach(it=>{ const item = d.products.find(p=>p.id===it.id) || d.services.find(s=>s.id===it.id) || {}; const line=(item.price||0)*it.qty; total+=line; html+=`<tr><td>${item.name}</td><td>${it.qty}</td><td>${line.toLocaleString()} ج.م</td></tr>`; });
   html+='</tbody></table>';
@@ -138,27 +127,42 @@ function openShop(){
 }
 function clearCart(){ if(confirm('هل تريد تفريغ السلة؟')){ saveCart([]); closeModal(); alert('تم تفريغ السلة'); } }
 
-/* ---------- services / booking ---------- */
-function renderServices(){ const d=loadData(); let html='<ul style="list-style:none;padding:0">'; d.services.forEach(s=> html+=`<li style="padding:8px;border-bottom:1px dashed #eef9ff"><strong>${s.name}</strong><div style="font-size:13px">${s.desc||''}</div><div style="color:var(--accent);font-weight:800;margin-top:6px">${s.price.toLocaleString()} ج.م</div><div style="margin-top:6px"><button class="btn" onclick="addToCart('${s.id}')">احجز هذه الخدمة</button></div></li>`); html+='</ul>'; return html; }
+/* ========== services / booking ========= */
+function renderServices(){
+  const d=loadData(); let html='<ul style="list-style:none;padding:0">';
+  d.services.forEach(s=> html+=`<li style="padding:10px;border-bottom:1px dashed #eef9ff"><strong>${s.name}</strong><div style="font-size:13px;color:#456">${s.desc||''}</div><div style="margin-top:6px;color:var(--accent);font-weight:800">${s.price.toLocaleString()} ج.م</div><div style="margin-top:6px"><button class="btn" onclick="addToCart('${s.id}','service')">احجز هذه الخدمة</button></div></li>`);
+  html+='</ul>'; return html;
+}
 function openServices(){ openModal('خدماتنا', renderServices() + `<div style="margin-top:10px;color:#235a75">الضمان على أعمال الصيانة: <strong>5 سنوات</strong></div>`); }
-function openBook(){ openModal('احجز خدمة الآن', renderServices() + `<div style="margin-top:12px"><small>بعد الضغط على احجز، إتمام الدفع عبر اتصالات كاش على الرقم الظاهر.</small></div>`); }
+function openBook(){ openModal('احجز خدمة الآن', renderServices() + `<div style="margin-top:12px"><small>بعد الضغط على احجز، إتمام الدفع عبر اتصالات كاش على 01150402031.</small></div>`); }
 
-/* ---------- checkout simulated ---------- */
+/* ========== checkout simulated ========= */
 function checkout(){
   const d=loadData(); const cart=loadCart(); if(cart.length===0){ alert('السلة فارغة'); return; }
   let total=0; cart.forEach(it=>{ const item=d.products.find(p=>p.id===it.id)||d.services.find(s=>s.id===it.id)||{}; total += (item.price||0)*it.qty; });
-  const html=`<div><p>المبلغ المستحق: <strong>${total.toLocaleString()} ج.م</strong></p><p>طريقة الدفع: <strong>اتصالات كاش</strong></p><p>رقم الدفع: <strong>${d.paymentNumber}</strong></p><div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="confirmOrder()">✅ تم الدفع — إشعار</button><button class="btn" onclick="closeModal()">إلغاء</button></div></div>`;
+  const html=`<div><p>المبلغ المستحق: <strong>${total.toLocaleString()} ج.م</strong></p><p>طريقة الدفع: <strong>اتصالات كاش</strong></p><p>رقم الدفع: <strong>${d.paymentNumber}</strong></p><p>بعد الدفع أرسل إيصال الدفع عبر واتساب على نفس الرقم.</p><div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="confirmOrder()">✅ تم الدفع — إرسال إشعار</button><button class="btn" onclick="closeModal()">إلغاء</button></div></div>`;
   openModal('الدفع', html);
 }
-function confirmOrder(){ const cart=loadCart(); if(cart.length===0){ alert('السلة فارغة'); closeModal(); return; } const orders=JSON.parse(localStorage.getItem('FutureTank_orders')||'[]'); const d=loadData(); let total=0; const items=[]; cart.forEach(it=>{ const itm=d.products.find(p=>p.id===it.id)||d.services.find(s=>s.id===it.id)||{}; items.push({id:it.id,name:itm.name||'—',qty:it.qty,price:itm.price||0}); total += (itm.price||0)*it.qty; }); orders.push({id:'ORD'+Date.now(),date:new Date().toLocaleString(),items,total}); localStorage.setItem('FutureTank_orders',JSON.stringify(orders)); saveCart([]); closeModal(); alert('تم تسجيل الطلب. يرجى ارسال إيصال الدفع على رقم ' + d.paymentNumber); }
+function confirmOrder(){
+  const cart = loadCart();
+  if(cart.length===0){ alert('السلة فارغة'); closeModal(); return; }
+  const orders = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
+  const d = loadData();
+  let total=0; const items=[];
+  cart.forEach(it=>{ const product = d.products.find(p=>p.id===it.id) || d.services.find(s=>s.id===it.id) || {}; items.push({id: it.id, name: product.name || 'منتج', qty: it.qty, price: product.price || 0}); total += (product.price||0)*it.qty; });
+  orders.push({ id:'ORD'+Date.now(), date:new Date().toLocaleString(), items, total });
+  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
+  saveCart([]);
+  closeModal();
+  alert('تم تسجيل الطلب. يرجى إرسال إيصال الدفع على رقم ' + d.paymentNumber);
+}
 
-/* ---------- init ---------- */
-document.addEventListener('DOMContentLoaded',()=>{
+/* ========== init ========= */
+document.addEventListener('DOMContentLoaded', ()=>{
   updateCartCount();
   const d = loadData();
   if(d.brand && d.brand.name_ar) document.getElementById('brandName').innerText = d.brand.name_ar + ' — ' + (d.brand.name_en||'FutureTank');
   if(d.brand && d.brand.slogan) document.getElementById('brandSlogan').innerText = d.brand.slogan;
-  // logo override (set by dashboard as dataURL)
   const logoData = localStorage.getItem('FutureTank_logoData');
   if(logoData){ const el = document.getElementById('logoImg'); el.style.backgroundImage = `url(${logoData})`; el.innerText=''; el.style.backgroundSize='cover'; }
 });
