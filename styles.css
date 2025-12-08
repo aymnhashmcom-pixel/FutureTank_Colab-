@@ -1,0 +1,40 @@
+:root{--sky:#dff6ff;--accent:#00a2ff;--text:#033b50}
+*{box-sizing:border-box}
+body{margin:0;font-family:Tahoma,'Noto Naskh Arabic',sans-serif;background:linear-gradient(180deg,#f7fdff,#e8f7ff);color:var(--text);padding:12px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:12px;border-radius:10px;background:#fff;box-shadow:0 6px 18px rgba(3,59,80,0.06)}
+.brand{display:flex;gap:12px;align-items:center}
+.logo-wrap{width:88px;height:88px;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:center;padding:6px}
+.company{font-weight:900;font-size:20px;color:var(--accent)}
+.tag{font-size:13px;color:#316a88}
+.controls{display:flex;gap:12px;align-items:center}
+.lang-switch button{background:#fff;border:1px solid var(--accent);padding:6px 8px;border-radius:6px;cursor:pointer}
+.nav{display:flex;gap:8px}
+.btn{background:var(--accent);color:#fff;padding:10px 12px;border-radius:8px;text-decoration:none;font-weight:700;border:none;cursor:pointer}
+.hero{max-width:1000px;margin:18px auto;padding:18px;background:#fff;border-radius:12px;box-shadow:0 8px 30px rgba(3,59,80,0.04)}
+.lead{color:#235a75}
+.ctas{display:flex;gap:10px;flex-wrap:wrap;margin:12px 0}
+.ctas .big{background:#fff;border:2px solid var(--accent);color:var(--accent);padding:12px 16px;border-radius:10px;text-decoration:none;font-weight:800}
+.section{margin-top:18px}
+.cards{display:flex;gap:12px;flex-wrap:wrap}
+.card{background:#fbfeff;padding:12px;border-radius:12px;border:1px solid #eef9ff;min-width:220px}
+.buy{display:inline-block;background:var(--accent);color:#fff;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:800;border:none;cursor:pointer}
+.site-foot{margin-top:20px;padding-top:12px;border-top:1px solid #f0f7fb;color:#2d677f;font-weight:700}
+.row{display:flex;gap:8px}
+input,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #e6f6fb;background:#fbfeff}
+table{width:100%;border-collapse:collapse}
+table th,table td{border:1px solid #eef9ff;padding:8px;text-align:right}
+
+/* chat bubble */
+#ft-chat-bubble{position:fixed;bottom:24px;left:24px; /* RTL: left for Arabic preference; change to right if desired */
+width:64px;height:64px;background:linear-gradient(180deg,#9ee1ff,#dff6ff);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 30px rgba(3,59,80,0.12);cursor:pointer;z-index:1200}
+#ft-chat-bubble .fb-icon{font-size:28px}
+#ft-chat-overlay{display:none;position:fixed;bottom:24px;left:24px;z-index:1300}
+.chat-window{width:360px;background:#fff;border-radius:12px;box-shadow:0 20px 50px rgba(3,59,80,0.2);overflow:hidden;display:flex;flex-direction:column}
+.chat-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:linear-gradient(90deg,#f7fdff,#eef9ff);border-bottom:1px solid #eef9ff}
+.chat-messages{padding:12px;height:220px;overflow:auto}
+.msg{margin:6px 0;padding:8px;border-radius:8px}
+.msg.u{text-align:right;background:#eef9ff}
+.msg.b{text-align:left;background:#fffbe8}
+.chat-input{display:flex;padding:10px;gap:8px;border-top:1px solid #f0f7fb}
+.chat-actions{padding:10px;border-top:1px solid #f0f7fb;display:flex;justify-content:flex-end}
+@media(max-width:720px){#ft-chat-overlay .chat-window{width:92vw}}

@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>الفواتير — فيوتشر تانك</title><link rel="stylesheet" href="styles.css"></head><body>
+<header class="top"><div class="brand"><div class="logo-wrap" aria-hidden="true"><svg width="64" height="64" viewBox="0 0 120 120"><rect width="120" height="120" rx="18" fill="#dff6ff"/><path d="M42 6c-6 8-12 12-12 22 0 14 12 24 24 24s24-10 24-24c0-10-9-14-18-34-6 8-9 9-18 12z" fill="#2fa9ff"/></svg></div><div><div class="company">فيوتشرتانك</div><div class="tag">نقاء الماء هو هدفنا</div></div></div></header>
+<main class="hero">
+  <h2>إنشاء فاتورة</h2>
+  <div class="card">
+    <label>اسم العميل</label><input id="custName" placeholder="اسم العميل">
+    <label>البند</label><input id="itemDesc" placeholder="وصف">
+    <label>السعر</label><input id="itemPrice" type="number">
+    <label>الكمية</label><input id="itemQty" type="number" value="1">
+    <button id="addItem" class="btn">أضف بند</button>
+    <table id="items" style="width:100%;border-collapse:collapse;margin-top:10px"><thead><tr><th>الوصف</th><th>سعر</th><th>كمية</th><th>المجموع</th><th></th></tr></thead><tbody></tbody></table>
+    <div style="margin-top:10px">الإجمالي: <span id="total">0.00</span> ج.م</div>
+    <div style="margin-top:12px"><button id="genPdf" class="buy">تنزيل PDF</button></div>
+  </div>
+</main>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.9.3/html2pdf.bundle.min.js"></script>
+<script>
+function fmt(n){ return Number(n||0).toLocaleString('ar-EG',{minimumFractionDigits:2}); }
+const tbody = document.querySelector('#items tbody');
+function recalc(){ let t=0; tbody.querySelectorAll('tr').forEach(r=>{ const p=Number(r.dataset.price), q=Number(r.dataset.qty); t += p*q; }); document.getElementById('total').innerText = fmt(t); }
+document.getElementById('addItem').addEventListener('click', ()=>{ const d=document.getElementById('itemDesc').value; const p=Number(document.getElementById('itemPrice').value||0); const q=Number(document.getElementById('itemQty').value||1); if(!d) return alert('اكتب الوصف'); const tr=document.createElement('tr'); tr.dataset.price=p; tr.dataset.qty=q; tr.innerHTML = `<td>${d}</td><td>${fmt(p)}</td><td>${q}</td><td>${fmt(p*q)}</td><td><button class="del">حذف</button></td>`; tbody.appendChild(tr); tr.querySelector('.del').addEventListener('click', ()=>{ tr.remove(); recalc(); }); recalc(); document.getElementById('itemDesc').value=''; document.getElementById('itemPrice').value=''; document.getElementById('itemQty').value=1; });
+document.getElementById('genPdf').addEventListener('click', async ()=>{ const node = document.createElement('div'); node.style.padding='20px'; node.innerHTML = `<h2>فاتورة — FutureTank</h2><div>العميل: ${document.getElementById('custName').value||'—'}</div>` + document.querySelector('#items').outerHTML; document.body.appendChild(node); try{ await html2pdf().from(node).save(); }catch(e){ alert('خطأ في توليد PDF'); } finally{ node.remove(); } });
+</script>
+</body></html>
