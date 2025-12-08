@@ -1,82 +1,71 @@
-// ===============================
-// system.js — FutureTank System
-// نسخة خفيفة تعمل فوراً بدون أي إضافات
-// ===============================
+// system.js — core data layer (light & safe)
+// استخدم هذا الملف كبديل آمن للمشكلة السابقة.
 
-// تحميل بيانات النظام
-export function loadSystem() {
-    const data = localStorage.getItem('futuretank_system');
-    if (!data) {
-        const defaultData = {
-            welcomeAudio: "",
-            products: [],
-            services: [],
-            invoices: [],
-            settings: {
-                siteTitle: "فيوتشرتانك",
-                slogan: "نقاء الماء هو هدفنا"
-            }
-        };
-        localStorage.setItem('futuretank_system', JSON.stringify(defaultData));
-        return defaultData;
+export const SYS = {
+  version: "1.0.0",
+  siteTitle: "فيوتشرتانك",
+  slogan: "نقاء الماء هو هدفنا"
+};
+
+const STORAGE_KEY = 'futuretank_system_v1';
+
+function defaultData(){
+  return {
+    settings: {
+      siteTitle: SYS.siteTitle,
+      slogan: SYS.slogan,
+      welcomeMessage: "مرحباً! أنا مساعد فيوتشرتانك — اسألني عن الخدمات أو الحجز.",
+      welcomeAudio: "" // قاعدة64 للصوت لو حطيتها
+    },
+    products: [],
+    services: [],
+    invoices: [],
+    users: []
+  };
+}
+
+export function loadSystem(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) {
+      const d = defaultData();
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+      return d;
     }
-    return JSON.parse(data);
+    return JSON.parse(raw);
+  }catch(e){
+    console.error("loadSystem error", e);
+    const d = defaultData();
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(d));
+    return d;
+  }
 }
 
-// حفظ البيانات
-export function saveSystem(newData) {
-    localStorage.setItem('futuretank_system', JSON.stringify(newData));
+export function saveSystem(data){
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
-// تحديث إعداد
-export function updateSetting(key, value) {
-    const data = loadSystem();
-    data.settings[key] = value;
-    saveSystem(data);
+export function getSetting(key){
+  const d = loadSystem();
+  return d.settings?.[key];
 }
 
-// إضافة منتج
-export function addProduct(product) {
-    const data = loadSystem();
-    data.products.push(product);
-    saveSystem(data);
+export function setSetting(key, value){
+  const d = loadSystem();
+  d.settings = d.settings || {};
+  d.settings[key] = value;
+  saveSystem(d);
 }
 
-// حذف منتج
-export function deleteProduct(index) {
-    const data = loadSystem();
-    data.products.splice(index, 1);
-    saveSystem(data);
-}
-
-// إضافة خدمة
-export function addService(service) {
-    const data = loadSystem();
-    data.services.push(service);
-    saveSystem(data);
-}
-
-// حذف خدمة
-export function deleteService(index) {
-    const data = loadSystem();
-    data.services.splice(index, 1);
-    saveSystem(data);
-}
-
-// حفظ رسالة ترحيب صوتية
-export function saveWelcomeAudio(base64audio) {
-    const data = loadSystem();
-    data.welcomeAudio = base64audio;
-    saveSystem(data);
-}
-
-// تشغيل رسالة الترحيب
-export function playWelcomeAudio() {
-    const data = loadSystem();
-    if (!data.welcomeAudio) {
-        alert("❗ لا يوجد تسجيل ترحيب حتى الآن");
-        return;
-    }
-    const audio = new Audio(data.welcomeAudio);
-    audio.play();
+export function playWelcomeAudio(){
+  const d = loadSystem();
+  if(!d.settings || !d.settings.welcomeAudio) return false;
+  try{
+    const a = new Audio(d.settings.welcomeAudio);
+    a.play();
+    return true;
+  }catch(e){
+    console.warn("playWelcomeAudio failed", e);
+    return false;
+  }
 }
