@@ -1,89 +1,54 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>لوحة التحكم — FutureTank</title><link rel="stylesheet" href="styles.css"></head>
-<body>
-  <div class="container">
-    <div class="card">
-      <h2>لوحة التحكم (محلي)</h2>
-      <div id="authArea">
-        <label>كلمة مرور الدخول:</label><input id="passInput" placeholder="كلمة المرور">
-        <button class="btn" onclick="login()">دخول</button>
-        <p style="font-size:13px;color:#666">كلمة المرور الافتراضية: <strong>future2025</strong></p>
-      </div>
+<!doctype html>
+<html lang="ar" dir="rtl"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>لوحة التحكم — فيوتشر تانك</title><link rel="stylesheet" href="styles.css"></head><body>
+<header class="top"><div class="brand"><div class="logo-wrap" aria-hidden="true"><svg width="64" height="64" viewBox="0 0 120 120"><rect width="120" height="120" rx="18" fill="#dff6ff"/><path d="M42 6c-6 8-12 12-12 22 0 14 12 24 24 24s24-10 24-24c0-10-9-14-18-34-6 8-9 9-18 12z" fill="#2fa9ff"/></svg></div><div><div class="company">لوحة تحكم — فيوتشر تانك</div><div class="tag">تحكم في المحتوى</div></div></div></header>
+<main class="hero">
+  <h2>لوحة التحكم</h2>
+  <div class="card">
+    <label>كلمة مرور الدخول</label><input id="pwd" type="password" placeholder="ادخل كلمة المرور">
+    <button id="login" class="btn">دخول</button>
+    <div id="adminArea" style="display:none;margin-top:12px">
+      <h3>رسالة الترحيب الصوتية</h3>
+      <textarea id="welcome" placeholder="نص رسالة الترحيب"></textarea>
+      <label>تشغيل تلقائي عند دخول الزوار</label>
+      <select id="autoplay"><option value="0">لا</option><option value="1">نعم</option></select>
 
-      <div id="adminArea" style="display:none">
-        <h3>معلومات العلامة التجارية</h3>
-        <label>الاسم العربي</label><input id="b_ar">
-        <label>الاسم الإنجليزي</label><input id="b_en">
-        <label>الشعار (slogan)</label><input id="b_slogan">
-        <label>رقم الدفع (اتصالات كاش)</label><input id="paynum">
-        <label>رسالة ترحيب صوتية</label><input id="welcomeMsg" placeholder="أهلاً! مرحباً بك...">
-        <label>رفع اللوجو</label><input type="file" id="logoFile">
-        <button class="btn" onclick="saveBrand()">حفظ العلامة</button>
+      <h3>المنتجات</h3>
+      <div id="prodList"></div>
+      <input id="pname" placeholder="اسم المنتج"><input id="pprice" placeholder="السعر"><input id="pimg" placeholder="رابط صورة"><button id="addProd" class="btn">أضف منتج</button>
 
-        <hr>
-        <h3>المنتجات</h3>
-        <label>اسم المنتج</label><input id="prod_name">
-        <label>السعر</label><input id="prod_price" type="number">
-        <label>رابط الصورة (اختياري)</label><input id="prod_img">
-        <label>رفع صورة للمنتج</label><input type="file" id="prodFile">
-        <button class="btn" onclick="addProduct()">أضف منتج</button>
-        <div id="productsList"></div>
+      <h3>الخدمات</h3>
+      <div id="svcList"></div>
+      <input id="sname" placeholder="اسم الخدمة"><input id="sprice" placeholder="السعر"><button id="addSvc" class="btn">أضف خدمة</button>
 
-        <hr>
-        <h3>الخدمات</h3>
-        <label>اسم الخدمة</label><input id="svc_name">
-        <label>السعر</label><input id="svc_price" type="number">
-        <label>الوصف</label><input id="svc_desc">
-        <button class="btn" onclick="addService()">أضف خدمة</button>
-        <div id="servicesList"></div>
-
-        <hr>
-        <h3>الطلبات والفواتير</h3>
-        <button class="btn" onclick="showOrders()">عرض الطلبات</button>
-        <button class="btn" onclick="showInvoices()">عرض الفواتير</button>
-        <div id="ordersArea"></div>
-
-        <hr>
-        <button class="btn" onclick="exportData()">تصدير JSON</button>
-        <button class="btn" onclick="importData()">استيراد JSON</button>
-        <button class="btn" onclick="logout()">خروج</button>
-      </div>
+      <h3>خيارات عامة</h3>
+      <label>رقم الدفع (اتصالات كاش)</label><input id="paynum" placeholder="01150402031">
+      <div style="margin-top:12px"><button id="save" class="buy">حفظ</button> <button id="clear" class="btn">مسح البيانات</button></div>
     </div>
   </div>
-
+</main>
 <script>
-const STORAGE_KEY='FutureTank_data_v1';
-const INV_KEY='FutureTank_invoices_v1';
-const ORD_KEY='FutureTank_orders_v1';
-const ADMIN_PASS='future2025';
-
-function login(){ const p=document.getElementById('passInput').value; if(p===ADMIN_PASS){ document.getElementById('authArea').style.display='none'; document.getElementById('adminArea').style.display='block'; loadAll(); } else alert('كلمة مرور خاطئة'); }
-function logout(){ document.getElementById('adminArea').style.display='none'; document.getElementById('authArea').style.display='block'; }
-
-function loadOrInit(){ let raw=localStorage.getItem(STORAGE_KEY); if(!raw){ localStorage.setItem(STORAGE_KEY, JSON.stringify({brand:{name_ar:'فيوتشر تانك',name_en:'FutureTank',slogan:'نقاء الماء هو هدفنا'},paymentNumber:'01150402031',products:[],services:[], welcomeMessage: 'أهلاً! مرحباً بك في فيوتشر تانك'})); raw=localStorage.getItem(STORAGE_KEY); } return JSON.parse(raw); }
-function saveAll(d){ localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); loadAll(); }
-
-function loadAll(){ const d=loadOrInit(); document.getElementById('b_ar').value=d.brand.name_ar||''; document.getElementById('b_en').value=d.brand.name_en||''; document.getElementById('b_slogan').value=d.brand.slogan||''; document.getElementById('paynum').value=d.paymentNumber||''; document.getElementById('welcomeMsg').value = d.welcomeMessage || ''; renderProducts(); renderServices(); }
-
-function saveBrand(){ const d=loadOrInit(); d.brand.name_ar = document.getElementById('b_ar').value; d.brand.name_en = document.getElementById('b_en').value; d.brand.slogan = document.getElementById('b_slogan').value; d.paymentNumber = document.getElementById('paynum').value; d.welcomeMessage = document.getElementById('welcomeMsg').value || d.welcomeMessage;
-  const f=document.getElementById('logoFile').files[0]; if(f){ const r=new FileReader(); r.onload=e=>{ localStorage.setItem('FutureTank_logoData', e.target.result); saveAll(d); alert('تم حفظ العلامة والشعار'); }; r.readAsDataURL(f); } else { saveAll(d); alert('تم حفظ العلامة'); } }
-
-function addProduct(){ const name=document.getElementById('prod_name').value; const price=Number(document.getElementById('prod_price').value||0); const img=document.getElementById('prod_img').value || localStorage.getItem('FutureTank_lastUpload') || 'https://via.placeholder.com/400x300'; if(!name||price<=0) return alert('ادخل اسم وسعر'); const d=loadOrInit(); const id='p'+Date.now(); d.products.push({id,name,price,img}); localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); renderProducts(); alert('تمت الإضافة'); }
-document.getElementById('prodFile')?.addEventListener('change', function(e){ const f=e.target.files[0]; if(!f) return; const r=new FileReader(); r.onload=ev=>{ localStorage.setItem('FutureTank_lastUpload', ev.target.result); alert('تم رفع الصورة. استخدمها عند إضافة المنتج أو ضع رابط الصورة.'); }; r.readAsDataURL(f); });
-
-function renderProducts(){ const d=loadOrInit(); let html='<table><thead><tr><th>اسم</th><th>سعر</th><th>صورة</th><th>حذف</th></tr></thead><tbody>'; (d.products||[]).forEach(p=> html+=`<tr><td>${p.name}</td><td>${p.price}</td><td style="width:140px"><img src="${p.img}" style="width:120px;height:70px;object-fit:cover;border-radius:6px"></td><td><button class="btn" onclick="delProduct('${p.id}')">حذف</button></td></tr>`); html+='</tbody></table>'; document.getElementById('productsList').innerHTML=html; }
-function delProduct(id){ if(!confirm('حذف المنتج؟')) return; const d=loadOrInit(); d.products = d.products.filter(x=>x.id!==id); localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); renderProducts(); }
-
-function addService(){ const name=document.getElementById('svc_name').value; const price=Number(document.getElementById('svc_price').value||0); const desc=document.getElementById('svc_desc').value; if(!name||price<=0) return alert('اكتب اسم وسعر'); const d=loadOrInit(); d.services.push({id:'s'+Date.now(),name,price,desc}); localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); renderServices(); alert('تمت الإضافة'); }
-function renderServices(){ const d=loadOrInit(); let html='<table><thead><tr><th>الخدمة</th><th>السعر</th><th>حذف</th></tr></thead><tbody>'; (d.services||[]).forEach(s=> html+=`<tr><td>${s.name}</td><td>${s.price}</td><td><button class="btn" onclick="delService('${s.id}')">حذف</button></td></tr>`); html+='</tbody></table>'; document.getElementById('servicesList').innerHTML=html; }
-function delService(id){ if(!confirm('حذف الخدمة؟')) return; const d=loadOrInit(); d.services = d.services.filter(x=>x.id!==id); localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); renderServices(); }
-
-function showOrders(){ const o=JSON.parse(localStorage.getItem(ORD_KEY)||'[]'); let html='<h4>الطلبات</h4>'; if(o.length===0) html+='<p>لا توجد طلبات</p>'; else { html+='<ul>'; o.forEach(ord=> html+=`<li><strong>${ord.id}</strong> — ${ord.date} — ${ord.total} ج.م <pre style="background:#f7f9fb;padding:8px">${JSON.stringify(ord.items,null,2)}</pre></li>`); html+='</ul>'; } document.getElementById('ordersArea').innerHTML=html; }
-function showInvoices(){ const inv=JSON.parse(localStorage.getItem(INV_KEY)||'[]'); let html='<h4>الفواتير</h4>'; if(inv.length===0) html+='<p>لا توجد فواتير</p>'; else { html+='<ul>'; inv.forEach(i=> html+=`<li><strong>${i.id}</strong> — ${i.date} — ${i.name} — <pre style="background:#f7f9fb;padding:6px">${JSON.stringify(i.items,null,2)}</pre></li>`); html+='</ul>'; } document.getElementById('ordersArea').innerHTML=html; }
-
-function exportData(){ const data = localStorage.getItem(STORAGE_KEY) || '{}'; const blob = new Blob([data], {type:'application/json'}); const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='futuretank_data.json'; a.click(); }
-function importData(){ const input=document.createElement('input'); input.type='file'; input.accept='application/json'; input.onchange = e => { const f=e.target.files[0]; const r=new FileReader(); r.onload = ev => { localStorage.setItem(STORAGE_KEY, ev.target.result); alert('تم الاستيراد.'); loadAll(); }; r.readAsText(f); }; input.click(); }
+const PASSWORD = 'Future2025';
+const loginBtn = document.getElementById('login');
+const pwd = document.getElementById('pwd');
+const admin = document.getElementById('adminArea');
+function loadDB(){ return JSON.parse(localStorage.getItem('ft_db')||'{"products":[{"name":"خزان بلاستيكي 1000 لتر","price":"1200","img":""},{"name":"فلتر مياه منزلي 5 مراحل","price":"2200","img":""}],"services":[{"name":"تطهير وتعقيم خزانات المياه","price":"300"},{"name":"توريد وتركيب خزانات المياه","price":"500"}],"company":{"phone":"01150402031","email":"aymnhashm.com@gmail.com","address":"هرم ستي - حدائق أكتوبر - الجيزة"},"welcome":"أهلاً بكم في فيوتشرتانك. نقاء الماء هو هدفنا. كيف أساعدك اليوم؟","autoplayWelcome":true}'); }
+function saveDB(db){ localStorage.setItem('ft_db', JSON.stringify(db)); }
+loginBtn.addEventListener('click', ()=>{ if(pwd.value===PASSWORD){ admin.style.display='block'; loadToUI(); } else alert('كلمة المرور خاطئة'); });
+function loadToUI(){
+  const db=loadDB();
+  document.getElementById('welcome').value = db.welcome||'';
+  document.getElementById('autoplay').value = db.autoplayWelcome? '1':'0';
+  document.getElementById('paynum').value = (db.company && db.company.phone) || '01150402031';
+  const prodList = document.getElementById('prodList'); prodList.innerHTML='';
+  (db.products||[]).forEach((p,i)=>{ const d=document.createElement('div'); d.className='card'; d.innerHTML = `<strong>${p.name}</strong> — ${p.price} ج.م <button data-i="${i}" class="delProd">حذف</button>`; prodList.appendChild(d); });
+  const svcList = document.getElementById('svcList'); svcList.innerHTML='';
+  (db.services||[]).forEach((s,i)=>{ const d=document.createElement('div'); d.className='card'; d.innerHTML = `<strong>${s.name}</strong> — ${s.price||'—'} ج.م <button data-i="${i}" class="delSvc">حذف</button>`; svcList.appendChild(d); });
+  document.querySelectorAll('.delProd').forEach(b=>b.onclick=function(){ const i=this.dataset.i; db.products.splice(i,1); saveDB(db); loadToUI(); });
+  document.querySelectorAll('.delSvc').forEach(b=>b.onclick=function(){ const i=this.dataset.i; db.services.splice(i,1); saveDB(db); loadToUI(); });
+}
+document.getElementById('addProd').addEventListener('click', ()=>{ const db=loadDB(); const n=document.getElementById('pname').value, pr=document.getElementById('pprice').value, img=document.getElementById('pimg').value; if(!n) return alert('اكتب اسم المنتج'); db.products.push({name:n,price:pr||'0',img:img||''}); saveDB(db); loadToUI(); });
+document.getElementById('addSvc').addEventListener('click', ()=>{ const db=loadDB(); const n=document.getElementById('sname').value, pr=document.getElementById('sprice').value; if(!n) return alert('اكتب اسم الخدمة'); db.services.push({name:n,price:pr||'0'}); saveDB(db); loadToUI(); });
+document.getElementById('save').addEventListener('click', ()=>{ const db=loadDB(); db.welcome = document.getElementById('welcome').value; db.autoplayWelcome = document.getElementById('autoplay').value==='1'; db.company = db.company || {}; db.company.phone = document.getElementById('paynum').value; saveDB(db); alert('✓ تم الحفظ'); });
+document.getElementById('clear').addEventListener('click', ()=>{ if(confirm('هل تريد مسح كل البيانات؟')){ localStorage.removeItem('ft_db'); loadToUI(); } });
 </script>
-</body>
-</html>
+</body></html>
