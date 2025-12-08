@@ -1,1 +1,0 @@
-console.log('FutureTank site loaded');
