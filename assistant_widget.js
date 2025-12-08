@@ -1,101 +1,40 @@
-// assistant_widget.js
-// يعتمد على ft_db في localStorage
-(function(){
-  const bubble = document.getElementById('ft-chat-bubble');
-  const overlay = document.getElementById('ft-chat-overlay');
-  const closeBtn = document.getElementById('closeChat');
-  const sendBtn = document.getElementById('chatSend');
-  const input = document.getElementById('chatInput');
-  const messages = document.getElementById('chatMessages');
-  const playWelcomeBtn = document.getElementById('playWelcome');
+// assistant_widget.js — بسيط: يضيف فقاعة مساعد + يفتح assistant.html
+import { loadSystem, playWelcomeAudio } from './system.js';
 
-  function loadDB(){
-    return JSON.parse(localStorage.getItem('ft_db') || '{}');
-  }
-
-  function append(who, text){
-    const d = document.createElement('div');
-    d.className = 'msg ' + (who==='user' ? 'u' : 'b');
-    d.innerText = (who==='user' ? 'أنت: ' : 'المساعد: ') + text;
-    messages.appendChild(d);
-    messages.scrollTop = messages.scrollHeight;
-  }
-
-  function knowledgeReply(q){
-    const db = loadDB();
-    const t = q.toLowerCase();
-    if(t.includes('خدمات') || t.includes('ما هي خدمات') ) {
-      if(db.services && db.services.length) return db.services.map(s=>s.name).join(' — ');
-      return 'توريد/تركيب/صيانة/تعقيم';
-    }
-    if(t.includes('منتج') || t.includes('ما هي المنتجات')){
-      if(db.products && db.products.length) return db.products.map(p=>p.name).join(' — ');
-      return 'خزانات وفلاتر';
-    }
-    if(t.includes('احجز') || t.includes('حجز')){
-      return 'للحجز استخدم زر "احجز خدمة الآن" في الصفحة الرئيسية أو اتصل ' + ((db.company && db.company.phone) || '01150402031');
-    }
-    if(t.includes('كيف') && t.includes('ادفع') || t.includes('طريقة الدفع')){
-      return 'طريقة الدفع: اتصالات كاش على رقم ' + ((db.company && db.company.phone) || '01150402031');
-    }
-    if(t.includes('اتصال')||t.includes('واتس')){
-      return 'هاتف/واتساب: ' + ((db.company && db.company.phone) || '01150402031');
-    }
-    // else generic
-    return (db.aiFallback && db.aiFallback.reply) || 'أنا هنا للمساعدة — اسألني عن: الخدمات، المنتجات، الحجز، أو طرق الدفع.';
-  }
-
-  function handleSend(){
-    const q = input.value.trim();
-    if(!q) return;
-    append('user', q);
-    input.value = '';
-    const r = knowledgeReply(q);
-    setTimeout(()=> append('bot', r), 300);
-  }
-
-  bubble.addEventListener('click', ()=> {
-    overlay.style.display = 'block';
-    overlay.setAttribute('aria-hidden','false');
-    // welcome autoplay attempt
-    setTimeout(()=> tryPlayWelcome(), 300);
+function createWidget(){
+  // إذا موجود مسبقاً اوقف
+  if(document.querySelector('#ft-assistant-widget')) return;
+  const w = document.createElement('div');
+  w.id = 'ft-assistant-widget';
+  w.innerHTML = `
+    <button id="ft-open-assistant" title="تحدث مع المساعد">🤖</button>
+  `;
+  Object.assign(w.style, {
+    position: 'fixed',
+    right: '18px',
+    bottom: '18px',
+    zIndex: 9999
   });
-  closeBtn.addEventListener('click', ()=> { overlay.style.display='none'; overlay.setAttribute('aria-hidden','true'); });
+  document.body.appendChild(w);
 
-  sendBtn.addEventListener('click', handleSend);
-  input.addEventListener('keydown', (e)=> { if(e.key === 'Enter') handleSend(); });
-
-  playWelcomeBtn.addEventListener('click', tryPlayWelcome);
-
-  // welcome TTS
-  function tryPlayWelcome(){
-    const db = loadDB();
-    const txt = (db.welcome) ? db.welcome : 'أهلاً بكم في فيوتشرتانك. نقاء الماء هو هدفنا. كيف أساعدك اليوم؟';
-    if('speechSynthesis' in window){
-      try {
-        const utter = new SpeechSynthesisUtterance(txt);
-        utter.lang = 'ar-SA';
-        // set voice if available
-        const v = speechSynthesis.getVoices().find(v=>v.lang && v.lang.startsWith('ar')) || null;
-        if(v) utter.voice = v;
-        speechSynthesis.cancel();
-        speechSynthesis.speak(utter);
-      } catch(e){
-        console.warn('TTS error', e);
-      }
-    } else {
-      alert('المتصفح لا يدعم تحويل النص لصوت.');
+  const btn = document.getElementById('ft-open-assistant');
+  btn.style.cssText = 'background:var(--accent);color:#fff;border:0;padding:12px;border-radius:50%;font-size:20px;cursor:pointer';
+  btn.addEventListener('click', ()=>{
+    // افتح صفحة المساعد في تبويب جديد أو نافذة
+    const win = window.open('assistant.html', '_blank');
+    if(!win) {
+      // لو منعه البوب اب افتح في نفس النافذة
+      window.location.href = 'assistant.html';
     }
-  }
-
-  // auto-play welcome on open if db.autoplayWelcome true
-  document.addEventListener('DOMContentLoaded', ()=> {
-    const db = loadDB();
-    if(db.autoplayWelcome){
-      // attempt immediate play; browsers may block until user interacts
-      tryPlayWelcome();
-    }
-    // preload an initial assistant message
-    append('bot', 'أنا هنا للمساعدة — اسألني عن: الخدمات، المنتجات، الحجز، أو طرق الدفع.');
   });
-})();
+
+  // شغّل رسالة الترحيب لو موجودة
+  const sys = loadSystem();
+  if(sys.settings && sys.settings.welcomeAudio){
+    // لا تشغّل تلقائياً لو بدك تحكم: هنا نشغّل فقط لو أردت.
+    // playWelcomeAudio();
+  }
+}
+
+// تهيئة بعد DOM
+document.addEventListener('DOMContentLoaded', createWidget);
