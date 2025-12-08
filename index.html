@@ -1,22 +1,0 @@
-<!-- NAV -->
-<nav class="main-nav">
-  <div class="brand">
-    <!-- logo هنا -->
-    <a href="index.html" class="logo">FutureTank</a>
-  </div>
-  <ul class="nav-links">
-    <li><a href="assistant.html">🤖 المساعد الذكي</a></li>
-    <li><a href="billing.html">📄 إنشاء الفواتير</a></li>
-    <!-- لو عايب تخفي لوحة التحكم عن الجمهور لا تضع هذا الرابط هنا -->
-    <li class="admin-only" style="display:none;"><a href="dashboard.html">🛠 لوحة التحكم</a></li>
-  </ul>
-  <div class="actions">
-    <button id="langBtn">AR | EN</button>
-  </div>
-</nav>
-
-<!-- في نهاية body: تأكد تفعيل السكربتات بالترتيب التالي -->
-<script src="system.js" type="module"></script>
-<script src="assistant_widget.js" type="module"></script>
-<script src="lang.js" type="module"></script>
-<script src="script.js" defer></script>
