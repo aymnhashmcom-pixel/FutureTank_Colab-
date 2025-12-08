@@ -1,105 +1,22 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>FutureTank — فيوتشر تانك</title>
-<link rel="stylesheet" href="styles.css">
-</head>
-<body>
-  <header class="top">
-    <div class="brand">
-      <div class="logo-wrap" aria-hidden="true">
-        <!-- logo minimal (background between sky & light blue) -->
-        <svg width="88" height="88" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#dff6ff"/><stop offset="1" stop-color="#9ee1ff"/></linearGradient></defs>
-          <rect width="120" height="120" rx="18" fill="url(#g)"/>
-          <!-- hands + drop icon -->
-          <path d="M30 80 C30 60 18 52 12 40 C22 34 36 44 44 50 C52 44 66 34 76 40 C70 52 58 60 58 80 Z" fill="#2fa9ff"/>
-        </svg>
-      </div>
-      <div>
-        <div class="company">فيوتشرتانك</div>
-        <div class="tag">نقاء الماء هو هدفنا</div>
-      </div>
-    </div>
-
-    <div class="controls">
-      <div class="lang-switch">
-        <button id="toAr">AR</button> | <button id="toEn">EN</button>
-      </div>
-      <nav class="nav">
-        <a href="#" class="btn" id="link-assistant">🤖 المساعد الذكي</a>
-        <a href="billing.html" class="btn">📄 إنشاء الفواتير</a>
-        <a href="dashboard.html" class="btn">🛠 لوحة التحكم</a>
-      </nav>
-    </div>
-  </header>
-
-  <main class="hero">
-    <h1 id="headline">حلول متكاملة للمياه — خزانات وفلاتر</h1>
-    <p class="lead" id="lead">نقدّم توريد، تركيب، صيانة، وتعقيم خزانات المياه وفلات المياه مع ضمانات واضحة وجودة معتمدة.</p>
-
-    <div class="ctas">
-      <a class="big" href="#products" id="cta-products">🛍️ تعرف على منتجاتنا</a>
-      <a class="big" href="billing.html" id="cta-shop">🛒 تسوق الآن</a>
-      <a class="big" href="#services" id="cta-services">🧰 تعرف على خدماتنا</a>
-      <a class="big" href="#book" id="cta-book">📅 احجز خدمة الآن</a>
-    </div>
-
-    <section id="products" class="section">
-      <h2 id="productsTitle">المنتجات</h2>
-      <p id="productsIntro">خزانات مياه — فلاتر مياه</p>
-      <p class="muted" id="guaranteeProducts">الضمان على المنتجات: 10 سنوات</p>
-      <div id="productsList" class="cards"></div>
-    </section>
-
-    <section id="services" class="section">
-      <h2 id="servicesTitle">الخدمات</h2>
-      <ul id="servicesList"></ul>
-      <p class="muted" id="guaranteeMaintenance">الضمان على أعمال الصيانة: 5 سنوات</p>
-    </section>
-
-    <section id="book" class="section">
-      <h2 id="bookTitle">احجز خدمة</h2>
-      <p id="bookText">للحجز والدفع عبر اتصالات كاش: <strong id="phone">01150402031</strong></p>
-      <a class="buy" href="billing.html" id="bookNow">احجز الآن — دفع اتصالات كاش</a>
-    </section>
-
-    <footer class="site-foot">
-      <div class="contact">
-        <div id="contactPhone">هاتف/واتساب: <strong>01150402031</strong></div>
-        <div id="contactEmail">البريد: <strong>aymnhashm.com@gmail.com</strong></div>
-        <div id="contactAddr">العنوان: هرم ستي - حدائق أكتوبر - الجيزة</div>
-      </div>
-      <div id="copyright">© 2025 FutureTank — فيوتشر تانك — جميع الحقوق محفوظة</div>
-    </footer>
-  </main>
-
-  <!-- Chat bubble widget (assistant) -->
-  <div id="ft-chat-bubble" title="تواصل مع المساعد">
-    <div class="fb-icon">🤖</div>
+<!-- NAV -->
+<nav class="main-nav">
+  <div class="brand">
+    <!-- logo هنا -->
+    <a href="index.html" class="logo">FutureTank</a>
   </div>
-
-  <!-- Chat overlay -->
-  <div id="ft-chat-overlay" aria-hidden="true">
-    <div class="chat-window">
-      <header class="chat-head">
-        <div><strong>المساعد الذكي — FutureTank</strong></div>
-        <button id="closeChat">✖</button>
-      </header>
-      <div id="chatMessages" class="chat-messages"></div>
-      <div class="chat-input">
-        <input id="chatInput" placeholder="اكتب سؤالك هنا (مثال: ما هي خدماتكم؟)" />
-        <button id="chatSend" class="btn">إرسال</button>
-      </div>
-      <div class="chat-actions">
-        <button id="playWelcome" class="buy">▶ تشغيل رسالة الترحيب</button>
-      </div>
-    </div>
+  <ul class="nav-links">
+    <li><a href="assistant.html">🤖 المساعد الذكي</a></li>
+    <li><a href="billing.html">📄 إنشاء الفواتير</a></li>
+    <!-- لو عايب تخفي لوحة التحكم عن الجمهور لا تضع هذا الرابط هنا -->
+    <li class="admin-only" style="display:none;"><a href="dashboard.html">🛠 لوحة التحكم</a></li>
+  </ul>
+  <div class="actions">
+    <button id="langBtn">AR | EN</button>
   </div>
+</nav>
 
-<script src="lang.js"></script>
-<script src="assistant_widget.js"></script>
-</body>
-</html>
+<!-- في نهاية body: تأكد تفعيل السكربتات بالترتيب التالي -->
+<script src="system.js" type="module"></script>
+<script src="assistant_widget.js" type="module"></script>
+<script src="lang.js" type="module"></script>
+<script src="script.js" defer></script>
