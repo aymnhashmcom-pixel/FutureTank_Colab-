@@ -1,196 +1,105 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>FutureTank — فيوتشر تانك</title>
-  <link rel="stylesheet" href="styles.css">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>FutureTank — فيوتشر تانك</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-  <header class="header">
-    <div class="logo-wrap">
-      <div id="logoImg" class="logo-img" title="لوجو الشركة">💧🤲</div>
-      <div class="brand">
-        <h1 id="brandName">فيوتشر تانك — FutureTank</h1>
-        <p id="brandSlogan">نقاء الماء هو هدفنا</p>
+  <header class="top">
+    <div class="brand">
+      <div class="logo-wrap" aria-hidden="true">
+        <!-- logo minimal (background between sky & light blue) -->
+        <svg width="88" height="88" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+          <defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#dff6ff"/><stop offset="1" stop-color="#9ee1ff"/></linearGradient></defs>
+          <rect width="120" height="120" rx="18" fill="url(#g)"/>
+          <!-- hands + drop icon -->
+          <path d="M30 80 C30 60 18 52 12 40 C22 34 36 44 44 50 C52 44 66 34 76 40 C70 52 58 60 58 80 Z" fill="#2fa9ff"/>
+        </svg>
       </div>
+      <div>
+        <div class="company">فيوتشرتانك</div>
+        <div class="tag">نقاء الماء هو هدفنا</div>
+      </div>
+    </div>
+
+    <div class="controls">
+      <div class="lang-switch">
+        <button id="toAr">AR</button> | <button id="toEn">EN</button>
+      </div>
+      <nav class="nav">
+        <a href="#" class="btn" id="link-assistant">🤖 المساعد الذكي</a>
+        <a href="billing.html" class="btn">📄 إنشاء الفواتير</a>
+        <a href="dashboard.html" class="btn">🛠 لوحة التحكم</a>
+      </nav>
     </div>
   </header>
 
-  <main class="container">
-    <div class="hero">
-      <h2>حلول متكاملة للمياه — خزانات وفلاتر</h2>
-      <p id="lead">نقدّم توريد وتركيب وصيانة وخدمات تعقيم لخزانات المياه وفلات المياه مع ضمانات واضحة وجودة معتمدة.</p>
+  <main class="hero">
+    <h1 id="headline">حلول متكاملة للمياه — خزانات وفلاتر</h1>
+    <p class="lead" id="lead">نقدّم توريد، تركيب، صيانة، وتعقيم خزانات المياه وفلات المياه مع ضمانات واضحة وجودة معتمدة.</p>
 
-      <div class="row">
-        <a class="btn" href="assistant.html">🤖 التحدث مع المساعد الذكي</a>
-        <button class="btn" onclick="openProducts()">🛍️ تعرف على منتجاتنا</button>
-        <button class="btn" onclick="openShop()">🛒 تسوق الآن</button>
-        <button class="btn" onclick="openServices()">🧰 تعرف على خدماتنا</button>
-        <button class="btn" onclick="openBook()">📅 احجز خدمة الآن</button>
-      </div>
-
-      <div class="row" style="margin-top:22px">
-        <div class="card">
-          <h3>المنتجات</h3>
-          <p class="small">خزانات مياه — فلاتر مياه</p>
-          <p class="small">ضمان على المنتجات: <strong>10 سنوات</strong></p>
-        </div>
-
-        <div class="card">
-          <h3>أعمال الصيانة</h3>
-          <p class="small">ضمان على أعمال الصيانة: <strong>5 سنوات</strong></p>
-          <p class="small">تعقيم بخيارات مطابقة لمعايير وزارة الصحة المصرية</p>
-        </div>
-      </div>
+    <div class="ctas">
+      <a class="big" href="#products" id="cta-products">🛍️ تعرف على منتجاتنا</a>
+      <a class="big" href="billing.html" id="cta-shop">🛒 تسوق الآن</a>
+      <a class="big" href="#services" id="cta-services">🧰 تعرف على خدماتنا</a>
+      <a class="big" href="#book" id="cta-book">📅 احجز خدمة الآن</a>
     </div>
+
+    <section id="products" class="section">
+      <h2 id="productsTitle">المنتجات</h2>
+      <p id="productsIntro">خزانات مياه — فلاتر مياه</p>
+      <p class="muted" id="guaranteeProducts">الضمان على المنتجات: 10 سنوات</p>
+      <div id="productsList" class="cards"></div>
+    </section>
+
+    <section id="services" class="section">
+      <h2 id="servicesTitle">الخدمات</h2>
+      <ul id="servicesList"></ul>
+      <p class="muted" id="guaranteeMaintenance">الضمان على أعمال الصيانة: 5 سنوات</p>
+    </section>
+
+    <section id="book" class="section">
+      <h2 id="bookTitle">احجز خدمة</h2>
+      <p id="bookText">للحجز والدفع عبر اتصالات كاش: <strong id="phone">01150402031</strong></p>
+      <a class="buy" href="billing.html" id="bookNow">احجز الآن — دفع اتصالات كاش</a>
+    </section>
+
+    <footer class="site-foot">
+      <div class="contact">
+        <div id="contactPhone">هاتف/واتساب: <strong>01150402031</strong></div>
+        <div id="contactEmail">البريد: <strong>aymnhashm.com@gmail.com</strong></div>
+        <div id="contactAddr">العنوان: هرم ستي - حدائق أكتوبر - الجيزة</div>
+      </div>
+      <div id="copyright">© 2025 FutureTank — فيوتشر تانك — جميع الحقوق محفوظة</div>
+    </footer>
   </main>
 
-  <button class="cart-btn" onclick="openCart()">🛒 <span id="cartCount">0</span></button>
-  <footer>© 2025 FutureTank — فيوتشر تانك — جميع الحقوق محفوظة</footer>
+  <!-- Chat bubble widget (assistant) -->
+  <div id="ft-chat-bubble" title="تواصل مع المساعد">
+    <div class="fb-icon">🤖</div>
+  </div>
 
-  <!-- MODAL -->
-  <div id="modalBack" class="modal-back">
-    <div class="modal">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-        <h2 id="modalTitle">القائمة</h2>
-        <div><button class="close" onclick="closeModal()">إغلاق ✖</button></div>
+  <!-- Chat overlay -->
+  <div id="ft-chat-overlay" aria-hidden="true">
+    <div class="chat-window">
+      <header class="chat-head">
+        <div><strong>المساعد الذكي — FutureTank</strong></div>
+        <button id="closeChat">✖</button>
+      </header>
+      <div id="chatMessages" class="chat-messages"></div>
+      <div class="chat-input">
+        <input id="chatInput" placeholder="اكتب سؤالك هنا (مثال: ما هي خدماتكم؟)" />
+        <button id="chatSend" class="btn">إرسال</button>
       </div>
-      <div id="modalBody"></div>
+      <div class="chat-actions">
+        <button id="playWelcome" class="buy">▶ تشغيل رسالة الترحيب</button>
+      </div>
     </div>
   </div>
 
-<script>
-/* ========== Data layer (localStorage) ========== */
-const STORAGE_KEY = 'FutureTank_data_v1';
-const CART_KEY = 'FutureTank_cart_v1';
-const ORDERS_KEY = 'FutureTank_orders_v1';
-const INVOICES_KEY = 'FutureTank_invoices_v1';
-
-const defaults = {
-  brand:{name_ar:'فيوتشر تانك', name_en:'FutureTank', slogan:'نقاء الماء هو هدفنا'},
-  paymentNumber:'01150402031',
-  welcomeMessage: 'أهلاً! مرحباً بك في فيوتشر تانك، كيف أساعدك اليوم؟',
-  products:[
-    {id:'p1',name:'خزان مياه 1000 لتر',price:2200,img:'https://via.placeholder.com/400x300?text=خزان+1000L',category:'خزانات'},
-    {id:'p2',name:'فلتر مياه منزلي 7 مراحل',price:1850,img:'https://via.placeholder.com/400x300?text=فلتر+7+مراحل',category:'فلاتر'}
-  ],
-  services:[
-    {id:'s1',name:'توريد وتركيب خزانات المياه',price:300,desc:'توريد وتركيب وفق المواصفات'},
-    {id:'s2',name:'صيانة وإصلاح خزانات المياه',price:450,desc:'تشخيص وصيانة شاملة'},
-    {id:'s3',name:'تطهير وتعقيم خزانات مياه الشرب',price:300,desc:'مطابق لمعايير وزارة الصحة المصرية'},
-    {id:'s4',name:'توريد وتركيب فلاتر المياه',price:1200,desc:'فلتر منزلي مع التركيب'},
-    {id:'s5',name:'صيانة وإصلاح فلاتر المياه',price:400,desc:'صيانة فلتر وتغيير فلاتر'}
-  ]
-};
-
-function loadData(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if(raw) return JSON.parse(raw);
-  }catch(e){}
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(defaults));
-  return JSON.parse(JSON.stringify(defaults));
-}
-function saveData(d){ localStorage.setItem(STORAGE_KEY, JSON.stringify(d)); }
-
-/* ========== cart ========= */
-function loadCart(){ return JSON.parse(localStorage.getItem(CART_KEY) || '[]'); }
-function saveCart(c){ localStorage.setItem(CART_KEY, JSON.stringify(c)); updateCartCount(); }
-function updateCartCount(){ const c = loadCart(); document.getElementById('cartCount').innerText = c.reduce((s,i)=> s + i.qty, 0); }
-
-/* ========== modal helpers ========= */
-function openModal(title, html){ document.getElementById('modalTitle').innerText = title; document.getElementById('modalBody').innerHTML = html; document.getElementById('modalBack').style.display='flex'; }
-function closeModal(){ document.getElementById('modalBack').style.display='none'; }
-
-/* ========== products / shop ========= */
-function renderProducts(){
-  const d=loadData();
-  let html=`<div style="text-align:right"><p>المنتجات — ضمان 10 سنوات</p><div class="products-grid">`;
-  d.products.forEach(p=> html+=`<div class="product"><img src="${p.img}" alt="${p.name}"><h4>${p.name}</h4><div class="price">${p.price.toLocaleString()} ج.م</div><div style="margin-top:8px"><a class="btn" href="#" onclick="addToCart('${p.id}','product');return false;">أضف للسلة</a></div></div>`);
-  html+='</div></div>'; return html;
-}
-function openProducts(){ openModal('منتجاتنا', renderProducts() + `<div style="margin-top:12px;text-align:left"><button class="btn" onclick="openShop();closeModal();">🛒 الذهاب إلى السلة</button></div>`); }
-function addToCart(id,type='product'){ let c=loadCart(); const idx=c.findIndex(i=>i.id===id); if(idx>-1) c[idx].qty++; else c.push({id,qty:1,type}); saveCart(c); alert('تمت الإضافة للسلة'); }
-
-/* ========== shop / cart ========= */
-function openShop(){
-  const d=loadData(); const cart=loadCart(); let html=`<h3>سلة التسوق</h3>`;
-  if(cart.length===0) html+='<p>السلة فارغة</p>';
-  html += `<table><thead><tr><th>المنتج</th><th>كمية</th><th>السعر</th></tr></thead><tbody>`;
-  let total=0;
-  cart.forEach(it=>{ const item = d.products.find(p=>p.id===it.id) || d.services.find(s=>s.id===it.id) || {}; const line=(item.price||0)*it.qty; total+=line; html+=`<tr><td>${item.name}</td><td>${it.qty}</td><td>${line.toLocaleString()} ج.م</td></tr>`; });
-  html+='</tbody></table>';
-  html+=`<div style="text-align:right;font-weight:800;margin-top:8px">الإجمالي: ${total.toLocaleString()} ج.م</div>`;
-  html+=`<div style="margin-top:10px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="checkout()">🔖 الدفع الآن</button><button class="btn" onclick="clearCart()">🗑 تفريغ السلة</button></div>`;
-  openModal('التسوق', html);
-}
-function clearCart(){ if(confirm('هل تريد تفريغ السلة؟')){ saveCart([]); closeModal(); alert('تم تفريغ السلة'); } }
-
-/* ========== services / booking ========= */
-function renderServices(){
-  const d=loadData(); let html='<ul style="list-style:none;padding:0">';
-  d.services.forEach(s=> html+=`<li style="padding:10px;border-bottom:1px dashed #eef9ff"><strong>${s.name}</strong><div style="font-size:13px;color:#456">${s.desc||''}</div><div style="margin-top:6px;color:var(--accent);font-weight:800">${s.price.toLocaleString()} ج.م</div><div style="margin-top:6px"><button class="btn" onclick="addToCart('${s.id}','service')">احجز هذه الخدمة</button></div></li>`);
-  html+='</ul>'; return html;
-}
-function openServices(){ openModal('خدماتنا', renderServices() + `<div style="margin-top:10px;color:#235a75">الضمان على أعمال الصيانة: <strong>5 سنوات</strong></div>`); }
-function openBook(){ openModal('احجز خدمة الآن', renderServices() + `<div style="margin-top:12px"><small>بعد الضغط على احجز، إتمام الدفع عبر اتصالات كاش على 01150402031.</small></div>`); }
-
-/* ========== checkout simulated ========= */
-function checkout(){
-  const d=loadData(); const cart=loadCart(); if(cart.length===0){ alert('السلة فارغة'); return; }
-  let total=0; cart.forEach(it=>{ const item=d.products.find(p=>p.id===it.id)||d.services.find(s=>s.id===it.id)||{}; total += (item.price||0)*it.qty; });
-  const html=`<div><p>المبلغ المستحق: <strong>${total.toLocaleString()} ج.م</strong></p><p>طريقة الدفع: <strong>اتصالات كاش</strong></p><p>رقم الدفع: <strong>${d.paymentNumber}</strong></p><p>بعد الدفع أرسل إيصال الدفع عبر واتساب على نفس الرقم.</p><div style="margin-top:12px;display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="confirmOrder()">✅ تم الدفع — إرسال إشعار</button><button class="btn" onclick="closeModal()">إلغاء</button></div></div>`;
-  openModal('الدفع', html);
-}
-function confirmOrder(){
-  const cart = loadCart();
-  if(cart.length===0){ alert('السلة فارغة'); closeModal(); return; }
-  const orders = JSON.parse(localStorage.getItem(ORDERS_KEY) || '[]');
-  const d = loadData();
-  let total=0; const items=[];
-  cart.forEach(it=>{ const product = d.products.find(p=>p.id===it.id) || d.services.find(s=>s.id===it.id) || {}; items.push({id: it.id, name: product.name || 'منتج', qty: it.qty, price: product.price || 0}); total += (product.price||0)*it.qty; });
-  orders.push({ id:'ORD'+Date.now(), date:new Date().toLocaleString(), items, total });
-  localStorage.setItem(ORDERS_KEY, JSON.stringify(orders));
-  saveCart([]);
-  closeModal();
-  alert('تم تسجيل الطلب. يرجى إرسال إيصال الدفع على رقم ' + d.paymentNumber);
-}
-
-/* ========== welcome audio feature ========= */
-function playWelcome(){
-  try{
-    const d=loadData();
-    const txt = d.welcomeMessage || '';
-    if(!txt) return;
-    // use SpeechSynthesis
-    if('speechSynthesis' in window){
-      const utter = new SpeechSynthesisUtterance(txt);
-      // set Arabic voice if available
-      const voices = window.speechSynthesis.getVoices();
-      const ar = voices.find(v=>/arabic|ar-SA|ar_EG/i.test(v.lang) || /Arabic/i.test(v.name));
-      if(ar) utter.voice = ar;
-      utter.lang = 'ar-SA';
-      utter.rate = 1;
-      window.speechSynthesis.cancel();
-      window.speechSynthesis.speak(utter);
-    }
-  }catch(e){ console.warn(e); }
-}
-
-/* ========== init ========= */
-document.addEventListener('DOMContentLoaded', ()=>{
-  updateCartCount();
-  const d = loadData();
-  if(d.brand && d.brand.name_ar) document.getElementById('brandName').innerText = d.brand.name_ar + ' — ' + (d.brand.name_en||'FutureTank');
-  if(d.brand && d.brand.slogan) document.getElementById('brandSlogan').innerText = d.brand.slogan;
-  const logoData = localStorage.getItem('FutureTank_logoData');
-  if(logoData){ const el = document.getElementById('logoImg'); el.style.backgroundImage = `url(${logoData})`; el.innerText=''; el.style.backgroundSize='cover'; }
-  // play welcome message (once per session)
-  const played = sessionStorage.getItem('ft_welcome_played');
-  if(!played){ playWelcome(); sessionStorage.setItem('ft_welcome_played','1'); }
-});
-</script>
+<script src="lang.js"></script>
+<script src="assistant_widget.js"></script>
 </body>
 </html>
