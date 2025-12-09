@@ -1,86 +1,75 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FutureTank | فيوتشرتانك</title>
-
-<style>
-    body {
-        font-family: "Cairo", sans-serif;
-        margin: 0;
-        padding: 0;
-        background: #0c2d48;
-        color: white;
-        text-align: center;
-    }
-
-    .header {
-        padding: 30px 10px;
-    }
-
-    .logo {
-        width: 180px;
-        margin-bottom: 10px;
-    }
-
-    h1 {
-        margin: 5px 0;
-        font-size: 32px;
-        font-weight: 800;
-        color: #6bd5ff;
-    }
-
-    h2 {
-        margin: 0;
-        font-size: 20px;
-        color: #aee9ff;
-    }
-
-    .section-btn {
-        display: block;
-        width: 80%;
-        margin: 20px auto;
-        padding: 18px;
-        background: #1e90ff;
-        color: white;
-        font-size: 22px;
-        font-weight: bold;
-        border-radius: 15px;
-        text-decoration: none;
-        transition: 0.3s;
-    }
-
-    .section-btn:hover {
-        background: #63b8ff;
-    }
-
-    footer {
-        margin-top: 40px;
-        padding: 20px;
-        opacity: 0.6;
-    }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FutureTank | فيوتشرتانك لخزانات وفلاتر المياه</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<!-- ====================== HEADER ====================== -->
-<div class="header">
-    <img class="logo" src="logo.png" alt="FutureTank Logo">
-    <h1>فيوتشرتانك</h1>
-    <h2>خزانات مياه • فلاتر مياه</h2>
-</div>
+    <!-- Header -->
+    <header class="main-header">
+        <img src="https://i.imgur.com/IxQFJvM.png" class="logo" alt="FutureTank Logo">
+        <h1 class="brand-title">فيوتشر تانك ✨</h1>
+        <p class="brand-sub">خزانات مياه – فلاتر مياه – صيانة – تركيب</p>
 
-<!-- ====================== BUTTONS ====================== -->
-<a href="products.html" class="section-btn">تعرف على منتجاتنا</a>
-<a href="shop.html" class="section-btn">تسوّق الآن</a>
-<a href="services.html" class="section-btn">تعرف على خدماتنا</a>
-<a href="booking.html" class="section-btn">احجز خدمة الآن</a>
+        <div class="header-buttons">
+            <a href="#products" class="btn primary">تعرف على منتجاتنا</a>
+            <a href="#shop" class="btn secondary">تسوق الآن 🛒</a>
+            <a href="#services" class="btn primary">تعرف على خدماتنا</a>
+            <a href="#booking" class="btn secondary">احجز خدمة الآن</a>
+        </div>
+    </header>
 
-<footer>
-    © 2025 FutureTank — جميع الحقوق محفوظة
-</footer>
+    <!-- Products Section -->
+    <section id="products" class="section">
+        <h2>منتجات فيوتشرتانك</h2>
+        <p class="section-desc">خزانات مياه – فلاتر مياه – ضمان 10 سنوات</p>
 
+        <div class="product-grid" id="productContainer">
+            <!-- يتم تعبئتها تلقائياً من database.json -->
+        </div>
+    </section>
+
+    <!-- Shopping Section -->
+    <section id="shop" class="section alt">
+        <h2>تسوق الآن</h2>
+        <p class="section-desc">يمكنك شراء منتجات FutureTank عبر متجرنا</p>
+
+        <div id="shopContainer" class="product-grid">
+            <!-- إضافة المنتجات تلقائياً -->
+        </div>
+    </section>
+
+    <!-- Services Section -->
+    <section id="services" class="section">
+        <h2>خدمات فيوتشرتانك</h2>
+        <ul class="services-list">
+            <li>توريد وتركيب خزانات المياه</li>
+            <li>صيانة وإصلاح خزانات المياه</li>
+            <li>تطهير وتعقيم خزانات مياه الشرب – مطابقة لمعايير وزارة الصحة</li>
+            <li>توريد وتركيب فلاتر المياه</li>
+            <li>صيانة وإصلاح فلاتر المياه</li>
+            <li>ضمان 5 سنوات على جميع أعمال الصيانة</li>
+        </ul>
+    </section>
+
+    <!-- Booking Section -->
+    <section id="booking" class="section alt">
+        <h2>احجز خدمة الآن</h2>
+        <p class="section-desc">اختر خدمتك – الدفع عند الاستلام أو أونلاين</p>
+
+        <div id="bookingContainer" class="product-grid">
+            <!-- يتم تعبئتها تلقائياً -->
+        </div>
+    </section>
+
+    <footer class="footer">
+        FutureTank © جميع الحقوق محفوظة 2025
+    </footer>
+
+    <script src="system.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
