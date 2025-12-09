@@ -3,28 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>فيوتشر تانك | FutureTank</title>
+    <title>Future Tank Assistant</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-    <!-- HEADER -->
-    <div class="header">
-        <img src="https://i.imgur.com/94YQv2F.png" alt="FutureTank Logo">
-        <h1>فيوتشر تانك</h1>
-        <h2>خزانات مياه • فلاتر مياه</h2>
+    <!-- زر تغيير اللغة -->
+    <div class="language-switch">
+        <button id="lang-ar" class="active">عربي</button>
+        <button id="lang-en">English</button>
     </div>
 
-    <!-- BUTTONS -->
-    <a href="products.html" class="btn">تعرف على منتجاتنا</a>
-    <a href="shop.html" class="btn">تسوق الآن 🛒</a>
-    <a href="services.html" class="btn">تعرف على خدماتنا</a>
-    <a href="booking.html" class="btn">احجز خدمة الآن</a>
+    <!-- صندوق المساعد -->
+    <div id="assistant-box" class="assistant-open">
+        <div class="assistant-header">
+            <h2 id="assistant-title">مساعد Future Tank</h2>
+        </div>
 
-    <div class="footer">
-        © 2025 FutureTank — جميع الحقوق محفوظة
+        <div id="assistant-messages"></div>
+
+        <div class="assistant-input-container">
+            <input id="assistant-input" type="text" placeholder="اكتب رسالتك...">
+            <button id="assistant-send">إرسال</button>
+        </div>
     </div>
 
+    <script src="assistant_widget.js"></script>
 </body>
 </html>
