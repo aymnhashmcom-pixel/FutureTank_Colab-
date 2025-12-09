@@ -1,85 +1,89 @@
-/* RESET */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Tajawal', sans-serif;
-}
-
 body {
-    background: #f4f9ff;
-    color: #003366;
-    text-align: center;
-    padding-bottom: 50px;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f5fafd;
 }
 
-/* HEADER */
-.header {
-    background: linear-gradient(180deg, #003c8f, #005fbd);
-    padding: 40px 20px;
+.language-switch {
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 9999;
+}
+
+.language-switch button {
+    padding: 8px 15px;
+    border-radius: 8px;
+    border: none;
+    background: #e1f3ff;
+    cursor: pointer;
+    margin-right: 5px;
+}
+
+.language-switch .active {
+    background: #4aa8ff;
     color: white;
 }
 
-.header img {
-    width: 140px;
-    margin-bottom: 10px;
+#assistant-box {
+    width: 340px;
+    height: 480px;
+    background: white;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    border-radius: 18px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-.header h1 {
-    font-size: 38px;
-    margin-bottom: 5px;
-}
-
-.header h2 {
-    font-size: 22px;
-    opacity: 0.9;
-}
-
-/* BUTTONS */
-.btn {
-    display: block;
-    width: 90%;
-    max-width: 350px;
-    margin: 15px auto;
+.assistant-header {
+    background: #4aa8ff;
     padding: 15px;
-    background: #007bff;
+    text-align: center;
     color: white;
-    border-radius: 12px;
-    font-size: 20px;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-.btn:hover {
-    background: #0056b3;
-}
-
-/* SECTIONS */
-.section {
-    margin-top: 40px;
-    padding: 20px;
-}
-
-.section h3 {
-    margin-bottom: 15px;
-    font-size: 26px;
-    color: #003c8f;
-}
-
-.section p, .section ul {
     font-size: 18px;
-    line-height: 1.7;
 }
 
-.section ul li {
-    margin: 8px 0;
+#assistant-messages {
+    flex: 1;
+    padding: 10px;
+    overflow-y: auto;
 }
 
-/* FOOTER */
-.footer {
-    margin-top: 50px;
-    padding: 20px;
-    font-size: 16px;
-    color: #003c8f;
-    opacity: 0.8;
+.message {
+    padding: 8px 12px;
+    margin-bottom: 6px;
+    border-radius: 10px;
+    max-width: 80%;
+}
+
+.user {
+    background: #d7edff;
+    align-self: flex-end;
+}
+
+.bot {
+    background: #eee;
+    align-self: flex-start;
+}
+
+.assistant-input-container {
+    display: flex;
+    border-top: 1px solid #ddd;
+}
+
+.assistant-input-container input {
+    flex: 1;
+    padding: 10px;
+    border: none;
+}
+
+.assistant-input-container button {
+    width: 80px;
+    background: #4aa8ff;
+    border: none;
+    color: white;
 }
