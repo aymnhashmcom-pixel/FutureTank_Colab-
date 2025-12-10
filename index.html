@@ -1,34 +1,234 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Future Tank Assistant</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>FutureTank — فيوتشر تانك</title>
+  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="فيوتشرتانك — توريد وتركيب وصيانة وتطهير خزانات وفلاتر المياه. نقاء الماء هو هدفنا.">
 </head>
-
 <body>
-
-    <!-- زر تغيير اللغة -->
-    <div class="language-switch">
-        <button id="lang-ar" class="active">عربي</button>
-        <button id="lang-en">English</button>
-    </div>
-
-    <!-- صندوق المساعد -->
-    <div id="assistant-box" class="assistant-open">
-        <div class="assistant-header">
-            <h2 id="assistant-title">مساعد Future Tank</h2>
+  <header class="site-header">
+    <div class="container header-inner">
+      <!-- logo (SVG simple) -->
+      <div class="brand">
+        <svg class="logo" viewBox="0 0 100 100" aria-hidden="true">
+          <defs>
+            <linearGradient id="g" x1="0" x2="1">
+              <stop offset="0" stop-color="#dff4ff"/>
+              <stop offset="1" stop-color="#7fd3ff"/>
+            </linearGradient>
+          </defs>
+          <!-- hand + drop icon simplified -->
+          <path fill="url(#g)" d="M50 8c-9 0-16 7-16 16 0 8 9 20 16 30 7-10 16-22 16-30C66 15 59 8 50 8z"/>
+          <path fill="#ffffff" d="M36 62c-6 6-8 14-8 18h44c0-4-2-12-8-18-8 4-20 4-28 0z"/>
+        </svg>
+        <div class="brand-text">
+          <div class="company-ar">فيوتشرتانك</div>
+          <div class="company-en">FutureTank</div>
+          <div class="tagline">نقاء الماء هو هدفنا</div>
         </div>
+      </div>
 
-        <div id="assistant-messages"></div>
-
-        <div class="assistant-input-container">
-            <input id="assistant-input" type="text" placeholder="اكتب رسالتك...">
-            <button id="assistant-send">إرسال</button>
-        </div>
+      <nav class="nav">
+        <button class="btn ghost" id="langToggle">EN</button>
+        <a class="nav-link" href="#products">تعرف على منتجاتنا</a>
+        <a class="nav-link" href="#shop">تسوق الآن</a>
+        <a class="nav-link" href="#services">تعرف على خدماتنا</a>
+        <a class="nav-link primary" href="#booking">احجز خدمة الآن</a>
+      </nav>
     </div>
+  </header>
 
-    <script src="assistant_widget.js"></script>
+  <main class="container main">
+    <section class="hero">
+      <h1>حلول متكاملة للمياه — خزانات وفلاتر</h1>
+      <p class="lead">توريد · تركيب · صيانة · تعقيم — مع ضمانات واضحة وجودة معتمدة.</p>
+      <div class="hero-actions">
+        <a class="btn" href="#products">تعرف على منتجاتنا</a>
+        <a class="btn outline" href="#booking">احجز خدمة الآن</a>
+      </div>
+    </section>
+
+    <section id="products" class="cards">
+      <h2>منتجاتنا</h2>
+      <p class="muted">خزانات مياه — فلاتر مياه</p>
+      <div class="grid" id="productsGrid">
+        <!-- منتجات افتراضية: يمكن إدارتها من لوحة التحكم (تخزن في localStorage لليوم) -->
+      </div>
+      <div class="small-note">الضمان على المنتجات: <strong>10 سنوات</strong></div>
+    </section>
+
+    <section id="shop" class="shop">
+      <h2>متجر فيوتشر تانك</h2>
+      <div id="shopGrid" class="grid"></div>
+      <div class="cart-summary">
+        <button id="openCart" class="btn">عرض عربة التسوق (<span id="cartCount">0</span>)</button>
+      </div>
+    </section>
+
+    <section id="services" class="cards">
+      <h2>خدماتنا</h2>
+      <ul class="services-list" id="servicesList">
+        <!-- تملأ من database أو localStorage -->
+      </ul>
+      <div class="small-note">الضمان على أعمال الصيانة: <strong>5 سنوات</strong></div>
+      <div class="actions">
+        <a class="btn" href="#services">تعرف على خدماتنا</a>
+        <a class="btn outline" href="#booking">احجز خدمة الآن</a>
+      </div>
+    </section>
+
+    <section id="booking" class="cards">
+      <h2>احجز خدمة</h2>
+      <p>للحجز والدفع عبر اتصالات كاش: <strong id="phoneDisplay">01150402031</strong></p>
+      <form id="bookingForm" class="form">
+        <label>الاسم</label>
+        <input id="b_name" placeholder="الاسم" />
+        <label>الخدمة</label>
+        <select id="b_service"></select>
+        <label>تفاصيل / ملاحظات</label>
+        <textarea id="b_notes"></textarea>
+        <div class="form-actions">
+          <button type="button" class="btn" id="bookNow">احجز الآن</button>
+        </div>
+      </form>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div>© 2025 FutureTank — فيوتشر تانك — جميع الحقوق محفوظة</div>
+      <div class="contacts">
+        هاتف/واتساب: <a id="phoneLink" href="tel:01150402031">01150402031</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- assistant widget script -->
+  <script src="lang.js"></script>
+  <script src="assistant_widget.js" defer></script>
+  <script>
+    // بيانات افتراضيّة محلياً لو مش موجودة (يمكن تعديلها من لوحة التحكم لاحقاً)
+    const defaultDB = {
+      company: { phone: "01150402031", email: "aymnhashm.com@gmail.com" },
+      products: [
+        { id: "p1", name: "خزان بلاستيك سعة 1000 لتر", price: 2500, img: "" },
+        { id: "p2", name: "فلتر منزلي 5 مراحل", price: 3200, img: "" }
+      ],
+      services: [
+        { id: "s1", name: "توريد وتركيب خزانات المياه", price: 0 },
+        { id: "s2", name: "صيانة وإصلاح خزانات المياه", price: 0 },
+        { id: "s3", name: "تطهير وتعقيم خزانات مياه الشرب", price: 0 },
+        { id: "s4", name: "توريد وتركيب فلاتر المياه", price: 0 },
+        { id: "s5", name: "صيانة وإصلاح فلاتر المياه", price: 0 }
+      ],
+      settings: { autoplayWelcome: false, language: "ar" }
+    };
+
+    function loadDB() {
+      try {
+        const v = JSON.parse(localStorage.getItem('ft_db') || 'null');
+        if(!v) { localStorage.setItem('ft_db', JSON.stringify(defaultDB)); return defaultDB; }
+        return v;
+      } catch(e) { localStorage.setItem('ft_db', JSON.stringify(defaultDB)); return defaultDB; }
+    }
+
+    function renderProducts() {
+      const db = loadDB();
+      const grid = document.getElementById('productsGrid');
+      const shopGrid = document.getElementById('shopGrid');
+      grid.innerHTML = '';
+      shopGrid.innerHTML = '';
+      db.products.forEach(p=>{
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `<div class="card-body">
+          <div class="card-title">${p.name}</div>
+          <div class="card-price">${p.price ? p.price + ' ج.م' : 'سعر حسب الطلب'}</div>
+        </div>`;
+        grid.appendChild(card);
+
+        const shop = document.createElement('div');
+        shop.className = 'card';
+        shop.innerHTML = `<div class="card-body">
+          <div class="card-title">${p.name}</div>
+          <div class="card-price">${p.price ? p.price + ' ج.م' : 'سعر حسب الطلب'}</div>
+          <div><button class="btn add-to-cart" data-id="${p.id}">أضف للعربة</button></div>
+        </div>`;
+        shopGrid.appendChild(shop);
+      });
+    }
+
+    function renderServices(){
+      const db = loadDB();
+      const list = document.getElementById('servicesList');
+      const sel = document.getElementById('b_service');
+      list.innerHTML = '';
+      sel.innerHTML = '';
+      db.services.forEach(s=>{
+        const li = document.createElement('li');
+        li.textContent = s.name;
+        list.appendChild(li);
+        const opt = document.createElement('option');
+        opt.value = s.id; opt.textContent = s.name;
+        sel.appendChild(opt);
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', ()=>{
+      renderProducts();
+      renderServices();
+
+      // cart buttons
+      document.body.addEventListener('click', (e)=>{
+        if(e.target.classList.contains('add-to-cart')){
+          const id = e.target.dataset.id;
+          const cart = JSON.parse(localStorage.getItem('ft_cart')||'[]');
+          cart.push(id);
+          localStorage.setItem('ft_cart', JSON.stringify(cart));
+          document.getElementById('cartCount').textContent = cart.length;
+          alert('تم إضافة المنتج للعربة');
+        }
+      });
+
+      // open cart
+      document.getElementById('openCart').addEventListener('click', ()=>{
+        const cart = JSON.parse(localStorage.getItem('ft_cart')||'[]');
+        const db = loadDB();
+        let html = 'عربتك:\n';
+        cart.forEach(id=>{
+          const p = db.products.find(x=>x.id===id);
+          html += (p ? p.name + ' - ' + (p.price? p.price+' ج.م' : '') : id) + '\n';
+        });
+        if(cart.length===0) html = 'العربة فارغة';
+        alert(html);
+      });
+
+      // booking
+      document.getElementById('bookNow').addEventListener('click', ()=>{
+        const name = document.getElementById('b_name').value.trim();
+        const serviceId = document.getElementById('b_service').value;
+        const notes = document.getElementById('b_notes').value.trim();
+        if(!name){ alert('ادخل اسمك'); return; }
+        const db = loadDB();
+        const svc = db.services.find(s=>s.id===serviceId);
+        // store booking locally for now
+        const bookings = JSON.parse(localStorage.getItem('ft_bookings')||'[]');
+        bookings.push({id: 'bk'+Date.now(), name, service: svc?svc.name:serviceId, notes});
+        localStorage.setItem('ft_bookings', JSON.stringify(bookings));
+        alert('تم استلام طلب الحجز — سوف نتواصل معك على ' + (db.company && db.company.phone));
+        document.getElementById('b_name').value=''; document.getElementById('b_notes').value='';
+      });
+
+      // phone display from db
+      const db = loadDB();
+      document.getElementById('phoneDisplay').textContent = (db.company && db.company.phone) || '01150402031';
+      document.getElementById('phoneLink').href = 'tel:' + ((db.company && db.company.phone) || '01150402031');
+
+      // set initial cart count
+      document.getElementById('cartCount').textContent = (JSON.parse(localStorage.getItem('ft_cart')||'[]')).length;
+    });
+  </script>
 </body>
 </html>
