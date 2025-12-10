@@ -1,89 +1,73 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    background: #f5fafd;
+:root{
+  --bg: #ffffff;
+  --muted: #6b6f76;
+  --accent: #7fd3ff;
+  --accent-2: #dff4ff;
+  --dark: #0b2a3a;
+  --radius: 12px;
+  font-family: "Segoe UI", Tahoma, Arial, sans-serif;
 }
 
-.language-switch {
-    position: fixed;
-    top: 10px;
-    left: 10px;
-    z-index: 9999;
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;background:var(--bg);color:var(--dark);line-height:1.5;
+  -webkit-font-smoothing:antialiased;
 }
 
-.language-switch button {
-    padding: 8px 15px;
-    border-radius: 8px;
-    border: none;
-    background: #e1f3ff;
-    cursor: pointer;
-    margin-right: 5px;
+.container{max-width:1100px;margin:0 auto;padding:18px}
+
+/* header */
+.site-header{background:linear-gradient(180deg,var(--accent-2),#fff);box-shadow:0 6px 18px rgba(15,47,62,0.06)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.brand{display:flex;gap:12px;align-items:center}
+.logo{width:64px;height:64px;border-radius:10px;box-shadow:0 6px 18px rgba(127,211,255,0.2)}
+.brand-text .company-ar{font-weight:700;font-size:20px}
+.brand-text .company-en{font-size:12px;color:var(--muted)}
+.tagline{font-size:12px;color:var(--muted)}
+
+/* nav */
+.nav{display:flex;gap:10px;align-items:center}
+.nav .nav-link{color:var(--dark);text-decoration:none;padding:8px 12px;border-radius:10px}
+.nav .primary{background:var(--accent);color:#fff;padding:8px 14px;border-radius:10px}
+.btn{background:var(--dark);color:#fff;padding:10px 14px;border-radius:10px;border:0;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--dark);border:1px solid transparent}
+.btn.outline{background:transparent;border:1px solid rgba(11,42,58,0.06);color:var(--dark)}
+
+/* hero */
+.hero{padding:40px 0;text-align:center}
+.lead{color:var(--muted);max-width:760px;margin:10px auto}
+
+/* cards/grid */
+.cards{padding:24px 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:14px}
+.card{background:#fff;border-radius:12px;padding:12px;box-shadow:0 4px 18px rgba(11,42,58,0.04)}
+.card .card-title{font-weight:600}
+.card .card-price{color:var(--muted);margin-top:8px}
+
+/* services list */
+.services-list{list-style:none;padding:0;margin:8px 0}
+.services-list li{padding:8px 0;border-bottom:1px dashed rgba(11,42,58,0.03)}
+
+/* form */
+.form label{display:block;margin:8px 0 4px}
+.form input, .form select, .form textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #e6eef5;background:#fbfeff}
+.form-actions{margin-top:12px}
+
+/* footer */
+.site-footer{padding:18px 0;border-top:1px solid rgba(11,42,58,0.04);margin-top:40px;color:var(--muted);font-size:14px}
+.footer-inner{display:flex;justify-content:space-between;align-items:center}
+
+/* small helpers */
+.muted{color:var(--muted)}
+.small-note{font-size:13px;color:var(--muted);margin-top:8px}
+
+/* responsive */
+@media(max-width:720px){
+  .header-inner{flex-direction:column;align-items:flex-start}
+  .nav{width:100%;justify-content:space-between}
+  .brand-text .company-ar{font-size:18px}
 }
 
-.language-switch .active {
-    background: #4aa8ff;
-    color: white;
-}
-
-#assistant-box {
-    width: 340px;
-    height: 480px;
-    background: white;
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    border-radius: 18px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-}
-
-.assistant-header {
-    background: #4aa8ff;
-    padding: 15px;
-    text-align: center;
-    color: white;
-    font-size: 18px;
-}
-
-#assistant-messages {
-    flex: 1;
-    padding: 10px;
-    overflow-y: auto;
-}
-
-.message {
-    padding: 8px 12px;
-    margin-bottom: 6px;
-    border-radius: 10px;
-    max-width: 80%;
-}
-
-.user {
-    background: #d7edff;
-    align-self: flex-end;
-}
-
-.bot {
-    background: #eee;
-    align-self: flex-start;
-}
-
-.assistant-input-container {
-    display: flex;
-    border-top: 1px solid #ddd;
-}
-
-.assistant-input-container input {
-    flex: 1;
-    padding: 10px;
-    border: none;
-}
-
-.assistant-input-container button {
-    width: 80px;
-    background: #4aa8ff;
-    border: none;
-    color: white;
-}
+/* assistant bubble adjustments (assistant_widget will add its own styles if needed) */
+#ft-assistant-widget button{box-shadow:0 8px 24px rgba(127,211,255,0.18)}
