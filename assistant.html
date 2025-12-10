@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مساعد فيوتشر تانك — FutureTank Assistant</title>
+<link rel="stylesheet" href="styles.css">
+<script src="system.js" defer></script>
+</head>
+<body class="assistant-page">
+<div class="assistant-container container">
+  <header><h2>🤖 المساعد الذكي — فيوتشر تانك</h2></header>
+  <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
+  <div class="chat-controls">
+    <input id="chatInput" placeholder="اكتب سؤالك هنا..." />
+    <button id="chatSend">إرسال</button>
+    <button id="playWelcome">🔊 تشغيل رسالة الترحيب</button>
+  </div>
+</div>
+
+<script>
+(function(){
+  function loadDB(){ return JSON.parse(localStorage.getItem('ft_db') || '{}'); }
+  function append(who, text){
+    const messages = document.getElementById('chatMessages');
+    const d = document.createElement('div'); d.className = 'msg '+(who==='user'?'u':'b');
+    d.innerText = (who==='user'?'أنت: ':'المساعد: ')+text;
+    messages.appendChild(d); messages.scrollTop = messages.scrollHeight;
+  }
+  function knowledgeReply(q){
+    const db = loadDB();
+    const t = q.toLowerCase();
+    if(t.includes('خدمات') || t.includes('ما هي خدمات')) {
+      return (db.services && db.services.length) ? db.services.map(s=>s.name).join(' — ') : 'توريد/تركيب/صيانة/تعقيم';
+    }
+    if(t.includes('منتج') || t.includes('ما هي المنتجات')){
+      return (db.products && db.products.length) ? db.products.map(p=>p.name).join(' — ') : 'خزانات وفلاتر';
+    }
+    if(t.includes('احجز') || t.includes('حجز')){
+      return 'للحجز استخدم زر "احجز خدمة الآن" في الصفحة الرئيسية أو اتصل 01150402031';
+    }
+    if((t.includes('كيف') && t.includes('ادفع')) || t.includes('طريقة الدفع')){
+      return 'طريقة الدفع: اتصالات كاش على رقم 01150402031';
+    }
+    if(t.includes('اتصال')||t.includes('واتس')){
+      return 'هاتف/واتساب: 01150402031';
+    }
+    if(t.includes('اسم')||t.includes('من انتم')||t.includes('من انت')){
+      return 'فيوتشر تانك — شركة متخصصة في خزانات المياه وفلاتر المياه.';
+    }
+    return (db.aiFallback && db.aiFallback.reply) || 'أنا هنا للمساعدة — اسألني عن: الخدمات، المنتجات، الحجز، أو طرق الدفع.';
+  }
+
+  document.addEventListener('DOMContentLoaded', ()=>{
+    append('bot','أنا هنا للمساعدة — اسألني عن: الخدمات، المنتجات، الحجز، أو طرق الدفع.');
+    const input = document.getElementById('chatInput');
+    document.getElementById('chatSend').addEventListener('click', ()=>{
+      const q = input.value.trim(); if(!q) return;
+      append('user', q); input.value='';
+      setTimeout(()=> append('bot', knowledgeReply(q)), 300);
+    });
+    document.getElementById('playWelcome').addEventListener('click', ()=>{
+      const db = loadDB(); const txt = db.welcome || 'أهلاً بكم في فيوتشرتانك. نقاء الماء هو هدفنا. كيف أساعدك اليوم؟';
+      if('speechSynthesis' in window){
+        const u = new SpeechSynthesisUtterance(txt); u.lang='ar-SA'; speechSynthesis.cancel(); speechSynthesis.speak(u);
+      } else alert('المتصفح لا يدعم تحويل النص لصوت.');
+    });
+    document.getElementById('chatInput').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('chatSend').click(); });
+  });
+})();
+</script>
+</body>
+</html>

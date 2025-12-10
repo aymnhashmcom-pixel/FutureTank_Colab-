@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>إنشاء فاتورة — FutureTank</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container card">
+  <h2>📄 إنشاء فاتورة</h2>
+  <form id="invoiceForm">
+    <label>اسم العميل<input id="clientName" required></label>
+    <div id="items"></div>
+    <button type="button" id="addItem">أضف بند</button>
+    <div>الإجمالي: <span id="total">0.00</span> ج.م</div>
+    <button type="button" id="downloadPdf">تنزيل PDF (تجريبي)</button>
+  </form>
+</div>
+<script>
+(function(){
+  function calc(){ const rows = document.querySelectorAll('.itemRow'); let total=0; rows.forEach(r=>{ const p = parseFloat(r.querySelector('.price').value || 0); const q = parseFloat(r.querySelector('.qty').value || 0); total += p*q; }); document.getElementById('total').innerText = total.toFixed(2); }
+  function addRow(){ const div = document.createElement('div'); div.className='itemRow'; div.innerHTML = '<input class="desc" placeholder="الوصف"> <input class="price" placeholder="سعر" type="number"> <input class="qty" placeholder="كمية" type="number" value="1"> <button class="rm">✖</button>'; document.getElementById('items').appendChild(div); div.querySelector('.rm').addEventListener('click', ()=>{ div.remove(); calc(); }); div.querySelectorAll('input').forEach(i=>i.addEventListener('input', calc)); }
+  document.getElementById('addItem').addEventListener('click', addRow);
+  document.getElementById('downloadPdf').addEventListener('click', ()=> alert('تحميل PDF تجربة — يمكنك تمديدها لاحقاً.'));
+  addRow();
+})();
+</script>
+</body>
+</html>

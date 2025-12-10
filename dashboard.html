@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>لوحة التحكم — FutureTank</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="container card">
+  <h2>🛠 لوحة التحكم (محلي)</h2>
+  <p>كلمة المرور: <strong>Future2025</strong></p>
+  <label>كلمة المرور<input id="pw" type="password"></label>
+  <button id="login">دخول</button>
+  <div id="adminArea" style="display:none">
+    <h3>بيانات الشركة</h3>
+    <label>اسم الشركة<input id="companyName"></label>
+    <label>هاتف<input id="companyPhone"></label>
+    <label>رسالة الترحيب<textarea id="welcome"></textarea></label>
+    <h3>منتجات</h3>
+    <div id="products"></div>
+    <button id="addProd">أضف منتج</button>
+    <h3>خدمات</h3>
+    <div id="services"></div>
+    <button id="addSrv">أضف خدمة</button>
+    <hr>
+    <button id="save">حفظ التعديلات</button>
+    <button id="clearDB">مسح جميع البيانات</button>
+  </div>
+</div>
+
+<script>
+function loadDB(){ return JSON.parse(localStorage.getItem('ft_db')||'{}'); }
+function saveDB(db){ localStorage.setItem('ft_db', JSON.stringify(db)); }
+document.getElementById('login').addEventListener('click', ()=>{
+  if(document.getElementById('pw').value === 'Future2025'){
+    document.getElementById('adminArea').style.display='block';
+    const db = loadDB();
+    document.getElementById('companyName').value = (db.company && db.company.name) || 'فيوتشر تانك';
+    document.getElementById('companyPhone').value = (db.company && db.company.phone) || '01150402031';
+    document.getElementById('welcome').value = db.welcome || 'أهلاً بكم في فيوتشرتانك. نقاء الماء هو هدفنا.';
+    const prodDiv = document.getElementById('products'); prodDiv.innerHTML='';
+    (db.products||[]).forEach((p,i)=>{ const row = document.createElement('div'); row.innerHTML = '<input class="pname" value="'+p.name+'"> <input class="pprice" value="'+p.price+'"> <button class="rm">✖</button>'; prodDiv.appendChild(row); row.querySelector('.rm').addEventListener('click', ()=>{ row.remove(); }); });
+    const srvDiv = document.getElementById('services'); srvDiv.innerHTML=''; (db.services||[]).forEach(s=>{ const r=document.createElement('div'); r.innerHTML = '<input class="sname" value="'+s.name+'"> <button class="rm">✖</button>'; srvDiv.appendChild(r); r.querySelector('.rm').addEventListener('click', ()=> r.remove());});
+  } else alert('كلمة المرور غير صحيحة');
+});
+document.getElementById('addProd').addEventListener('click', ()=>{ const p=document.createElement('div'); p.innerHTML='<input class="pname" placeholder="اسم المنتج"> <input class="pprice" placeholder="السعر"> <button class="rm">✖</button>'; document.getElementById('products').appendChild(p); p.querySelector('.rm').addEventListener('click', ()=>p.remove());});
+document.getElementById('addSrv').addEventListener('click', ()=>{ const s=document.createElement('div'); s.innerHTML='<input class="sname" placeholder="اسم الخدمة"> <button class="rm">✖</button>'; document.getElementById('services').appendChild(s); s.querySelector('.rm').addEventListener('click', ()=>s.remove());});
+document.getElementById('save').addEventListener('click', ()=>{
+  const db = {};
+  db.company = { name: document.getElementById('companyName').value, phone: document.getElementById('companyPhone').value };
+  db.welcome = document.getElementById('welcome').value;
+  db.products = Array.from(document.querySelectorAll('.pname')).map((el,i)=>({ name: el.value, price: document.querySelectorAll('.pprice')[i] ? document.querySelectorAll('.pprice')[i].value : '' }));
+  db.services = Array.from(document.querySelectorAll('.sname')).map(el=>({ name: el.value }));
+  saveDB(db); alert('تم الحفظ محلياً في المتصفح (localStorage).');
+});
+document.getElementById('clearDB').addEventListener('click', ()=>{ if(confirm('مسح جميع بيانات localStorage؟')){ localStorage.removeItem('ft_db'); alert('تم المسح'); }});
+</script>
+</body>
+</html>
