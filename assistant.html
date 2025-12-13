@@ -1,54 +1,90 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!doctype html>
+
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>🤖 المساعد الذكي — فيوتشر تانك</title>
-  <link rel="stylesheet" href="styles.css" />
-  <style>
-    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma; background:#f4f9ff; margin:0}
-    .chat-wrap{max-width:800px;margin:40px auto;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.1);overflow:hidden}
-    .chat-header{background:#4a90e2;color:#fff;padding:16px;font-size:18px;font-weight:700}
-    .chat-messages{padding:16px;min-height:300px;max-height:500px;overflow-y:auto}
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>🤖 المساعد الذكي — فيوتشر تانك</title>  <!-- ستايل عام -->  <link rel="stylesheet" href="styles.css" />  <style>
+    body{
+      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma;
+      background:#f4f9ff;
+      margin:0
+    }
+    .chat-wrap{
+      max-width:800px;
+      margin:40px auto;
+      background:#fff;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.1);
+      overflow:hidden
+    }
+    .chat-header{
+      background:#4a90e2;
+      color:#fff;
+      padding:16px;
+      font-size:18px;
+      font-weight:700
+    }
+    .chat-messages{
+      padding:16px;
+      min-height:300px;
+      max-height:500px;
+      overflow-y:auto
+    }
     .msg{margin-bottom:12px;line-height:1.6}
     .bot{color:#1f3b5c}
     .user{color:#000;font-weight:600}
     .chat-input{display:flex;border-top:1px solid #eee}
-    .chat-input input{flex:1;padding:14px;border:0;font-size:16px}
-    .chat-input button{background:#4a90e2;color:#fff;border:0;padding:0 20px;font-size:16px;cursor:pointer}
-  </style>
-</head>
+    .chat-input input{
+      flex:1;
+      padding:14px;
+      border:0;
+      font-size:16px
+    }
+    .chat-input button{
+      background:#4a90e2;
+      color:#fff;
+      border:0;
+      padding:0 20px;
+      font-size:16px;
+      cursor:pointer
+    }
+  </style></head>
 <body><div class="chat-wrap">
-  <div class="chat-header">🤖 المساعد الذكي — فيوتشر تانك</div>
-  <div id="messages" class="chat-messages"></div>
-  <div class="chat-input">
+  <div class="chat-header">🤖 المساعد الذكي — فيوتشر تانك</div>  <div id="messages" class="chat-messages"></div>  <div class="chat-input">
     <input id="userInput" type="text" placeholder="اكتب سؤالك هنا..." />
     <button id="sendBtn">إرسال</button>
   </div>
-</div><!-- المساعد الذكي (ملف واحد فقط بدون تعارض) --><script src="assistant_widget.js?v=2025"></script><script>
+</div><!-- كود المساعد فقط (بدون لوحة تحكم – بدون localStorage) --><script src="assistant_widget.js?v=2025"></script><script>
   const messages = document.getElementById('messages');
   const input = document.getElementById('userInput');
   const btn = document.getElementById('sendBtn');
 
   function addMsg(text, cls){
-    const d=document.createElement('div');
-    d.className='msg '+cls;
-    d.textContent=text;
+    const d = document.createElement('div');
+    d.className = 'msg ' + cls;
+    d.textContent = text;
     messages.appendChild(d);
-    messages.scrollTop=messages.scrollHeight;
+    messages.scrollTop = messages.scrollHeight;
   }
 
-  // رسالة ترحيب
+  // رسالة الترحيب
   addMsg(FutureTankAssistant.welcome(), 'bot');
 
-  btn.onclick = ()=>{
-    const q=input.value.trim(); if(!q) return;
-    addMsg('أنت: '+q,'user');
-    input.value='';
-    setTimeout(()=>{
-      addMsg(FutureTankAssistant.reply(q),'bot');
-    },300);
+  btn.onclick = () => {
+    const q = input.value.trim();
+    if(!q) return;
+
+    addMsg('أنت: ' + q, 'user');
+    input.value = '';
+
+    setTimeout(() => {
+      addMsg(FutureTankAssistant.reply(q), 'bot');
+    }, 300);
   };
 
-  input.addEventListener('keydown',e=>{if(e.key==='Enter')btn.click();});
+  input.addEventListener('keydown', e => {
+    if(e.key === 'Enter') btn.click();
+  });
 </script></body>
-  </html>
+      </html>
