@@ -1,45 +1,58 @@
+function normalizeArabic(text) {
+  const arabicNumbers = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
+  const englishNumbers = ['0','1','2','3','4','5','6','7','8','9'];
+
+  arabicNumbers.forEach((num, i) => {
+    text = text.replace(new RegExp(num, 'g'), englishNumbers[i]);
+  });
+
+  return text;
+}
+
 function ftReply(message) {
-  const msg = message.toLowerCase();
+  let msg = message.toLowerCase();
+  msg = normalizeArabic(msg);
+
   let replies = [];
 
-  if (msg.includes("مرحبا") || msg.includes("السلام")) {
+  // ترحيب
+  if (msg.includes("السلام") || msg.includes("مرحبا")) {
     replies.push(ftWelcome());
   }
 
-  if (msg.includes("اسم") || msg.includes("شركة")) {
-    replies.push(`${FT_COMPANY.name_ar} (${FT_COMPANY.name_en})  
-${FT_COMPANY.slogan}`);
-  }
-
-  if (msg.includes("خزان") || msg.includes("فلتر") || msg.includes("منتج")) {
-    replies.push(`🧰 المنتجات المتاحة:
+  // شراء / منتجات
+  if (
+    msg.includes("اشتري") ||
+    msg.includes("شراء") ||
+    msg.includes("خزان") ||
+    msg.includes("فلتر") ||
+    msg.includes("1000")
+  ) {
+    replies.push(`🛒 منتجات ${FT_COMPANY.name_ar}:
 ${FT_COMPANY.products.map(p => `• ${p.name} — ${p.price}`).join("\n")}
 
 🛡️ ضمان 10 سنوات`);
   }
 
-  if (msg.includes("صيانة") || msg.includes("مشكلة") || msg.includes("تصليح")) {
+  // صيانة / كسر / مشكلة
+  if (
+    msg.includes("صيانة") ||
+    msg.includes("كسر") ||
+    msg.includes("مشكلة") ||
+    msg.includes("تصليح")
+  ) {
     replies.push(`🔧 خدمات الصيانة:
 • صيانة وإصلاح خزانات المياه
-• تعقيم وتطهير خزانات الشرب
+• تطهير وتعقيم خزانات الشرب
 
 🛡️ ضمان 5 سنوات`);
   }
 
-  if (msg.includes("سعر") || msg.includes("كام") || msg.includes("بكم")) {
-    replies.push(`💰 الأسعار:
-${FT_COMPANY.products.map(p => `• ${p.name}: ${p.price}`).join("\n")}`);
-  }
-
-  if (msg.includes("حجز")) {
-    replies.push(`📅 لحجز خدمة:
+  // حجز
+  if (msg.includes("حجز") || msg.includes("عايز")) {
+    replies.push(`📅 للحجز والاستفسار:
 📞 ${FT_COMPANY.phone}
 💬 واتساب: https://wa.me/2${FT_COMPANY.whatsapp}`);
-  }
-
-  if (msg.includes("دفع") || msg.includes("فلوس")) {
-    replies.push(`💳 طرق الدفع:
-${FT_COMPANY.payments}`);
   }
 
   if (replies.length > 0) {
@@ -48,9 +61,8 @@ ${FT_COMPANY.payments}`);
 
   return `أنا مساعد ${FT_COMPANY.name_ar} 🤖  
 ممكن تسألني عن:
-- الخزانات
-- الصيانة
+- شراء خزان
+- صيانة خزان
 - الأسعار
-- الحجز
-- طرق الدفع`;
-      }
+- الحجز`;
+                                                                }
