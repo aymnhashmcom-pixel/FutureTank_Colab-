@@ -64,11 +64,10 @@ body{
 
 <div class="chat-box">
   <div class="chat-header">🤖 المساعد الذكي — فيوتشر تانك</div>
-
   <div id="messages" class="chat-messages"></div>
 
   <div class="chat-input">
-    <input id="input" type="text" placeholder="اكتب سؤالك هنا...">
+    <input id="input" placeholder="اكتب سؤالك هنا..." />
     <button id="send">إرسال</button>
   </div>
 </div>
@@ -79,19 +78,16 @@ const input = document.getElementById("input");
 const send = document.getElementById("send");
 
 function addMsg(text, cls){
-  const div = document.createElement("div");
-  div.className = "msg " + cls;
-  div.textContent = text;
-  messages.appendChild(div);
+  const d = document.createElement("div");
+  d.className = "msg " + cls;
+  d.textContent = text;
+  messages.appendChild(d);
   messages.scrollTop = messages.scrollHeight;
 }
 
-function reply(q){
-<script>
 function normalize(text){
   return text
     .replace(/[٠-٩]/g, d => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(d)])
-    .replace(/\s+/g,' ')
     .toLowerCase();
 }
 
@@ -99,29 +95,25 @@ function reply(q){
   q = normalize(q);
 
   if(q.includes("خزان") && q.includes("1000")){
-    return "خزان بولي إيثيلين 1000 لتر متوفر ✔️\nتحب تركيب فقط ولا تركيب + توصيل؟";
+    return "خزان بولي إيثيلين 1000 لتر متوفر ✔️ تحب تركيب ولا توريد فقط؟";
   }
 
   if(q.includes("بولي") || q.includes("بلاستيك")){
-    return "نوفر خزانات بولي إيثيلين أصلية بأحجام مختلفة (500 – 1000 – 2000 لتر). تحب أنهي حجم؟";
+    return "نوفر خزانات بولي إيثيلين أصلية بأحجام مختلفة (500 – 1000 – 2000 لتر).";
   }
 
   if(q.includes("صيانة") || q.includes("كسر")){
-    return "نعم، لدينا صيانة خزانات ومعالجة الكسور والتسريب. تحب نحدد موعد؟";
+    return "نعم، لدينا صيانة خزانات ومعالجة الكسور. تحب نحدد موعد؟";
   }
 
   if(q.includes("سعر") || q.includes("كام")){
     return "السعر بيختلف حسب السعة والتركيب. تحب خزان كام لتر؟";
   }
 
-  if(q.includes("خدمات")){
-    return "خدماتنا: بيع خزانات، تركيب، صيانة، تعقيم.";
-  }
-
-  return "تمام 👍 قولي تحب خزان كام لتر أو محتاج صيانة؟";
+  return "تمام 👍 ممكن توضّح سؤالك أكتر؟";
 }
-</script>
-// رسالة ترحيب
+
+// رسالة الترحيب
 addMsg("أنا هنا للمساعدة — اسألني عن الخزانات أو الصيانة.", "bot");
 
 send.onclick = ()=>{
