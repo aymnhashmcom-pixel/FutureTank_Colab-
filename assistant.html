@@ -1,90 +1,127 @@
-<!doctype html>
-
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>🤖 المساعد الذكي — فيوتشر تانك</title>  <!-- ستايل عام -->  <link rel="stylesheet" href="styles.css" />  <style>
-    body{
-      font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma;
-      background:#f4f9ff;
-      margin:0
-    }
-    .chat-wrap{
-      max-width:800px;
-      margin:40px auto;
-      background:#fff;
-      border-radius:16px;
-      box-shadow:0 10px 30px rgba(0,0,0,.1);
-      overflow:hidden
-    }
-    .chat-header{
-      background:#4a90e2;
-      color:#fff;
-      padding:16px;
-      font-size:18px;
-      font-weight:700
-    }
-    .chat-messages{
-      padding:16px;
-      min-height:300px;
-      max-height:500px;
-      overflow-y:auto
-    }
-    .msg{margin-bottom:12px;line-height:1.6}
-    .bot{color:#1f3b5c}
-    .user{color:#000;font-weight:600}
-    .chat-input{display:flex;border-top:1px solid #eee}
-    .chat-input input{
-      flex:1;
-      padding:14px;
-      border:0;
-      font-size:16px
-    }
-    .chat-input button{
-      background:#4a90e2;
-      color:#fff;
-      border:0;
-      padding:0 20px;
-      font-size:16px;
-      cursor:pointer
-    }
-  </style></head>
-<body><div class="chat-wrap">
-  <div class="chat-header">🤖 المساعد الذكي — فيوتشر تانك</div>  <div id="messages" class="chat-messages"></div>  <div class="chat-input">
-    <input id="userInput" type="text" placeholder="اكتب سؤالك هنا..." />
-    <button id="sendBtn">إرسال</button>
-  </div>
-</div><!-- كود المساعد فقط (بدون لوحة تحكم – بدون localStorage) --><script src="assistant_widget.js?v=2025"></script><script>
-  const messages = document.getElementById('messages');
-  const input = document.getElementById('userInput');
-  const btn = document.getElementById('sendBtn');
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🤖 المساعد الذكي — فيوتشر تانك</title>
 
-  function addMsg(text, cls){
-    const d = document.createElement('div');
-    d.className = 'msg ' + cls;
-    d.textContent = text;
-    messages.appendChild(d);
-    messages.scrollTop = messages.scrollHeight;
+<style>
+body{
+  margin:0;
+  font-family:Tahoma, Arial;
+  background:#f4f9ff;
+}
+.chat-box{
+  max-width:700px;
+  margin:40px auto;
+  background:#fff;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.1);
+  overflow:hidden;
+}
+.chat-header{
+  background:#4a90e2;
+  color:#fff;
+  padding:16px;
+  font-size:18px;
+  font-weight:bold;
+}
+.chat-messages{
+  padding:16px;
+  min-height:300px;
+  max-height:500px;
+  overflow-y:auto;
+}
+.msg{
+  margin-bottom:12px;
+  line-height:1.6;
+}
+.bot{color:#1f3b5c}
+.user{color:#000;font-weight:bold}
+.chat-input{
+  display:flex;
+  border-top:1px solid #eee;
+}
+.chat-input input{
+  flex:1;
+  padding:14px;
+  font-size:16px;
+  border:none;
+  outline:none;
+}
+.chat-input button{
+  background:#4a90e2;
+  color:#fff;
+  border:none;
+  padding:0 24px;
+  font-size:16px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="chat-box">
+  <div class="chat-header">🤖 المساعد الذكي — فيوتشر تانك</div>
+
+  <div id="messages" class="chat-messages"></div>
+
+  <div class="chat-input">
+    <input id="input" type="text" placeholder="اكتب سؤالك هنا...">
+    <button id="send">إرسال</button>
+  </div>
+</div>
+
+<script>
+const messages = document.getElementById("messages");
+const input = document.getElementById("input");
+const send = document.getElementById("send");
+
+function addMsg(text, cls){
+  const div = document.createElement("div");
+  div.className = "msg " + cls;
+  div.textContent = text;
+  messages.appendChild(div);
+  messages.scrollTop = messages.scrollHeight;
+}
+
+function reply(q){
+  q = q.toLowerCase();
+
+  if(q.includes("خزان") && q.includes("صيانة")){
+    return "نعم، لدينا صيانة خزانات ومعالجة الكسور. تحب نحدد لك موعد؟";
+  }
+  if(q.includes("1000")){
+    return "خزان 1000 لتر متوفر لدينا بجودة عالية. تحب تعرف السعر أو التركيب؟";
+  }
+  if(q.includes("خدمات")){
+    return "خدماتنا: بيع خزانات، تركيب، صيانة، تعقيم.";
+  }
+  if(q.includes("دفع")){
+    return "الدفع متاح كاش أو تحويل.";
   }
 
-  // رسالة الترحيب
-  addMsg(FutureTankAssistant.welcome(), 'bot');
+  return "تمام 👍 ممكن توضح سؤالك أكتر؟";
+}
 
-  btn.onclick = () => {
-    const q = input.value.trim();
-    if(!q) return;
+// رسالة ترحيب
+addMsg("أنا هنا للمساعدة — اسألني عن الخزانات أو الصيانة.", "bot");
 
-    addMsg('أنت: ' + q, 'user');
-    input.value = '';
+send.onclick = ()=>{
+  const q = input.value.trim();
+  if(!q) return;
+  addMsg("أنت: " + q, "user");
+  input.value = "";
+  setTimeout(()=>{
+    addMsg("المساعد: " + reply(q), "bot");
+  },300);
+};
 
-    setTimeout(() => {
-      addMsg(FutureTankAssistant.reply(q), 'bot');
-    }, 300);
-  };
+input.addEventListener("keydown", e=>{
+  if(e.key === "Enter") send.click();
+});
+</script>
 
-  input.addEventListener('keydown', e => {
-    if(e.key === 'Enter') btn.click();
-  });
-</script></body>
-      </html>
+</body>
+</html>
