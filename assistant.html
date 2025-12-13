@@ -12,7 +12,7 @@ body{
   background:#f4f9ff;
 }
 .chat-box{
-  max-width:700px;
+  max-width:720px;
   margin:40px auto;
   background:#fff;
   border-radius:16px;
@@ -28,14 +28,11 @@ body{
 }
 .chat-messages{
   padding:16px;
-  min-height:300px;
-  max-height:500px;
+  min-height:320px;
+  max-height:520px;
   overflow-y:auto;
 }
-.msg{
-  margin-bottom:12px;
-  line-height:1.6;
-}
+.msg{margin-bottom:12px;line-height:1.6}
 .bot{color:#1f3b5c}
 .user{color:#000;font-weight:bold}
 .chat-input{
@@ -53,7 +50,7 @@ body{
   background:#4a90e2;
   color:#fff;
   border:none;
-  padding:0 24px;
+  padding:0 26px;
   font-size:16px;
   cursor:pointer;
 }
@@ -65,7 +62,6 @@ body{
 <div class="chat-box">
   <div class="chat-header">🤖 المساعد الذكي — فيوتشر تانك</div>
   <div id="messages" class="chat-messages"></div>
-
   <div class="chat-input">
     <input id="input" placeholder="اكتب سؤالك هنا..." />
     <button id="send">إرسال</button>
@@ -73,61 +69,88 @@ body{
 </div>
 
 <script>
+/* ===== بيانات الموقع (تُدار من لوحة التحكم لاحقًا) ===== */
+const SITE = {
+  company: "فيوتشر تانك",
+  phone: "01150402031",
+  products: {
+    "1000": { name:"خزان بولي إيثيلين 1000 لتر", price:"حسب المعاينة" }
+  }
+};
+
+/* ===== ذاكرة الجلسة ===== */
+let session = {
+  size: null,
+  service: null
+};
+
+/* ===== أدوات ===== */
 const messages = document.getElementById("messages");
 const input = document.getElementById("input");
 const send = document.getElementById("send");
 
 function addMsg(text, cls){
-  const d = document.createElement("div");
-  d.className = "msg " + cls;
-  d.textContent = text;
+  const d=document.createElement("div");
+  d.className="msg "+cls;
+  d.textContent=text;
   messages.appendChild(d);
-  messages.scrollTop = messages.scrollHeight;
+  messages.scrollTop=messages.scrollHeight;
 }
 
-function normalize(text){
-  return text
-    .replace(/[٠-٩]/g, d => "0123456789"["٠١٢٣٤٥٦٧٨٩".indexOf(d)])
-    .toLowerCase();
+function normalize(t){
+  return t
+    .toLowerCase()
+    .replace(/[٠-٩]/g,d=>"٠١٢٣٤٥٦٧٨٩".indexOf(d))
+    .replace(/\s+/g," ");
 }
 
+/* ===== الذكاء ===== */
 function reply(q){
   q = normalize(q);
 
-  if(q.includes("خزان") && q.includes("1000")){
-    return "خزان بولي إيثيلين 1000 لتر متوفر ✔️ تحب تركيب ولا توريد فقط؟";
+  /* تحية */
+  if(q.includes("السلام") || q.includes("مرحبا") || q.includes("كيف حالك")){
+    return "وعليكم السلام 🌸 أهلاً بحضرتك، تحب نساعدك في إيه؟";
   }
 
-  if(q.includes("بولي") || q.includes("بلاستيك")){
-    return "نوفر خزانات بولي إيثيلين أصلية بأحجام مختلفة (500 – 1000 – 2000 لتر).";
+  /* تحديد السعة */
+  if(q.includes("1000")){
+    session.size = 1000;
+    return "تمام ✅ خزان 1000 لتر. تحب توريد فقط ولا توريد وتركيب؟";
   }
 
+  /* اختيار الخدمة */
+  if(q.includes("توريد") && q.includes("تركيب")){
+    session.service = "توريد وتركيب";
+    return "💰 تكلفة خزان 1000 لتر (توريد وتركيب) بتتحدد بعد المعاينة. تحب نحجز لك معاينة؟";
+  }
+
+  if(q.includes("توريد فقط")){
+    session.service = "توريد فقط";
+    return "💰 سعر خزان 1000 لتر (توريد فقط) يبدأ بعد المعاينة. تحب أكلمك التفاصيل؟";
+  }
+
+  /* صيانة */
   if(q.includes("صيانة") || q.includes("كسر")){
-    return "نعم، لدينا صيانة خزانات ومعالجة الكسور. تحب نحدد موعد؟";
-  }
-
-  if(q.includes("سعر") || q.includes("كام")){
-    return "السعر بيختلف حسب السعة والتركيب. تحب خزان كام لتر؟";
+    return "🔧 نعم، نوفر صيانة وإصلاح خزانات المياه. تحب نحدد موعد؟";
   }
 
   return "تمام 👍 ممكن توضّح سؤالك أكتر؟";
 }
 
-// رسالة الترحيب
+/* ===== تشغيل ===== */
 addMsg("أنا هنا للمساعدة — اسألني عن الخزانات أو الصيانة.", "bot");
 
 send.onclick = ()=>{
-  const q = input.value.trim();
+  const q=input.value.trim();
   if(!q) return;
-  addMsg("أنت: " + q, "user");
-  input.value = "";
-  setTimeout(()=>{
-    addMsg("المساعد: " + reply(q), "bot");
-  },300);
+  addMsg("أنت: "+q,"user");
+  input.value="";
+  setTimeout(()=> addMsg("المساعد: "+reply(q),"bot"),300);
 };
 
-input.addEventListener("keydown", e=>{
-  if(e.key === "Enter") send.click();
+input.addEventListener("keydown",e=>{
+  if(e.key==="Enter") send.click();
 });
 </script>
 
