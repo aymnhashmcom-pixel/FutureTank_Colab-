@@ -1,73 +1,54 @@
-<!doctype html>
-<html lang="ar" dir="rtl">
+<!DOCTYPE html><html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>مساعد فيوتشر تانك — FutureTank Assistant</title>
-<link rel="stylesheet" href="styles.css">
-<script src="system.js" defer></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🤖 المساعد الذكي — فيوتشر تانك</title>
+  <link rel="stylesheet" href="styles.css" />
+  <style>
+    body{font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Tahoma; background:#f4f9ff; margin:0}
+    .chat-wrap{max-width:800px;margin:40px auto;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.1);overflow:hidden}
+    .chat-header{background:#4a90e2;color:#fff;padding:16px;font-size:18px;font-weight:700}
+    .chat-messages{padding:16px;min-height:300px;max-height:500px;overflow-y:auto}
+    .msg{margin-bottom:12px;line-height:1.6}
+    .bot{color:#1f3b5c}
+    .user{color:#000;font-weight:600}
+    .chat-input{display:flex;border-top:1px solid #eee}
+    .chat-input input{flex:1;padding:14px;border:0;font-size:16px}
+    .chat-input button{background:#4a90e2;color:#fff;border:0;padding:0 20px;font-size:16px;cursor:pointer}
+  </style>
 </head>
-<body class="assistant-page">
-<div class="assistant-container container">
-  <header><h2>🤖 المساعد الذكي — فيوتشر تانك</h2></header>
-  <div id="chatMessages" class="chat-messages" aria-live="polite"></div>
-  <div class="chat-controls">
-    <input id="chatInput" placeholder="اكتب سؤالك هنا..." />
-    <button id="chatSend">إرسال</button>
-    <button id="playWelcome">🔊 تشغيل رسالة الترحيب</button>
+<body><div class="chat-wrap">
+  <div class="chat-header">🤖 المساعد الذكي — فيوتشر تانك</div>
+  <div id="messages" class="chat-messages"></div>
+  <div class="chat-input">
+    <input id="userInput" type="text" placeholder="اكتب سؤالك هنا..." />
+    <button id="sendBtn">إرسال</button>
   </div>
-</div>
+</div><!-- المساعد الذكي (ملف واحد فقط بدون تعارض) --><script src="assistant_widget.js?v=2025"></script><script>
+  const messages = document.getElementById('messages');
+  const input = document.getElementById('userInput');
+  const btn = document.getElementById('sendBtn');
 
-<script>
-(function(){
-  function loadDB(){ return JSON.parse(localStorage.getItem('ft_db') || '{}'); }
-  function append(who, text){
-    const messages = document.getElementById('chatMessages');
-    const d = document.createElement('div'); d.className = 'msg '+(who==='user'?'u':'b');
-    d.innerText = (who==='user'?'أنت: ':'المساعد: ')+text;
-    messages.appendChild(d); messages.scrollTop = messages.scrollHeight;
-  }
-  function knowledgeReply(q){
-    const db = loadDB();
-    const t = q.toLowerCase();
-    if(t.includes('خدمات') || t.includes('ما هي خدمات')) {
-      return (db.services && db.services.length) ? db.services.map(s=>s.name).join(' — ') : 'توريد/تركيب/صيانة/تعقيم';
-    }
-    if(t.includes('منتج') || t.includes('ما هي المنتجات')){
-      return (db.products && db.products.length) ? db.products.map(p=>p.name).join(' — ') : 'خزانات وفلاتر';
-    }
-    if(t.includes('احجز') || t.includes('حجز')){
-      return 'للحجز استخدم زر "احجز خدمة الآن" في الصفحة الرئيسية أو اتصل 01150402031';
-    }
-    if((t.includes('كيف') && t.includes('ادفع')) || t.includes('طريقة الدفع')){
-      return 'طريقة الدفع: اتصالات كاش على رقم 01150402031';
-    }
-    if(t.includes('اتصال')||t.includes('واتس')){
-      return 'هاتف/واتساب: 01150402031';
-    }
-    if(t.includes('اسم')||t.includes('من انتم')||t.includes('من انت')){
-      return 'فيوتشر تانك — شركة متخصصة في خزانات المياه وفلاتر المياه.';
-    }
-    return (db.aiFallback && db.aiFallback.reply) || 'أنا هنا للمساعدة — اسألني عن: الخدمات، المنتجات، الحجز، أو طرق الدفع.';
+  function addMsg(text, cls){
+    const d=document.createElement('div');
+    d.className='msg '+cls;
+    d.textContent=text;
+    messages.appendChild(d);
+    messages.scrollTop=messages.scrollHeight;
   }
 
-  document.addEventListener('DOMContentLoaded', ()=>{
-    append('bot','أنا هنا للمساعدة — اسألني عن: الخدمات، المنتجات، الحجز، أو طرق الدفع.');
-    const input = document.getElementById('chatInput');
-    document.getElementById('chatSend').addEventListener('click', ()=>{
-      const q = input.value.trim(); if(!q) return;
-      append('user', q); input.value='';
-      setTimeout(()=> append('bot', knowledgeReply(q)), 300);
-    });
-    document.getElementById('playWelcome').addEventListener('click', ()=>{
-      const db = loadDB(); const txt = db.welcome || 'أهلاً بكم في فيوتشرتانك. نقاء الماء هو هدفنا. كيف أساعدك اليوم؟';
-      if('speechSynthesis' in window){
-        const u = new SpeechSynthesisUtterance(txt); u.lang='ar-SA'; speechSynthesis.cancel(); speechSynthesis.speak(u);
-      } else alert('المتصفح لا يدعم تحويل النص لصوت.');
-    });
-    document.getElementById('chatInput').addEventListener('keydown', e=>{ if(e.key==='Enter') document.getElementById('chatSend').click(); });
-  });
-})();
-</script>
-</body>
-</html>
+  // رسالة ترحيب
+  addMsg(FutureTankAssistant.welcome(), 'bot');
+
+  btn.onclick = ()=>{
+    const q=input.value.trim(); if(!q) return;
+    addMsg('أنت: '+q,'user');
+    input.value='';
+    setTimeout(()=>{
+      addMsg(FutureTankAssistant.reply(q),'bot');
+    },300);
+  };
+
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')btn.click();});
+</script></body>
+  </html>
