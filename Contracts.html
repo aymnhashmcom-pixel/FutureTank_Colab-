@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>لوحة العقود - FutureTank</title>
+<style>
+body {
+  font-family: Tahoma, Arial;
+  background: #f4f6f8;
+  padding: 20px;
+}
+h1 { color: #0b5394; }
+section {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+}
+input, select, button {
+  padding: 8px;
+  margin: 5px 0;
+  width: 100%;
+}
+button {
+  background: #0b5394;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+button:hover { opacity: 0.9; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th, td {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  text-align: center;
+}
+.delete {
+  background: crimson;
+}
+</style>
+</head>
+
+<body>
+
+<h1>📋 إدارة العملاء والعقود — FutureTank</h1>
+
+<section>
+<h3>➕ إضافة عقد جديد</h3>
+
+<input id="clientName" placeholder="اسم العميل">
+<input id="clientPhone" placeholder="رقم الهاتف">
+<input id="location" placeholder="العنوان / الموقع">
+
+<select id="serviceType">
+  <option>تطهير وتعقيم خزانات</option>
+  <option>توريد وتركيب خزانات</option>
+  <option>صيانة وإصلاح خزانات</option>
+</select>
+
+<select id="contractType">
+  <option value="سنوي">سنوي</option>
+  <option value="شهري">شهري</option>
+  <option value="مفتوح">مفتوح</option>
+</select>
+
+<select id="cycle">
+  <option value="30">زيارة كل 30 يوم</option>
+  <option value="60">زيارة كل 60 يوم</option>
+  <option value="0">مخصص</option>
+</select>
+
+<label>تاريخ آخر زيارة</label>
+<input type="date" id="lastVisit">
+
+<button onclick="addContract()">حفظ العقد</button>
+</section>
+
+<section>
+<h3>📦 العقود الحالية</h3>
+<table>
+<thead>
+<tr>
+<th>العميل</th>
+<th>الخدمة</th>
+<th>الدورة</th>
+<th>آخر زيارة</th>
+<th>الزيارة القادمة</th>
+<th>حذف</th>
+</tr>
+</thead>
+<tbody id="contractsTable"></tbody>
+</table>
+</section>
+
+<script>
+const KEY = "ft_contracts";
+
+function loadContracts() {
+  const data = JSON.parse(localStorage.getItem(KEY) || "[]");
+  const tbody = document.getElementById("contractsTable");
+  tbody.innerHTML = "";
+
+  data.forEach((c, i) => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${c.name}<br>${c.phone}</td>
+      <td>${c.service}</td>
+      <td>${c.cycle} يوم</td>
+      <td>${c.lastVisit}</td>
+      <td>${c.nextVisit}</td>
+      <td><button class="delete" onclick="remove(${i})">✖</button></td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+function addContract() {
+  const name = clientName.value;
+  const phone = clientPhone.value;
+  const service = serviceType.value;
+  const cycle = parseInt(document.getElementById("cycle").value);
+  const lastVisit = document.getElementById("lastVisit").value;
+
+  if (!name || !lastVisit) {
+    alert("أدخل البيانات الأساسية");
+    return;
+  }
+
+  let nextVisit = "—";
+  if (cycle > 0) {
+    const d = new Date(lastVisit);
+    d.setDate(d.getDate() + cycle);
+    nextVisit = d.toISOString().split("T")[0];
+  }
+
+  const data = JSON.parse(localStorage.getItem(KEY) || "[]");
+  data.push({
+    name,
+    phone,
+    service,
+    cycle,
+    lastVisit,
+    nextVisit
+  });
+
+  localStorage.setItem(KEY, JSON.stringify(data));
+  loadContracts();
+  document.querySelectorAll("input").forEach(i => i.value = "");
+}
+
+function remove(i) {
+  const data = JSON.parse(localStorage.getItem(KEY));
+  data.splice(i, 1);
+  localStorage.setItem(KEY, JSON.stringify(data));
+  loadContracts();
+}
+
+loadContracts();
+</script>
+
+</body>
+    </html>
