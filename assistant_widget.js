@@ -1,68 +1,63 @@
-function normalizeArabic(text) {
-  const arabicNumbers = ['٠','١','٢','٣','٤','٥','٦','٧','٨','٩'];
-  const englishNumbers = ['0','1','2','3','4','5','6','7','8','9'];
+(function(){
 
-  arabicNumbers.forEach((num, i) => {
-    text = text.replace(new RegExp(num, 'g'), englishNumbers[i]);
-  });
-
-  return text;
+function getDB(){
+  return JSON.parse(localStorage.getItem("ft_db") || "{}");
 }
 
-function ftReply(message) {
-  let msg = message.toLowerCase();
-  msg = normalizeArabic(msg);
+function getProducts(){
+  return JSON.parse(localStorage.getItem("ft_products") || "[]");
+}
 
-  let replies = [];
+function reply(q){
+  q = q.toLowerCase();
 
   // ترحيب
-  if (msg.includes("السلام") || msg.includes("مرحبا")) {
-    replies.push(ftWelcome());
+  if(q.includes("السلام") || q.includes("مرحبا") || q.includes("صباح") || q.includes("مساء")){
+    return "أهلاً بيك 👋 نورت فيوتشر تانك، تحب أساعدك في إيه؟";
   }
 
-  // شراء / منتجات
-  if (
-    msg.includes("اشتري") ||
-    msg.includes("شراء") ||
-    msg.includes("خزان") ||
-    msg.includes("فلتر") ||
-    msg.includes("1000")
-  ) {
-    replies.push(`🛒 منتجات ${FT_COMPANY.name_ar}:
-${FT_COMPANY.products.map(p => `• ${p.name} — ${p.price}`).join("\n")}
-
-🛡️ ضمان 10 سنوات`);
+  // تعريف
+  if(q.includes("انت مين") || q.includes("من انت")){
+    return "أنا المساعد الذكي لفيوتشر تانك، متخصص في الخزانات والصيانة.";
   }
 
-  // صيانة / كسر / مشكلة
-  if (
-    msg.includes("صيانة") ||
-    msg.includes("كسر") ||
-    msg.includes("مشكلة") ||
-    msg.includes("تصليح")
-  ) {
-    replies.push(`🔧 خدمات الصيانة:
-• صيانة وإصلاح خزانات المياه
-• تطهير وتعقيم خزانات الشرب
+  // عرض منتجات
+  if(q.includes("خزان") || q.includes("منتج")){
+    const p = getProducts();
+    if(!p.length) return "حالياً لا توجد منتجات مضافة.";
+    return p.map(x=>`${x.name} — ${x.price} جنيه`).join(" | ");
+  }
 
-🛡️ ضمان 5 سنوات`);
+  // سعر 1000 لتر
+  if(q.includes("1000")){
+    const p = getProducts().find(x=>x.name.includes("1000"));
+    return p ? `سعر ${p.name} هو ${p.price} جنيه` : "خزان 1000 لتر غير مسجل حالياً";
+  }
+
+  // تركيب
+  if(q.includes("تركيب")){
+    return "نوفر توريد وتركيب داخل القاهرة والمحافظات 👍";
   }
 
   // حجز
-  if (msg.includes("حجز") || msg.includes("عايز")) {
-    replies.push(`📅 للحجز والاستفسار:
-📞 ${FT_COMPANY.phone}
-💬 واتساب: https://wa.me/2${FT_COMPANY.whatsapp}`);
+  if(q.includes("حجز")){
+    return "للحجز اضغط زر واتساب أو اكتب (احجز الآن)";
   }
 
-  if (replies.length > 0) {
-    return replies.join("\n\n——————————\n\n");
+  // واتساب
+  if(q.includes("واتس") || q.includes("واتساب")){
+    return "تواصل معنا على واتساب: 01150402031";
   }
 
-  return `أنا مساعد ${FT_COMPANY.name_ar} 🤖  
-ممكن تسألني عن:
-- شراء خزان
-- صيانة خزان
-- الأسعار
-- الحجز`;
-                                                                }
+  return "ممكن توضّح سؤالك أكتر؟ 😊";
+}
+
+// ربط بالواجهة
+window.FutureTankAssistant = {
+  reply,
+  welcome(){
+    return "أنا هنا للمساعدة — اسألني عن الخزانات أو الصيانة.";
+  }
+};
+
+})();
