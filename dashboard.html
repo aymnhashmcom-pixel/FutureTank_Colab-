@@ -1,58 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>لوحة التحكم — FutureTank</title>
-<link rel="stylesheet" href="styles.css">
+<head>
+<meta charset="UTF-8">
+<title>لوحة التحكم — فيوتشر تانك</title>
+<style>
+body{font-family:Tahoma;background:#f4f9ff;margin:0;padding:20px}
+.box{max-width:700px;margin:auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.1)}
+h2{color:#4a90e2}
+label{display:block;margin-top:12px;font-weight:bold}
+input,textarea{width:100%;padding:10px;margin-top:6px}
+button{margin-top:20px;padding:12px 20px;border:none;background:#4a90e2;color:#fff;font-size:16px;cursor:pointer}
+</style>
 </head>
 <body>
-<div class="container card">
-  <h2>🛠 لوحة التحكم (محلي)</h2>
-  <p>كلمة المرور: <strong>Future2025</strong></p>
-  <label>كلمة المرور<input id="pw" type="password"></label>
-  <button id="login">دخول</button>
-  <div id="adminArea" style="display:none">
-    <h3>بيانات الشركة</h3>
-    <label>اسم الشركة<input id="companyName"></label>
-    <label>هاتف<input id="companyPhone"></label>
-    <label>رسالة الترحيب<textarea id="welcome"></textarea></label>
-    <h3>منتجات</h3>
-    <div id="products"></div>
-    <button id="addProd">أضف منتج</button>
-    <h3>خدمات</h3>
-    <div id="services"></div>
-    <button id="addSrv">أضف خدمة</button>
-    <hr>
-    <button id="save">حفظ التعديلات</button>
-    <button id="clearDB">مسح جميع البيانات</button>
-  </div>
+
+<div class="box">
+<h2>⚙️ لوحة التحكم – فيوتشر تانك</h2>
+
+<label>رسالة الترحيب</label>
+<textarea id="welcome"></textarea>
+
+<label>رقم واتساب</label>
+<input id="whatsapp" placeholder="201150402031">
+
+<label>سعر خزان 1000 لتر</label>
+<input id="price1000">
+
+<button onclick="save()">💾 حفظ البيانات</button>
 </div>
 
 <script>
-function loadDB(){ return JSON.parse(localStorage.getItem('ft_db')||'{}'); }
-function saveDB(db){ localStorage.setItem('ft_db', JSON.stringify(db)); }
-document.getElementById('login').addEventListener('click', ()=>{
-  if(document.getElementById('pw').value === 'Future2025'){
-    document.getElementById('adminArea').style.display='block';
-    const db = loadDB();
-    document.getElementById('companyName').value = (db.company && db.company.name) || 'فيوتشر تانك';
-    document.getElementById('companyPhone').value = (db.company && db.company.phone) || '01150402031';
-    document.getElementById('welcome').value = db.welcome || 'أهلاً بكم في فيوتشرتانك. نقاء الماء هو هدفنا.';
-    const prodDiv = document.getElementById('products'); prodDiv.innerHTML='';
-    (db.products||[]).forEach((p,i)=>{ const row = document.createElement('div'); row.innerHTML = '<input class="pname" value="'+p.name+'"> <input class="pprice" value="'+p.price+'"> <button class="rm">✖</button>'; prodDiv.appendChild(row); row.querySelector('.rm').addEventListener('click', ()=>{ row.remove(); }); });
-    const srvDiv = document.getElementById('services'); srvDiv.innerHTML=''; (db.services||[]).forEach(s=>{ const r=document.createElement('div'); r.innerHTML = '<input class="sname" value="'+s.name+'"> <button class="rm">✖</button>'; srvDiv.appendChild(r); r.querySelector('.rm').addEventListener('click', ()=> r.remove());});
-  } else alert('كلمة المرور غير صحيحة');
-});
-document.getElementById('addProd').addEventListener('click', ()=>{ const p=document.createElement('div'); p.innerHTML='<input class="pname" placeholder="اسم المنتج"> <input class="pprice" placeholder="السعر"> <button class="rm">✖</button>'; document.getElementById('products').appendChild(p); p.querySelector('.rm').addEventListener('click', ()=>p.remove());});
-document.getElementById('addSrv').addEventListener('click', ()=>{ const s=document.createElement('div'); s.innerHTML='<input class="sname" placeholder="اسم الخدمة"> <button class="rm">✖</button>'; document.getElementById('services').appendChild(s); s.querySelector('.rm').addEventListener('click', ()=>s.remove());});
-document.getElementById('save').addEventListener('click', ()=>{
-  const db = {};
-  db.company = { name: document.getElementById('companyName').value, phone: document.getElementById('companyPhone').value };
-  db.welcome = document.getElementById('welcome').value;
-  db.products = Array.from(document.querySelectorAll('.pname')).map((el,i)=>({ name: el.value, price: document.querySelectorAll('.pprice')[i] ? document.querySelectorAll('.pprice')[i].value : '' }));
-  db.services = Array.from(document.querySelectorAll('.sname')).map(el=>({ name: el.value }));
-  saveDB(db); alert('تم الحفظ محلياً في المتصفح (localStorage).');
-});
-document.getElementById('clearDB').addEventListener('click', ()=>{ if(confirm('مسح جميع بيانات localStorage؟')){ localStorage.removeItem('ft_db'); alert('تم المسح'); }});
+function save(){
+  const data = {
+    welcome: welcome.value,
+    whatsapp: whatsapp.value,
+    prices:{
+      "1000": price1000.value
+    }
+  };
+  localStorage.setItem("ft_data", JSON.stringify(data));
+  alert("✅ تم الحفظ بنجاح");
+}
+
+(function load(){
+  const d = JSON.parse(localStorage.getItem("ft_data")||"{}");
+  if(d.welcome) welcome.value = d.welcome;
+  if(d.whatsapp) whatsapp.value = d.whatsapp;
+  if(d.prices) price1000.value = d.prices["1000"]||"";
+})();
 </script>
+
 </body>
 </html>
