@@ -1,22 +1,26 @@
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
-const products = db.products || [];
-const box = document.getElementById("products");
+fetch("database.json")
+  .then(res => res.json())
+  .then(db => {
+    const products = db.products || [];
+    const box = document.getElementById("products");
 
-if(products.length === 0){
-  box.innerHTML = "<p style='grid-column:1/-1;text-align:center'>لا توجد منتجات حالياً</p>";
-}
+    if(products.length === 0){
+      box.innerHTML = "<p style='grid-column:1/-1;text-align:center'>لا توجد منتجات حالياً</p>";
+      return;
+    }
 
-products.forEach(p=>{
-  box.innerHTML += `
-    <div class="card">
-      <img src="${p.img || ''}">
-      <div class="p">
-        <h4>${p.name}</h4>
-        <div class="price">${p.price} جنيه</div>
-        <p>${p.desc || ''}</p>
-      </div>
-    </div>
-  `;
-});
+    products.forEach(p=>{
+      box.innerHTML += `
+        <div class="card">
+          <img src="${p.img}">
+          <div class="p">
+            <h4>${p.name}</h4>
+            <div class="price">${p.price} جنيه</div>
+            <p>${p.desc}</p>
+          </div>
+        </div>
+      `;
+    });
+  });
 </script>
