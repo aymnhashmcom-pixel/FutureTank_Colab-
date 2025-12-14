@@ -2,53 +2,37 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>لوحة التحكم — فيوتشر تانك</title>
+<title>لوحة التحكم — المنتجات</title>
 <style>
-body{font-family:Tahoma;background:#f4f9ff;margin:0;padding:20px}
-.box{max-width:700px;margin:auto;background:#fff;padding:20px;border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,.1)}
-h2{color:#4a90e2}
-label{display:block;margin-top:12px;font-weight:bold}
-input,textarea{width:100%;padding:10px;margin-top:6px}
-button{margin-top:20px;padding:12px 20px;border:none;background:#4a90e2;color:#fff;font-size:16px;cursor:pointer}
+body{font-family:Tahoma;background:#f4f9ff;padding:30px}
+input,textarea,button{width:100%;margin:8px 0;padding:10px}
+button{background:#4a90e2;color:#fff;border:0;cursor:pointer}
 </style>
 </head>
 <body>
 
-<div class="box">
-<h2>⚙️ لوحة التحكم – فيوتشر تانك</h2>
+<h2>➕ إضافة منتج</h2>
 
-<label>رسالة الترحيب</label>
-<textarea id="welcome"></textarea>
-
-<label>رقم واتساب</label>
-<input id="whatsapp" placeholder="201150402031">
-
-<label>سعر خزان 1000 لتر</label>
-<input id="price1000">
-
-<button onclick="save()">💾 حفظ البيانات</button>
-</div>
+<input id="name" placeholder="اسم المنتج">
+<input id="price" placeholder="السعر">
+<input id="img" placeholder="رابط الصورة">
+<textarea id="desc" placeholder="وصف المنتج"></textarea>
+<button onclick="add()">حفظ المنتج</button>
 
 <script>
-function save(){
-  const data = {
-    welcome: welcome.value,
-    whatsapp: whatsapp.value,
-    prices:{
-      "1000": price1000.value
-    }
+function add(){
+  const p={
+    name:name.value,
+    price:price.value,
+    img:img.value,
+    desc:desc.value
   };
-  localStorage.setItem("ft_data", JSON.stringify(data));
-  alert("✅ تم الحفظ بنجاح");
+  const arr=JSON.parse(localStorage.getItem("ft_products")||"[]");
+  arr.push(p);
+  localStorage.setItem("ft_products",JSON.stringify(arr));
+  alert("تم حفظ المنتج ✔️");
+  name.value=price.value=img.value=desc.value="";
 }
-
-(function load(){
-  const d = JSON.parse(localStorage.getItem("ft_data")||"{}");
-  if(d.welcome) welcome.value = d.welcome;
-  if(d.whatsapp) whatsapp.value = d.whatsapp;
-  if(d.prices) price1000.value = d.prices["1000"]||"";
-})();
 </script>
-
 </body>
 </html>
