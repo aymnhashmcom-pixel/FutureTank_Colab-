@@ -1,49 +1,98 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>لوحة تحكم FutureTank</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>إدارة العملاء والعقود — FutureTank</title>
 <style>
-body{font-family:Tahoma;background:#f4f9ff;margin:0;padding:20px}
-h1{color:#1f3b5c}
-.box{background:#fff;border-radius:14px;padding:20px;margin-bottom:20px;box-shadow:0 6px 20px rgba(0,0,0,.1)}
-input,select,button{padding:10px;margin:6px 0;width:100%;font-size:14px}
-button{background:#4a90e2;color:#fff;border:none;border-radius:8px;cursor:pointer}
-table{width:100%;border-collapse:collapse;margin-top:10px}
-th,td{border-bottom:1px solid #eee;padding:8px;text-align:center}
-th{background:#f0f6ff}
-.del{color:red;cursor:pointer}
-.logout{background:#999}
+body{
+  font-family: Arial, sans-serif;
+  background:#f5f7fa;
+  margin:20px;
+}
+h1{color:#0b5ed7}
+section{
+  background:#fff;
+  padding:15px;
+  border-radius:8px;
+  margin-bottom:20px;
+}
+input, select, button{
+  padding:8px;
+  margin:5px 0;
+  width:100%;
+}
+button{
+  background:#0b5ed7;
+  color:#fff;
+  border:none;
+  border-radius:5px;
+  cursor:pointer;
+}
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+th, td{
+  border:1px solid #ddd;
+  padding:8px;
+  text-align:center;
+}
+th{background:#e9f0ff}
+.whatsapp{
+  background:#25d366;
+  color:#fff;
+  padding:5px 8px;
+  border-radius:5px;
+  text-decoration:none;
+}
+.delete{
+  color:red;
+  cursor:pointer;
+  font-weight:bold;
+}
 </style>
 </head>
+
 <body>
+
 <h1>📋 إدارة العملاء والعقود — FutureTank</h1>
-<button class="logout" onclick="logout()">تسجيل خروج</button><div class="box">
+
+<section>
 <h3>➕ إضافة عقد جديد</h3>
-<input id="client" placeholder="اسم العميل + رقم الهاتف">
+
+<input id="client" placeholder="اسم العميل">
+<input id="phone" placeholder="رقم الهاتف (مثال: 01100000000)">
+
 <select id="service">
   <option>تطهير وتعقيم خزانات</option>
   <option>توريد وتركيب خزانات</option>
   <option>صيانة وإصلاح خزانات</option>
 </select>
+
 <select id="cycle">
   <option value="30">زيارة كل 30 يوم</option>
   <option value="60">زيارة كل 60 يوم</option>
-  <option value="custom">مخصص</option>
 </select>
-<select id="contractType">
-  <option value="year">سنوي</option>
-  <option value="month">شهري</option>
-  <option value="open">مفتوح</option>
+
+<select id="type">
+  <option>سنوي</option>
+  <option>شهري</option>
+  <option>مفتوح</option>
 </select>
+
 <label>تاريخ التعاقد</label>
-<input type="date" id="startDate">
+<input type="date" id="contractDate">
+
 <label>تاريخ آخر زيارة</label>
 <input type="date" id="lastVisit">
+
 <label>تكلفة الزيارة (جنيه)</label>
-<input type="number" id="price">
+<input type="number" id="cost">
+
 <button onclick="addContract()">حفظ العقد</button>
-</div><div class="box">
+</section>
+
+<section>
 <h3>📦 العقود الحالية</h3>
 <table>
 <thead>
@@ -54,59 +103,73 @@ th{background:#f0f6ff}
 <th>آخر زيارة</th>
 <th>الزيارة القادمة</th>
 <th>التكلفة</th>
+<th>واتساب</th>
 <th>حذف</th>
 </tr>
 </thead>
-<tbody id="contracts"></tbody>
+<tbody id="contractsTable"></tbody>
 </table>
-</div><script>
-// حماية بسيطة
-const PASS_KEY = 'ft_admin_pass';
-let savedPass = localStorage.getItem(PASS_KEY) || 'Future2025';
-if(!sessionStorage.getItem('logged')){
-  const p = prompt('كلمة المرور');
-  if(p !== savedPass){alert('غير مصرح');location.href='index.html'}
-  sessionStorage.setItem('logged',1);
-}
+</section>
 
-const DB_KEY='ft_contracts';
-const list = JSON.parse(localStorage.getItem(DB_KEY)||'[]');
-const tbody=document.getElementById('contracts');
-
-function nextDate(d,days){
- let x=new Date(d);x.setDate(x.getDate()+days);return x.toISOString().split('T')[0];
-}
-
+<script src="system.js"></script>
+<script>
 function addContract(){
- const c=client.value;
- const s=service.value;
- const cycleVal=cycle.value;
- const days=cycleVal==='custom'?0:Number(cycleVal);
- const last=lastVisit.value;
- const priceVal=price.value;
- let next='-';
- if(days && last) next=nextDate(last,days);
- list.push({client:c,service:s,cycle:days?days+' يوم':'مخصص',last,last,next,price:priceVal});
- localStorage.setItem(DB_KEY,JSON.stringify(list));
- location.reload();
+  const contract = {
+    client: client.value,
+    phone: phone.value,
+    service: service.value,
+    cycle: cycle.value,
+    type: type.value,
+    contractDate: contractDate.value,
+    lastVisit: lastVisit.value,
+    cost: cost.value
+  };
+
+  if(!contract.client || !contract.phone){
+    alert("يرجى إدخال اسم العميل ورقم الهاتف");
+    return;
+  }
+
+  ftAddContract(contract);
+  renderContracts();
 }
 
-function render(){
- tbody.innerHTML='';
- list.forEach((o,i)=>{
-  tbody.innerHTML+=`<tr>
-  <td>${o.client}</td>
-  <td>${o.service}</td>
-  <td>${o.cycle}</td>
-  <td>${o.last}</td>
-  <td>${o.next}</td>
-  <td>${o.price} جنيه</td>
-  <td class='del' onclick='del(${i})'>✖</td>
-  </tr>`;
- });
+function renderContracts(){
+  const data = ftLoadContracts();
+  contractsTable.innerHTML = "";
+
+  data.forEach(c=>{
+    const tr = document.createElement("tr");
+
+    tr.innerHTML = `
+      <td>${c.client}</td>
+      <td>${c.service}</td>
+      <td>${c.cycle} يوم</td>
+      <td>${c.lastVisit || "-"}</td>
+      <td>${c.nextVisit || "-"}</td>
+      <td>${c.cost || 0} جنيه</td>
+      <td>
+        <a class="whatsapp" target="_blank" href="${ftGenerateWhatsApp(c)}">
+        واتساب
+        </a>
+      </td>
+      <td>
+        <span class="delete" onclick="remove(${c.id})">✖</span>
+      </td>
+    `;
+    contractsTable.appendChild(tr);
+  });
 }
-function del(i){if(confirm('حذف؟')){list.splice(i,1);localStorage.setItem(DB_KEY,JSON.stringify(list));render();}}
-function logout(){sessionStorage.removeItem('logged');location.reload();}
-render();
-</script></body>
+
+function remove(id){
+  if(confirm("حذف العقد؟")){
+    ftDeleteContract(id);
+    renderContracts();
+  }
+}
+
+renderContracts();
+</script>
+
+</body>
 </html>
