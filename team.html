@@ -5,39 +5,25 @@
 <title>👷 لوحة الفريق — FutureTank</title>
 
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  margin:20px
-}
+body{font-family:Tahoma;background:#f4f9ff;margin:20px}
 h2{color:#4a90e2}
-table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fff;
-  margin-top:20px
-}
-th,td{
-  border:1px solid #ddd;
-  padding:8px;
-  text-align:center
-}
+table{width:100%;border-collapse:collapse;background:#fff;margin-top:20px}
+th,td{border:1px solid #ddd;padding:8px;text-align:center}
 th{background:#eef5ff}
+
+.bad{background:#ffe5e5}
+.warn{background:#fff3cd}
+.good{background:#e8f5e9}
+
 button{
   padding:6px 10px;
-  cursor:pointer;
+  border:none;
   border-radius:6px;
-  border:none
+  cursor:pointer
 }
 .done{background:#4CAF50;color:#fff}
-.note{background:#ffc107}
-.bad{color:#d32f2f;font-weight:bold}
-.good{color:#388e3c;font-weight:bold}
-textarea{
-  width:100%;
-  padding:6px;
-  margin-top:4px
-}
+.ws{background:#25D366;color:#fff}
+textarea{width:100%;padding:6px}
 </style>
 </head>
 
@@ -49,12 +35,11 @@ textarea{
 <thead>
 <tr>
   <th>العميل</th>
-  <th>الهاتف</th>
   <th>الخدمة</th>
   <th>موعد الزيارة</th>
   <th>الحالة</th>
   <th>ملاحظات</th>
-  <th>تنفيذ</th>
+  <th>إجراء</th>
 </tr>
 </thead>
 
@@ -63,36 +48,59 @@ textarea{
 
 <script src="system.js"></script>
 <script>
+function daysDiff(date){
+  const d = new Date(date);
+  const today = new Date();
+  return Math.ceil((d - today)/(1000*60*60*24));
+}
+
 function renderTeamOrders(){
   const db = loadDB();
   const body = document.getElementById("ordersBody");
   body.innerHTML = "";
 
-  (db.contracts || []).forEach(c=>{
+  (db.contracts||[]).forEach(c=>{
+    const diff = daysDiff(c.nextVisit);
+    let cls = "good";
+    if(diff < 0) cls="bad";
+    else if(diff <=5) cls="warn";
+
+    const msg = encodeURIComponent(
+`السلام عليكم
+نذكركم بموعد الزيارة
+
+الخدمة: ${c.service}
+العميل: ${c.client}
+📅 الموعد: ${c.nextVisit}
+
+فريق FutureTank`
+    );
+
     const tr = document.createElement("tr");
+    tr.className = cls;
 
     tr.innerHTML = `
       <td>${c.client}</td>
-      <td>${c.phone}</td>
       <td>${c.service}</td>
       <td>${c.nextVisit}</td>
-      <td class="${c.status==='تم التنفيذ'?'good':'bad'}">${c.status}</td>
+      <td>${c.status}</td>
+      <td><textarea id="n${c.id}">${c.notes||""}</textarea></td>
       <td>
-        <textarea id="note-${c.id}" placeholder="ملاحظات التنفيذ">${c.notes||""}</textarea>
-      </td>
-      <td>
-        <button class="done" onclick="executeOrder(${c.id})">✔ تم التنفيذ</button>
+        <button class="done" onclick="execute(${c.id})">✔ تم التنفيذ</button>
+        <br><br>
+        <a href="https://wa.me/2${c.phone}?text=${msg}" target="_blank">
+          <button class="ws">واتساب</button>
+        </a>
       </td>
     `;
-
     body.appendChild(tr);
   });
 }
 
-function executeOrder(id){
-  const note = document.getElementById("note-"+id).value;
+function execute(id){
+  const note = document.getElementById("n"+id).value;
   updateExecution(id,"تم التنفيذ",note);
-  alert("✅ تم تسجيل التنفيذ وإعادة الجدولة تلقائيًا");
+  alert("✅ تم تسجيل التنفيذ");
   renderTeamOrders();
 }
 
