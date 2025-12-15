@@ -1,86 +1,112 @@
-/* ===============================
-   FutureTank System Core
-   Contracts + Scheduling Engine
-   =============================== */
+const FT_KEY = "ft_contracts";
+const FT_SENT_KEY = "ft_sent_notifications";
 
-const FT_STORAGE_KEY = "ft_contracts";
-
-/* ===== Helpers ===== */
-function ftLoadContracts() {
-  return JSON.parse(localStorage.getItem(FT_STORAGE_KEY) || "[]");
+// تحميل البيانات
+function ftLoad() {
+  return JSON.parse(localStorage.getItem(FT_KEY) || "[]");
 }
 
-function ftSaveContracts(data) {
-  localStorage.setItem(FT_STORAGE_KEY, JSON.stringify(data));
+// حفظ البيانات
+function ftSave(data) {
+  localStorage.setItem(FT_KEY, JSON.stringify(data));
 }
 
-function ftAddDays(dateStr, days) {
-  if (!dateStr) return "";
-  const d = new Date(dateStr);
-  d.setDate(d.getDate() + Number(days));
+// حساب الزيارة القادمة
+function ftNextVisit(last, cycle) {
+  const d = new Date(last);
+  d.setDate(d.getDate() + Number(cycle));
   return d.toISOString().split("T")[0];
 }
 
-/* ===== Calculate Next Visit ===== */
-function ftCalcNextVisit(lastVisit, cycle) {
-  if (!lastVisit) return "";
-  if (cycle === "30") return ftAddDays(lastVisit, 30);
-  if (cycle === "60") return ftAddDays(lastVisit, 60);
-  return "";
+// إضافة عقد
+function ftAddContract(form) {
+  const data = ftLoad();
+  const c = {
+    id: Date.now(),
+    client: form.client.value,
+    phone: form.phone.value,
+    service: form.service.value,
+    cycle: form.cycle.value,
+    period: form.period.value,
+    startDate: form.startDate.value,
+    lastVisit: form.lastVisit.value,
+    cost: form.cost.value,
+  };
+  data.push(c);
+  ftSave(data);
+  form.reset();
+  ftRender();
 }
 
-/* ===== Add Contract ===== */
-function ftAddContract(contract) {
-  const contracts = ftLoadContracts();
-
-  contract.id = Date.now();
-  contract.nextVisit = ftCalcNextVisit(
-    contract.lastVisit,
-    contract.cycle
-  );
-
-  contracts.push(contract);
-  ftSaveContracts(contracts);
+// حذف عقد
+function ftDelete(id) {
+  ftSave(ftLoad().filter(c => c.id !== id));
+  ftRender();
 }
 
-/* ===== Delete Contract ===== */
-function ftDeleteContract(id) {
-  let contracts = ftLoadContracts();
-  contracts = contracts.filter(c => c.id !== id);
-  ftSaveContracts(contracts);
-}
-
-/* ===== Get Due Contracts ===== */
-function ftGetDueContracts(daysAhead = 5) {
-  const contracts = ftLoadContracts();
-  const today = new Date();
-
-  return contracts.filter(c => {
-    if (!c.nextVisit) return false;
-    const visitDate = new Date(c.nextVisit);
-    const diff = (visitDate - today) / (1000 * 60 * 60 * 24);
-    return diff <= daysAhead && diff >= 0;
-  });
-}
-
-/* ===== WhatsApp Message Generator ===== */
-function ftGenerateWhatsApp(contract) {
-  const msg = `
+// رسالة واتساب
+function ftWhatsApp(c) {
+  const next = ftNextVisit(c.lastVisit, c.cycle);
+  const text = `
 السلام عليكم
 نود إفادتكم بموعد زيارة
 
-الخدمة: ${contract.service}
-العميل: ${contract.client}
+الخدمة: ${c.service}
+العميل: ${c.client}
 
-📅 الموعد: ${contract.nextVisit}
-💰 تكلفة الزيارة: ${contract.cost} جنيه
+📅 الموعد: ${next}
+💰 تكلفة الزيارة: ${c.cost} جنيه
 
 🔔 يتم الدفع عقب انتهاء الأعمال مباشرة
 عبر اتصالات كاش:
 01150402031
 
 فريق FutureTank
-  `.trim();
+`;
+  return `https://wa.me/2${c.phone}?text=${encodeURIComponent(text)}`;
+}
 
-  return "https://wa.me/2" + contract.phone + "?text=" + encodeURIComponent(msg);
+// عرض العقود
+function ftRender() {
+  const body = document.getElementById("contractsBody");
+  if (!body) return;
+  body.innerHTML = "";
+  ftLoad().forEach(c => {
+    const next = ftNextVisit(c.lastVisit, c.cycle);
+    body.innerHTML += `
+<tr>
+<td>${c.client}</td>
+<td>${c.service}</td>
+<td>${c.cycle} يوم</td>
+<td>${c.lastVisit}</td>
+<td>${next}</td>
+<td>${c.cost} جنيه</td>
+<td><a href="${ftWhatsApp(c)}" target="_blank">واتساب</a></td>
+<td><button onclick="ftDelete(${c.id})">✖</button></td>
+</tr>`;
+  });
+}
+
+// 🔔 فحص الزيارات قبل 5 أيام
+function ftCheckUpcoming(days = 5) {
+  const today = new Date();
+  const sent = JSON.parse(localStorage.getItem(FT_SENT_KEY) || "[]");
+
+  ftLoad().forEach(c => {
+    const next = new Date(ftNextVisit(c.lastVisit, c.cycle));
+    const diff = Math.ceil((next - today) / (1000 * 60 * 60 * 24));
+
+    if (diff === days && !sent.includes(c.id)) {
+      alert(`🔔 زيارة قريبة بعد ${days} أيام:\n${c.client} – ${c.service}`);
+      sent.push(c.id);
     }
+  });
+
+  localStorage.setItem(FT_SENT_KEY, JSON.stringify(sent));
+}
+
+// تشغيل تلقائي عند فتح الصفحة
+document.addEventListener("DOMContentLoaded", () => {
+  ftRender();
+  ftCheckUpcoming(5);
+});
