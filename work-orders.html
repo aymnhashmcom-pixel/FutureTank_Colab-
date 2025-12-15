@@ -2,24 +2,23 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>📋 أوامر الشغل — FutureTank</title>
+<title>📄 تصدير أوامر الشغل PDF — FutureTank</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.31/jspdf.plugin.autotable.min.js"></script>
+
 <style>
 body{font-family:Tahoma;background:#f4f9ff;margin:20px}
-h2{color:#4a90e2}
-.card{background:#fff;padding:15px;border-radius:10px;margin-bottom:15px}
-.btn{display:inline-block;padding:8px 12px;background:#4a90e2;color:#fff;border-radius:6px;text-decoration:none;margin-top:8px}
+button{padding:12px 18px;background:#4a90e2;color:#fff;border:none;border-radius:8px;font-size:16px;cursor:pointer}
 </style>
 </head>
 <body>
 
-<h2>📋 أوامر الشغل المستحقة</h2>
-<p>الزيارات المطلوب تنفيذها خلال الأيام القادمة</p>
-
-<div id="orders"></div>
+<h2>📄 تصدير أوامر الشغل (PDF مُجمّع)</h2>
+<button onclick="generatePDF()">⬇️ تحميل PDF</button>
 
 <script>
-const data = JSON.parse(localStorage.getItem("ft_contracts")||"[]");
-const box = document.getElementById("orders");
+const { jsPDF } = window.jspdf;
 
 function nextVisit(last, cycle){
   const d = new Date(last);
@@ -27,44 +26,58 @@ function nextVisit(last, cycle){
   return d;
 }
 
-const today = new Date();
+function generatePDF(){
+  const data = JSON.parse(localStorage.getItem("ft_contracts")||"[]");
+  const today = new Date();
 
-const due = data.filter(c=>{
-  const diff = Math.ceil((nextVisit(c.lastVisit,c.cycle)-today)/(1000*60*60*24));
-  return diff <= 5 && diff >= 0;
-});
+  const orders = data.filter(c=>{
+    const diff = Math.ceil((nextVisit(c.lastVisit,c.cycle)-today)/(1000*60*60*24));
+    return diff <= 5 && diff >= 0;
+  });
 
-if(due.length===0){
-  box.innerHTML="<p>لا توجد أوامر شغل حالياً ✅</p>";
+  if(orders.length===0){
+    alert("لا توجد أوامر شغل حالياً");
+    return;
+  }
+
+  const pdf = new jsPDF({orientation:"portrait", unit:"mm", format:"a4"});
+
+  orders.forEach((c,i)=>{
+    if(i>0) pdf.addPage();
+
+    pdf.setFont("Helvetica","bold");
+    pdf.setFontSize(16);
+    pdf.text("FutureTank", 105, 20, {align:"center"});
+
+    pdf.setFontSize(12);
+    pdf.text("أمر شغل رسمي", 105, 30, {align:"center"});
+
+    pdf.setFont("Helvetica","normal");
+    pdf.text(`التاريخ: ${new Date().toISOString().split("T")[0]}`, 15, 40);
+
+    const visit = nextVisit(c.lastVisit,c.cycle).toISOString().split("T")[0];
+
+    pdf.autoTable({
+      startY: 50,
+      styles:{halign:"right", font:"Helvetica"},
+      head:[["البيان","التفاصيل"]],
+      body:[
+        ["اسم العميل", c.client],
+        ["رقم الهاتف", c.phone],
+        ["الخدمة", c.service],
+        ["موعد الزيارة", visit],
+        ["تكلفة الزيارة", c.cost + " جنيه"],
+        ["طريقة الدفع", "اتصالات كاش — 01150402031"],
+        ["ملاحظة", "يتم الدفع عقب انتهاء الأعمال مباشرة"]
+      ]
+    });
+
+    pdf.text("توقيع العميل: ____________________", 15, 260);
+    pdf.text("فريق FutureTank", 150, 260);
+  });
+
+  pdf.save("FutureTank_Work_Orders.pdf");
 }
-
-due.forEach(c=>{
-  const visit = nextVisit(c.lastVisit,c.cycle).toISOString().split("T")[0];
-  const msg = `
-السلام عليكم
-أمر شغل معتمد
-
-العميل: ${c.client}
-الخدمة: ${c.service}
-📅 الموعد: ${visit}
-💰 التكلفة: ${c.cost} جنيه
-
-الدفع بعد التنفيذ
-اتصالات كاش:
-01150402031
-
-FutureTank`;
-  const wa = `https://wa.me/2${c.phone}?text=${encodeURIComponent(msg)}`;
-
-  box.innerHTML += `
-  <div class="card">
-    <b>العميل:</b> ${c.client}<br>
-    <b>الخدمة:</b> ${c.service}<br>
-    <b>موعد الزيارة:</b> ${visit}<br>
-    <b>التكلفة:</b> ${c.cost} جنيه<br>
-    <a class="btn" href="${wa}" target="_blank">💬 إرسال واتساب</a>
-  </div>`;
-});
 </script>
 
 </body>
