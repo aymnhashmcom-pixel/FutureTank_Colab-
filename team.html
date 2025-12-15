@@ -3,89 +3,86 @@
 <head>
 <meta charset="UTF-8">
 <title>لوحة الفريق — FutureTank</title>
+
 <style>
 body{font-family:Tahoma;background:#f4f9ff;margin:20px}
 h2{color:#2c6ecb}
-table{width:100%;border-collapse:collapse;background:#fff;margin-top:20px}
-th,td{border:1px solid #ddd;padding:10px;text-align:center}
+table{width:100%;border-collapse:collapse;background:#fff;margin-top:15px}
+th,td{border:1px solid #ddd;padding:8px;text-align:center}
 th{background:#eef5ff}
-button{padding:6px 10px;cursor:pointer}
-.badge{background:#ffefc1;padding:4px 8px;border-radius:6px}
+button,a{padding:6px 10px;text-decoration:none;cursor:pointer}
+.whatsapp{background:#25d366;color:#fff;border-radius:6px}
+.work{background:#4a90e2;color:#fff;border-radius:6px}
 </style>
-</head>
 
+</head>
 <body>
 
-<h2>👷‍♂️ لوحة تنفيذ الزيارات — FutureTank</h2>
-<p class="badge">الزيارات المستحقة خلال 7 أيام</p>
+<h2>🧑‍🔧 لوحة الفريق — أوامر الشغل</h2>
 
 <table>
 <thead>
 <tr>
 <th>العميل</th>
+<th>الهاتف</th>
 <th>الخدمة</th>
-<th>موعد الزيارة</th>
+<th>تاريخ الزيارة</th>
 <th>التكلفة</th>
-<th>تنفيذ</th>
+<th>أمر شغل</th>
+<th>واتساب</th>
 </tr>
 </thead>
 <tbody id="teamBody"></tbody>
 </table>
 
 <script>
-const KEY = "ft_contracts";
+const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
+const contracts = db.contracts || [];
+const body = document.getElementById("teamBody");
 
-function load() {
-  return JSON.parse(localStorage.getItem(KEY) || "[]");
-}
+contracts.forEach(c=>{
+  const tr = document.createElement("tr");
 
-function save(d) {
-  localStorage.setItem(KEY, JSON.stringify(d));
-}
+  const msg = encodeURIComponent(
+`السلام عليكم
+نود إفادتكم بموعد زيارة
 
-function done(id) {
-  const data = load();
-  const c = data.find(x => x.id === id);
-  if (!c) return;
+الخدمة: ${c.service}
+العميل: ${c.client}
 
-  const today = new Date();
-  c.lastVisit = today.toISOString().split("T")[0];
+📅 الموعد: ${c.nextVisit}
+💰 تكلفة الزيارة: ${c.cost} جنيه
 
-  const next = new Date(today);
-  next.setDate(today.getDate() + c.cycle);
-  c.nextVisit = next.toISOString().split("T")[0];
+🔔 يتم الدفع عقب انتهاء الأعمال مباشرة
+عبر اتصالات كاش:
+01150402031
 
-  save(data);
-  render();
-}
+فريق FutureTank`
+  );
 
-function render() {
-  const body = document.getElementById("teamBody");
-  body.innerHTML = "";
+  tr.innerHTML = `
+    <td>${c.client}</td>
+    <td>${c.phone}</td>
+    <td>${c.service}</td>
+    <td>${c.nextVisit}</td>
+    <td>${c.cost} جنيه</td>
 
-  const today = new Date();
-  load().forEach(c => {
-    const visit = new Date(c.nextVisit);
-    const diff = (visit - today) / (1000*60*60*24);
+    <td>
+      <a class="work" target="_blank"
+      href="workorder.html?client=${c.client}&phone=${c.phone}&service=${c.service}&date=${c.nextVisit}&cost=${c.cost}">
+      📄 أمر شغل
+      </a>
+    </td>
 
-    if (diff <= 7 && diff >= 0) {
-      body.innerHTML += `
-<tr>
-<td>${c.client}</td>
-<td>${c.service}</td>
-<td>${c.nextVisit}</td>
-<td>${c.cost} جنيه</td>
-<td><button onclick="done(${c.id})">✔ تم</button></td>
-</tr>`;
-    }
-  });
-
-  if (!body.innerHTML) {
-    body.innerHTML = `<tr><td colspan="5">لا توجد زيارات حالياً</td></tr>`;
-  }
-}
-
-render();
+    <td>
+      <a class="whatsapp" target="_blank"
+      href="https://wa.me/2${c.phone}?text=${msg}">
+      واتساب
+      </a>
+    </td>
+  `;
+  body.appendChild(tr);
+});
 </script>
 
 </body>
