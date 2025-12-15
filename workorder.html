@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>أمر شغل — FutureTank</title>
+<style>
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+.box{background:#fff;padding:20px;border-radius:10px;max-width:700px;margin:auto}
+h2{text-align:center;color:#2c6ecb}
+.row{margin:8px 0}
+.label{font-weight:bold}
+hr{margin:15px 0}
+button{padding:10px 14px;cursor:pointer;margin-top:10px}
+.sign{margin-top:40px;display:flex;justify-content:space-between}
+</style>
+</head>
+<body>
+
+<div class="box" id="printArea">
+<h2>📄 أمر شغل — FutureTank</h2>
+
+<div class="row"><span class="label">العميل:</span> <span id="client"></span></div>
+<div class="row"><span class="label">الهاتف:</span> <span id="phone"></span></div>
+<div class="row"><span class="label">الخدمة:</span> <span id="service"></span></div>
+<div class="row"><span class="label">تاريخ الزيارة:</span> <span id="date"></span></div>
+<div class="row"><span class="label">تكلفة الزيارة:</span> <span id="cost"></span> جنيه</div>
+
+<hr>
+
+<p>
+🔔 يتم الدفع عقب انتهاء الأعمال مباشرة  
+<br>
+💰 اتصالات كاش: <strong>01150402031</strong>
+</p>
+
+<div class="sign">
+<div>توقيع الفريق</div>
+<div>توقيع العميل</div>
+</div>
+</div>
+
+<button onclick="window.print()">🖨️ طباعة / حفظ PDF</button>
+
+<script>
+const p = new URLSearchParams(location.search);
+["client","phone","service","date","cost"].forEach(k=>{
+  document.getElementById(k).textContent = p.get(k) || "";
+});
+</script>
+
+</body>
+  </html>
