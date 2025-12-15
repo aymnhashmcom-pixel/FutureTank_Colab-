@@ -1,5 +1,4 @@
 const FT_KEY = "ft_contracts";
-const FT_SENT_KEY = "ft_sent_notifications";
 
 // تحميل البيانات
 function ftLoad() {
@@ -11,28 +10,28 @@ function ftSave(data) {
   localStorage.setItem(FT_KEY, JSON.stringify(data));
 }
 
-// حساب الزيارة القادمة
-function ftNextVisit(last, cycle) {
-  const d = new Date(last);
-  d.setDate(d.getDate() + Number(cycle));
-  return d.toISOString().split("T")[0];
-}
-
 // إضافة عقد
 function ftAddContract(form) {
   const data = ftLoad();
-  const c = {
+
+  const cycle = parseInt(form.cycle.value);
+  const lastVisit = new Date(form.lastVisit.value);
+  const nextVisit = new Date(lastVisit);
+  nextVisit.setDate(lastVisit.getDate() + cycle);
+
+  data.push({
     id: Date.now(),
     client: form.client.value,
     phone: form.phone.value,
     service: form.service.value,
-    cycle: form.cycle.value,
+    cycle,
     period: form.period.value,
     startDate: form.startDate.value,
     lastVisit: form.lastVisit.value,
-    cost: form.cost.value,
-  };
-  data.push(c);
+    nextVisit: nextVisit.toISOString().split("T")[0],
+    cost: form.cost.value
+  });
+
   ftSave(data);
   form.reset();
   ftRender();
@@ -40,21 +39,38 @@ function ftAddContract(form) {
 
 // حذف عقد
 function ftDelete(id) {
+  if (!confirm("تأكيد حذف العقد؟")) return;
   ftSave(ftLoad().filter(c => c.id !== id));
   ftRender();
 }
 
+// تم التنفيذ
+function ftDone(id) {
+  const data = ftLoad();
+  const c = data.find(x => x.id === id);
+  if (!c) return;
+
+  const today = new Date();
+  c.lastVisit = today.toISOString().split("T")[0];
+
+  const next = new Date(today);
+  next.setDate(today.getDate() + c.cycle);
+  c.nextVisit = next.toISOString().split("T")[0];
+
+  ftSave(data);
+  ftRender();
+}
+
 // رسالة واتساب
-function ftWhatsApp(c) {
-  const next = ftNextVisit(c.lastVisit, c.cycle);
-  const text = `
+function ftWhats(c) {
+  const msg = `
 السلام عليكم
 نود إفادتكم بموعد زيارة
 
 الخدمة: ${c.service}
 العميل: ${c.client}
 
-📅 الموعد: ${next}
+📅 الموعد: ${c.nextVisit}
 💰 تكلفة الزيارة: ${c.cost} جنيه
 
 🔔 يتم الدفع عقب انتهاء الأعمال مباشرة
@@ -62,51 +78,52 @@ function ftWhatsApp(c) {
 01150402031
 
 فريق FutureTank
-`;
-  return `https://wa.me/2${c.phone}?text=${encodeURIComponent(text)}`;
+`.trim();
+
+  return `https://wa.me/20${c.phone}?text=${encodeURIComponent(msg)}`;
 }
 
-// عرض العقود
+// توليد أوامر الشغل (X أيام قبل الموعد)
+function ftGenerateWorkOrders(days) {
+  const today = new Date();
+  const data = ftLoad();
+
+  const due = data.filter(c => {
+    const v = new Date(c.nextVisit);
+    const diff = (v - today) / (1000 * 60 * 60 * 24);
+    return diff <= days && diff >= 0;
+  });
+
+  if (!due.length) {
+    alert("لا توجد زيارات مستحقة حالياً");
+    return;
+  }
+
+  due.forEach(c => window.open(ftWhats(c), "_blank"));
+}
+
+// عرض الجدول
 function ftRender() {
   const body = document.getElementById("contractsBody");
   if (!body) return;
+
   body.innerHTML = "";
   ftLoad().forEach(c => {
-    const next = ftNextVisit(c.lastVisit, c.cycle);
     body.innerHTML += `
 <tr>
 <td>${c.client}</td>
 <td>${c.service}</td>
 <td>${c.cycle} يوم</td>
 <td>${c.lastVisit}</td>
-<td>${next}</td>
+<td>${c.nextVisit}</td>
 <td>${c.cost} جنيه</td>
-<td><a href="${ftWhatsApp(c)}" target="_blank">واتساب</a></td>
-<td><button onclick="ftDelete(${c.id})">✖</button></td>
+<td><a href="${ftWhats(c)}" target="_blank">واتساب</a></td>
+<td>
+<button onclick="ftDone(${c.id})">✔</button>
+<button onclick="ftDelete(${c.id})">✖</button>
+</td>
 </tr>`;
   });
 }
 
-// 🔔 فحص الزيارات قبل 5 أيام
-function ftCheckUpcoming(days = 5) {
-  const today = new Date();
-  const sent = JSON.parse(localStorage.getItem(FT_SENT_KEY) || "[]");
-
-  ftLoad().forEach(c => {
-    const next = new Date(ftNextVisit(c.lastVisit, c.cycle));
-    const diff = Math.ceil((next - today) / (1000 * 60 * 60 * 24));
-
-    if (diff === days && !sent.includes(c.id)) {
-      alert(`🔔 زيارة قريبة بعد ${days} أيام:\n${c.client} – ${c.service}`);
-      sent.push(c.id);
-    }
-  });
-
-  localStorage.setItem(FT_SENT_KEY, JSON.stringify(sent));
-}
-
-// تشغيل تلقائي عند فتح الصفحة
-document.addEventListener("DOMContentLoaded", () => {
-  ftRender();
-  ftCheckUpcoming(5);
-});
+document.addEventListener("DOMContentLoaded", ftRender);
