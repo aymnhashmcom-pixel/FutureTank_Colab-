@@ -2,87 +2,101 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>لوحة الفريق — FutureTank</title>
+<title>👷 لوحة الفريق — FutureTank</title>
 
 <style>
-body{font-family:Tahoma;background:#f4f9ff;margin:20px}
-h2{color:#2c6ecb}
-table{width:100%;border-collapse:collapse;background:#fff;margin-top:15px}
-th,td{border:1px solid #ddd;padding:8px;text-align:center}
+body{
+  font-family:Tahoma;
+  background:#f4f9ff;
+  margin:20px
+}
+h2{color:#4a90e2}
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  margin-top:20px
+}
+th,td{
+  border:1px solid #ddd;
+  padding:8px;
+  text-align:center
+}
 th{background:#eef5ff}
-button,a{padding:6px 10px;text-decoration:none;cursor:pointer}
-.whatsapp{background:#25d366;color:#fff;border-radius:6px}
-.work{background:#4a90e2;color:#fff;border-radius:6px}
+button{
+  padding:6px 10px;
+  cursor:pointer;
+  border-radius:6px;
+  border:none
+}
+.done{background:#4CAF50;color:#fff}
+.note{background:#ffc107}
+.bad{color:#d32f2f;font-weight:bold}
+.good{color:#388e3c;font-weight:bold}
+textarea{
+  width:100%;
+  padding:6px;
+  margin-top:4px
+}
 </style>
-
 </head>
+
 <body>
 
-<h2>🧑‍🔧 لوحة الفريق — أوامر الشغل</h2>
+<h2>👷 لوحة الفريق — أوامر الشغل</h2>
 
 <table>
 <thead>
 <tr>
-<th>العميل</th>
-<th>الهاتف</th>
-<th>الخدمة</th>
-<th>تاريخ الزيارة</th>
-<th>التكلفة</th>
-<th>أمر شغل</th>
-<th>واتساب</th>
+  <th>العميل</th>
+  <th>الهاتف</th>
+  <th>الخدمة</th>
+  <th>موعد الزيارة</th>
+  <th>الحالة</th>
+  <th>ملاحظات</th>
+  <th>تنفيذ</th>
 </tr>
 </thead>
-<tbody id="teamBody"></tbody>
+
+<tbody id="ordersBody"></tbody>
 </table>
 
+<script src="system.js"></script>
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
-const contracts = db.contracts || [];
-const body = document.getElementById("teamBody");
+function renderTeamOrders(){
+  const db = loadDB();
+  const body = document.getElementById("ordersBody");
+  body.innerHTML = "";
 
-contracts.forEach(c=>{
-  const tr = document.createElement("tr");
+  (db.contracts || []).forEach(c=>{
+    const tr = document.createElement("tr");
 
-  const msg = encodeURIComponent(
-`السلام عليكم
-نود إفادتكم بموعد زيارة
+    tr.innerHTML = `
+      <td>${c.client}</td>
+      <td>${c.phone}</td>
+      <td>${c.service}</td>
+      <td>${c.nextVisit}</td>
+      <td class="${c.status==='تم التنفيذ'?'good':'bad'}">${c.status}</td>
+      <td>
+        <textarea id="note-${c.id}" placeholder="ملاحظات التنفيذ">${c.notes||""}</textarea>
+      </td>
+      <td>
+        <button class="done" onclick="executeOrder(${c.id})">✔ تم التنفيذ</button>
+      </td>
+    `;
 
-الخدمة: ${c.service}
-العميل: ${c.client}
+    body.appendChild(tr);
+  });
+}
 
-📅 الموعد: ${c.nextVisit}
-💰 تكلفة الزيارة: ${c.cost} جنيه
+function executeOrder(id){
+  const note = document.getElementById("note-"+id).value;
+  updateExecution(id,"تم التنفيذ",note);
+  alert("✅ تم تسجيل التنفيذ وإعادة الجدولة تلقائيًا");
+  renderTeamOrders();
+}
 
-🔔 يتم الدفع عقب انتهاء الأعمال مباشرة
-عبر اتصالات كاش:
-01150402031
-
-فريق FutureTank`
-  );
-
-  tr.innerHTML = `
-    <td>${c.client}</td>
-    <td>${c.phone}</td>
-    <td>${c.service}</td>
-    <td>${c.nextVisit}</td>
-    <td>${c.cost} جنيه</td>
-
-    <td>
-      <a class="work" target="_blank"
-      href="workorder.html?client=${c.client}&phone=${c.phone}&service=${c.service}&date=${c.nextVisit}&cost=${c.cost}">
-      📄 أمر شغل
-      </a>
-    </td>
-
-    <td>
-      <a class="whatsapp" target="_blank"
-      href="https://wa.me/2${c.phone}?text=${msg}">
-      واتساب
-      </a>
-    </td>
-  `;
-  body.appendChild(tr);
-});
+renderTeamOrders();
 </script>
 
 </body>
