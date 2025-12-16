@@ -2,73 +2,90 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>إدارة المنتجات — FutureTank</title>
+<title>🛒 إدارة المنتجات — FutureTank</title>
+
 <style>
 body{font-family:Tahoma;background:#f4f9ff;padding:20px}
-input,textarea,button{padding:8px;margin:4px}
-.card{background:#fff;padding:10px;margin:10px 0;border-radius:6px}
-button{background:#007bff;color:#fff;border:none;border-radius:4px;cursor:pointer}
-button:hover{background:#0056b3}
-.delete{background:#dc3545}
+.card{background:#fff;padding:15px;border-radius:8px;margin-bottom:10px}
+img,video{max-width:120px;display:block;margin-top:8px}
+button{margin-top:8px}
 </style>
 </head>
 
 <body>
 
 <script src="auth.js"></script>
-<script>
-requireRole("admin");
-</script>
+<script>requireRole("admin");</script>
 
 <h2>🛒 إدارة المنتجات</h2>
 
-<div id="list"></div>
-
-<hr>
+<div id="products"></div>
 
 <h3>➕ إضافة منتج جديد</h3>
-<input id="name" placeholder="اسم المنتج">
-<input id="price" placeholder="السعر">
-<textarea id="desc" placeholder="الوصف"></textarea><br>
+
+<input id="name" placeholder="اسم المنتج"><br><br>
+<input id="price" placeholder="السعر"><br><br>
+<textarea id="desc" placeholder="الوصف"></textarea><br><br>
+
+<label>📷 صورة المنتج</label><br>
+<input type="file" id="image" accept="image/*"><br><br>
+
+<label>🎥 فيديو (اختياري)</label><br>
+<input type="file" id="video" accept="video/*"><br><br>
+
 <button onclick="addProduct()">إضافة المنتج</button>
 
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
+const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
 db.products = db.products || [];
 
 function render(){
-  const list = document.getElementById("list");
-  list.innerHTML = "";
+  const div=document.getElementById("products");
+  div.innerHTML="";
   db.products.forEach((p,i)=>{
-    const div=document.createElement("div");
-    div.className="card";
-    div.innerHTML=`
+    div.innerHTML+=`
+    <div class="card">
       <b>${p.name}</b><br>
       السعر: ${p.price} جنيه<br>
-      ${p.desc || ""}
+      ${p.desc||""}
+      ${p.image?`<img src="${p.image}">`:""}
+      ${p.video?`<video src="${p.video}" controls></video>`:""}
       <br>
-      <button class="delete" onclick="remove(${i})">حذف</button>
-    `;
-    list.appendChild(div);
+      <button onclick="del(${i})">حذف</button>
+    </div>`;
   });
 }
 render();
 
-function addProduct(){
-  db.products.push({
-    name:name.value,
-    price:price.value,
-    desc:desc.value
+function toBase64(file){
+  return new Promise(res=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result);
+    r.readAsDataURL(file);
   });
-  localStorage.setItem("ft_db",JSON.stringify(db));
-  name.value=price.value=desc.value="";
-  render();
 }
 
-function remove(i){
+async function addProduct(){
+  const name=nameInput.value||name.value;
+  const price=priceInput?.value||price.value;
+  const desc=document.getElementById("desc").value;
+  const img=document.getElementById("image").files[0];
+  const vid=document.getElementById("video").files[0];
+
+  const product={name,price,desc};
+
+  if(img) product.image=await toBase64(img);
+  if(vid) product.video=await toBase64(vid);
+
+  db.products.push(product);
+  localStorage.setItem("ft_db",JSON.stringify(db));
+  location.reload();
+}
+
+function del(i){
   db.products.splice(i,1);
   localStorage.setItem("ft_db",JSON.stringify(db));
-  render();
+  location.reload();
 }
 </script>
 
