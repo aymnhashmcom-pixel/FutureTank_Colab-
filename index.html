@@ -1,68 +1,67 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>فيوتشر تانك — FutureTank</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="styles.css">
-
-<style>
-body{font-family:Tahoma;margin:0;background:#f4f9ff;color:#003366}
-header{text-align:center;padding:40px 20px}
-.actions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  justify-content:center;
-  margin:25px 0;
-}
-.btn{
-  padding:12px 18px;
-  border-radius:10px;
-  text-decoration:none;
-  background:#e9f1fb;
-  color:#003366;
-  font-weight:bold;
-}
-.btn.primary{background:#4a90e2;color:#fff}
-.btn.whatsapp{background:#25d366;color:#fff}
-.btn.assistant{background:#222;color:#fff}
-section{max-width:1100px;margin:40px auto;padding:0 20px}
-h2{text-align:center;margin-bottom:20px}
-</style>
+  <meta charset="UTF-8">
+  <title>FutureTank</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
-<header>
-  <h1>فيوتشر تانك — FutureTank</h1>
-  <p>نقاء الماء هو هدفنا</p>
+<!-- 🔹 الهيدر -->
+<header class="main-header">
+  <h1>FutureTank</h1>
 
-  <div class="actions">
-    <a href="products.html" class="btn">🛍️ المنتجات</a>
-    <a href="#services" class="btn">🛠️ الخدمات</a>
-    <a href="products.html" class="btn primary">تسوق الآن</a>
-    <a href="booking.html?type=product" class="btn">📦 احجز منتج الآن</a>
-    <a href="booking.html?type=service" class="btn">🧰 احجز خدمة الآن</a>
-    <a href="assistant.html" class="btn assistant">🤖 المساعد الذكي</a>
-    <a href="https://wa.me/201150402031" target="_blank" class="btn whatsapp">💬 واتساب</a>
-  </div>
+  <nav class="main-nav">
+    <a href="index.html">🏠 الرئيسية</a>
+    <a href="products.html">🛒 المنتجات</a>
+    <a href="services.html">🧰 الخدمات</a>
+    <a href="booking.html">📦 احجز</a>
+  </nav>
 </header>
 
-<section id="products">
-  <h2>المنتجات</h2>
-  <p style="text-align:center">تصفح أحدث خزانات المياه المتاحة</p>
-</section>
+<!-- 🔹 المحتوى الرئيسي -->
+<main>
 
-<section id="services">
-  <h2>الخدمات</h2>
-  <p style="text-align:center">توريد – تركيب – صيانة – تعقيم</p>
-</section>
+  <section class="hero">
+    <h2>نقاء الماء هو هدفنا</h2>
+    <p>خزانات مياه بولي إيثيلين ثلاث طبقات – جودة عالية وأسعار مناسبة</p>
+  </section>
 
-<footer style="text-align:center;padding:30px 10px;background:#e9f1fb">
-  © 2025 FutureTank — جميع الحقوق محفوظة
+  <section class="products-preview">
+    <h3>🛒 منتجاتنا</h3>
+    <div id="productsList"></div>
+  </section>
+
+</main>
+
+<!-- 🔹 الفوتر -->
+<footer>
+  <p>© 2025 FutureTank — جميع الحقوق محفوظة</p>
 </footer>
+
+<!-- 🔹 سكريبت جلب المنتجات -->
+<script>
+  const db = JSON.parse(localStorage.getItem("ft_db")) || {};
+  const products = db.products || [];
+  const container = document.getElementById("productsList");
+
+  if (products.length === 0) {
+    container.innerHTML = "<p>لا توجد منتجات حاليًا</p>";
+  } else {
+    products.slice(0, 3).forEach(product => {
+      const div = document.createElement("div");
+      div.className = "product-card";
+      div.innerHTML = `
+        <h4>${product.name}</h4>
+        <p>${product.description || ""}</p>
+        <strong>${product.price} جنيه</strong>
+      `;
+      container.appendChild(div);
+    });
+  }
+</script>
 
 </body>
 </html>
