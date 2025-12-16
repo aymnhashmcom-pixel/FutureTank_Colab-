@@ -3,30 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <title>🛠️ لوحة التحكم — FutureTank</title>
+
 <style>
 body{
-  font-family:Tahoma;
+  font-family: Tahoma, Arial;
   background:#f4f9ff;
   margin:0;
+  padding:0;
 }
 header{
   background:#4a90e2;
   padding:15px;
+  color:#fff;
+}
+header h1{
+  margin:0;
+  font-size:22px;
+}
+nav{
+  background:#ffffff;
+  padding:10px;
   display:flex;
   flex-wrap:wrap;
-  gap:10px;
+  gap:8px;
+  border-bottom:1px solid #ddd;
 }
-header a{
-  color:#fff;
+nav a{
   text-decoration:none;
-  background:rgba(255,255,255,0.15);
-  padding:8px 14px;
-  border-radius:6px;
+  background:#eef5ff;
+  padding:8px 12px;
+  border-radius:8px;
+  color:#333;
   font-size:14px;
 }
-header a:hover{
-  background:#fff;
-  color:#4a90e2;
+nav a:hover{
+  background:#4a90e2;
+  color:#fff;
 }
 main{
   padding:20px;
@@ -34,8 +46,8 @@ main{
 .card{
   background:#fff;
   padding:20px;
-  border-radius:8px;
-  box-shadow:0 2px 5px rgba(0,0,0,.1);
+  border-radius:12px;
+  max-width:900px;
 }
 ul{
   line-height:2;
@@ -46,23 +58,27 @@ ul{
 <body>
 
 <header>
-  <a href="dashboard.html">🛠️ لوحة التحكم</a>
-  <a href="dashboard.html">🛍️ إدارة المنتجات</a>
+  <h1>🛠️ لوحة التحكم — FutureTank</h1>
+</header>
+
+<nav>
+  <a href="products.html">🛍️ إدارة المنتجات</a>
   <a href="contracts.html">📋 إدارة العقود</a>
   <a href="workorders.html">🧾 أوامر الشغل</a>
   <a href="reports.html">📊 تقارير التشغيل</a>
-  <a href="analytics.html">📈 لوحة الأداء</a>
+  <a href="performance.html">📈 لوحة الأداء</a>
   <a href="team.html">👷 لوحة الفريق</a>
   <a href="assistant.html">🤖 المساعد</a>
   <a href="index.html">🌐 الموقع</a>
-  <a href="#" onclick="logout()">🚪 تسجيل خروج</a>
-</header>
+  <a href="dashboard.html#logout">🚪 تسجيل خروج</a>
+</nav>
 
 <main>
   <div class="card">
     <h2>مرحبًا بك 👋</h2>
     <p>اختر القسم الذي تريد إدارته من الأعلى.</p>
-    <p>هذه اللوحة مخصصة للإدارة فقط ولا تظهر للعملاء.</p>
+
+    <p><strong>هذه اللوحة مخصصة للإدارة فقط ولا تظهر للعملاء.</strong></p>
 
     <ul>
       <li>🛍️ إدارة المنتجات (أسعار – صور)</li>
@@ -74,12 +90,6 @@ ul{
     </ul>
   </div>
 </main>
-
-<script>
-function logout(){
-  alert("تم تسجيل الخروج");
-}
-</script>
 
 </body>
 </html>
