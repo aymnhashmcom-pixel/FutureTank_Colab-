@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>📈 لوحة الأداء — FutureTank</title>
+<style>
+body{font-family:Tahoma;background:#f4f9ff;margin:20px}
+h2{color:#4a90e2}
+.cards{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:15px;
+}
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:8px;
+  text-align:center;
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+.num{
+  font-size:28px;
+  font-weight:bold;
+  margin-top:10px;
+}
+.green{color:#2ecc71}
+.red{color:#e74c3c}
+.orange{color:#e67e22}
+.blue{color:#3498db}
+</style>
+</head>
+<body>
+
+<h2>📈 لوحة الأداء الذكية — FutureTank</h2>
+
+<div class="cards">
+  <div class="card">
+    إجمالي العقود
+    <div class="num blue" id="total">0</div>
+  </div>
+  <div class="card">
+    تم التنفيذ
+    <div class="num green" id="done">0</div>
+  </div>
+  <div class="card">
+    متأخر
+    <div class="num red" id="late">0</div>
+  </div>
+  <div class="card">
+    قريب
+    <div class="num orange" id="soon">0</div>
+  </div>
+  <div class="card">
+    الإيراد المتوقع (جنيه)
+    <div class="num blue" id="revenue">0</div>
+  </div>
+</div>
+
+<script>
+const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+const contracts = db.contracts || [];
+const today = new Date().toISOString().split("T")[0];
+
+let done=0, late=0, soon=0, revenue=0;
+
+contracts.forEach(c=>{
+  revenue += Number(c.cost||0);
+  if(c.status==="تم التنفيذ") done++;
+  else if(c.nextVisit < today) late++;
+  else soon++;
+});
+
+document.getElementById("total").innerText = contracts.length;
+document.getElementById("done").innerText = done;
+document.getElementById("late").innerText = late;
+document.getElementById("soon").innerText = soon;
+document.getElementById("revenue").innerText = revenue;
+</script>
+
+</body>
+</html>
