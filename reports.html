@@ -2,69 +2,28 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>📊 تقارير التشغيل — FutureTank</title>
-
-<!-- jsPDF -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.29/jspdf.plugin.autotable.min.js"></script>
-
+<title>تقارير التشغيل — FutureTank</title>
 <style>
-body{font-family:Tahoma;background:#f4f9ff;margin:20px}
-h2{color:#4a90e2}
-button{padding:10px 15px;border:none;border-radius:8px;background:#4a90e2;color:#fff;cursor:pointer;margin-bottom:15px}
-
-.cards{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-  gap:15px;
-  margin-bottom:25px
-}
-.card{
-  background:#fff;
-  padding:15px;
-  border-radius:10px;
-  text-align:center;
-  box-shadow:0 4px 10px rgba(0,0,0,.1)
-}
-.card h3{margin:0;font-size:14px}
-.card p{font-size:22px;font-weight:bold;margin:8px 0;color:#4a90e2}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  background:#fff
-}
-th,td{
-  border:1px solid #ddd;
-  padding:8px;
-  text-align:center
-}
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+table{width:100%;background:#fff;border-collapse:collapse}
+th,td{border:1px solid #ccc;padding:8px;text-align:center}
 th{background:#eef5ff}
+button{padding:8px;margin-bottom:10px}
 </style>
 </head>
 
 <body>
 
-<h2>📊 تقارير التشغيل — FutureTank</h2>
-
-<button onclick="exportPDF()">📄 تحميل تقرير PDF</button>
-
-<div class="cards">
-  <div class="card"><h3>إجمالي العقود</h3><p id="total">0</p></div>
-  <div class="card"><h3>تم التنفيذ</h3><p id="done">0</p></div>
-  <div class="card"><h3>متأخر</h3><p id="late">0</p></div>
-  <div class="card"><h3>خلال 5 أيام</h3><p id="soon">0</p></div>
-  <div class="card"><h3>إيراد متوقع</h3><p id="revenue">0</p></div>
-</div>
+<h2>📊 تقارير التشغيل</h2>
+<button onclick="window.print()">🖨️ طباعة التقرير</button>
 
 <table>
 <thead>
 <tr>
-  <th>العميل</th>
-  <th>الخدمة</th>
-  <th>موعد الزيارة</th>
-  <th>الحالة</th>
-  <th>التكلفة</th>
+<th>العميل</th>
+<th>الخدمة</th>
+<th>موعد الزيارة</th>
+<th>الحالة</th>
 </tr>
 </thead>
 <tbody id="tableBody"></tbody>
@@ -72,62 +31,18 @@ th{background:#eef5ff}
 
 <script>
 const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-const contracts = db.contracts||[];
-
-const today = new Date();
-const in5 = new Date(); in5.setDate(today.getDate()+5);
-
-let done=0, late=0, soon=0, revenue=0;
+const contracts = db.contracts || [];
+const body=document.getElementById("tableBody");
 
 contracts.forEach(c=>{
-  const d = new Date(c.nextVisit);
-  revenue += Number(c.cost||0);
-  if(c.status==="تم التنفيذ") done++;
-  if(d < today && c.status!=="تم التنفيذ") late++;
-  if(d>=today && d<=in5) soon++;
-});
-
-document.getElementById("total").innerText = contracts.length;
-document.getElementById("done").innerText = done;
-document.getElementById("late").innerText = late;
-document.getElementById("soon").innerText = soon;
-document.getElementById("revenue").innerText = revenue+" جنيه";
-
-const body = document.getElementById("tableBody");
-contracts.forEach(c=>{
-  const tr = document.createElement("tr");
-  tr.innerHTML = `
-    <td>${c.client}</td>
-    <td>${c.service}</td>
-    <td>${c.nextVisit}</td>
-    <td>${c.status}</td>
-    <td>${c.cost} جنيه</td>
-  `;
+  const tr=document.createElement("tr");
+  tr.innerHTML=`
+<td>${c.client}</td>
+<td>${c.service}</td>
+<td>${c.nextVisit}</td>
+<td>${c.status}</td>`;
   body.appendChild(tr);
 });
-
-function exportPDF(){
-  const { jsPDF } = window.jspdf;
-  const doc = new jsPDF();
-
-  doc.text("FutureTank - تقرير التشغيل", 105, 15, {align:"center"});
-  doc.text("التاريخ: "+new Date().toLocaleDateString("ar-EG"), 105, 25, {align:"center"});
-
-  doc.autoTable({
-    startY:35,
-    head:[["العميل","الخدمة","موعد الزيارة","الحالة","التكلفة"]],
-    body: contracts.map(c=>[
-      c.client,
-      c.service,
-      c.nextVisit,
-      c.status,
-      c.cost+" جنيه"
-    ]),
-    styles:{font:"helvetica",fontSize:10}
-  });
-
-  doc.save("FutureTank_Report.pdf");
-}
 </script>
 
 </body>
