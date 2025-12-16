@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>🧰 إدارة الخدمات — FutureTank</title>
+<style>
+body{font-family:Tahoma;background:#f4f9ff;margin:20px}
+h2{color:#4a90e2}
+form, .box{background:#fff;padding:15px;border-radius:10px;margin-bottom:20px}
+input,textarea,button{padding:8px;margin:4px;width:100%}
+.service{border-bottom:1px solid #ddd;padding:10px}
+button{cursor:pointer;background:#4a90e2;color:#fff;border:none;border-radius:6px}
+.delete{background:#e74c3c}
+</style>
+</head>
+<body>
+
+<h2>🧰 إدارة الخدمات — FutureTank</h2>
+
+<div class="box">
+<h3>➕ إضافة خدمة جديدة</h3>
+<form onsubmit="event.preventDefault();addService(this)">
+<input name="name" placeholder="اسم الخدمة" required>
+<textarea name="desc" placeholder="وصف مختصر للخدمة"></textarea>
+<input name="price" placeholder="سعر الخدمة (اختياري)">
+<button>إضافة الخدمة</button>
+</form>
+</div>
+
+<div class="box">
+<h3>📋 الخدمات الحالية</h3>
+<div id="servicesList"></div>
+</div>
+
+<script>
+const DB_KEY="ft_db";
+
+function loadDB(){
+  return JSON.parse(localStorage.getItem(DB_KEY)||"{}");
+}
+function saveDB(db){
+  localStorage.setItem(DB_KEY,JSON.stringify(db));
+}
+
+function addService(form){
+  const db=loadDB();
+  db.services=db.services||[];
+  db.services.push({
+    id:Date.now(),
+    name:form.name.value,
+    desc:form.desc.value,
+    price:form.price.value
+  });
+  saveDB(db);
+  form.reset();
+  renderServices();
+}
+
+function deleteService(id){
+  const db=loadDB();
+  db.services=db.services.filter(s=>s.id!==id);
+  saveDB(db);
+  renderServices();
+}
+
+function renderServices(){
+  const db=loadDB();
+  const box=document.getElementById("servicesList");
+  box.innerHTML="";
+  (db.services||[]).forEach(s=>{
+    const div=document.createElement("div");
+    div.className="service";
+    div.innerHTML=`
+<b>${s.name}</b><br>
+${s.desc||""}<br>
+${s.price? "💰 السعر: "+s.price+" جنيه":""}<br>
+<button class="delete" onclick="deleteService(${s.id})">حذف</button>
+    `;
+    box.appendChild(div);
+  });
+}
+
+renderServices();
+</script>
+
+</body>
+  </html>
