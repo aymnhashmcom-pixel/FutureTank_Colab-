@@ -33,17 +33,18 @@ requireRole("admin");
 </table>
 
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
 const contracts = db.contracts || [];
 const body = document.getElementById("body");
 
-contracts.forEach(c=>{
-  const tr=document.createElement("tr");
-  tr.innerHTML=`
-<td>${c.client}</td>
-<td>${c.service}</td>
-<td>${c.nextVisit}</td>
-<td>${c.cost} جنيه</td>`;
+contracts.forEach(c => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td>${c.client}</td>
+    <td>${c.service}</td>
+    <td>${c.nextVisit}</td>
+    <td>${c.cost} جنيه</td>
+  `;
   body.appendChild(tr);
 });
 </script>
