@@ -5,86 +5,139 @@
 <title>🧰 إدارة الخدمات — FutureTank</title>
 
 <style>
-body{font-family:Tahoma;background:#f4f9ff;padding:20px}
-.card{background:#fff;padding:15px;border-radius:8px;margin-bottom:10px}
-img,video{max-width:140px;display:block;margin-top:8px}
-button{margin-top:8px}
+body{
+  font-family:Tahoma;
+  background:#f4f9ff;
+  padding:20px
+}
+h2{margin-bottom:15px}
+.card{
+  background:#fff;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,.08)
+}
+input,textarea,button{
+  width:100%;
+  padding:8px;
+  margin:6px 0;
+  font-size:14px
+}
+button{
+  background:#4a90e2;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer
+}
+button.delete{
+  background:#d9534f;
+  margin-top:5px
+}
+img,video{
+  max-width:120px;
+  display:block;
+  margin:5px auto
+}
 </style>
 </head>
 
 <body>
 
 <script src="auth.js"></script>
-<script>requireRole("admin");</script>
+<script>
+requireRole("admin");
+</script>
 
 <h2>🧰 إدارة الخدمات</h2>
 
-<div id="services"></div>
+<div id="list"></div>
+
+<hr>
 
 <h3>➕ إضافة خدمة جديدة</h3>
 
-<input id="name" placeholder="اسم الخدمة"><br><br>
-<textarea id="desc" placeholder="وصف الخدمة"></textarea><br><br>
-
-<label>📷 صورة الخدمة</label><br>
-<input type="file" id="image" accept="image/*"><br><br>
-
-<label>🎥 فيديو (اختياري)</label><br>
-<input type="file" id="video" accept="video/*"><br><br>
+<input id="name" placeholder="اسم الخدمة">
+<textarea id="desc" placeholder="وصف الخدمة"></textarea>
+<input id="price" placeholder="السعر (اختياري)">
+<input id="img" type="file" accept="image/*">
+<input id="vid" type="file" accept="video/*">
 
 <button onclick="addService()">إضافة الخدمة</button>
 
 <script>
 const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
 db.services = db.services || [];
+const list = document.getElementById("list");
 
 function render(){
-  const div=document.getElementById("services");
-  div.innerHTML="";
+  list.innerHTML="";
   db.services.forEach((s,i)=>{
-    div.innerHTML+=`
-    <div class="card">
-      <b>${s.name}</b><br>
-      ${s.desc||""}
-      ${s.image?`<img src="${s.image}">`:""}
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`
+      <b>${s.name}</b>
+      <p>${s.desc||""}</p>
+      <p>${s.price||""}</p>
+      ${s.img?`<img src="${s.img}">`:""}
       ${s.video?`<video src="${s.video}" controls></video>`:""}
-      <br>
-      <button onclick="del(${i})">حذف</button>
-    </div>`;
-  });
-}
-render();
-
-function toBase64(file){
-  return new Promise(res=>{
-    const r=new FileReader();
-    r.onload=()=>res(r.result);
-    r.readAsDataURL(file);
+      <button class="delete" onclick="del(${i})">حذف</button>
+    `;
+    list.appendChild(div);
   });
 }
 
-async function addService(){
-  const name=document.getElementById("name").value;
-  const desc=document.getElementById("desc").value;
-  const img=document.getElementById("image").files[0];
-  const vid=document.getElementById("video").files[0];
+function toBase64(file,cb){
+  const r=new FileReader();
+  r.onload=()=>cb(r.result);
+  r.readAsDataURL(file);
+}
 
-  const service={name,desc};
+function addService(){
+  const s={
+    name: name.value,
+    desc: desc.value,
+    price: price.value
+  };
 
-  if(img) service.image=await toBase64(img);
-  if(vid) service.video=await toBase64(vid);
+  const imgFile = img.files[0];
+  const vidFile = vid.files[0];
 
-  db.services.push(service);
+  if(imgFile){
+    toBase64(imgFile,(res)=>{
+      s.img=res;
+      if(vidFile){
+        toBase64(vidFile,(v)=>{
+          s.video=v;
+          save(s);
+        });
+      } else save(s);
+    });
+  } else if(vidFile){
+    toBase64(vidFile,(v)=>{
+      s.video=v;
+      save(s);
+    });
+  } else save(s);
+}
+
+function save(s){
+  db.services.push(s);
   localStorage.setItem("ft_db",JSON.stringify(db));
   location.reload();
 }
 
 function del(i){
-  db.services.splice(i,1);
-  localStorage.setItem("ft_db",JSON.stringify(db));
-  location.reload();
+  if(confirm("حذف الخدمة؟")){
+    db.services.splice(i,1);
+    localStorage.setItem("ft_db",JSON.stringify(db));
+    render();
+  }
 }
+
+render();
 </script>
 
 </body>
-  </html>
+</html>
