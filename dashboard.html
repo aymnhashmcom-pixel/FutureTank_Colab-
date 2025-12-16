@@ -1,48 +1,48 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>📊 لوحة التحكم — FutureTank</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>لوحة التحكم — FutureTank</title>
+<style>
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+nav a{margin:6px;display:inline-block;padding:8px 12px;
+background:#007bff;color:#fff;text-decoration:none;border-radius:6px}
+nav a:hover{background:#0056b3}
+</style>
 </head>
 
 <body>
 
-<header class="dashboard-header">
-  <h2>📊 لوحة التحكم — FutureTank</h2>
+<script src="auth.js"></script>
+<script>
+if (!localStorage.getItem("ft_role")) {
+  const pass = prompt("🔐 أدخل كلمة مرور الإدارة");
+  if (!loginAdmin(pass)) {
+    throw new Error("Login failed");
+  }
+}
+</script>
 
-  <nav class="dashboard-nav">
-    <a href="products.html">🛒 إدارة المنتجات</a>
-    <a href="services.html">🧰 إدارة الخدمات</a>
-    <a href="contracts.html">📄 إدارة العقود</a>
-    <a href="workorders.html">🧾 أوامر الشغل</a>
-    <a href="reports.html">📊 تقارير التشغيل</a>
-    <a href="analytics.html">📈 لوحة الأداء</a>
-    <a href="team.html">👷 لوحة الفريق</a>
-    <a href="assistant.html">🤖 المساعد</a>
-    <a href="index.html">🌐 الموقع</a>
-  </nav>
-</header>
+<h2>📊 لوحة التحكم — FutureTank</h2>
 
-<main class="dashboard-main">
-  <h3>مرحبًا بك 👋</h3>
-  <p>اختر القسم الذي تريد إدارته من الأعلى.</p>
+<nav>
+  <a href="products.html">🛒 إدارة المنتجات</a>
+  <a href="services.html">🧰 إدارة الخدمات</a>
+  <a href="contracts.html">📄 إدارة العقود</a>
+  <a href="workorders.html">🧾 أوامر الشغل</a>
+  <a href="reports.html">📊 تقارير التشغيل</a>
+  <a href="analytics.html">📈 لوحة الأداء</a>
+  <a href="team.html">👷 لوحة الفريق</a>
+  <a href="assistant.html">🤖 المساعد</a>
+  <a href="index.html">🌐 الموقع</a>
+</nav>
 
-  <ul>
-    <li>🛒 إدارة المنتجات (أسعار – صور)</li>
-    <li>🧰 إدارة الخدمات</li>
-    <li>📄 إدارة العقود والتشغيل</li>
-    <li>🧾 أوامر الشغل اليومية</li>
-    <li>📊 تقارير تشغيل ومالية</li>
-    <li>📈 لوحة أداء وتحليل إداري</li>
-    <li>👷 لوحة الفرق والتنفيذ</li>
-  </ul>
-</main>
+<hr>
 
-<footer>
-  <p>© 2025 FutureTank</p>
-</footer>
+<h3>مرحبًا بك 👋</h3>
+<p>اختر القسم الذي تريد إدارته من الأعلى.</p>
+
+<button onclick="logoutAdmin()">🚪 تسجيل خروج</button>
 
 </body>
 </html>
