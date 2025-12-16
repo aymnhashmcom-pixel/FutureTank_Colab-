@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>إدارة المنتجات — FutureTank</title>
+<style>
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+input,textarea,button{padding:8px;margin:4px}
+.card{background:#fff;padding:10px;margin:10px 0;border-radius:6px}
+button{background:#007bff;color:#fff;border:none;border-radius:4px;cursor:pointer}
+button:hover{background:#0056b3}
+.delete{background:#dc3545}
+</style>
+</head>
+
+<body>
+
+<script src="auth.js"></script>
+<script>
+requireRole("admin");
+</script>
+
+<h2>🛒 إدارة المنتجات</h2>
+
+<div id="list"></div>
+
+<hr>
+
+<h3>➕ إضافة منتج جديد</h3>
+<input id="name" placeholder="اسم المنتج">
+<input id="price" placeholder="السعر">
+<textarea id="desc" placeholder="الوصف"></textarea><br>
+<button onclick="addProduct()">إضافة المنتج</button>
+
+<script>
+const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
+db.products = db.products || [];
+
+function render(){
+  const list = document.getElementById("list");
+  list.innerHTML = "";
+  db.products.forEach((p,i)=>{
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`
+      <b>${p.name}</b><br>
+      السعر: ${p.price} جنيه<br>
+      ${p.desc || ""}
+      <br>
+      <button class="delete" onclick="remove(${i})">حذف</button>
+    `;
+    list.appendChild(div);
+  });
+}
+render();
+
+function addProduct(){
+  db.products.push({
+    name:name.value,
+    price:price.value,
+    desc:desc.value
+  });
+  localStorage.setItem("ft_db",JSON.stringify(db));
+  name.value=price.value=desc.value="";
+  render();
+}
+
+function remove(i){
+  db.products.splice(i,1);
+  localStorage.setItem("ft_db",JSON.stringify(db));
+  render();
+}
+</script>
+
+</body>
+</html>
