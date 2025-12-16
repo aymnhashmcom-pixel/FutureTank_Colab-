@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>💰 التقارير المالية — FutureTank</title>
+<style>
+body{
+  font-family:Tahoma;
+  background:#f4f9ff;
+  margin:20px;
+}
+h2{color:#4a90e2}
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+  margin-top:20px;
+}
+th,td{
+  border:1px solid #ddd;
+  padding:8px;
+  text-align:center;
+}
+th{background:#eef5ff}
+.summary{
+  background:#fff;
+  padding:15px;
+  border-radius:10px;
+  margin-bottom:20px;
+}
+button{
+  padding:8px 12px;
+  margin:5px;
+  cursor:pointer;
+}
+.income{color:green;font-weight:bold}
+.expense{color:red;font-weight:bold}
+</style>
+</head>
+
+<body>
+
+<h2>💰 التقارير المالية — FutureTank</h2>
+
+<div class="summary">
+  <p>إجمالي الدخل: <span id="totalIncome" class="income">0</span> جنيه</p>
+  <p>إجمالي المصروفات: <span id="totalExpense" class="expense">0</span> جنيه</p>
+  <p>صافي الربح: <span id="netProfit">0</span> جنيه</p>
+</div>
+
+<button onclick="window.print()">🖨️ طباعة التقرير</button>
+
+<table>
+<thead>
+<tr>
+  <th>النوع</th>
+  <th>العميل</th>
+  <th>الخدمة</th>
+  <th>المبلغ</th>
+  <th>التاريخ</th>
+</tr>
+</thead>
+<tbody id="financeBody"></tbody>
+</table>
+
+<script>
+const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
+const finance = db.finance || [];
+
+let income = 0;
+let expense = 0;
+
+const body = document.getElementById("financeBody");
+
+finance.forEach(f=>{
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+<td>${f.type}</td>
+<td>${f.client || "-"}</td>
+<td>${f.service || "-"}</td>
+<td class="${f.type==='دخل'?'income':'expense'}">${f.amount}</td>
+<td>${f.date}</td>
+  `;
+  body.appendChild(tr);
+
+  if(f.type==="دخل") income += f.amount;
+  if(f.type==="مصروف") expense += f.amount;
+});
+
+document.getElementById("totalIncome").innerText = income;
+document.getElementById("totalExpense").innerText = expense;
+document.getElementById("netProfit").innerText = income - expense;
+</script>
+
+</body>
+  </html>
