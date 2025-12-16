@@ -7,71 +7,104 @@
 <style>
 body{font-family:Tahoma;background:#f4f6f8;padding:20px}
 h1{color:#1e88e5}
-.section{background:#fff;padding:15px;border-radius:8px;margin-bottom:20px}
+nav button{margin:5px;padding:10px}
+.section{background:#fff;padding:15px;border-radius:8px;margin-top:20px}
 input,textarea,button{padding:8px;margin:5px 0;width:100%}
 button{background:#1e88e5;color:#fff;border:none;border-radius:5px;cursor:pointer}
 button.danger{background:#c62828}
 .product{border-bottom:1px solid #ddd;padding:10px 0}
+img{max-width:120px;display:block;margin:5px 0}
+.hidden{display:none}
 </style>
 </head>
 <body>
 
 <h1>📊 لوحة التحكم — FutureTank</h1>
 
-<div class="section">
-<h2>🛒 إدارة المنتجات</h2>
+<nav>
+<button onclick="show('products')">🛒 المنتجات</button>
+<button onclick="show('services')">🧰 الخدمات</button>
+<button onclick="show('contracts')">📄 العقود</button>
+<button onclick="show('team')">👥 الفريق</button>
+</nav>
 
+<!-- المنتجات -->
+<div id="products" class="section">
+<h2>🛒 إدارة المنتجات</h2>
 <div id="productsList"></div>
 
 <h3>➕ إضافة منتج جديد</h3>
 <input id="p_name" placeholder="اسم المنتج">
 <input id="p_price" placeholder="السعر">
 <textarea id="p_desc" placeholder="وصف المنتج"></textarea>
+<input type="file" id="p_img">
 <button onclick="addProduct()">إضافة المنتج</button>
 </div>
 
+<!-- أقسام لاحقًا -->
+<div id="services" class="section hidden"><h2>🧰 إدارة الخدمات (قريبًا)</h2></div>
+<div id="contracts" class="section hidden"><h2>📄 إدارة العقود (قريبًا)</h2></div>
+<div id="team" class="section hidden"><h2>👥 إدارة الفريق (قريبًا)</h2></div>
+
 <script>
-const dbKey = 'ft_db';
+const dbKey='ft_db';
 
 function getDB(){
-  return JSON.parse(localStorage.getItem(dbKey)) || {products:[]};
+ return JSON.parse(localStorage.getItem(dbKey))||{products:[]};
 }
 function saveDB(db){
-  localStorage.setItem(dbKey, JSON.stringify(db));
+ localStorage.setItem(dbKey,JSON.stringify(db));
+}
+
+function show(id){
+ document.querySelectorAll('.section').forEach(s=>s.classList.add('hidden'));
+ document.getElementById(id).classList.remove('hidden');
 }
 
 function renderProducts(){
-  const db = getDB();
-  const box = document.getElementById('productsList');
-  box.innerHTML = '';
-  db.products.forEach((p,i)=>{
-    box.innerHTML += `
-    <div class="product">
-      <b>${p.name}</b><br>
-      السعر: ${p.price}<br>
-      ${p.desc || ''}
-      <button class="danger" onclick="deleteProduct(${i})">حذف</button>
-    </div>`;
-  });
+ const db=getDB();
+ const box=document.getElementById('productsList');
+ box.innerHTML='';
+ db.products.forEach((p,i)=>{
+  box.innerHTML+=`
+   <div class="product">
+    <b>${p.name}</b><br>
+    السعر: ${p.price}<br>
+    ${p.desc||''}
+    ${p.img?`<img src="${p.img}">`:''}
+    <button class="danger" onclick="del(${i})">حذف</button>
+   </div>`;
+ });
 }
 
 function addProduct(){
-  const db = getDB();
-  db.products.push({
-    name: p_name.value,
-    price: p_price.value,
-    desc: p_desc.value
-  });
-  saveDB(db);
-  p_name.value=p_price.value=p_desc.value='';
-  renderProducts();
+ const file=p_img.files[0];
+ if(file){
+  const r=new FileReader();
+  r.onload=e=>saveProduct(e.target.result);
+  r.readAsDataURL(file);
+ } else saveProduct('');
 }
 
-function deleteProduct(i){
-  const db = getDB();
-  db.products.splice(i,1);
-  saveDB(db);
-  renderProducts();
+function saveProduct(img){
+ const db=getDB();
+ db.products.push({
+  name:p_name.value,
+  price:p_price.value,
+  desc:p_desc.value,
+  img:img
+ });
+ saveDB(db);
+ p_name.value=p_price.value=p_desc.value='';
+ p_img.value='';
+ renderProducts();
+}
+
+function del(i){
+ const db=getDB();
+ db.products.splice(i,1);
+ saveDB(db);
+ renderProducts();
 }
 
 renderProducts();
