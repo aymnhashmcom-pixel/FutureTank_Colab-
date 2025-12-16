@@ -4,9 +4,14 @@ const DB_KEY = "ft_db";
 function loadDB(){
   return JSON.parse(localStorage.getItem(DB_KEY) || "{}");
 }
-
 function saveDB(db){
   localStorage.setItem(DB_KEY, JSON.stringify(db));
+}
+
+// ===== WhatsApp =====
+function wa(phone, msg){
+  const url = `https://wa.me/2${phone}?text=${encodeURIComponent(msg)}`;
+  window.open(url,"_blank");
 }
 
 // ===== Contracts =====
@@ -46,24 +51,54 @@ function deleteContract(id){
   renderContracts();
 }
 
-// ===== Execution سجل التنفيذ =====
-function updateExecution(id, status, notes){
+// ===== Execution =====
+function updateExecution(id){
   const db = loadDB();
   const c = db.contracts.find(c=>c.id===id);
   if(!c) return;
 
-  c.status = status;
-  c.notes = notes;
+  c.status = "تم التنفيذ";
+  c.lastVisit = c.nextVisit;
 
-  if(status === "تم التنفيذ"){
-    c.lastVisit = c.nextVisit;
-    const next = new Date(c.lastVisit);
-    next.setDate(next.getDate() + c.cycle);
-    c.nextVisit = next.toISOString().split("T")[0];
-  }
+  const next = new Date(c.lastVisit);
+  next.setDate(next.getDate()+c.cycle);
+  c.nextVisit = next.toISOString().split("T")[0];
+
+  db.logs = db.logs || [];
+  db.logs.push({
+    client:c.client,
+    service:c.service,
+    date:new Date().toISOString().split("T")[0]
+  });
+
+  // رسالة بعد التنفيذ
+  wa(c.phone,
+`تم تنفيذ خدمة:
+${c.service}
+نشكر ثقتك في FutureTank 💧
+موعد الزيارة القادمة: ${c.nextVisit}`);
 
   saveDB(db);
   renderContracts();
+}
+
+// ===== Reminders =====
+function ftGenerateWorkOrders(days){
+  const db = loadDB();
+  const today = new Date();
+  const target = new Date();
+  target.setDate(today.getDate()+days);
+
+  (db.contracts||[]).forEach(c=>{
+    const d = new Date(c.nextVisit);
+    if(d.toDateString() === target.toDateString()){
+      wa(c.phone,
+`تذكير بموعد زيارة:
+${c.service}
+📅 ${c.nextVisit}
+FutureTank 💧`);
+    }
+  });
 }
 
 // ===== Render =====
@@ -71,52 +106,23 @@ function renderContracts(){
   const db = loadDB();
   const body = document.getElementById("contractsBody");
   if(!body) return;
+
   body.innerHTML = "";
-
-  (db.contracts || []).forEach(c=>{
-    const msg = encodeURIComponent(
-`السلام عليكم
-نود إفادتكم بموعد زيارة
-
-الخدمة: ${c.service}
-العميل: ${c.client}
-
-📅 الموعد: ${c.nextVisit}
-💰 تكلفة الزيارة: ${c.cost} جنيه
-
-🔔 يتم الدفع عقب انتهاء الأعمال مباشرة
-عبر اتصالات كاش:
-01150402031
-
-فريق FutureTank`
-    );
-
+  (db.contracts||[]).forEach(c=>{
     const tr = document.createElement("tr");
     tr.innerHTML = `
-<td>${c.client}<br>${c.phone}</td>
+<td>${c.client}</td>
 <td>${c.service}</td>
 <td>${c.cycle} يوم</td>
 <td>${c.lastVisit}</td>
 <td>${c.nextVisit}</td>
 <td>${c.cost} جنيه</td>
-<td>${c.status || "قادم"}</td>
-
 <td>
-<select onchange="updateExecution(${c.id}, this.value, this.nextElementSibling.value)">
-  <option ${c.status==="قادم"?"selected":""}>قادم</option>
-  <option ${c.status==="تم التنفيذ"?"selected":""}>تم التنفيذ</option>
-  <option ${c.status==="مؤجل"?"selected":""}>مؤجل</option>
-</select>
-<textarea placeholder="ملاحظات" style="width:100%">${c.notes||""}</textarea>
+<button onclick="wa('${c.phone}',
+'استفسار بخصوص عقد ${c.client} — FutureTank')">
+💬 واتساب
+</button>
 </td>
-
-<td>
-<a target="_blank"
-href="https://wa.me/2${c.phone}?text=${msg}">
-واتساب
-</a>
-</td>
-
 <td>
 <button onclick="deleteContract(${c.id})">✖</button>
 </td>
@@ -125,4 +131,4 @@ href="https://wa.me/2${c.phone}?text=${msg}">
   });
 }
 
-document.addEventListener("DOMContentLoaded", renderContracts);
+document.addEventListener("DOMContentLoaded",renderContracts);
