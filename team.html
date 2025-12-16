@@ -2,99 +2,72 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>👷 لوحة الفريق — FutureTank</title>
+<title>لوحة الفريق — FutureTank</title>
 <style>
-body{font-family:Tahoma;background:#f4f9ff;margin:20px}
-h2{color:#4a90e2}
-table{width:100%;border-collapse:collapse;background:#fff}
-th,td{border:1px solid #ddd;padding:8px;text-align:center}
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+table{width:100%;background:#fff;border-collapse:collapse}
+th,td{border:1px solid #ccc;padding:8px;text-align:center}
 th{background:#eef5ff}
-button{
-  padding:6px 10px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer
-}
-.done{background:#2ecc71;color:#fff}
-.note{width:100%;padding:6px}
+button{padding:6px 10px}
+.good{color:green}
+.bad{color:red}
 </style>
 </head>
 
 <body>
 
-<h2>👷 لوحة الفريق — أوامر الشغل</h2>
+<script src="auth.js"></script>
+<script>
+requireRole("team");
+</script>
+
+<h2>👷 مهام الفريق</h2>
 
 <table>
 <thead>
 <tr>
-  <th>العميل</th>
-  <th>الخدمة</th>
-  <th>موعد الزيارة</th>
-  <th>ملاحظات</th>
-  <th>تنفيذ</th>
+<th>العميل</th>
+<th>الخدمة</th>
+<th>موعد الزيارة</th>
+<th>الحالة</th>
+<th>تنفيذ</th>
 </tr>
 </thead>
-<tbody id="teamBody"></tbody>
+<tbody id="tasks"></tbody>
 </table>
 
 <script>
 const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-db.contracts = db.contracts || [];
+const contracts = db.contracts || [];
+const body = document.getElementById("tasks");
 
-const body = document.getElementById("teamBody");
+contracts.forEach(c=>{
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+<td>${c.client}</td>
+<td>${c.service}</td>
+<td>${c.nextVisit}</td>
+<td class="${c.status==='تم التنفيذ'?'good':'bad'}">${c.status}</td>
+<td>
+<button onclick="execute(${c.id})">تم التنفيذ</button>
+</td>`;
+  body.appendChild(tr);
+});
 
-function render(){
-  body.innerHTML = "";
-  db.contracts.forEach((c,i)=>{
-    if(c.status==="تم التنفيذ") return;
-
-    const tr = document.createElement("tr");
-    tr.innerHTML = `
-      <td>${c.client}</td>
-      <td>${c.service}</td>
-      <td>${c.nextVisit}</td>
-      <td>
-        <input class="note" placeholder="ملاحظات التنفيذ" 
-        onchange="saveNote(${i},this.value)">
-      </td>
-      <td>
-        <button class="done" onclick="markDone(${i})">
-          ✔ تم التنفيذ
-        </button>
-      </td>
-    `;
-    body.appendChild(tr);
-  });
-}
-
-function saveNote(i,val){
-  db.contracts[i].note = val;
-  localStorage.setItem("ft_db",JSON.stringify(db));
-}
-
-function markDone(i){
-  const c = db.contracts[i];
-  c.status = "تم التنفيذ";
-  c.lastVisit = c.nextVisit;
-
-  const days = Number(c.cycle);
-  const next = new Date(c.nextVisit);
-  next.setDate(next.getDate()+days);
-  c.nextVisit = next.toISOString().split("T")[0];
-
+function execute(id){
+  const db = JSON.parse(localStorage.getItem("ft_db"));
+  const c = db.contracts.find(x=>x.id===id);
+  if(!c) return;
+  c.status="تم التنفيذ";
   db.logs = db.logs || [];
   db.logs.push({
     client:c.client,
     service:c.service,
-    date:new Date().toISOString().split("T")[0],
-    note:c.note||""
+    date:new Date().toISOString().split("T")[0]
   });
-
-  localStorage.setItem("ft_db",JSON.stringify(db));
-  render();
+  localStorage.setItem("ft_db", JSON.stringify(db));
+  location.reload();
 }
-
-render();
 </script>
 
 </body>
