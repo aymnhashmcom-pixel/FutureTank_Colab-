@@ -3,78 +3,62 @@
 <head>
 <meta charset="UTF-8">
 <title>لوحة التحكم — FutureTank</title>
-
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  margin:20px
-}
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+a{display:inline-block;margin:5px;padding:10px 15px;
+background:#4a90e2;color:#fff;text-decoration:none;border-radius:8px}
 h2{color:#4a90e2}
-nav{
-  background:#fff;
-  padding:15px;
-  border-radius:12px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-  margin-bottom:20px;
-  box-shadow:0 6px 20px rgba(0,0,0,.08)
-}
-nav a{
-  text-decoration:none;
-  background:#4a90e2;
-  color:#fff;
-  padding:8px 14px;
-  border-radius:8px;
-  font-size:14px
-}
-nav a.secondary{
-  background:#6c757d
-}
-nav a.danger{
-  background:#c0392b
-}
-section{
-  background:#fff;
-  padding:15px;
-  border-radius:12px;
-  box-shadow:0 6px 20px rgba(0,0,0,.08)
-}
+.box{background:#fff;padding:15px;border-radius:10px;margin-top:20px}
+button{padding:8px 12px;margin:5px;cursor:pointer}
 </style>
 </head>
 
 <body>
 
+<script src="auth.js"></script>
+<script>
+if(!currentUser()) location.href="index.html";
+</script>
+
 <h2>🛠️ لوحة التحكم — FutureTank</h2>
 
-<!-- شريط التحكم -->
-<nav>
-  <a href="dashboard.html">🛍️ إدارة المنتجات</a>
-  <a href="contracts.html">📋 إدارة العقود</a>
-  <a href="reports.html">📊 تقارير التشغيل</a>
-  <a href="team.html">👷 لوحة الفريق</a>
-  <a href="assistant.html" target="_blank" class="secondary">🤖 المساعد</a>
-  <a href="index.html" target="_blank" class="secondary">🌐 الموقع</a>
-  <a href="#" onclick="ftLogout()" class="danger">🚪 تسجيل خروج</a>
-</nav>
+<div>
+<a href="products.html">🛍️ إدارة المنتجات</a>
+<a href="contracts.html">📋 إدارة العقود</a>
+<a href="reports.html">📊 تقارير التشغيل</a>
+<a href="team.html">👷 لوحة الفريق</a>
+<a href="assistant.html">🤖 المساعد</a>
+<a href="index.html">🌐 الموقع</a>
+<a href="#" onclick="logout()">🚪 تسجيل خروج</a>
+</div>
 
-<!-- محتوى الصفحة الافتراضي -->
-<section>
-  <h3>مرحبًا بك 👋</h3>
-  <p>
-    اختر القسم الذي تريد إدارته من الأعلى.<br>
-    هذه اللوحة مخصصة للإدارة فقط ولا تظهر للعملاء.
-  </p>
+<div class="box">
+<h3>💾 النسخ الاحتياطي</h3>
+<button onclick="backup()">تحميل نسخة احتياطية</button>
+<input type="file" onchange="restore(this)">
+</div>
 
-  <ul>
-    <li>🛍️ إدارة المنتجات (أسعار – صور)</li>
-    <li>📋 إدارة العقود والتشغيل</li>
-    <li>📊 تقارير تشغيل ومالية</li>
-    <li>👷 لوحة الفرق والتنفيذ</li>
-  </ul>
-</section>
+<script>
+function backup(){
+  const data = localStorage.getItem("ft_db") || "{}";
+  const blob = new Blob([data],{type:"application/json"});
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "futuretank-backup.json";
+  a.click();
+}
 
-<script src="system.js"></script>
+function restore(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = e=>{
+    localStorage.setItem("ft_db", e.target.result);
+    alert("✅ تم استرجاع البيانات بنجاح");
+  };
+  reader.readAsText(file);
+}
+</script>
+
 </body>
 </html>
