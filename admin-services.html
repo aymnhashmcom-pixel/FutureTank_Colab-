@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>🧰 إدارة الخدمات — FutureTank</title>
+
+<style>
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+.card{background:#fff;padding:15px;border-radius:8px;margin-bottom:10px}
+img,video{max-width:140px;display:block;margin-top:8px}
+button{margin-top:8px}
+</style>
+</head>
+
+<body>
+
+<script src="auth.js"></script>
+<script>requireRole("admin");</script>
+
+<h2>🧰 إدارة الخدمات</h2>
+
+<div id="services"></div>
+
+<h3>➕ إضافة خدمة جديدة</h3>
+
+<input id="name" placeholder="اسم الخدمة"><br><br>
+<textarea id="desc" placeholder="وصف الخدمة"></textarea><br><br>
+
+<label>📷 صورة الخدمة</label><br>
+<input type="file" id="image" accept="image/*"><br><br>
+
+<label>🎥 فيديو (اختياري)</label><br>
+<input type="file" id="video" accept="video/*"><br><br>
+
+<button onclick="addService()">إضافة الخدمة</button>
+
+<script>
+const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+db.services = db.services || [];
+
+function render(){
+  const div=document.getElementById("services");
+  div.innerHTML="";
+  db.services.forEach((s,i)=>{
+    div.innerHTML+=`
+    <div class="card">
+      <b>${s.name}</b><br>
+      ${s.desc||""}
+      ${s.image?`<img src="${s.image}">`:""}
+      ${s.video?`<video src="${s.video}" controls></video>`:""}
+      <br>
+      <button onclick="del(${i})">حذف</button>
+    </div>`;
+  });
+}
+render();
+
+function toBase64(file){
+  return new Promise(res=>{
+    const r=new FileReader();
+    r.onload=()=>res(r.result);
+    r.readAsDataURL(file);
+  });
+}
+
+async function addService(){
+  const name=document.getElementById("name").value;
+  const desc=document.getElementById("desc").value;
+  const img=document.getElementById("image").files[0];
+  const vid=document.getElementById("video").files[0];
+
+  const service={name,desc};
+
+  if(img) service.image=await toBase64(img);
+  if(vid) service.video=await toBase64(vid);
+
+  db.services.push(service);
+  localStorage.setItem("ft_db",JSON.stringify(db));
+  location.reload();
+}
+
+function del(i){
+  db.services.splice(i,1);
+  localStorage.setItem("ft_db",JSON.stringify(db));
+  location.reload();
+}
+</script>
+
+</body>
+  </html>
