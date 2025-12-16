@@ -1,24 +1,30 @@
-// ===== FutureTank Auth =====
-const USER_KEY = "ft_user";
+// auth.js — نظام صلاحيات FutureTank (نسخة مستقرة)
 
-function login(role){
-  localStorage.setItem(USER_KEY, role);
-  location.href = "dashboard.html";
-}
-
-function logout(){
-  localStorage.removeItem(USER_KEY);
-  location.href = "index.html";
-}
-
-function currentUser(){
-  return localStorage.getItem(USER_KEY);
-}
-
-function requireRole(role){
-  const u = currentUser();
-  if(u !== role){
-    alert("غير مصرح بالدخول");
-    history.back();
+function loginAdmin(password) {
+  if (password === "Future2025") {
+    localStorage.setItem("ft_role", "admin");
+    alert("✅ تم تسجيل الدخول كمسؤول");
+    return true;
+  } else {
+    alert("❌ كلمة السر غير صحيحة");
+    return false;
   }
+}
+
+function requireRole(role) {
+  const currentRole = localStorage.getItem("ft_role");
+  if (currentRole !== role) {
+    document.body.innerHTML = `
+      <div style="text-align:center;margin-top:80px;font-family:Tahoma">
+        <h2>⛔ غير مصرح بالدخول</h2>
+        <p>هذه الصفحة مخصصة للإدارة فقط</p>
+      </div>
+    `;
+    throw new Error("Access denied");
+  }
+}
+
+function logoutAdmin() {
+  localStorage.removeItem("ft_role");
+  location.href = "index.html";
 }
