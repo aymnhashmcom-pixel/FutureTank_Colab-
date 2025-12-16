@@ -1,52 +1,52 @@
-<!DOCTYPE html><html lang="ar" dir="rtl">
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>إدارة العملاء والعقود — FutureTank</title>
+<title>إدارة العقود — FutureTank</title>
 <style>
-body{font-family:Tahoma;background:#f4f9ff;margin:20px}
-h2{color:#4a90e2}
-input,select,button{padding:8px;margin:4px;width:100%}
-form{background:#fff;padding:15px;border-radius:10px;max-width:900px}
-table{width:100%;margin-top:20px;border-collapse:collapse;background:#fff}
-th,td{border:1px solid #ddd;padding:8px;text-align:center}
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+table{width:100%;background:#fff;border-collapse:collapse}
+th,td{border:1px solid #ccc;padding:8px;text-align:center}
 th{background:#eef5ff}
-button{cursor:pointer}
 </style>
 </head>
-<body><h2>📋 إدارة العملاء والعقود — FutureTank</h2><form onsubmit="event.preventDefault();ftAddContract(this)">
-  <h3>➕ إضافة عقد جديد</h3>
-  <input name="client" placeholder="اسم العميل" required>
-  <input name="phone" placeholder="رقم الهاتف" required>  <select name="service">
-    <option>تطهير وتعقيم خزانات</option>
-    <option>توريد وتركيب خزانات</option>
-    <option>صيانة وإصلاح خزانات</option>
-  </select>  <select name="cycle">
-    <option value="30">زيارة كل 30 يوم</option>
-    <option value="60">زيارة كل 60 يوم</option>
-  </select>  <select name="period">
-    <option>سنوي</option>
-    <option>شهري</option>
-    <option>مفتوح</option>
-  </select><label>تاريخ التعاقد</label> <input type="date" name="startDate" required>
 
-<label>تاريخ آخر زيارة</label> <input type="date" name="lastVisit" required>
+<body>
 
-  <input name="cost" placeholder="تكلفة الزيارة (جنيه)" required><button>حفظ العقد</button>
+<script src="auth.js"></script>
+<script>
+requireRole("admin");
+</script>
 
-</form><h3>📦 العقود الحالية</h3>
-<button onclick="ftGenerateWorkOrders(5)">📤 إرسال أوامر الشغل (بعد 5 أيام)</button><table>
+<h2>📋 إدارة العقود</h2>
+
+<table>
 <thead>
 <tr>
 <th>العميل</th>
 <th>الخدمة</th>
-<th>الدورة</th>
-<th>آخر زيارة</th>
 <th>الزيارة القادمة</th>
 <th>التكلفة</th>
-<th>واتساب</th>
-<th>حذف</th>
 </tr>
 </thead>
-<tbody id="contractsBody"></tbody>
-</table><script src="system.js"></script></body>
+<tbody id="body"></tbody>
+</table>
+
+<script>
+const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+const contracts = db.contracts || [];
+const body = document.getElementById("body");
+
+contracts.forEach(c=>{
+  const tr=document.createElement("tr");
+  tr.innerHTML=`
+<td>${c.client}</td>
+<td>${c.service}</td>
+<td>${c.nextVisit}</td>
+<td>${c.cost} جنيه</td>`;
+  body.appendChild(tr);
+});
+</script>
+
+</body>
 </html>
