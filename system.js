@@ -1,4 +1,4 @@
-// ===== FutureTank System =====
+// ===== FutureTank System v7 =====
 const DB_KEY = "ft_db";
 
 function loadDB(){
@@ -8,35 +8,27 @@ function saveDB(db){
   localStorage.setItem(DB_KEY, JSON.stringify(db));
 }
 
-// ===== WhatsApp =====
-function wa(phone, msg){
-  const url = `https://wa.me/2${phone}?text=${encodeURIComponent(msg)}`;
-  window.open(url,"_blank");
-}
-
 // ===== Contracts =====
 function ftAddContract(form){
   const db = loadDB();
   db.contracts = db.contracts || [];
-
-  const cycleDays = parseInt(form.cycle.value);
+  const cycle = parseInt(form.cycle.value);
   const last = new Date(form.lastVisit.value);
   const next = new Date(last);
-  next.setDate(last.getDate() + cycleDays);
+  next.setDate(last.getDate() + cycle);
 
   db.contracts.push({
     id: Date.now(),
     client: form.client.value,
     phone: form.phone.value,
     service: form.service.value,
-    cycle: cycleDays,
+    cycle,
     period: form.period.value,
     startDate: form.startDate.value,
     lastVisit: form.lastVisit.value,
     nextVisit: next.toISOString().split("T")[0],
-    cost: form.cost.value,
-    status: "قادم",
-    notes: ""
+    cost: Number(form.cost.value),
+    status: "قادم"
   });
 
   saveDB(db);
@@ -46,59 +38,35 @@ function ftAddContract(form){
 
 function deleteContract(id){
   const db = loadDB();
-  db.contracts = db.contracts.filter(c=>c.id!==id);
+  db.contracts = (db.contracts||[]).filter(c=>c.id!==id);
   saveDB(db);
   renderContracts();
 }
 
-// ===== Execution =====
-function updateExecution(id){
+// ===== Execution + Finance =====
+function executeVisit(id){
   const db = loadDB();
-  const c = db.contracts.find(c=>c.id===id);
+  const c = db.contracts.find(x=>x.id===id);
   if(!c) return;
 
   c.status = "تم التنفيذ";
   c.lastVisit = c.nextVisit;
-
   const next = new Date(c.lastVisit);
-  next.setDate(next.getDate()+c.cycle);
+  next.setDate(next.getDate() + c.cycle);
   c.nextVisit = next.toISOString().split("T")[0];
 
-  db.logs = db.logs || [];
-  db.logs.push({
-    client:c.client,
-    service:c.service,
-    date:new Date().toISOString().split("T")[0]
+  // 💰 تسجيل الدخل
+  db.finance = db.finance || [];
+  db.finance.push({
+    type: "دخل",
+    client: c.client,
+    service: c.service,
+    amount: c.cost,
+    date: new Date().toISOString().split("T")[0]
   });
-
-  // رسالة بعد التنفيذ
-  wa(c.phone,
-`تم تنفيذ خدمة:
-${c.service}
-نشكر ثقتك في FutureTank 💧
-موعد الزيارة القادمة: ${c.nextVisit}`);
 
   saveDB(db);
-  renderContracts();
-}
-
-// ===== Reminders =====
-function ftGenerateWorkOrders(days){
-  const db = loadDB();
-  const today = new Date();
-  const target = new Date();
-  target.setDate(today.getDate()+days);
-
-  (db.contracts||[]).forEach(c=>{
-    const d = new Date(c.nextVisit);
-    if(d.toDateString() === target.toDateString()){
-      wa(c.phone,
-`تذكير بموعد زيارة:
-${c.service}
-📅 ${c.nextVisit}
-FutureTank 💧`);
-    }
-  });
+  location.reload();
 }
 
 // ===== Render =====
@@ -106,8 +74,8 @@ function renderContracts(){
   const db = loadDB();
   const body = document.getElementById("contractsBody");
   if(!body) return;
-
   body.innerHTML = "";
+
   (db.contracts||[]).forEach(c=>{
     const tr = document.createElement("tr");
     tr.innerHTML = `
@@ -118,10 +86,7 @@ function renderContracts(){
 <td>${c.nextVisit}</td>
 <td>${c.cost} جنيه</td>
 <td>
-<button onclick="wa('${c.phone}',
-'استفسار بخصوص عقد ${c.client} — FutureTank')">
-💬 واتساب
-</button>
+<button onclick="executeVisit(${c.id})">تم التنفيذ</button>
 </td>
 <td>
 <button onclick="deleteContract(${c.id})">✖</button>
@@ -130,5 +95,3 @@ function renderContracts(){
     body.appendChild(tr);
   });
 }
-
-document.addEventListener("DOMContentLoaded",renderContracts);
