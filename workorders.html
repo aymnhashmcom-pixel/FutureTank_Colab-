@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>🧾 أوامر الشغل — FutureTank</title>
+<style>
+body{font-family:Tahoma;background:#f4f9ff;margin:20px}
+h2{color:#4a90e2}
+table{width:100%;border-collapse:collapse;background:#fff;margin-top:15px}
+th,td{border:1px solid #ddd;padding:8px;text-align:center}
+th{background:#eef5ff}
+button{padding:6px 10px;cursor:pointer}
+.overdue{color:red;font-weight:bold}
+.soon{color:#e67e22;font-weight:bold}
+</style>
+</head>
+<body>
+
+<h2>🧾 أوامر الشغل اليومية — FutureTank</h2>
+
+<label>عدد الأيام القادمة:</label>
+<input type="number" id="days" value="5" style="width:80px">
+<button onclick="renderOrders()">🔄 تحديث</button>
+<button onclick="sendTeamMsg()">📤 إرسال للفريق</button>
+
+<table>
+<thead>
+<tr>
+<th>العميل</th>
+<th>الخدمة</th>
+<th>الزيارة</th>
+<th>الحالة</th>
+<th>تنفيذ</th>
+</tr>
+</thead>
+<tbody id="ordersBody"></tbody>
+</table>
+
+<script>
+const DB_KEY="ft_db";
+
+function loadDB(){
+  return JSON.parse(localStorage.getItem(DB_KEY)||"{}");
+}
+function today(){
+  return new Date().toISOString().split("T")[0];
+}
+function diffDays(d){
+  return Math.ceil((new Date(d)-new Date(today()))/86400000);
+}
+
+function renderOrders(){
+  const db=loadDB();
+  const body=document.getElementById("ordersBody");
+  body.innerHTML="";
+  const days=parseInt(document.getElementById("days").value);
+
+  (db.contracts||[]).forEach(c=>{
+    if(c.status==="تم التنفيذ") return;
+
+    const diff=diffDays(c.nextVisit);
+    let cls="",label="";
+
+    if(c.nextVisit<today()){
+      cls="overdue"; label="متأخر";
+    }else if(diff<=days){
+      cls="soon"; label="قريب";
+    }else return;
+
+    const tr=document.createElement("tr");
+    tr.innerHTML=`
+<td>${c.client}</td>
+<td>${c.service}</td>
+<td>${c.nextVisit}</td>
+<td class="${cls}">${label}</td>
+<td>
+<button onclick="markDone(${c.id})">✔ تم</button>
+</td>`;
+    body.appendChild(tr);
+  });
+}
+
+function markDone(id){
+  const db=loadDB();
+  const c=db.contracts.find(x=>x.id===id);
+  if(!c) return;
+
+  c.status="تم التنفيذ";
+  c.lastVisit=c.nextVisit;
+  const n=new Date(c.lastVisit);
+  n.setDate(n.getDate()+c.cycle);
+  c.nextVisit=n.toISOString().split("T")[0];
+
+  localStorage.setItem(DB_KEY,JSON.stringify(db));
+  renderOrders();
+}
+
+function sendTeamMsg(){
+  const db=loadDB();
+  let msg="🧾 أوامر شغل اليوم:\n\n";
+
+  (db.contracts||[]).forEach(c=>{
+    if(c.status!=="تم التنفيذ" && c.nextVisit<=today()){
+      msg+=`- ${c.client} | ${c.service} | ${c.nextVisit}\n`;
+    }
+  });
+
+  if(msg.trim()==="🧾 أوامر شغل اليوم:"){
+    alert("لا يوجد أوامر حالياً");
+    return;
+  }
+
+  window.open("https://wa.me/?text="+encodeURIComponent(msg));
+}
+
+renderOrders();
+</script>
+</body>
+  </html>
