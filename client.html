@@ -11,47 +11,46 @@ body{
 }
 .box{
   background:#fff;
-  padding:20px;
-  border-radius:10px;
-  max-width:500px;
+  padding:25px;
+  border-radius:12px;
+  max-width:520px;
   margin:auto;
-  box-shadow:0 2px 8px rgba(0,0,0,.1)
+  box-shadow:0 2px 10px rgba(0,0,0,.1)
 }
 input{
   width:100%;
-  padding:10px;
+  padding:12px;
   margin:10px 0;
   font-size:16px
 }
 button{
   width:100%;
-  padding:12px;
+  padding:14px;
   background:#0d6efd;
   color:#fff;
   border:none;
   font-size:16px;
-  border-radius:6px;
+  border-radius:8px;
   cursor:pointer
 }
 .data{
   margin-top:20px;
   background:#eef5ff;
   padding:15px;
-  border-radius:8px
+  border-radius:10px
 }
 .action{
   display:block;
   margin-top:10px;
-  padding:10px;
+  padding:12px;
   text-align:center;
   background:#25d366;
   color:#fff;
   text-decoration:none;
-  border-radius:6px
+  border-radius:8px
 }
-.renew{
-  background:#ff9800
-}
+.renew{background:#ff9800}
+.error{color:red;margin-top:10px}
 </style>
 </head>
 
@@ -59,9 +58,9 @@ button{
 
 <div class="box">
   <h2>🔐 بوابة العملاء</h2>
-  <p>من فضلك أدخل كود العميل</p>
+  <p>أدخل <b>رقم الهاتف</b> أو <b>كود العميل</b></p>
 
-  <input id="code" placeholder="مثال: FT-1234">
+  <input id="key" placeholder="0115xxxxxxx أو FT-1234">
   <button onclick="login()">دخول</button>
 
   <div id="result"></div>
@@ -71,15 +70,17 @@ button{
 const PHONE = "201150402031";
 
 function login(){
-  const code = document.getElementById("code").value.trim();
+  const key = document.getElementById("key").value.trim();
   const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
   const clients = db.clients || [];
-
-  const client = clients.find(c=>c.code === code);
   const box = document.getElementById("result");
 
+  const client = clients.find(c =>
+    c.code === key || c.phone === key
+  );
+
   if(!client){
-    box.innerHTML = "<p style='color:red'>❌ الكود غير صحيح</p>";
+    box.innerHTML = "<p class='error'>❌ البيانات غير صحيحة</p>";
     return;
   }
 
@@ -100,13 +101,13 @@ function login(){
       <b>🧰 الخدمة:</b> ${client.service}<br>
       <b>📅 آخر زيارة:</b> ${client.lastVisit || "-"}<br>
       <b>📆 الزيارة القادمة:</b> ${client.nextVisit || "-"}<br>
-      <b>📄 تاريخ التعاقد:</b> ${client.contract || "-"}<br>
-      <b>♻️ تجديد:</b> ${client.renew || "-"}
-      
+      <b>📄 التعاقد:</b> ${client.contract || "-"}<br>
+      <b>♻️ التجديد:</b> ${client.renew || "-"}
+
       <a class="action"
       target="_blank"
       href="https://wa.me/${PHONE}?text=استفسار%20عن%20التعاقد%20—%20كود:${client.code}">
-      💬 تواصل مع خدمة العملاء
+      💬 خدمة العملاء
       </a>
 
       ${renewBtn}
