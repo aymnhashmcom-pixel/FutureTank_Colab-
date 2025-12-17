@@ -2,117 +2,107 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>🔐 بوابة العملاء — FutureTank</title>
+<title>👤 بوابة العميل — FutureTank</title>
+
 <style>
 body{
   font-family:Tahoma;
   background:#f4f9ff;
   padding:20px
 }
-.box{
+.card{
   background:#fff;
-  padding:25px;
-  border-radius:12px;
-  max-width:520px;
+  padding:20px;
+  max-width:600px;
   margin:auto;
+  border-radius:12px;
   box-shadow:0 2px 10px rgba(0,0,0,.1)
 }
-input{
-  width:100%;
-  padding:12px;
-  margin:10px 0;
-  font-size:16px
-}
-button{
-  width:100%;
-  padding:14px;
-  background:#0d6efd;
-  color:#fff;
-  border:none;
-  font-size:16px;
-  border-radius:8px;
-  cursor:pointer
-}
-.data{
-  margin-top:20px;
+h2{color:#0d6efd}
+.info{
   background:#eef5ff;
-  padding:15px;
-  border-radius:10px
-}
-.action{
-  display:block;
-  margin-top:10px;
   padding:12px;
-  text-align:center;
-  background:#25d366;
-  color:#fff;
-  text-decoration:none;
-  border-radius:8px
+  border-radius:8px;
+  margin:8px 0
 }
-.renew{background:#ff9800}
-.error{color:red;margin-top:10px}
+button,a{
+  display:inline-block;
+  margin:5px 5px 0 0;
+  padding:10px 14px;
+  border-radius:6px;
+  text-decoration:none;
+  border:none;
+  cursor:pointer;
+  font-size:14px
+}
+.whatsapp{background:#25d366;color:#fff}
+.renew{background:#ff9800;color:#fff}
+.notfound{
+  background:#ffe0e0;
+  padding:15px;
+  border-radius:8px;
+  color:#b00020
+}
 </style>
 </head>
 
 <body>
 
-<div class="box">
-  <h2>🔐 بوابة العملاء</h2>
-  <p>أدخل <b>رقم الهاتف</b> أو <b>كود العميل</b></p>
-
-  <input id="key" placeholder="0115xxxxxxx أو FT-1234">
-  <button onclick="login()">دخول</button>
-
-  <div id="result"></div>
-</div>
+<div class="card" id="box"></div>
 
 <script>
-const PHONE = "201150402031";
+const params = new URLSearchParams(location.search);
+const code = params.get("code");
 
-function login(){
-  const key = document.getElementById("key").value.trim();
-  const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-  const clients = db.clients || [];
-  const box = document.getElementById("result");
+const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+const clients = db.clients || [];
 
-  const client = clients.find(c =>
-    c.code === key || c.phone === key
-  );
+const client = clients.find(c=>c.code===code);
+const box = document.getElementById("box");
 
-  if(!client){
-    box.innerHTML = "<p class='error'>❌ البيانات غير صحيحة</p>";
-    return;
-  }
-
-  let renewBtn = "";
-  if(client.renew){
-    renewBtn = `
-      <a class="action renew" target="_blank"
-      href="https://wa.me/${PHONE}?text=أرغب%20في%20تجديد%20التعاقد%20—%20كود:${client.code}">
-      🔁 تجديد التعاقد
-      </a>
-    `;
-  }
-
+if(!code || !client){
   box.innerHTML = `
-    <div class="data">
-      <b>👤 العميل:</b> ${client.name}<br>
-      <b>📞 الهاتف:</b> ${client.phone}<br>
-      <b>🧰 الخدمة:</b> ${client.service}<br>
-      <b>📅 آخر زيارة:</b> ${client.lastVisit || "-"}<br>
-      <b>📆 الزيارة القادمة:</b> ${client.nextVisit || "-"}<br>
-      <b>📄 التعاقد:</b> ${client.contract || "-"}<br>
-      <b>♻️ التجديد:</b> ${client.renew || "-"}
-
-      <a class="action"
-      target="_blank"
-      href="https://wa.me/${PHONE}?text=استفسار%20عن%20التعاقد%20—%20كود:${client.code}">
-      💬 خدمة العملاء
-      </a>
-
-      ${renewBtn}
+    <div class="notfound">
+      ❌ الكود غير صحيح<br><br>
+      برجاء التواصل مع خدمة العملاء
     </div>
   `;
+}else{
+  box.innerHTML = `
+    <h2>👤 مرحبًا ${client.name}</h2>
+
+    <div class="info">📞 رقم الهاتف: ${client.phone}</div>
+    <div class="info">🧰 الخدمة: ${client.service}</div>
+    <div class="info">📅 آخر زيارة: ${client.lastVisit || "-"}</div>
+    <div class="info">📆 الزيارة القادمة: ${client.nextVisit || "-"}</div>
+    <div class="info">📄 تاريخ التعاقد: ${client.contract || "-"}</div>
+    <div class="info">🔁 شهر التجديد: ${client.renew || "-"}</div>
+
+    ${
+      client.renew === "يناير"
+      ? `<button class="renew" onclick="renew()">🔄 تجديد التعاقد الآن</button>`
+      : ``
+    }
+
+    <a class="whatsapp"
+       href="https://wa.me/201150402031?text=استفسار%20عميل%20كود:${client.code}"
+       target="_blank">
+       💬 تواصل مع خدمة العملاء
+    </a>
+  `;
+}
+
+function renew(){
+  const msg = `
+عميل يرغب في تجديد التعاقد
+الاسم: ${client.name}
+الكود: ${client.code}
+الخدمة: ${client.service}
+`;
+  window.open(
+    "https://wa.me/201150402031?text="+encodeURIComponent(msg),
+    "_blank"
+  );
 }
 </script>
 
