@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>📝 التعاقد — FutureTank</title>
+<style>
+body{
+  font-family:Tahoma;
+  background:#f4f9ff;
+  padding:20px
+}
+.box{
+  max-width:520px;
+  margin:auto;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.1)
+}
+input,select,button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  font-size:15px
+}
+button{
+  background:#4caf50;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer
+}
+.note{
+  background:#f1f8ff;
+  padding:10px;
+  margin-top:15px;
+  border-radius:6px;
+  font-size:14px
+}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>📝 التعاقد الإلكتروني — FutureTank</h2>
+
+<input id="name" placeholder="اسم العميل">
+<input id="phone" placeholder="رقم الهاتف">
+<select id="type">
+  <option value="new">عميل جديد</option>
+  <option value="renew">تجديد تعاقد</option>
+</select>
+
+<input id="service" placeholder="الخدمة المطلوبة">
+<input id="cost" placeholder="التكلفة بالجنيه">
+<input id="next" placeholder="موعد الزيارة القادمة (مثال: 01/01/2026)">
+
+<button onclick="submit()">✔️ تأكيد التعاقد</button>
+
+<div class="note">
+بالضغط على تأكيد، أقر بموافقتي على التعاقد مع FutureTank
+</div>
+</div>
+
+<script>
+const WHATSAPP = "201150402031";
+
+function submit(){
+  const name = nameEl.value.trim();
+  const phone = phoneEl.value.trim();
+  const type = typeEl.value;
+  const service = serviceEl.value.trim();
+  const cost = costEl.value.trim();
+  const next = nextEl.value.trim();
+
+  if(!name || !phone || !service){
+    alert("❌ برجاء استكمال البيانات");
+    return;
+  }
+
+  const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+  db.contracts = db.contracts || [];
+
+  const code = "FT-" + Math.floor(1000 + Math.random()*9000);
+
+  const contract = {
+    code,
+    client:name,
+    phone,
+    service,
+    cost,
+    lastVisit:"—",
+    nextVisit:next,
+    startDate:new Date().toLocaleDateString("ar-EG"),
+    renewDate:"01/01/2026"
+  };
+
+  db.contracts.push(contract);
+  localStorage.setItem("ft_db",JSON.stringify(db));
+
+  const msg =
+`تم ${type==="new"?"تعاقد جديد":"تجديد تعاقد"}
+العميل: ${name}
+الخدمة: ${service}
+الكود: ${code}
+موعد الزيارة: ${next}`;
+
+  window.open(
+    `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`
+  );
+
+  alert("✅ تم التعاقد بنجاح\nكود العميل: "+code);
+}
+</script>
+
+</body>
+  </html>
