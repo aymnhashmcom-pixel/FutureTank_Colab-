@@ -2,111 +2,64 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>👤 بوابة العميل — FutureTank</title>
+<title>👤 بيانات العميل</title>
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+.card{
+ background:#fff;
+ padding:20px;
+ border-radius:10px;
+ max-width:500px;
+ margin:auto
 }
-.box{
-  max-width:520px;
-  margin:auto;
-  background:#fff;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,.1)
+.btn{
+ display:block;
+ margin-top:10px;
+ padding:10px;
+ text-align:center;
+ background:#007bff;
+ color:#fff;
+ text-decoration:none;
+ border-radius:6px
 }
-input,button{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  font-size:15px
-}
-button{
-  background:#007bff;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  cursor:pointer
-}
-.data{
-  margin-top:15px;
-  background:#f1f8ff;
-  padding:15px;
-  border-radius:8px
-}
-.actions a{
-  display:inline-block;
-  margin:5px 5px 0 0;
-  padding:8px 12px;
-  border-radius:6px;
-  text-decoration:none;
-  color:#fff;
-  font-size:14px
-}
-.book{background:#4caf50}
-.renew{background:#ff9800}
-.whatsapp{background:#25d366}
+.renew{background:#4caf50}
 </style>
 </head>
 
 <body>
 
-<div class="box">
-<h2>👤 بوابة العميل</h2>
-
-<input id="code" placeholder="أدخل كود العميل">
-<button onclick="lookup()">🔍 عرض البيانات</button>
-
-<div id="result"></div>
-</div>
+<div class="card" id="box"></div>
 
 <script>
-const WHATSAPP = "201150402031";
+const code = new URLSearchParams(location.search).get("code");
+const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+const c = (db.clients||[]).find(x=>x.code===code);
 
-function lookup(){
-  const code = document.getElementById("code").value.trim();
-  const box = document.getElementById("result");
-  box.innerHTML = "";
+if(!c){
+ box.innerHTML="❌ لا توجد بيانات";
+}else{
+ let renewBtn = "";
+ if(new Date(c.renewDate)<=new Date("2026-01-31")){
+  renewBtn = `<a class="btn renew"
+  href="renew.html?code=${c.code}">
+  🔄 تجديد التعاقد
+  </a>`;
+ }
 
-  const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-  const contracts = db.contracts || [];
+ box.innerHTML=`
+ <h3>👤 ${c.name}</h3>
+ <p>الخدمة: ${c.service}</p>
+ <p>آخر زيارة: ${c.lastVisit}</p>
+ <p>الزيارة القادمة: ${c.nextVisit}</p>
+ <p>تاريخ التجديد: ${c.renewDate}</p>
 
-  const c = contracts.find(x=>x.code===code);
-  if(!c){
-    box.innerHTML = "❌ كود غير صحيح";
-    return;
-  }
+ <a class="btn"
+ href="invoice.html?code=${c.code}">
+ 🧾 عرض الفاتورة
+ </a>
 
-  box.innerHTML = `
-  <div class="data">
-    <b>الاسم:</b> ${c.client}<br>
-    <b>الخدمة:</b> ${c.service}<br>
-    <b>آخر زيارة:</b> ${c.lastVisit || "—"}<br>
-    <b>الزيارة القادمة:</b> ${c.nextVisit}<br>
-    <b>تاريخ التعاقد:</b> ${c.startDate}<br>
-    <b>تاريخ التجديد:</b> ${c.renewDate}<br>
-
-    <div class="actions">
-      <a class="book"
-         href="booking.html?type=service&name=${encodeURIComponent(c.service)}">
-         📅 حجز زيارة
-      </a>
-
-      <a class="renew"
-         href="contract.html">
-         🔁 تجديد التعاقد
-      </a>
-
-      <a class="whatsapp"
-         target="_blank"
-         href="https://wa.me/${WHATSAPP}?text=استفسار%20بخصوص%20الكود:%20${c.code}">
-         💬 تواصل واتساب
-      </a>
-    </div>
-  </div>
-  `;
+ ${renewBtn}
+ `;
 }
 </script>
 
