@@ -8,37 +8,29 @@
 body{
   font-family:Tahoma;
   background:#f4f9ff;
-  padding:20px
+  padding:20px;
 }
-h2{margin-bottom:15px}
-.card{
+h2,h3{color:#0a58ca}
+.service{
   background:#fff;
-  padding:15px;
-  border-radius:10px;
+  padding:10px;
   margin-bottom:10px;
-  box-shadow:0 2px 6px rgba(0,0,0,.08)
-}
-input,textarea,button{
-  width:100%;
-  padding:8px;
-  margin:6px 0;
-  font-size:14px
+  border-radius:8px;
 }
 button{
-  background:#4a90e2;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  cursor:pointer
+  padding:6px 12px;
+  margin-top:6px;
 }
-button.delete{
-  background:#d9534f;
-  margin-top:5px
+input,textarea{
+  width:100%;
+  margin-bottom:8px;
+  padding:6px;
 }
 img,video{
-  max-width:120px;
+  max-width:200px;
+  margin-top:6px;
+  border-radius:8px;
   display:block;
-  margin:5px auto
 }
 </style>
 </head>
@@ -50,92 +42,102 @@ img,video{
 requireRole("admin");
 </script>
 
-<h2>🧰 إدارة الخدمات</h2>
+<h2>🧰 إدارة الخدمات — FutureTank</h2>
 
-<div id="list"></div>
-
-<hr>
-
+<!-- إضافة خدمة -->
 <h3>➕ إضافة خدمة جديدة</h3>
 
 <input id="name" placeholder="اسم الخدمة">
 <textarea id="desc" placeholder="وصف الخدمة"></textarea>
-<input id="price" placeholder="السعر (اختياري)">
-<input id="img" type="file" accept="image/*">
-<input id="vid" type="file" accept="video/*">
+
+<label>📷 صورة الخدمة</label>
+<input type="file" id="image" accept="image/*">
+
+<label>🎥 فيديو الخدمة (اختياري)</label>
+<input type="file" id="video" accept="video/*">
 
 <button onclick="addService()">إضافة الخدمة</button>
 
-<script>
-const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-db.services = db.services || [];
-const list = document.getElementById("list");
+<hr>
 
-function render(){
-  list.innerHTML="";
-  db.services.forEach((s,i)=>{
-    const div=document.createElement("div");
-    div.className="card";
-    div.innerHTML=`
-      <b>${s.name}</b>
-      <p>${s.desc||""}</p>
-      <p>${s.price||""}</p>
-      ${s.img?`<img src="${s.img}">`:""}
-      ${s.video?`<video src="${s.video}" controls></video>`:""}
-      <button class="delete" onclick="del(${i})">حذف</button>
-    `;
-    list.appendChild(div);
-  });
+<h3>📋 الخدمات الحالية</h3>
+<div id="list"></div>
+
+<script>
+const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
+db.services = db.services || [];
+
+function save(){
+  localStorage.setItem("ft_db", JSON.stringify(db));
 }
 
-function toBase64(file,cb){
-  const r=new FileReader();
-  r.onload=()=>cb(r.result);
-  r.readAsDataURL(file);
+function fileToBase64(file,cb){
+  const reader = new FileReader();
+  reader.onload = e => cb(e.target.result);
+  reader.readAsDataURL(file);
 }
 
 function addService(){
-  const s={
-    name: name.value,
-    desc: desc.value,
-    price: price.value
-  };
+  const name = document.getElementById("name").value.trim();
+  const desc = document.getElementById("desc").value.trim();
+  const imgFile = document.getElementById("image").files[0];
+  const vidFile = document.getElementById("video").files[0];
 
-  const imgFile = img.files[0];
-  const vidFile = vid.files[0];
+  if(!name) return alert("اكتب اسم الخدمة");
+
+  const service = {name,desc};
 
   if(imgFile){
-    toBase64(imgFile,(res)=>{
-      s.img=res;
-      if(vidFile){
-        toBase64(vidFile,(v)=>{
-          s.video=v;
-          save(s);
-        });
-      } else save(s);
+    fileToBase64(imgFile,(img)=>{
+      service.image = img;
+      handleVideo(service,vidFile);
     });
-  } else if(vidFile){
-    toBase64(vidFile,(v)=>{
-      s.video=v;
-      save(s);
-    });
-  } else save(s);
-}
-
-function save(s){
-  db.services.push(s);
-  localStorage.setItem("ft_db",JSON.stringify(db));
-  location.reload();
-}
-
-function del(i){
-  if(confirm("حذف الخدمة؟")){
-    db.services.splice(i,1);
-    localStorage.setItem("ft_db",JSON.stringify(db));
-    render();
+  }else{
+    handleVideo(service,vidFile);
   }
 }
 
+function handleVideo(service,vidFile){
+  if(vidFile){
+    fileToBase64(vidFile,(vid)=>{
+      service.video = vid;
+      finishAdd(service);
+    });
+  }else{
+    finishAdd(service);
+  }
+}
+
+function finishAdd(service){
+  db.services.push(service);
+  save();
+  location.reload();
+}
+
+function removeService(i){
+  if(confirm("حذف الخدمة؟")){
+    db.services.splice(i,1);
+    save();
+    location.reload();
+  }
+}
+
+function render(){
+  const box = document.getElementById("list");
+  db.services.forEach((s,i)=>{
+    const div = document.createElement("div");
+    div.className="service";
+    div.innerHTML = `
+<b>${s.name}</b><br>
+${s.desc || ""}
+${s.image ? `<img src="${s.image}">` : ""}
+${s.video ? `<video src="${s.video}" controls></video>` : ""}
+<br>
+<button onclick="removeService(${i})">🗑 حذف</button>
+`;
+    box.appendChild(div);
+  });
+}
 render();
 </script>
 
