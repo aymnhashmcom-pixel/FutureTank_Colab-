@@ -2,64 +2,116 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>👤 بيانات العميل</title>
+<title>🔐 بوابة العملاء — FutureTank</title>
 <style>
-body{font-family:Tahoma;background:#f4f9ff;padding:20px}
-.card{
- background:#fff;
- padding:20px;
- border-radius:10px;
- max-width:500px;
- margin:auto
+body{
+  font-family:Tahoma;
+  background:#f4f9ff;
+  padding:20px
 }
-.btn{
- display:block;
- margin-top:10px;
- padding:10px;
- text-align:center;
- background:#007bff;
- color:#fff;
- text-decoration:none;
- border-radius:6px
+.box{
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  max-width:500px;
+  margin:auto;
+  box-shadow:0 2px 8px rgba(0,0,0,.1)
 }
-.renew{background:#4caf50}
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  font-size:16px
+}
+button{
+  width:100%;
+  padding:12px;
+  background:#0d6efd;
+  color:#fff;
+  border:none;
+  font-size:16px;
+  border-radius:6px;
+  cursor:pointer
+}
+.data{
+  margin-top:20px;
+  background:#eef5ff;
+  padding:15px;
+  border-radius:8px
+}
+.action{
+  display:block;
+  margin-top:10px;
+  padding:10px;
+  text-align:center;
+  background:#25d366;
+  color:#fff;
+  text-decoration:none;
+  border-radius:6px
+}
+.renew{
+  background:#ff9800
+}
 </style>
 </head>
 
 <body>
 
-<div class="card" id="box"></div>
+<div class="box">
+  <h2>🔐 بوابة العملاء</h2>
+  <p>من فضلك أدخل كود العميل</p>
+
+  <input id="code" placeholder="مثال: FT-1234">
+  <button onclick="login()">دخول</button>
+
+  <div id="result"></div>
+</div>
 
 <script>
-const code = new URLSearchParams(location.search).get("code");
-const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-const c = (db.clients||[]).find(x=>x.code===code);
+const PHONE = "201150402031";
 
-if(!c){
- box.innerHTML="❌ لا توجد بيانات";
-}else{
- let renewBtn = "";
- if(new Date(c.renewDate)<=new Date("2026-01-31")){
-  renewBtn = `<a class="btn renew"
-  href="renew.html?code=${c.code}">
-  🔄 تجديد التعاقد
-  </a>`;
- }
+function login(){
+  const code = document.getElementById("code").value.trim();
+  const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+  const clients = db.clients || [];
 
- box.innerHTML=`
- <h3>👤 ${c.name}</h3>
- <p>الخدمة: ${c.service}</p>
- <p>آخر زيارة: ${c.lastVisit}</p>
- <p>الزيارة القادمة: ${c.nextVisit}</p>
- <p>تاريخ التجديد: ${c.renewDate}</p>
+  const client = clients.find(c=>c.code === code);
+  const box = document.getElementById("result");
 
- <a class="btn"
- href="invoice.html?code=${c.code}">
- 🧾 عرض الفاتورة
- </a>
+  if(!client){
+    box.innerHTML = "<p style='color:red'>❌ الكود غير صحيح</p>";
+    return;
+  }
 
- ${renewBtn}
- `;
+  let renewBtn = "";
+  if(client.renew){
+    renewBtn = `
+      <a class="action renew" target="_blank"
+      href="https://wa.me/${PHONE}?text=أرغب%20في%20تجديد%20التعاقد%20—%20كود:${client.code}">
+      🔁 تجديد التعاقد
+      </a>
+    `;
+  }
+
+  box.innerHTML = `
+    <div class="data">
+      <b>👤 العميل:</b> ${client.name}<br>
+      <b>📞 الهاتف:</b> ${client.phone}<br>
+      <b>🧰 الخدمة:</b> ${client.service}<br>
+      <b>📅 آخر زيارة:</b> ${client.lastVisit || "-"}<br>
+      <b>📆 الزيارة القادمة:</b> ${client.nextVisit || "-"}<br>
+      <b>📄 تاريخ التعاقد:</b> ${client.contract || "-"}<br>
+      <b>♻️ تجديد:</b> ${client.renew || "-"}
+      
+      <a class="action"
+      target="_blank"
+      href="https://wa.me/${PHONE}?text=استفسار%20عن%20التعاقد%20—%20كود:${client.code}">
+      💬 تواصل مع خدمة العملاء
+      </a>
+
+      ${renewBtn}
+    </div>
+  `;
 }
 </script>
 
