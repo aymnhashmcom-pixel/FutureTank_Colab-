@@ -1,67 +1,44 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>FutureTank</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="styles.css">
+<meta charset="UTF-8">
+<title>FutureTank</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{
+  font-family:Tahoma;
+  background:#f4f9ff;
+  padding:20px
+}
+.main-btn{
+ display:block;
+ margin:15px auto;
+ padding:15px;
+ max-width:320px;
+ background:#007bff;
+ color:#fff;
+ text-align:center;
+ border-radius:10px;
+ text-decoration:none;
+ font-size:18px
+}
+</style>
 </head>
 
 <body>
 
-<!-- 🔹 الهيدر -->
-<header class="main-header">
-  <h1>FutureTank</h1>
+<h1>مرحباً بكم في FutureTank</h1>
+<p>حلول متكاملة لخزانات المياه</p>
 
-  <nav class="main-nav">
-    <a href="index.html">🏠 الرئيسية</a>
-    <a href="products.html">🛒 المنتجات</a>
-    <a href="services.html">🧰 الخدمات</a>
-    <a href="booking.html">📦 احجز</a>
-  </nav>
-</header>
+<a class="main-btn" href="products.html">🛒 المنتجات</a>
+<a class="main-btn" href="services.html">🧰 الخدمات</a>
 
-<!-- 🔹 المحتوى الرئيسي -->
-<main>
+<!-- الزر الجديد -->
+<a class="main-btn" href="get-code.html">
+📲 بياناتي / استلام كود العميل
+</a>
 
-  <section class="hero">
-    <h2>نقاء الماء هو هدفنا</h2>
-    <p>خزانات مياه بولي إيثيلين ثلاث طبقات – جودة عالية وأسعار مناسبة</p>
-  </section>
-
-  <section class="products-preview">
-    <h3>🛒 منتجاتنا</h3>
-    <div id="productsList"></div>
-  </section>
-
-</main>
-
-<!-- 🔹 الفوتر -->
-<footer>
-  <p>© 2025 FutureTank — جميع الحقوق محفوظة</p>
-</footer>
-
-<!-- 🔹 سكريبت جلب المنتجات -->
-<script>
-  const db = JSON.parse(localStorage.getItem("ft_db")) || {};
-  const products = db.products || [];
-  const container = document.getElementById("productsList");
-
-  if (products.length === 0) {
-    container.innerHTML = "<p>لا توجد منتجات حاليًا</p>";
-  } else {
-    products.slice(0, 3).forEach(product => {
-      const div = document.createElement("div");
-      div.className = "product-card";
-      div.innerHTML = `
-        <h4>${product.name}</h4>
-        <p>${product.description || ""}</p>
-        <strong>${product.price} جنيه</strong>
-      `;
-      container.appendChild(div);
-    });
-  }
-</script>
+<a class="main-btn" href="assistant.html">🤖 المساعد الذكي</a>
 
 </body>
 </html>
