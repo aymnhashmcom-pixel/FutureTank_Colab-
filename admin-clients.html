@@ -3,8 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <title>👥 إدارة العملاء — FutureTank</title>
+
 <script src="auth.js"></script>
 <script>requireRole("admin")</script>
+
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
 
 <style>
 body{
@@ -16,7 +19,7 @@ body{
   background:#fff;
   padding:20px;
   border-radius:12px;
-  max-width:900px;
+  max-width:950px;
   margin:auto;
   box-shadow:0 2px 10px rgba(0,0,0,.1)
 }
@@ -26,22 +29,28 @@ input,select{
   width:180px
 }
 button{
-  padding:10px 15px;
-  background:#0d6efd;
-  color:#fff;
+  padding:8px 12px;
+  margin-top:5px;
   border:none;
   border-radius:6px;
-  cursor:pointer
+  cursor:pointer;
+  background:#0d6efd;
+  color:#fff
 }
+.del{background:#dc3545}
+.qr{background:#198754}
 .client{
   background:#eef5ff;
   padding:12px;
-  border-radius:8px;
+  border-radius:10px;
   margin-top:10px
 }
-.del{
-  background:#dc3545;
-  margin-top:5px
+.qrbox{
+  margin-top:10px;
+  background:#fff;
+  padding:10px;
+  display:inline-block;
+  border-radius:8px
 }
 </style>
 </head>
@@ -61,11 +70,11 @@ button{
 <input id="contract" type="date">
 
 <select id="renewMonth">
-  <option value="">شهر التجديد</option>
-  <option>يناير</option><option>فبراير</option><option>مارس</option>
-  <option>أبريل</option><option>مايو</option><option>يونيو</option>
-  <option>يوليو</option><option>أغسطس</option><option>سبتمبر</option>
-  <option>أكتوبر</option><option>نوفمبر</option><option>ديسمبر</option>
+<option value="">شهر التجديد</option>
+<option>يناير</option><option>فبراير</option><option>مارس</option>
+<option>أبريل</option><option>مايو</option><option>يونيو</option>
+<option>يوليو</option><option>أغسطس</option><option>سبتمبر</option>
+<option>أكتوبر</option><option>نوفمبر</option><option>ديسمبر</option>
 </select>
 
 <br><br>
@@ -90,7 +99,7 @@ function genCode(){
 }
 
 function addClient(){
-  const c = {
+  db.clients.push({
     code: genCode(),
     name: name.value,
     phone: phone.value,
@@ -99,8 +108,7 @@ function addClient(){
     nextVisit: nextVisit.value,
     contract: contract.value,
     renew: renewMonth.value
-  };
-  db.clients.push(c);
+  });
   save();
   location.reload();
 }
@@ -113,10 +121,21 @@ function remove(i){
   }
 }
 
+function showQR(code, id){
+  const box = document.getElementById(id);
+  box.innerHTML="";
+  new QRCode(box,{
+    text: location.origin + "/client.html?code=" + code,
+    width:150,
+    height:150
+  });
+}
+
 function render(){
   const box = document.getElementById("list");
   db.clients.forEach((c,i)=>{
-    const div = document.createElement("div");
+    const id="qr"+i;
+    const div=document.createElement("div");
     div.className="client";
     div.innerHTML=`
 <b>${c.name}</b> — ${c.code}<br>
@@ -124,9 +143,12 @@ function render(){
 🧰 ${c.service}<br>
 📅 آخر زيارة: ${c.lastVisit || "-"}<br>
 📆 القادمة: ${c.nextVisit || "-"}<br>
-🔁 تجديد: ${c.renew || "-"}
-<br>
+🔁 تجديد: ${c.renew || "-"}<br>
+
+<button class="qr" onclick="showQR('${c.code}','${id}')">📱 عرض QR</button>
 <button class="del" onclick="remove(${i})">🗑 حذف</button>
+
+<div class="qrbox" id="${id}"></div>
 `;
     box.appendChild(div);
   });
@@ -135,4 +157,4 @@ render();
 </script>
 
 </body>
-</html>
+  </html>
