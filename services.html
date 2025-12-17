@@ -1,87 +1,114 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>🧰 إدارة الخدمات — FutureTank</title>
+<title>خدماتنا — FutureTank</title>
+<link rel="stylesheet" href="styles.css">
 <style>
-body{font-family:Tahoma;background:#f4f9ff;margin:20px}
-h2{color:#4a90e2}
-form, .box{background:#fff;padding:15px;border-radius:10px;margin-bottom:20px}
-input,textarea,button{padding:8px;margin:4px;width:100%}
-.service{border-bottom:1px solid #ddd;padding:10px}
-button{cursor:pointer;background:#4a90e2;color:#fff;border:none;border-radius:6px}
-.delete{background:#e74c3c}
+body{
+  font-family: Arial, sans-serif;
+  background:#f7fbff;
+  margin:0;
+  padding:0;
+}
+.container{
+  max-width:1100px;
+  margin:auto;
+  padding:20px;
+}
+h1{
+  text-align:center;
+  color:#2a8fd4;
+}
+.services{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+  gap:20px;
+}
+.service-card{
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+.service-card img{
+  width:100%;
+  height:200px;
+  object-fit:cover;
+}
+.service-card video{
+  width:100%;
+  max-height:260px;
+}
+.service-content{
+  padding:15px;
+  flex:1;
+}
+.service-content h3{
+  margin:0 0 10px;
+  color:#2a8fd4;
+}
+.service-content p{
+  font-size:14px;
+  color:#444;
+}
+.actions{
+  display:flex;
+  gap:10px;
+  padding:15px;
+  border-top:1px solid #eee;
+}
+.actions a{
+  flex:1;
+  text-align:center;
+  text-decoration:none;
+  padding:10px;
+  border-radius:8px;
+  font-size:14px;
+  font-weight:bold;
+}
+.call{
+  background:#2a8fd4;
+  color:#fff;
+}
+.whatsapp{
+  background:#25d366;
+  color:#fff;
+}
 </style>
 </head>
+
 <body>
-
-<h2>🧰 إدارة الخدمات — FutureTank</h2>
-
-<div class="box">
-<h3>➕ إضافة خدمة جديدة</h3>
-<form onsubmit="event.preventDefault();addService(this)">
-<input name="name" placeholder="اسم الخدمة" required>
-<textarea name="desc" placeholder="وصف مختصر للخدمة"></textarea>
-<input name="price" placeholder="سعر الخدمة (اختياري)">
-<button>إضافة الخدمة</button>
-</form>
-</div>
-
-<div class="box">
-<h3>📋 الخدمات الحالية</h3>
-<div id="servicesList"></div>
+<div class="container">
+  <h1>🧰 خدمات FutureTank</h1>
+  <div class="services" id="services"></div>
 </div>
 
 <script>
-const DB_KEY="ft_db";
+const db = JSON.parse(localStorage.getItem("ft_db")) || {services:[]};
+const box = document.getElementById("services");
 
-function loadDB(){
-  return JSON.parse(localStorage.getItem(DB_KEY)||"{}");
-}
-function saveDB(db){
-  localStorage.setItem(DB_KEY,JSON.stringify(db));
-}
+db.services.forEach(service=>{
+  const card = document.createElement("div");
+  card.className = "service-card";
 
-function addService(form){
-  const db=loadDB();
-  db.services=db.services||[];
-  db.services.push({
-    id:Date.now(),
-    name:form.name.value,
-    desc:form.desc.value,
-    price:form.price.value
-  });
-  saveDB(db);
-  form.reset();
-  renderServices();
-}
-
-function deleteService(id){
-  const db=loadDB();
-  db.services=db.services.filter(s=>s.id!==id);
-  saveDB(db);
-  renderServices();
-}
-
-function renderServices(){
-  const db=loadDB();
-  const box=document.getElementById("servicesList");
-  box.innerHTML="";
-  (db.services||[]).forEach(s=>{
-    const div=document.createElement("div");
-    div.className="service";
-    div.innerHTML=`
-<b>${s.name}</b><br>
-${s.desc||""}<br>
-${s.price? "💰 السعر: "+s.price+" جنيه":""}<br>
-<button class="delete" onclick="deleteService(${s.id})">حذف</button>
-    `;
-    box.appendChild(div);
-  });
-}
-
-renderServices();
+  card.innerHTML = `
+    ${service.image ? `<img src="${service.image}">` : ""}
+    ${service.video ? `<video src="${service.video}" controls></video>` : ""}
+    <div class="service-content">
+      <h3>${service.name}</h3>
+      <p>${service.desc || ""}</p>
+    </div>
+    <div class="actions">
+      <a class="call" href="tel:01150402031">📞 فون</a>
+      <a class="whatsapp" href="https://wa.me/201150402031" target="_blank">💬 واتساب</a>
+    </div>
+  `;
+  box.appendChild(card);
+});
 </script>
 
 </body>
-  </html>
+</html>
