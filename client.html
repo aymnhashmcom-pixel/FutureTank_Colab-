@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>🔑 بوابة العميل — FutureTank</title>
+<style>
+body{
+  font-family:Tahoma;
+  background:#f4f9ff;
+  padding:20px
+}
+.box{
+  max-width:500px;
+  margin:auto;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.1)
+}
+input,button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+  font-size:15px
+}
+button{
+  background:#007bff;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer
+}
+.data{
+  margin-top:20px;
+  background:#f9fbff;
+  padding:15px;
+  border-radius:8px
+}
+.renew{
+  background:#4caf50;
+  margin-top:15px
+}
+.hidden{display:none}
+</style>
+</head>
+
+<body>
+
+<div class="box">
+<h2>🔑 دخول العميل</h2>
+<p>من فضلك أدخل كود العميل</p>
+
+<input id="code" placeholder="مثال: FT-1025">
+<button onclick="login()">دخول</button>
+
+<div id="result" class="data hidden"></div>
+</div>
+
+<script>
+const WHATSAPP = "201150402031";
+
+function login(){
+  const code = document.getElementById("code").value.trim();
+  const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+  const contracts = db.contracts || [];
+
+  const c = contracts.find(x => x.code === code);
+  if(!c){
+    alert("❌ الكود غير صحيح");
+    return;
+  }
+
+  const box = document.getElementById("result");
+  box.classList.remove("hidden");
+
+  const today = new Date();
+  const renewDate = new Date(c.renewDate);
+  const showRenew = renewDate.getMonth() === 0; // يناير
+
+  box.innerHTML = `
+    <h3>👤 ${c.client}</h3>
+    <p>🧰 الخدمة: ${c.service}</p>
+    <p>📅 آخر زيارة: ${c.lastVisit}</p>
+    <p>📅 الزيارة القادمة: ${c.nextVisit}</p>
+    <p>📄 تاريخ التعاقد: ${c.startDate}</p>
+    <p>🔁 تجديد التعاقد: ${c.renewDate}</p>
+    <p>💰 التكلفة: ${c.cost} جنيه</p>
+
+    ${showRenew ? `
+    <button class="renew"
+      onclick="renew('${c.client}','${c.service}')">
+      🔁 تجديد التعاقد
+    </button>` : ""}
+  `;
+}
+
+function renew(client,service){
+  const msg = `طلب تجديد تعاقد%nالعميل: ${client}%nالخدمة: ${service}`;
+  window.open(
+    `https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`
+  );
+}
+</script>
+
+</body>
+</html>
