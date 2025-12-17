@@ -20,6 +20,7 @@ h2,h3{color:#0a58ca}
 button{
   padding:6px 12px;
   margin-top:6px;
+  cursor:pointer;
 }
 input,textarea{
   width:100%;
@@ -27,7 +28,7 @@ input,textarea{
   padding:6px;
 }
 img,video{
-  max-width:200px;
+  max-width:220px;
   margin-top:6px;
   border-radius:8px;
   display:block;
@@ -44,7 +45,6 @@ requireRole("admin");
 
 <h2>🧰 إدارة الخدمات — FutureTank</h2>
 
-<!-- إضافة خدمة -->
 <h3>➕ إضافة خدمة جديدة</h3>
 
 <input id="name" placeholder="اسم الخدمة">
@@ -56,7 +56,7 @@ requireRole("admin");
 <label>🎥 فيديو الخدمة (اختياري)</label>
 <input type="file" id="video" accept="video/*">
 
-<button onclick="addService()">إضافة الخدمة</button>
+<button onclick="addService()">➕ إضافة الخدمة</button>
 
 <hr>
 
@@ -85,7 +85,7 @@ function addService(){
 
   if(!name) return alert("اكتب اسم الخدمة");
 
-  const service = {name,desc};
+  const service = { name, desc };
 
   if(imgFile){
     fileToBase64(imgFile,(img)=>{
@@ -124,6 +124,7 @@ function removeService(i){
 
 function render(){
   const box = document.getElementById("list");
+  box.innerHTML="";
   db.services.forEach((s,i)=>{
     const div = document.createElement("div");
     div.className="service";
