@@ -2,47 +2,39 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>تقارير التشغيل — FutureTank</title>
+<title>📊 تقارير — FutureTank</title>
 <style>
 body{font-family:Tahoma;background:#f4f9ff;padding:20px}
-table{width:100%;background:#fff;border-collapse:collapse}
-th,td{border:1px solid #ccc;padding:8px;text-align:center}
-th{background:#eef5ff}
-button{padding:8px;margin-bottom:10px}
+.box{
+ background:#fff;
+ padding:20px;
+ border-radius:10px;
+ max-width:600px;
+ margin:auto
+}
 </style>
 </head>
 
 <body>
 
-<h2>📊 تقارير التشغيل</h2>
-<button onclick="window.print()">🖨️ طباعة التقرير</button>
-
-<table>
-<thead>
-<tr>
-<th>العميل</th>
-<th>الخدمة</th>
-<th>موعد الزيارة</th>
-<th>الحالة</th>
-</tr>
-</thead>
-<tbody id="tableBody"></tbody>
-</table>
+<div class="box">
+<h3>📊 تقرير العقود</h3>
+<p id="count"></p>
+<p id="total"></p>
+</div>
 
 <script>
 const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
 const contracts = db.contracts || [];
-const body=document.getElementById("tableBody");
 
-contracts.forEach(c=>{
-  const tr=document.createElement("tr");
-  tr.innerHTML=`
-<td>${c.client}</td>
-<td>${c.service}</td>
-<td>${c.nextVisit}</td>
-<td>${c.status}</td>`;
-  body.appendChild(tr);
-});
+let sum = 0;
+contracts.forEach(c=>sum+=Number(c.price||0));
+
+document.getElementById("count").innerText =
+"عدد العقود: " + contracts.length;
+
+document.getElementById("total").innerText =
+"إجمالي الإيرادات: " + sum + " جنيه";
 </script>
 
 </body>
