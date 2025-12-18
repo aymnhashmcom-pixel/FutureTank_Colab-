@@ -2,53 +2,46 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>FutureTank</title>
-<link rel="stylesheet" href="styles.css">
+
+<!-- S1: حل الموبايل -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>FutureTank | حلول خزانات المياه</title>
+
 <style>
 body{
   font-family: Tahoma;
   background:#f4f9ff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  height:100vh;
+  text-align:center;
+  padding:30px
 }
 .box{
   background:#fff;
   padding:30px;
-  width:360px;
+  max-width:400px;
+  margin:auto;
   border-radius:10px;
-  box-shadow:0 5px 15px rgba(0,0,0,.15);
-  text-align:center
+  box-shadow:0 2px 8px rgba(0,0,0,.15)
 }
-input{
+input,button{
   width:100%;
-  padding:10px;
-  margin:10px 0;
-  border-radius:6px;
-  border:1px solid #ccc
+  padding:12px;
+  margin-top:10px;
+  font-size:16px
 }
 button{
-  width:100%;
-  padding:10px;
-  border:none;
-  border-radius:6px;
   background:#007bff;
   color:#fff;
-  font-size:15px;
+  border:none;
+  border-radius:6px;
   cursor:pointer
 }
-.alt{
-  margin-top:10px;
-  background:#4caf50
-}
-.link{
-  margin-top:15px;
-  display:block;
-  color:#007bff;
-  text-decoration:none
+.public{
+  background:#4caf50;
 }
 </style>
+
+<script src="system.js"></script>
 </head>
 
 <body>
@@ -58,24 +51,20 @@ button{
   <p>حلول متكاملة لخزانات المياه</p>
 
   <h3>🔐 بوابة العملاء</h3>
-
   <input id="code" placeholder="رقم الهاتف أو كود العميل">
   <button onclick="login()">دخول</button>
 
-  <button class="alt" onclick="getCode()">🧾 استلم كودك</button>
-
-  <a class="link" href="services.html">🌐 دخول الموقع العام</a>
+  <br><br>
+  <button class="public" onclick="location.href='services.html'">
+    🌐 دخول الموقع العام
+  </button>
 </div>
 
 <script>
 function login(){
   const v = document.getElementById("code").value.trim();
-  if(!v) return alert("أدخل الكود أو رقم الهاتف");
-  location.href = "client.html?key=" + encodeURIComponent(v);
-}
-
-function getCode(){
-  location.href = "get-code.html";
+  if(!v) return alert("ادخل الرقم أو الكود");
+  location.href = "client.html?code=" + encodeURIComponent(v);
 }
 </script>
 
