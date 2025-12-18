@@ -1,43 +1,174 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <title>خدمات FutureTank</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<style>
+body{
+  margin:0;
+  font-family:Tahoma;
+  background:#f4f9ff;
+  color:#003344;
+}
+
+/* ===== Header ===== */
+header{
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  padding:15px;
+  text-align:center;
+}
+
+.logo{
+  width:70px;
+  height:70px;
+  margin:auto;
+  border-radius:50%;
+  background:#e6f7ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+  color:#00a8cc;
+}
+
+h1{margin:8px 0 0;font-size:22px}
+h1 span{display:block;font-size:14px;color:#007c99}
+.slogan{font-size:13px;color:#555;margin-top:5px}
+
+/* ===== Nav ===== */
+nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin:15px 0;
+}
+
+nav a{
+  text-decoration:none;
+  background:#00a8cc;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:20px;
+  font-size:13px;
+}
+
+/* ===== Services ===== */
+main{
+  padding:20px;
+  max-width:900px;
+  margin:auto;
+}
+
+.service{
+  background:#fff;
+  border-radius:14px;
+  padding:15px;
+  margin-bottom:20px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.service img,
+.service video{
+  width:100%;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+.actions{
+  margin-top:12px;
+}
+
+.actions a{
+  display:inline-block;
+  margin:5px 5px 0 0;
+  padding:8px 12px;
+  border-radius:6px;
+  text-decoration:none;
+  color:#fff;
+  font-size:13px;
+}
+
+.phone{background:#007bff}
+.whatsapp{background:#25d366}
+.cash{background:#ff9800}
+.book{background:#4caf50}
+
+/* ===== Footer ===== */
+footer{
+  margin-top:30px;
+  background:#003344;
+  color:#fff;
+  text-align:center;
+  padding:15px;
+  font-size:13px;
+}
+</style>
 </head>
+
 <body>
 
-<h2>🧰 خدمات FutureTank</h2>
-<div id="services">جاري تحميل الخدمات...</div>
+<header>
+  <div class="logo">💧</div>
+  <h1>FutureTank <span>فيوتشر تانك</span></h1>
+  <div class="slogan">نقاء الماء هو هدفنا</div>
+</header>
 
-<a href="index.html">⬅️ العودة للرئيسية</a>
+<nav>
+  <a href="index.html">🏠 الرئيسية</a>
+  <a href="services.html">🧰 الخدمات</a>
+  <a href="products.html">🛒 المنتجات</a>
+  <a href="assistant.html">💬 المساعد</a>
+  <a href="client.html">🔐 بوابة العملاء</a>
+</nav>
+
+<main id="servicesBox"></main>
+
+<footer>
+© 2025 FutureTank – جميع الحقوق محفوظة
+</footer>
 
 <script>
-fetch("database.json")
-.then(res => res.json())
-.then(data => {
-  const container = document.getElementById("services");
-  container.innerHTML = "";
+const PHONE = "01150402031";
+const WHATSAPP = "201150402031";
 
-  if(!data.services || data.services.length === 0){
-    container.innerHTML = "<p>لا توجد خدمات</p>";
-    return;
-  }
+const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
+const services = db.services || [];
+const box = document.getElementById("servicesBox");
 
-  data.services.forEach(s => {
-    container.innerHTML += `
-      <div style="border:1px solid #ccc; padding:10px; margin:10px">
-        <h3>${s.name}</h3>
-        <p>${s.desc}</p>
-        ${s.image ? `<img src="${s.image}" style="width:100%">` : ""}
-        ${s.video ? `<video src="${s.video}" controls style="width:100%"></video>` : ""}
-        <br><br>
-        <a href="tel:01100077169">📞 فون</a>
-        <a href="https://wa.me/201100077169">💬 واتساب</a>
-        <a href="#">💸 اتصالات كاش</a>
-        <button>📅 حجز خدمة</button>
-      </div>
-    `;
-  });
+if(services.length === 0){
+  box.innerHTML = "<p style='text-align:center'>لا توجد خدمات حالياً</p>";
+}
+
+services.forEach(s=>{
+  const div = document.createElement("div");
+  div.className="service";
+  div.innerHTML = `
+    <h3>${s.name}</h3>
+    <p>${s.desc || ""}</p>
+
+    ${s.image ? `<img src="${s.image}">` : ""}
+    ${s.video ? `<video src="${s.video}" controls></video>` : ""}
+
+    <div class="actions">
+      <a class="phone" href="tel:${PHONE}">📞 فون</a>
+      <a class="whatsapp" target="_blank"
+         href="https://wa.me/${WHATSAPP}?text=استفسار عن خدمة: ${encodeURIComponent(s.name)}">
+         💬 واتساب
+      </a>
+      <a class="cash" target="_blank"
+         href="https://wa.me/${WHATSAPP}?text=ارغب في الدفع اتصالات كاش لخدمة: ${encodeURIComponent(s.name)}">
+         💸 اتصالات كاش
+      </a>
+      <a class="book" href="booking.html?service=${encodeURIComponent(s.name)}">
+         📅 حجز خدمة
+      </a>
+    </div>
+  `;
+  box.appendChild(div);
 });
 </script>
 
