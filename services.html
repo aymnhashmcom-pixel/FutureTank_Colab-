@@ -3,40 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <title>خدمات FutureTank</title>
-<script src="system.js"></script>
 </head>
 <body>
 
 <h2>🧰 خدمات FutureTank</h2>
-<div id="services"></div>
+<div id="services">جاري تحميل الخدمات...</div>
 
 <a href="index.html">⬅️ العودة للرئيسية</a>
 
 <script>
-const db = loadDB();
-const container = document.getElementById("services");
+fetch("database.json")
+.then(res => res.json())
+.then(data => {
+  const container = document.getElementById("services");
+  container.innerHTML = "";
 
-if(db.services.length === 0){
-  container.innerHTML = "<p>لا توجد خدمات</p>";
-}
+  if(!data.services || data.services.length === 0){
+    container.innerHTML = "<p>لا توجد خدمات</p>";
+    return;
+  }
 
-db.services.forEach(s=>{
-  container.innerHTML += `
-  <div style="border:1px solid #ccc; padding:10px; margin:10px">
-    <h3>${s.name}</h3>
-    <p>${s.desc}</p>
-    ${s.image ? `<img src="${s.image}" width="100%">` : ""}
-    ${s.video ? `<video src="${s.video}" controls width="100%"></video>` : ""}
-    <br><br>
-    <a href="tel:01100077169">📞 فون</a>
-    <a href="https://wa.me/201100077169">💬 واتساب</a>
-    <a href="#">💸 اتصالات كاش</a>
-    <button onclick="alert('سيتم تفعيل الحجز')">📅 حجز خدمة</button>
-  </div>
-  `;
+  data.services.forEach(s => {
+    container.innerHTML += `
+      <div style="border:1px solid #ccc; padding:10px; margin:10px">
+        <h3>${s.name}</h3>
+        <p>${s.desc}</p>
+        ${s.image ? `<img src="${s.image}" style="width:100%">` : ""}
+        ${s.video ? `<video src="${s.video}" controls style="width:100%"></video>` : ""}
+        <br><br>
+        <a href="tel:01100077169">📞 فون</a>
+        <a href="https://wa.me/201100077169">💬 واتساب</a>
+        <a href="#">💸 اتصالات كاش</a>
+        <button>📅 حجز خدمة</button>
+      </div>
+    `;
+  });
 });
 </script>
 
-<script src="assistant.js"></script>
 </body>
 </html>
