@@ -1,19 +1,26 @@
-// تحميل قاعدة البيانات مرة واحدة
-async function initDB(){
-  if(!localStorage.getItem("ft_db")){
-    const res = await fetch("database.json");
-    const data = await res.json();
-    localStorage.setItem("ft_db", JSON.stringify(data));
-  }
-}
-initDB();
+let DB = null;
 
-// جلب البيانات
+async function loadDB(){
+  if(DB) return DB;
+  const res = await fetch("database.json");
+  DB = await res.json();
+  return DB;
+}
+
 function getDB(){
-  return JSON.parse(localStorage.getItem("ft_db"));
+  return DB;
 }
 
-// حفظ البيانات
-function saveDB(data){
-  localStorage.setItem("ft_db", JSON.stringify(data));
+function getClientByCode(code){
+  return DB.clients.find(c => c.code === code);
+}
+
+function getContractsByClient(code){
+  return DB.contracts.filter(c => c.clientCode === code);
+}
+
+function isRenewDue(contract){
+  const today = new Date();
+  const renew = new Date(contract.renewDate);
+  return renew <= today;
 }
