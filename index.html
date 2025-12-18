@@ -3,109 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <title>FutureTank</title>
-
 <style>
 body{
   font-family:Tahoma;
   background:#f4f9ff;
-  margin:0;
-  padding:0
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
 }
-header{
-  background:#0d6efd;
-  color:#fff;
-  padding:20px;
-  text-align:center
-}
-section{
-  padding:20px
-}
-.portal{
+.box{
   background:#fff;
-  max-width:500px;
-  margin:20px auto;
-  padding:20px;
+  padding:30px;
   border-radius:12px;
-  box-shadow:0 2px 10px rgba(0,0,0,.1)
+  width:100%;
+  max-width:420px;
+  box-shadow:0 4px 15px rgba(0,0,0,.15);
+  text-align:center;
 }
-input,button{
+h1{margin-bottom:5px}
+p{color:#555}
+input{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+button,a{
+  display:block;
   width:100%;
   padding:12px;
   margin-top:10px;
-  font-size:15px;
-  border-radius:6px;
-  border:1px solid #ccc
-}
-button{
-  background:#4caf50;
-  color:#fff;
   border:none;
-  cursor:pointer
+  border-radius:6px;
+  font-size:15px;
+  cursor:pointer;
+  text-decoration:none;
 }
-.result{
-  background:#eef5ff;
-  padding:12px;
-  border-radius:8px;
-  margin-top:15px;
-  word-break:break-all
-}
-.error{
-  background:#ffe0e0;
-  padding:12px;
-  border-radius:8px;
-  color:#b00020;
-  margin-top:10px
-}
+.login{background:#007bff;color:#fff}
+.public{background:#4caf50;color:#fff}
 </style>
 </head>
 
 <body>
 
-<header>
+<div class="box">
   <h1>FutureTank</h1>
   <p>حلول متكاملة لخزانات المياه</p>
-</header>
 
-<section>
-
-<div class="portal">
   <h3>🔐 بوابة العملاء</h3>
+  <input id="code" placeholder="رقم الهاتف أو كود العميل">
+  <button class="login" onclick="login()">دخول</button>
 
-  <input id="value" placeholder="أدخل رقم الهاتف أو كود العميل">
-  <button onclick="login()">دخول</button>
+  <hr style="margin:20px 0">
 
-  <div id="out"></div>
+  <a class="public" href="services.html">🌐 دخول الموقع العام</a>
 </div>
 
-</section>
-
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-const clients = db.clients || [];
-
 function login(){
-  const val = document.getElementById("value").value.trim();
-  const out = document.getElementById("out");
-
-  const client = clients.find(c=>c.code===val || c.phone===val);
-
-  if(!client){
-    out.innerHTML = `<div class="error">❌ البيانات غير موجودة</div>`;
-    return;
-  }
-
-  const link = `client.html?code=${client.code}`;
-
-  out.innerHTML = `
-    <div class="result">
-      ✅ تم العثور على بياناتك<br><br>
-      🔗 رابطك:
-      <a href="${link}" target="_blank">${link}</a><br><br>
-      📱 يمكنك حفظ الرابط أو مسح QR
-      <br><br>
-      <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=${encodeURIComponent(link)}">
-    </div>
-  `;
+  const v = document.getElementById("code").value.trim();
+  if(!v) return alert("ادخل رقم الهاتف أو الكود");
+  location.href = "client.html?key=" + encodeURIComponent(v);
 }
 </script>
 
