@@ -1,55 +1,48 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>🛒 إدارة المنتجات</title>
-<link rel="stylesheet" href="styles.css">
+<title>إدارة المنتجات</title>
+<script src="system.js"></script>
 </head>
-
 <body>
 
 <h2>🛒 إدارة المنتجات</h2>
 
 <input id="name" placeholder="اسم المنتج"><br><br>
 <input id="price" placeholder="السعر"><br><br>
-<button onclick="add()">➕ إضافة المنتج</button>
+<input id="image" placeholder="رابط صورة المنتج"><br><br>
+<input id="video" placeholder="رابط فيديو (اختياري)"><br><br>
 
-<hr>
+<button onclick="addProduct()">➕ إضافة المنتج</button>
 
-<div id="list"></div>
+<ul id="list"></ul>
 
-<script src="system.js"></script>
 <script>
-const db = getDB();
+function addProduct(){
+  const db = loadDB();
+  const name = document.getElementById("name").value;
+  const price = document.getElementById("price").value;
+  const image = document.getElementById("image").value;
+  const video = document.getElementById("video").value;
 
-function add(){
-  const name = document.getElementById("name").value.trim();
-  const price = document.getElementById("price").value.trim();
-  if(!name || !price) return alert("أدخل البيانات");
+  if(!name || !price){
+    alert("الاسم والسعر مطلوبين");
+    return;
+  }
 
-  db.products.push({name, price});
+  db.products.push({name, price, image, video});
   saveDB(db);
-  location.reload();
+  render();
 }
 
 function render(){
-  const box = document.getElementById("list");
-  db.products.forEach((p,i)=>{
-    box.innerHTML += `
-      <div>
-        <b>${p.name}</b> — ${p.price} جنيه
-        <button onclick="del(${i})">🗑</button>
-      </div>
-    `;
+  const db = loadDB();
+  list.innerHTML = "";
+  db.products.forEach(p=>{
+    list.innerHTML += `<li>${p.name} - ${p.price}</li>`;
   });
 }
-
-function del(i){
-  db.products.splice(i,1);
-  saveDB(db);
-  location.reload();
-}
-
 render();
 </script>
 
