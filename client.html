@@ -5,34 +5,12 @@
 <title>🔐 بوابة عملاء FutureTank</title>
 <link rel="stylesheet" href="styles.css">
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px
-}
-.card{
-  background:#fff;
-  padding:15px;
-  border-radius:8px;
-  margin-bottom:15px;
-  box-shadow:0 2px 6px rgba(0,0,0,.1)
-}
-input,button{
-  padding:10px;
-  width:100%;
-  margin-top:8px
-}
-button{
-  background:#007bff;
-  color:#fff;
-  border:0;
-  border-radius:6px;
-  cursor:pointer
-}
-.renew{
-  background:#4caf50;
-  margin-top:10px
-}
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+.card{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+input,button{padding:10px;width:100%;margin-top:8px}
+button{border:0;border-radius:6px;cursor:pointer}
+.login{background:#007bff;color:#fff}
+.renew{background:#4caf50;color:#fff;margin-top:10px}
 </style>
 </head>
 
@@ -42,73 +20,62 @@ button{
 
 <div class="card">
   <input id="loginValue" placeholder="رقم الهاتف أو كود العميل">
-  <button onclick="login()">دخول</button>
+  <button class="login" onclick="login()">دخول</button>
 </div>
 
 <div id="result"></div>
 
 <script src="system.js"></script>
 <script>
+const PHONE="01150402031";
+const WA="201150402031";
+
 async function login(){
-  const val = document.getElementById("loginValue").value.trim();
-  if(!val) return alert("ادخل البيانات");
+  const v=document.getElementById("loginValue").value.trim();
+  if(!v) return alert("ادخل البيانات");
 
-  const db = await loadDB();
+  const db=await loadDB();
+  const client=db.clients.find(c=>c.code===v||c.phone===v);
+  if(!client) return alert("العميل غير موجود");
 
-  let client = db.clients.find(c =>
-    c.code === val || c.phone === val
-  );
+  const contracts=getContractsByClient(client.code);
+  const box=document.getElementById("result");
 
-  if(!client){
-    alert("العميل غير موجود");
-    return;
-  }
-
-  const contracts = getContractsByClient(client.code);
-
-  const box = document.getElementById("result");
-  box.innerHTML = `
-    <div class="card">
-      <h3>👤 ${client.name}</h3>
-      <p>📱 ${client.phone}</p>
-      <p>🔐 كود العميل: ${client.code}</p>
-    </div>
-  `;
-
-  if(contracts.length === 0){
-    box.innerHTML += `<div class="card">لا يوجد عقود</div>`;
-    return;
-  }
+  box.innerHTML=`
+  <div class="card">
+    <h3>${client.name}</h3>
+    📱 ${client.phone}<br>
+    🔐 ${client.code}
+  </div>`;
 
   contracts.forEach(c=>{
-    const renewBtn = isRenewDue(c)
-      ? `<button class="renew"
-           onclick="renew('${c.contractId}')">
-           🔄 تجديد التعاقد
-         </button>`
+    const btn=isRenewDue(c)
+      ? `<button class="renew" onclick="renew('${c.contractId}')">🔄 تجديد التعاقد</button>`
       : "";
 
-    box.innerHTML += `
-      <div class="card">
-        <b>🧰 الخدمة:</b> ${c.service}<br>
-        <b>📅 آخر زيارة:</b> ${c.lastVisit}<br>
-        <b>📅 الزيارة القادمة:</b> ${c.nextVisit}<br>
-        <b>💰 التكلفة:</b> ${c.cost} جنيه<br>
-        <b>📆 تجديد:</b> ${c.renewDate}<br>
-        ${renewBtn}
-      </div>
-    `;
+    box.innerHTML+=`
+    <div class="card">
+      🧰 ${c.service}<br>
+      📅 آخر زيارة: ${c.lastVisit}<br>
+      📅 القادمة: ${c.nextVisit}<br>
+      💰 ${c.cost} جنيه<br>
+      📆 تجديد: ${c.renewDate}<br>
+      ${btn}
+    </div>`;
   });
 }
 
-function renew(contractId){
-  alert(
-    "تم إرسال طلب تجديد التعاقد.\n" +
-    "سيتم التواصل معك عبر واتساب."
-  );
+function renew(id){
+  if(!confirm("هل ترغب في تجديد التعاقد؟")) return;
 
-  // المرحلة القادمة:
-  // إرسال واتساب + تسجيل الطلب
+  const c=renewContract(id);
+
+  const msg=`تم تجديد تعاقد خدمة ${c.service}%0Aرقم التعاقد: ${id}`;
+
+  window.open(`https://wa.me/${WA}?text=${msg}`,"_blank");
+  window.open(`https://wa.me/${WA}?text=🔔 طلب تجديد تعاقد جديد`,"_blank");
+
+  alert("تم إرسال طلب التجديد بنجاح ✅");
 }
 </script>
 
