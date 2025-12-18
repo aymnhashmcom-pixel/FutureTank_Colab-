@@ -1,33 +1,6 @@
 {
-  "company": {
-    "name": "FutureTank",
-    "phone": "01150402031",
-    "whatsapp": "201150402031"
-  },
-
   "services": [],
-
   "products": [],
-
-  "clients": [
-    {
-      "code": "FT-1001",
-      "name": "عميل تجريبي",
-      "phone": "01111111111"
-    }
-  ],
-
-  "contracts": [
-    {
-      "contractId": "C-2025-001",
-      "clientCode": "FT-1001",
-      "service": "توريد وتركيب خزانات المياه",
-      "contractDate": "2025-01-01",
-      "lastVisit": "2025-09-01",
-      "nextVisit": "2026-01-01",
-      "renewDate": "2026-01-01",
-      "cost": 2500,
-      "status": "active"
-    }
-  ]
+  "clients": [],
+  "contracts": []
 }
