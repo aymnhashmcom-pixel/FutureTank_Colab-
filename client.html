@@ -2,93 +2,40 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>بوابة العميل — FutureTank</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بوابة العملاء</title>
+<script src="system.js"></script>
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px
-}
-.card{
-  background:#fff;
-  max-width:500px;
-  margin:auto;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 4px 12px rgba(0,0,0,.15)
-}
-h2{text-align:center}
-.row{margin:8px 0}
-.label{font-weight:bold;color:#555}
-.value{margin-top:3px}
-.btn{
-  display:block;
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-  border:none;
-  border-radius:6px;
-  font-size:15px;
-  cursor:pointer
-}
-.renew{background:#ff9800;color:#fff}
-.new{background:#4caf50;color:#fff}
-.back{background:#607d8b;color:#fff}
+body{font-family:tahoma;padding:20px}
+input,button{width:100%;padding:10px;margin-top:10px}
+button{background:#007bff;color:#fff;border:none}
 </style>
 </head>
 
 <body>
 
-<div class="card" id="box">
-  <h2>🔐 بوابة العملاء</h2>
-  <p>جاري تحميل بياناتك…</p>
-</div>
+<h2>🔐 بوابة العملاء</h2>
+<input id="code" placeholder="رقم الهاتف أو كود العميل">
+<button onclick="login()">دخول</button>
+
+<div id="data"></div>
 
 <script>
-const WHATSAPP = "201150402031";
-const params = new URLSearchParams(location.search);
-const key = params.get("key");
+function login(){
+  const db = getDB();
+  const v = code.value;
+  const client = db.clients.find(c => c.phone === v || c.id === v);
 
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
-db.clients = db.clients || [];
+  if(!client){
+    data.innerHTML = "❌ بيانات غير موجودة";
+    return;
+  }
 
-// ====== بحث عن العميل ======
-const client = db.clients.find(c => c.code == key || c.phone == key);
-
-const box = document.getElementById("box");
-
-if(!client){
-  box.innerHTML = `
-    <h3>❌ لم يتم العثور على بيانات</h3>
-    <p>تأكد من الكود أو رقم الهاتف</p>
-    <button class="btn back" onclick="location.href='index.html'">⬅️ رجوع</button>
+  data.innerHTML = `
+    <h3>👤 ${client.name}</h3>
+    <p>📞 ${client.phone}</p>
+    <button onclick="location.href='book.html'">📅 حجز خدمة</button>
   `;
-}else{
-
-  const today = new Date().toISOString().slice(0,10);
-  const expired = client.contractEnd < today;
-
-  box.innerHTML = `
-    <h2>👤 ${client.name}</h2>
-
-    <div class="row"><div class="label">📞 رقم الهاتف</div><div class="value">${client.phone}</div></div>
-    <div class="row"><div class="label">📅 بداية التعاقد</div><div class="value">${client.contractStart}</div></div>
-    <div class="row"><div class="label">📅 نهاية التعاقد</div><div class="value">${client.contractEnd}</div></div>
-    <div class="row"><div class="label">🛠 آخر زيارة</div><div class="value">${client.lastVisit || "—"}</div></div>
-    <div class="row"><div class="label">📍 الزيارة القادمة</div><div class="value">${client.nextVisit || "—"}</div></div>
-    <div class="row"><div class="label">💰 التكلفة</div><div class="value">${client.price} جنيه</div></div>
-
-    ${expired ? `
-      <button class="btn renew" onclick="renew()">🔄 تجديد التعاقد</button>
-    ` : ``}
-
-    <button class="btn back" onclick="location.href='index.html'">⬅️ خروج</button>
-  `;
-}
-
-function renew(){
-  const msg = `العميل ${client.name} (${client.phone}) يرغب في تجديد التعاقد`;
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`,"_blank");
 }
 </script>
 
