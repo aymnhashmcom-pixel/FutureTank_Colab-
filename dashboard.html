@@ -2,74 +2,78 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>📊 لوحة التحكم — FutureTank</title>
-
+<title>لوحة التحكم — FutureTank</title>
+<link rel="stylesheet" href="styles.css">
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+h2{margin-bottom:20px}
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:15px
+}
+.card{
+  background:#fff;
   padding:20px;
+  border-radius:10px;
+  text-align:center;
+  box-shadow:0 2px 6px rgba(0,0,0,.1)
 }
-.nav a{
-  display:inline-block;
-  margin:5px;
-  padding:8px 12px;
-  background:#ffffff;
-  border-radius:6px;
+.card a{
+  display:block;
+  margin-top:10px;
   text-decoration:none;
-  color:#007bff;
-  border:1px solid #cfe2ff;
-}
-.nav a:hover{
-  background:#e7f1ff;
-}
-.logout{
-  margin-top:20px;
-  background:#dc3545;
+  background:#007bff;
   color:#fff;
-  padding:8px 14px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
+  padding:10px;
+  border-radius:6px
 }
+.card a:hover{opacity:.9}
 </style>
 </head>
 
 <body>
 
-<!-- الحماية -->
 <script src="auth.js"></script>
 <script>
 requireRole("admin");
 </script>
 
-<h2>📊 لوحة التحكم — FutureTank</h2>
+<h2>⚙️ لوحة تحكم FutureTank</h2>
 
-<div class="nav">
-  <a href="admin-products.html">🛒 إدارة المنتجات</a>
-  <a href="services.html">🧰 إدارة الخدمات</a>
-  <a href="contracts.html">📄 إدارة العقود</a>
-  <a href="workorders.html">🧾 أوامر الشغل</a>
-  <a href="reports.html">📊 تقارير التشغيل</a>
-  <a href="analytics.html">📈 لوحة الأداء</a>
-  <a href="team.html">👷 لوحة الفريق</a>
-  <a href="assistant.html">🤖 المساعد</a>
-  <a href="index.html">🌐 الموقع</a>
+<div class="grid">
+
+  <div class="card">
+    🛒 إدارة المنتجات
+    <a href="admin-products.html">فتح</a>
+  </div>
+
+  <div class="card">
+    🧰 إدارة الخدمات
+    <a href="admin-services.html">فتح</a>
+  </div>
+
+  <div class="card">
+    👥 إدارة العملاء
+    <a href="admin-clients.html">فتح</a>
+  </div>
+
+  <div class="card">
+    📋 إدارة العقود
+    <a href="contracts.html">فتح</a>
+  </div>
+
+  <div class="card">
+    🔄 تجديدات التعاقد
+    <a href="admin-renewals.html">فتح</a>
+  </div>
+
+  <div class="card">
+    📊 التقارير
+    <a href="reports.html">فتح</a>
+  </div>
+
 </div>
-
-<p style="margin-top:20px">
-مرحبًا بك 👋<br>
-اختر القسم الذي تريد إدارته من الأعلى.
-</p>
-
-<button class="logout" onclick="logout()">🚪 تسجيل خروج</button>
-
-<script>
-function logout(){
-  localStorage.removeItem("ft_role");
-  location.href="index.html";
-}
-</script>
 
 </body>
 </html>
