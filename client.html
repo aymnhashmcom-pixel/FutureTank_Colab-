@@ -2,40 +2,113 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>بوابة العملاء</title>
-<script src="system.js"></script>
+<title>🔐 بوابة عملاء FutureTank</title>
+<link rel="stylesheet" href="styles.css">
 <style>
-body{font-family:tahoma;padding:20px}
-input,button{width:100%;padding:10px;margin-top:10px}
-button{background:#007bff;color:#fff;border:none}
+body{
+  font-family:Tahoma;
+  background:#f4f9ff;
+  padding:20px
+}
+.card{
+  background:#fff;
+  padding:15px;
+  border-radius:8px;
+  margin-bottom:15px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1)
+}
+input,button{
+  padding:10px;
+  width:100%;
+  margin-top:8px
+}
+button{
+  background:#007bff;
+  color:#fff;
+  border:0;
+  border-radius:6px;
+  cursor:pointer
+}
+.renew{
+  background:#4caf50;
+  margin-top:10px
+}
 </style>
 </head>
 
 <body>
 
-<h2>🔐 بوابة العملاء</h2>
-<input id="code" placeholder="رقم الهاتف أو كود العميل">
-<button onclick="login()">دخول</button>
+<h2>🔐 بوابة العملاء — FutureTank</h2>
 
-<div id="data"></div>
+<div class="card">
+  <input id="loginValue" placeholder="رقم الهاتف أو كود العميل">
+  <button onclick="login()">دخول</button>
+</div>
 
+<div id="result"></div>
+
+<script src="system.js"></script>
 <script>
-function login(){
-  const db = getDB();
-  const v = code.value;
-  const client = db.clients.find(c => c.phone === v || c.id === v);
+async function login(){
+  const val = document.getElementById("loginValue").value.trim();
+  if(!val) return alert("ادخل البيانات");
+
+  const db = await loadDB();
+
+  let client = db.clients.find(c =>
+    c.code === val || c.phone === val
+  );
 
   if(!client){
-    data.innerHTML = "❌ بيانات غير موجودة";
+    alert("العميل غير موجود");
     return;
   }
 
-  data.innerHTML = `
-    <h3>👤 ${client.name}</h3>
-    <p>📞 ${client.phone}</p>
-    <button onclick="location.href='book.html'">📅 حجز خدمة</button>
+  const contracts = getContractsByClient(client.code);
+
+  const box = document.getElementById("result");
+  box.innerHTML = `
+    <div class="card">
+      <h3>👤 ${client.name}</h3>
+      <p>📱 ${client.phone}</p>
+      <p>🔐 كود العميل: ${client.code}</p>
+    </div>
   `;
+
+  if(contracts.length === 0){
+    box.innerHTML += `<div class="card">لا يوجد عقود</div>`;
+    return;
+  }
+
+  contracts.forEach(c=>{
+    const renewBtn = isRenewDue(c)
+      ? `<button class="renew"
+           onclick="renew('${c.contractId}')">
+           🔄 تجديد التعاقد
+         </button>`
+      : "";
+
+    box.innerHTML += `
+      <div class="card">
+        <b>🧰 الخدمة:</b> ${c.service}<br>
+        <b>📅 آخر زيارة:</b> ${c.lastVisit}<br>
+        <b>📅 الزيارة القادمة:</b> ${c.nextVisit}<br>
+        <b>💰 التكلفة:</b> ${c.cost} جنيه<br>
+        <b>📆 تجديد:</b> ${c.renewDate}<br>
+        ${renewBtn}
+      </div>
+    `;
+  });
+}
+
+function renew(contractId){
+  alert(
+    "تم إرسال طلب تجديد التعاقد.\n" +
+    "سيتم التواصل معك عبر واتساب."
+  );
+
+  // المرحلة القادمة:
+  // إرسال واتساب + تسجيل الطلب
 }
 </script>
 
