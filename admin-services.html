@@ -3,68 +3,42 @@
 <head>
 <meta charset="UTF-8">
 <title>🧰 إدارة الخدمات — FutureTank</title>
-
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px;
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+.box{background:#fff;padding:20px;border-radius:10px}
+input,textarea,button{
+  width:100%;padding:10px;margin:6px 0;
+  border-radius:6px;border:1px solid #ccc
 }
-h2,h3{color:#0a58ca}
+button{background:#007bff;color:#fff;border:none;cursor:pointer}
 .service{
-  background:#fff;
-  padding:10px;
-  margin-bottom:10px;
-  border-radius:8px;
+  background:#eef5ff;padding:10px;margin-top:10px;border-radius:8px
 }
-button{
-  padding:6px 12px;
-  margin-top:6px;
-  cursor:pointer;
-}
-input,textarea{
-  width:100%;
-  margin-bottom:8px;
-  padding:6px;
-}
-img,video{
-  max-width:220px;
-  margin-top:6px;
-  border-radius:8px;
-  display:block;
-}
+img,video{max-width:100%;margin-top:5px;border-radius:6px}
+.export{background:#4caf50}
+.delete{background:#e53935}
 </style>
 </head>
 
 <body>
 
-<script src="auth.js"></script>
-<script>
-requireRole("admin");
-</script>
-
 <h2>🧰 إدارة الخدمات — FutureTank</h2>
 
-<h3>➕ إضافة خدمة جديدة</h3>
-
-<input id="name" placeholder="اسم الخدمة">
-<textarea id="desc" placeholder="وصف الخدمة"></textarea>
-
-<label>📷 صورة الخدمة</label>
-<input type="file" id="image" accept="image/*">
-
-<label>🎥 فيديو الخدمة (اختياري)</label>
-<input type="file" id="video" accept="video/*">
-
-<button onclick="addService()">➕ إضافة الخدمة</button>
-
-<hr>
+<div class="box">
+  <h3>➕ إضافة خدمة جديدة</h3>
+  <input id="name" placeholder="اسم الخدمة">
+  <textarea id="desc" placeholder="وصف الخدمة"></textarea>
+  <input type="file" id="img" accept="image/*">
+  <input type="file" id="vid" accept="video/*">
+  <button onclick="addService()">➕ إضافة الخدمة</button>
+  <button class="export" onclick="exportDB()">⬇️ تصدير قاعدة البيانات</button>
+</div>
 
 <h3>📋 الخدمات الحالية</h3>
 <div id="list"></div>
 
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
+const db = JSON.parse(localStorage.getItem("ft_db") || '{"services":[]}');
 db.services = db.services || [];
 
 function save(){
@@ -72,44 +46,38 @@ function save(){
 }
 
 function fileToBase64(file,cb){
-  const reader = new FileReader();
-  reader.onload = e => cb(e.target.result);
-  reader.readAsDataURL(file);
+  const r = new FileReader();
+  r.onload = ()=>cb(r.result);
+  r.readAsDataURL(file);
 }
 
 function addService(){
-  const name = document.getElementById("name").value.trim();
-  const desc = document.getElementById("desc").value.trim();
-  const imgFile = document.getElementById("image").files[0];
-  const vidFile = document.getElementById("video").files[0];
-
-  if(!name) return alert("اكتب اسم الخدمة");
-
-  const service = { name, desc };
+  const s = {
+    name: name.value,
+    desc: desc.value
+  };
+  const imgFile = img.files[0];
+  const vidFile = vid.files[0];
 
   if(imgFile){
-    fileToBase64(imgFile,(img)=>{
-      service.image = img;
-      handleVideo(service,vidFile);
+    fileToBase64(imgFile,(i)=>{
+      s.image=i;
+      handleVideo(s,vidFile);
     });
-  }else{
-    handleVideo(service,vidFile);
-  }
+  }else handleVideo(s,vidFile);
 }
 
-function handleVideo(service,vidFile){
-  if(vidFile){
-    fileToBase64(vidFile,(vid)=>{
-      service.video = vid;
-      finishAdd(service);
+function handleVideo(s,vid){
+  if(vid){
+    fileToBase64(vid,(v)=>{
+      s.video=v;
+      finish(s);
     });
-  }else{
-    finishAdd(service);
-  }
+  }else finish(s);
 }
 
-function finishAdd(service){
-  db.services.push(service);
+function finish(s){
+  db.services.push(s);
   save();
   location.reload();
 }
@@ -123,22 +91,30 @@ function removeService(i){
 }
 
 function render(){
-  const box = document.getElementById("list");
-  box.innerHTML="";
+  list.innerHTML="";
   db.services.forEach((s,i)=>{
-    const div = document.createElement("div");
-    div.className="service";
-    div.innerHTML = `
-<b>${s.name}</b><br>
-${s.desc || ""}
-${s.image ? `<img src="${s.image}">` : ""}
-${s.video ? `<video src="${s.video}" controls></video>` : ""}
-<br>
-<button onclick="removeService(${i})">🗑 حذف</button>
-`;
-    box.appendChild(div);
+    list.innerHTML+=`
+    <div class="service">
+      <b>${s.name}</b><br>
+      ${s.desc||""}
+      ${s.image?`<img src="${s.image}">`:""}
+      ${s.video?`<video src="${s.video}" controls></video>`:""}
+      <br><button class="delete" onclick="removeService(${i})">🗑 حذف</button>
+    </div>`;
   });
 }
+
+function exportDB(){
+  const blob = new Blob(
+    [JSON.stringify(db,null,2)],
+    {type:"application/json"}
+  );
+  const a = document.createElement("a");
+  a.href = URL.createObjectURL(blob);
+  a.download = "database.json";
+  a.click();
+}
+
 render();
 </script>
 
