@@ -2,49 +2,82 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>FutureTank | حلول متكاملة لخزانات المياه</title>
+<title>FutureTank</title>
+<link rel="stylesheet" href="styles.css">
 <style>
 body{
-  font-family:Tahoma;
+  font-family: Tahoma;
   background:#f4f9ff;
-  height:100vh;
   display:flex;
   align-items:center;
-  justify-content:center
+  justify-content:center;
+  height:100vh;
 }
 .box{
   background:#fff;
-  padding:40px;
-  border-radius:14px;
-  width:350px;
-  text-align:center;
-  box-shadow:0 4px 12px rgba(0,0,0,.15)
-}
-h1{margin-bottom:10px}
-p{color:#555;margin-bottom:20px}
-a{
-  display:block;
-  padding:14px;
-  margin:10px 0;
+  padding:30px;
+  width:360px;
   border-radius:10px;
-  text-decoration:none;
-  color:#fff;
-  font-size:16px
+  box-shadow:0 5px 15px rgba(0,0,0,.15);
+  text-align:center
 }
-.clients{background:#007bff}
-.public{background:#4caf50}
+input{
+  width:100%;
+  padding:10px;
+  margin:10px 0;
+  border-radius:6px;
+  border:1px solid #ccc
+}
+button{
+  width:100%;
+  padding:10px;
+  border:none;
+  border-radius:6px;
+  background:#007bff;
+  color:#fff;
+  font-size:15px;
+  cursor:pointer
+}
+.alt{
+  margin-top:10px;
+  background:#4caf50
+}
+.link{
+  margin-top:15px;
+  display:block;
+  color:#007bff;
+  text-decoration:none
+}
 </style>
 </head>
 
 <body>
 
 <div class="box">
-  <h1>FutureTank</h1>
+  <h2>FutureTank</h2>
   <p>حلول متكاملة لخزانات المياه</p>
 
-  <a class="clients" href="client-login.html">🔐 بوابة العملاء</a>
-  <a class="public" href="services.html">🌐 دخول الموقع العام</a>
+  <h3>🔐 بوابة العملاء</h3>
+
+  <input id="code" placeholder="رقم الهاتف أو كود العميل">
+  <button onclick="login()">دخول</button>
+
+  <button class="alt" onclick="getCode()">🧾 استلم كودك</button>
+
+  <a class="link" href="services.html">🌐 دخول الموقع العام</a>
 </div>
+
+<script>
+function login(){
+  const v = document.getElementById("code").value.trim();
+  if(!v) return alert("أدخل الكود أو رقم الهاتف");
+  location.href = "client.html?key=" + encodeURIComponent(v);
+}
+
+function getCode(){
+  location.href = "get-code.html";
+}
+</script>
 
 </body>
 </html>
