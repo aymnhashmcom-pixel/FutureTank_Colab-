@@ -2,107 +2,87 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>👤 بوابة العميل — FutureTank</title>
-
+<title>👤 بيانات العميل — FutureTank</title>
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px
-}
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
 .card{
   background:#fff;
   padding:20px;
+  border-radius:10px;
   max-width:600px;
   margin:auto;
-  border-radius:12px;
-  box-shadow:0 2px 10px rgba(0,0,0,.1)
+  box-shadow:0 2px 6px rgba(0,0,0,.15)
 }
-h2{color:#0d6efd}
-.info{
-  background:#eef5ff;
-  padding:12px;
-  border-radius:8px;
-  margin:8px 0
-}
-button,a{
-  display:inline-block;
-  margin:5px 5px 0 0;
+.item{margin:8px 0}
+button{
   padding:10px 14px;
-  border-radius:6px;
-  text-decoration:none;
   border:none;
-  cursor:pointer;
-  font-size:14px
-}
-.whatsapp{background:#25d366;color:#fff}
-.renew{background:#ff9800;color:#fff}
-.notfound{
-  background:#ffe0e0;
-  padding:15px;
   border-radius:8px;
-  color:#b00020
+  background:#4caf50;
+  color:#fff;
+  cursor:pointer;
+  margin-top:10px
 }
+.logout{background:#e53935}
 </style>
 </head>
 
 <body>
 
-<div class="card" id="box"></div>
+<div class="card" id="card"></div>
 
 <script>
-const params = new URLSearchParams(location.search);
-const code = params.get("code");
+const key = sessionStorage.getItem("client_key");
+if(!key) location.href="client-login.html";
 
-const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-const clients = db.clients || [];
+fetch("database.json")
+.then(r=>r.json())
+.then(db=>{
+  const clients = db.clients || [];
+  const c = clients.find(x =>
+    x.code==key || x.phone==key
+  );
 
-const client = clients.find(c=>c.code===code);
-const box = document.getElementById("box");
+  if(!c){
+    card.innerHTML="❌ العميل غير موجود";
+    return;
+  }
 
-if(!code || !client){
-  box.innerHTML = `
-    <div class="notfound">
-      ❌ الكود غير صحيح<br><br>
-      برجاء التواصل مع خدمة العملاء
-    </div>
-  `;
-}else{
-  box.innerHTML = `
-    <h2>👤 مرحبًا ${client.name}</h2>
-
-    <div class="info">📞 رقم الهاتف: ${client.phone}</div>
-    <div class="info">🧰 الخدمة: ${client.service}</div>
-    <div class="info">📅 آخر زيارة: ${client.lastVisit || "-"}</div>
-    <div class="info">📆 الزيارة القادمة: ${client.nextVisit || "-"}</div>
-    <div class="info">📄 تاريخ التعاقد: ${client.contract || "-"}</div>
-    <div class="info">🔁 شهر التجديد: ${client.renew || "-"}</div>
+  card.innerHTML=`
+    <h2>مرحبًا ${c.name}</h2>
+    <div class="item">📞 الهاتف: ${c.phone}</div>
+    <div class="item">🧰 الخدمة: ${c.service}</div>
+    <div class="item">📅 آخر زيارة: ${c.lastVisit}</div>
+    <div class="item">⏭ الزيارة القادمة: ${c.nextVisit}</div>
+    <div class="item">💰 التكلفة: ${c.cost} جنيه</div>
+    <div class="item">📄 نهاية التعاقد: ${c.renewDate}</div>
 
     ${
-      client.renew === "يناير"
-      ? `<button class="renew" onclick="renew()">🔄 تجديد التعاقد الآن</button>`
-      : ``
+      isRenewMonth(c.renewDate)
+      ? `<button onclick="renew()">🔁 تجديد التعاقد</button>`
+      : ""
     }
 
-    <a class="whatsapp"
-       href="https://wa.me/201150402031?text=استفسار%20عميل%20كود:${client.code}"
-       target="_blank">
-       💬 تواصل مع خدمة العملاء
-    </a>
+    <button class="logout" onclick="logout()">🚪 تسجيل خروج</button>
   `;
+});
+
+function isRenewMonth(d){
+  const m = new Date(d).getMonth();
+  return m === new Date().getMonth();
 }
 
 function renew(){
-  const msg = `
-عميل يرغب في تجديد التعاقد
-الاسم: ${client.name}
-الكود: ${client.code}
-الخدمة: ${client.service}
-`;
+  const wa="201150402031";
   window.open(
-    "https://wa.me/201150402031?text="+encodeURIComponent(msg),
+    `https://wa.me/${wa}?text=العميل%20يرغب%20في%20تجديد%20التعاقد`,
     "_blank"
   );
+}
+
+function logout(){
+  sessionStorage.clear();
+  location.href="client-login.html";
 }
 </script>
 
