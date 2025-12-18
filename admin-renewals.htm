@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>🔄 إدارة تجديدات التعاقد — FutureTank</title>
+<link rel="stylesheet" href="styles.css">
+<style>
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+.card{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+button{padding:8px 12px;border:0;border-radius:6px;cursor:pointer;margin-top:8px}
+.approve{background:#4caf50;color:#fff}
+.reject{background:#f44336;color:#fff}
+</style>
+</head>
+
+<body>
+
+<h2>🔄 إدارة طلبات تجديد التعاقد</h2>
+
+<div id="list"></div>
+
+<script src="system.js"></script>
+<script>
+async function render(){
+  const db=await loadDB();
+  const box=document.getElementById("list");
+  box.innerHTML="";
+
+  if(!db.renewRequests || db.renewRequests.length===0){
+    box.innerHTML="<p>لا توجد طلبات حالياً</p>";
+    return;
+  }
+
+  db.renewRequests.forEach((r,i)=>{
+    const c=db.contracts.find(x=>x.contractId===r.contractId);
+    const client=db.clients.find(x=>x.code===c.clientCode);
+
+    const div=document.createElement("div");
+    div.className="card";
+    div.innerHTML=`
+      👤 ${client.name}<br>
+      📞 ${client.phone}<br>
+      🧰 ${c.service}<br>
+      📆 تاريخ الطلب: ${r.date}<br>
+
+      <button class="approve" onclick="approve(${i})">✅ قبول</button>
+      <button class="reject" onclick="reject(${i})">❌ رفض</button>
+    `;
+    box.appendChild(div);
+  });
+}
+
+function approve(i){
+  if(!confirm("تأكيد قبول التجديد؟")) return;
+  DB.renewRequests.splice(i,1);
+  saveDB();
+  alert("تم قبول التجديد ✅");
+  render();
+}
+
+function reject(i){
+  if(!confirm("رفض طلب التجديد؟")) return;
+  DB.renewRequests.splice(i,1);
+  saveDB();
+  alert("تم رفض الطلب ❌");
+  render();
+}
+
+render();
+</script>
+
+</body>
+</html>
