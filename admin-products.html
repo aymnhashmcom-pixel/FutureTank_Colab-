@@ -2,47 +2,52 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>إدارة المنتجات</title>
-
-<script src="system.js"></script>
-
-<style>
-body{font-family:tahoma;padding:20px}
-input,button{padding:10px;width:100%;margin-top:10px}
-button{background:#007bff;color:#fff;border:none}
-</style>
+<title>🛒 إدارة المنتجات</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
 
 <h2>🛒 إدارة المنتجات</h2>
 
-<input id="pname" placeholder="اسم المنتج">
-<input id="pprice" placeholder="السعر">
-<button onclick="addProduct()">➕ إضافة المنتج</button>
+<input id="name" placeholder="اسم المنتج"><br><br>
+<input id="price" placeholder="السعر"><br><br>
+<button onclick="add()">➕ إضافة المنتج</button>
 
 <hr>
+
 <div id="list"></div>
 
+<script src="system.js"></script>
 <script>
-function addProduct(){
-  const db = getDB();
-  db.products.push({
-    id: Date.now(),
-    name: pname.value,
-    price: pprice.value,
-    image: ""
-  });
+const db = getDB();
+
+function add(){
+  const name = document.getElementById("name").value.trim();
+  const price = document.getElementById("price").value.trim();
+  if(!name || !price) return alert("أدخل البيانات");
+
+  db.products.push({name, price});
   saveDB(db);
-  render();
+  location.reload();
 }
 
 function render(){
-  const db = getDB();
-  list.innerHTML = db.products.map(p=>
-    `<p>🧰 ${p.name} - ${p.price} جنيه</p>`
-  ).join("");
+  const box = document.getElementById("list");
+  db.products.forEach((p,i)=>{
+    box.innerHTML += `
+      <div>
+        <b>${p.name}</b> — ${p.price} جنيه
+        <button onclick="del(${i})">🗑</button>
+      </div>
+    `;
+  });
+}
+
+function del(i){
+  db.products.splice(i,1);
+  saveDB(db);
+  location.reload();
 }
 
 render();
