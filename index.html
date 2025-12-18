@@ -2,71 +2,34 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-
-<!-- S1: حل الموبايل -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>FutureTank | حلول خزانات المياه</title>
+<title>FutureTank</title>
 
 <style>
-body{
-  font-family: Tahoma;
-  background:#f4f9ff;
-  text-align:center;
-  padding:30px
-}
-.box{
-  background:#fff;
-  padding:30px;
-  max-width:400px;
-  margin:auto;
-  border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,.15)
-}
-input,button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  font-size:16px
-}
-button{
+body{font-family:tahoma;text-align:center;padding:40px}
+a{
+  display:block;
+  margin:15px auto;
+  padding:15px;
+  width:80%;
+  max-width:300px;
+  border-radius:8px;
   background:#007bff;
   color:#fff;
-  border:none;
-  border-radius:6px;
-  cursor:pointer
+  text-decoration:none;
+  font-size:16px
 }
-.public{
-  background:#4caf50;
-}
+.public{background:#28a745}
 </style>
-
-<script src="system.js"></script>
 </head>
 
 <body>
 
-<div class="box">
-  <h2>FutureTank</h2>
-  <p>حلول متكاملة لخزانات المياه</p>
+<h1>FutureTank</h1>
+<p>حلول متكاملة لخزانات المياه</p>
 
-  <h3>🔐 بوابة العملاء</h3>
-  <input id="code" placeholder="رقم الهاتف أو كود العميل">
-  <button onclick="login()">دخول</button>
-
-  <br><br>
-  <button class="public" onclick="location.href='services.html'">
-    🌐 دخول الموقع العام
-  </button>
-</div>
-
-<script>
-function login(){
-  const v = document.getElementById("code").value.trim();
-  if(!v) return alert("ادخل الرقم أو الكود");
-  location.href = "client.html?code=" + encodeURIComponent(v);
-}
-</script>
+<a href="client.html">🔐 بوابة العملاء</a>
+<a class="public" href="services.html">🌐 دخول الموقع العام</a>
 
 </body>
 </html>
