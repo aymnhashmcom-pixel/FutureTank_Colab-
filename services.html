@@ -2,110 +2,26 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>🧰 خدمات FutureTank</title>
-
-<style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px
-}
-h2{
-  text-align:center;
-  margin-bottom:25px
-}
-.service{
-  background:#fff;
-  border-radius:10px;
-  padding:15px;
-  margin-bottom:20px;
-  box-shadow:0 2px 8px rgba(0,0,0,.1)
-}
-.service img,
-.service video{
-  max-width:100%;
-  border-radius:8px;
-  margin-top:10px
-}
-.actions a{
-  display:inline-block;
-  margin:6px 6px 0 0;
-  padding:8px 14px;
-  border-radius:8px;
-  text-decoration:none;
-  color:#fff;
-  font-size:14px
-}
-.phone{background:#007bff}
-.whatsapp{background:#25d366}
-.cash{background:#ff9800}
-.book{background:#4caf50}
-.back{
-  display:block;
-  margin:25px auto;
-  width:200px;
-  text-align:center;
-  background:#555;
-  color:#fff;
-  padding:10px;
-  border-radius:8px;
-  text-decoration:none
-}
-</style>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خدمات FutureTank</title>
+<script src="system.js"></script>
 </head>
 
 <body>
-
 <h2>🧰 خدمات FutureTank</h2>
-
 <div id="services"></div>
 
-<a class="back" href="index.html">⬅️ العودة للرئيسية</a>
+<a href="index.html">⬅️ العودة للرئيسية</a>
 
 <script>
-const PHONE = "01150402031";
-const WHATSAPP = "201150402031";
-
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
-const services = db.services || [];
-
-const box = document.getElementById("services");
-
-if(services.length === 0){
-  box.innerHTML = "<p style='text-align:center'>لا توجد خدمات حالياً</p>";
-}
-
-services.forEach(s=>{
-  const div = document.createElement("div");
-  div.className="service";
-  div.innerHTML = `
-    <h3>${s.name}</h3>
-    <p>${s.desc || ""}</p>
-
-    ${s.image ? `<img src="${s.image}">` : ""}
-    ${s.video ? `<video src="${s.video}" controls></video>` : ""}
-
-    <div class="actions">
-      <a class="phone" href="tel:${PHONE}">📞 فون</a>
-
-      <a class="whatsapp" target="_blank"
-         href="https://wa.me/${WHATSAPP}?text=استفسار عن خدمة: ${encodeURIComponent(s.name)}">
-         💬 واتساب
-      </a>
-
-      <a class="cash" target="_blank"
-         href="https://wa.me/${WHATSAPP}?text=ارغب%20في%20الدفع%20اتصالات%20كاش%20لخدمة:%20${encodeURIComponent(s.name)}">
-         💸 اتصالات كاش
-      </a>
-
-      <a class="book"
-         href="booking.html?service=${encodeURIComponent(s.name)}">
-         📅 حجز خدمة
-      </a>
-    </div>
-  `;
-  box.appendChild(div);
-});
+const db = getDB();
+services.innerHTML = db.services.map(s=>`
+  <h3>${s.name}</h3>
+  <p>${s.desc}</p>
+  <button>📞 فون</button>
+  <button>💬 واتساب</button>
+  <button>📅 حجز خدمة</button>
+`).join("");
 </script>
 
 </body>
