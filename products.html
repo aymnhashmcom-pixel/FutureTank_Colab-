@@ -8,71 +8,105 @@
 <style>
 body{
   margin:0;
-  font-family:Arial,Tahoma;
-  background:#f5f7fa;
+  font-family:Tahoma;
+  background:#f4f9ff;
+  color:#003344;
 }
+
+/* Header */
 header{
-  background:#0b5ed7;
-  color:#fff;
-  padding:20px;
+  background:#fff;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  padding:15px;
   text-align:center;
 }
-header a{
-  color:#fff;
-  text-decoration:none;
-  margin:0 10px;
-  font-weight:bold;
-}
-.container{
-  max-width:1200px;
-  margin:30px auto;
-  padding:0 15px;
-}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fill,minmax(260px,1fr));
-  gap:20px;
-}
-.card{
-  background:#fff;
-  border-radius:10px;
-  overflow:hidden;
-  box-shadow:0 4px 10px rgba(0,0,0,.08);
-}
-.card img{
-  width:100%;
-  height:200px;
-  object-fit:cover;
-}
-.card .p{
-  padding:15px;
-}
-.price{
-  color:#0b5ed7;
-  font-weight:bold;
-}
-.actions{
+
+.logo{
+  width:70px;
+  height:70px;
+  margin:auto;
+  border-radius:50%;
+  background:#e6f7ff;
   display:flex;
-  gap:10px;
-  padding:15px;
+  align-items:center;
+  justify-content:center;
+  font-size:34px;
+  color:#00a8cc;
 }
-.btn{
-  flex:1;
-  padding:10px;
-  border-radius:6px;
-  text-align:center;
+
+h1{margin:8px 0 0;font-size:22px}
+h1 span{display:block;font-size:14px;color:#007c99}
+.slogan{font-size:13px;color:#555;margin-top:5px}
+
+/* Nav */
+nav{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  justify-content:center;
+  margin:15px 0;
+}
+
+nav a{
   text-decoration:none;
-  font-weight:bold;
+  background:#00a8cc;
+  color:#fff;
+  padding:8px 14px;
+  border-radius:20px;
+  font-size:13px;
 }
-.book{background:#0b5ed7;color:#fff}
-.whatsapp{background:#25D366;color:#fff}
-.delete{background:#dc3545;color:#fff}
-footer{
-  text-align:center;
+
+/* Products */
+main{
   padding:20px;
+  max-width:900px;
+  margin:auto;
+}
+
+.product{
   background:#fff;
-  margin-top:40px;
-  color:#666;
+  border-radius:14px;
+  padding:15px;
+  margin-bottom:20px;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.product img,
+.product video{
+  width:100%;
+  border-radius:10px;
+  margin-top:10px;
+}
+
+.price{
+  margin:8px 0;
+  font-weight:bold;
+  color:#007c99;
+}
+
+.actions a{
+  display:inline-block;
+  margin:5px 5px 0 0;
+  padding:8px 12px;
+  border-radius:6px;
+  text-decoration:none;
+  color:#fff;
+  font-size:13px;
+}
+
+.phone{background:#007bff}
+.whatsapp{background:#25d366}
+.cash{background:#ff9800}
+.buy{background:#4caf50}
+
+/* Footer */
+footer{
+  margin-top:30px;
+  background:#003344;
+  color:#fff;
+  text-align:center;
+  padding:15px;
+  font-size:13px;
 }
 </style>
 </head>
@@ -80,63 +114,64 @@ footer{
 <body>
 
 <header>
-  <h1>منتجات FutureTank</h1>
-  <a href="index.html">الرئيسية</a>
-  <a href="assistant.html">🤖 المساعد</a>
-  <a href="https://wa.me/201150402031">💬 واتساب</a>
+  <div class="logo">💧</div>
+  <h1>FutureTank <span>فيوتشر تانك</span></h1>
+  <div class="slogan">نقاء الماء هو هدفنا</div>
 </header>
 
-<div class="container">
-  <h2 style="text-align:center">تصفح منتجاتنا</h2>
-  <div id="products" class="grid"></div>
-</div>
+<nav>
+  <a href="index.html">🏠 الرئيسية</a>
+  <a href="services.html">🧰 الخدمات</a>
+  <a href="products.html">🛒 المنتجات</a>
+  <a href="assistant.html">💬 المساعد</a>
+  <a href="client.html">🔐 بوابة العملاء</a>
+</nav>
+
+<main id="productsBox"></main>
 
 <footer>
-© 2025 FutureTank — جميع الحقوق محفوظة
+© 2025 FutureTank – جميع الحقوق محفوظة
 </footer>
 
 <script>
-const isAdmin = localStorage.getItem("ft_logged") === "true";
-let db = JSON.parse(localStorage.getItem("ft_db") || '{"products":[]}');
-const box = document.getElementById("products");
+const PHONE = "01150402031";
+const WHATSAPP = "201150402031";
 
-function render(){
-  box.innerHTML = "";
-  if(db.products.length === 0){
-    box.innerHTML = "<p style='grid-column:1/-1;text-align:center'>لا توجد منتجات</p>";
-    return;
-  }
+const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
+const products = db.products || [];
+const box = document.getElementById("productsBox");
 
-  db.products.forEach((p,i)=>{
-    box.innerHTML += `
-      <div class="card">
-        <img src="${p.img || 'https://via.placeholder.com/400x300'}">
-        <div class="p">
-          <h4>${p.name}</h4>
-          <div class="price">${p.price} جنيه</div>
-          <p>${p.desc || ''}</p>
-        </div>
-        <div class="actions">
-          <a class="btn book" href="booking.html?type=product&name=${encodeURIComponent(p.name)}">📦 احجز</a>
-          <a class="btn whatsapp" href="https://wa.me/201150402031?text=استفسار عن ${encodeURIComponent(p.name)}">واتساب</a>
-        </div>
-        ${isAdmin ? `<div class="actions">
-          <button class="btn delete" onclick="remove(${i})">🗑️ حذف المنتج</button>
-        </div>` : ``}
-      </div>
-    `;
-  });
+if(products.length === 0){
+  box.innerHTML = "<p style='text-align:center'>لا توجد منتجات حالياً</p>";
 }
 
-function remove(index){
-  if(confirm("هل أنت متأكد من حذف المنتج؟")){
-    db.products.splice(index,1);
-    localStorage.setItem("ft_db",JSON.stringify(db));
-    render();
-  }
-}
+products.forEach(p=>{
+  const div = document.createElement("div");
+  div.className="product";
+  div.innerHTML = `
+    <h3>${p.name}</h3>
+    <div class="price">السعر: ${p.price || ""} جنيه</div>
 
-render();
+    ${p.image ? `<img src="${p.image}">` : ""}
+    ${p.video ? `<video src="${p.video}" controls></video>` : ""}
+
+    <div class="actions">
+      <a class="phone" href="tel:${PHONE}">📞 فون</a>
+      <a class="whatsapp" target="_blank"
+         href="https://wa.me/${WHATSAPP}?text=استفسار عن منتج: ${encodeURIComponent(p.name)}">
+         💬 واتساب
+      </a>
+      <a class="cash" target="_blank"
+         href="https://wa.me/${WHATSAPP}?text=ارغب في الدفع اتصالات كاش لمنتج: ${encodeURIComponent(p.name)}">
+         💸 اتصالات كاش
+      </a>
+      <a class="buy" href="booking.html?product=${encodeURIComponent(p.name)}">
+         🛍️ تسوّق الآن
+      </a>
+    </div>
+  `;
+  box.appendChild(div);
+});
 </script>
 
 </body>
