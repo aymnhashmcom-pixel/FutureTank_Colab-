@@ -3,25 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>خدمات FutureTank</title>
+<title>🧰 خدمات FutureTank</title>
 <script src="system.js"></script>
+
+<style>
+body{font-family:tahoma;background:#f4f9ff;padding:20px}
+.service{background:#fff;border-radius:8px;padding:15px;margin-bottom:15px}
+.actions a{
+  display:inline-block;
+  margin:5px;
+  padding:8px 12px;
+  border-radius:6px;
+  color:#fff;
+  text-decoration:none;
+  font-size:14px
+}
+.phone{background:#007bff}
+.whatsapp{background:#25d366}
+.cash{background:#ff9800}
+.book{background:#4caf50}
+.back{background:#555}
+</style>
 </head>
 
 <body>
-<h2>🧰 خدمات FutureTank</h2>
-<div id="services"></div>
 
-<a href="index.html">⬅️ العودة للرئيسية</a>
+<h2>🧰 خدمات FutureTank</h2>
+
+<div id="list"></div>
+
+<a class="actions back" href="index.html">⬅️ العودة للرئيسية</a>
 
 <script>
 const db = getDB();
-services.innerHTML = db.services.map(s=>`
-  <h3>${s.name}</h3>
-  <p>${s.desc}</p>
-  <button>📞 فون</button>
-  <button>💬 واتساب</button>
-  <button>📅 حجز خدمة</button>
-`).join("");
+const box = document.getElementById("list");
+
+db.services.forEach(s=>{
+  box.innerHTML += `
+    <div class="service">
+      <h3>${s.name}</h3>
+      <p>${s.desc || ""}</p>
+
+      <div class="actions">
+        <a class="phone" href="tel:${db.company.phone}">📞 فون</a>
+        <a class="whatsapp" target="_blank"
+           href="https://wa.me/${db.company.whatsapp}?text=استفسار عن خدمة: ${encodeURIComponent(s.name)}">
+           💬 واتساب
+        </a>
+        <a class="cash" target="_blank"
+           href="https://wa.me/${db.company.whatsapp}?text=دفع اتصالات كاش لخدمة: ${encodeURIComponent(s.name)}">
+           💸 اتصالات كاش
+        </a>
+        <a class="book" href="book.html?service=${encodeURIComponent(s.name)}">
+           📅 حجز خدمة
+        </a>
+      </div>
+    </div>
+  `;
+});
 </script>
 
 </body>
