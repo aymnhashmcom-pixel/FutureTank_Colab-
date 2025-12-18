@@ -2,64 +2,138 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>👨‍💼 إدارة العملاء — FutureTank</title>
+<title>👥 إدارة العملاء — FutureTank</title>
 <style>
-body{font-family:Tahoma;background:#f4f9ff;padding:20px}
-.box{background:#fff;padding:20px;border-radius:10px}
-input,button{width:100%;padding:10px;margin:6px 0}
-.client{background:#eef5ff;padding:10px;margin-top:8px;border-radius:8px}
+body{
+  font-family:Tahoma;
+  background:#f4f9ff;
+  padding:20px
+}
+.card{
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  margin-bottom:20px;
+  box-shadow:0 3px 10px rgba(0,0,0,.15)
+}
+input{
+  width:100%;
+  padding:8px;
+  margin:6px 0;
+  border:1px solid #ccc;
+  border-radius:6px
+}
+button{
+  padding:8px 12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:14px
+}
+.add{background:#4caf50;color:#fff}
+.del{background:#f44336;color:#fff}
+.copy{background:#2196f3;color:#fff}
+.client{
+  border-bottom:1px solid #eee;
+  padding:10px 0
+}
+small{color:#666}
 </style>
 </head>
 
 <body>
 
-<h2>👨‍💼 إدارة العملاء</h2>
+<h2>👥 إدارة العملاء — FutureTank</h2>
 
-<div class="box">
-<input id="name" placeholder="اسم العميل">
-<input id="phone" placeholder="رقم الهاتف">
-<input id="code" placeholder="كود العميل">
-<input id="service" placeholder="الخدمة">
-<input id="last" type="date">
-<input id="next" type="date">
-<input id="renew" type="date">
-<input id="cost" placeholder="التكلفة">
-<button onclick="add()">➕ إضافة عميل</button>
+<div class="card">
+  <h3>➕ إضافة عميل جديد</h3>
+
+  <input id="name" placeholder="اسم العميل">
+  <input id="phone" placeholder="رقم الهاتف">
+  <input id="price" placeholder="التكلفة">
+  <label>📅 بداية التعاقد</label>
+  <input type="date" id="start">
+  <label>📅 نهاية التعاقد</label>
+  <input type="date" id="end">
+  <label>🛠 آخر زيارة</label>
+  <input type="date" id="last">
+  <label>📍 الزيارة القادمة</label>
+  <input type="date" id="next">
+
+  <button class="add" onclick="addClient()">➕ إضافة العميل</button>
 </div>
 
-<h3>📋 العملاء</h3>
-<div id="list"></div>
+<div class="card">
+  <h3>📋 العملاء الحاليون</h3>
+  <div id="list"></div>
+</div>
 
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db")||'{"clients":[]}');
+const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
 db.clients = db.clients || [];
 
 function save(){
-  localStorage.setItem("ft_db",JSON.stringify(db));
+  localStorage.setItem("ft_db", JSON.stringify(db));
 }
 
-function add(){
-  db.clients.push({
-    name:name.value,
-    phone:phone.value,
-    code:code.value,
-    service:service.value,
-    lastVisit:last.value,
-    nextVisit:next.value,
-    renewDate:renew.value,
-    cost:cost.value
-  });
+function genCode(){
+  return "FT-" + Math.floor(100000 + Math.random()*900000);
+}
+
+function addClient(){
+  const client = {
+    name: name.value.trim(),
+    phone: phone.value.trim(),
+    price: price.value || 0,
+    contractStart: start.value,
+    contractEnd: end.value,
+    lastVisit: last.value,
+    nextVisit: next.value,
+    code: genCode()
+  };
+
+  if(!client.name || !client.phone){
+    alert("الاسم ورقم الهاتف مطلوبين");
+    return;
+  }
+
+  db.clients.push(client);
   save();
   location.reload();
 }
 
+function removeClient(i){
+  if(confirm("حذف العميل؟")){
+    db.clients.splice(i,1);
+    save();
+    location.reload();
+  }
+}
+
+function copyCode(code){
+  navigator.clipboard.writeText(code);
+  alert("تم نسخ كود العميل");
+}
+
 function render(){
-  list.innerHTML="";
-  db.clients.forEach(c=>{
-    list.innerHTML+=`
-    <div class="client">
-      <b>${c.name}</b> — ${c.phone} — ${c.code}
-    </div>`;
+  const box = document.getElementById("list");
+  box.innerHTML="";
+  db.clients.forEach((c,i)=>{
+    const div=document.createElement("div");
+    div.className="client";
+    div.innerHTML=`
+<b>${c.name}</b><br>
+📞 ${c.phone}<br>
+🔑 الكود: <b>${c.code}</b><br>
+📅 التعاقد: ${c.contractStart} → ${c.contractEnd}<br>
+🛠 آخر زيارة: ${c.lastVisit || "—"}<br>
+📍 القادمة: ${c.nextVisit || "—"}<br>
+💰 ${c.price} جنيه<br><br>
+
+<button class="copy" onclick="copyCode('${c.code}')">📋 نسخ الكود</button>
+<button class="del" onclick="removeClient(${i})">🗑 حذف</button>
+`;
+    box.appendChild(div);
   });
 }
 render();
