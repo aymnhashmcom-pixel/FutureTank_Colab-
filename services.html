@@ -3,33 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <title>🧰 خدمات FutureTank</title>
-<link rel="stylesheet" href="styles.css">
 <style>
-body{
-  font-family: Tahoma;
-  background:#f4f9ff;
-  padding:20px
-}
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
 .service{
-  background:#fff;
-  border-radius:8px;
-  padding:15px;
-  margin-bottom:15px;
-  box-shadow:0 2px 6px rgba(0,0,0,.1)
+  background:#fff;padding:15px;margin-bottom:15px;
+  border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,.1)
 }
-.service img, .service video{
-  max-width:100%;
-  border-radius:6px;
-  margin-top:10px
-}
+img,video{max-width:100%;margin-top:8px;border-radius:6px}
 .actions a{
-  display:inline-block;
-  margin:5px 5px 0 0;
-  padding:8px 12px;
-  border-radius:6px;
-  text-decoration:none;
-  color:#fff;
-  font-size:14px
+  display:inline-block;margin:5px 5px 0 0;
+  padding:8px 12px;border-radius:6px;
+  text-decoration:none;color:#fff;font-size:14px
 }
 .phone{background:#007bff}
 .whatsapp{background:#25d366}
@@ -41,45 +25,43 @@ body{
 <body>
 
 <h2>🧰 خدمات FutureTank</h2>
-
 <div id="services"></div>
 
 <script>
-const PHONE = "01150402031";
-const WHATSAPP = "201150402031";
+const PHONE="01150402031";
+const WA="201150402031";
 
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
-const services = db.services || [];
-
-const box = document.getElementById("services");
-
-services.forEach(s=>{
-  const div = document.createElement("div");
-  div.className="service";
-  div.innerHTML = `
-    <h3>${s.name}</h3>
-    <p>${s.desc || ""}</p>
-
-    ${s.image ? `<img src="${s.image}">` : ""}
-    ${s.video ? `<video src="${s.video}" controls></video>` : ""}
-
-    <div class="actions">
-      <a class="phone" href="tel:${PHONE}">📞 فون</a>
-      <a class="whatsapp" target="_blank"
-         href="https://wa.me/${WHATSAPP}?text=استفسار عن خدمة: ${encodeURIComponent(s.name)}">
-         💬 واتساب
-      </a>
-      <a class="cash" target="_blank"
-         href="https://wa.me/${WHATSAPP}?text=ارغب%20في%20الدفع%20اتصالات%20كاش%20لخدمة:%20${encodeURIComponent(s.name)}">
-         💸 اتصالات كاش
-      </a>
-      <a class="book" href="booking.html?type=service&name=${encodeURIComponent(s.name)}">
-         📅 حجز خدمة
-      </a>
-    </div>
-  `;
-  box.appendChild(div);
+fetch("database.json")
+.then(r=>r.json())
+.then(db=>{
+  const services=db.services||[];
+  services.forEach(s=>{
+    servicesBox.innerHTML+=`
+    <div class="service">
+      <h3>${s.name}</h3>
+      <p>${s.desc||""}</p>
+      ${s.image?`<img src="${s.image}">`:""}
+      ${s.video?`<video src="${s.video}" controls></video>`:""}
+      <div class="actions">
+        <a class="phone" href="tel:${PHONE}">📞 فون</a>
+        <a class="whatsapp" target="_blank"
+           href="https://wa.me/${WA}?text=استفسار عن خدمة: ${encodeURIComponent(s.name)}">
+           💬 واتساب
+        </a>
+        <a class="cash" target="_blank"
+           href="https://wa.me/${WA}?text=دفع%20اتصالات%20كاش%20لخدمة:%20${encodeURIComponent(s.name)}">
+           💸 اتصالات كاش
+        </a>
+        <a class="book"
+           href="booking.html?type=service&name=${encodeURIComponent(s.name)}">
+           📅 حجز خدمة
+        </a>
+      </div>
+    </div>`;
+  });
 });
+
+const servicesBox=document.getElementById("services");
 </script>
 
 </body>
