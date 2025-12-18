@@ -2,34 +2,168 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<title>FutureTank | فيوتشر تانك</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FutureTank</title>
 
 <style>
-body{font-family:tahoma;text-align:center;padding:40px}
-a{
-  display:block;
-  margin:15px auto;
-  padding:15px;
-  width:80%;
-  max-width:300px;
-  border-radius:8px;
-  background:#007bff;
-  color:#fff;
-  text-decoration:none;
-  font-size:16px
+body{
+  margin:0;
+  font-family: Tahoma, Arial;
+  background:#f4f9ff;
+  color:#003344;
 }
-.public{background:#28a745}
+
+/* ===== Header ===== */
+header{
+  background:#ffffff;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+  padding:20px;
+  text-align:center;
+}
+
+.logo{
+  width:90px;
+  height:90px;
+  margin:auto;
+  border-radius:50%;
+  background:#e6f7ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:40px;
+  color:#00a8cc;
+}
+
+h1{
+  margin:10px 0 0;
+  font-size:26px;
+}
+
+h1 span{
+  display:block;
+  font-size:16px;
+  color:#007c99;
+}
+
+.slogan{
+  margin-top:8px;
+  font-size:14px;
+  color:#555;
+}
+
+/* ===== Main ===== */
+main{
+  padding:30px 15px;
+  max-width:900px;
+  margin:auto;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+  gap:20px;
+}
+
+.card{
+  background:#fff;
+  border-radius:14px;
+  padding:25px 15px;
+  text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.08);
+  cursor:pointer;
+  transition:.3s;
+}
+
+.card:hover{
+  transform:translateY(-5px);
+}
+
+.card span{
+  font-size:36px;
+  display:block;
+  margin-bottom:10px;
+}
+
+.card h3{
+  margin:0;
+  font-size:18px;
+}
+
+/* colors */
+.services{background:#e6f7ff}
+.products{background:#eef9f1}
+.shop{background:#fff4e5}
+.contract{background:#f3e8ff}
+.assistant{background:#e8f0ff}
+.clients{background:#e0f7fa}
+
+/* ===== Footer ===== */
+footer{
+  margin-top:40px;
+  background:#003344;
+  color:#fff;
+  text-align:center;
+  padding:15px;
+  font-size:13px;
+}
 </style>
 </head>
 
 <body>
 
-<h1>FutureTank</h1>
-<p>حلول متكاملة لخزانات المياه</p>
+<header>
+  <div class="logo">💧</div>
+  <h1>FutureTank <span>فيوتشر تانك</span></h1>
+  <div class="slogan">نقاء الماء هو هدفنا</div>
+</header>
 
-<a href="client.html">🔐 بوابة العملاء</a>
-<a class="public" href="services.html">🌐 دخول الموقع العام</a>
+<main>
+
+  <div class="grid">
+
+    <div class="card services" onclick="go('services.html')">
+      <span>🧰</span>
+      <h3>الخدمات</h3>
+    </div>
+
+    <div class="card products" onclick="go('products.html')">
+      <span>🛒</span>
+      <h3>المنتجات</h3>
+    </div>
+
+    <div class="card shop" onclick="go('shop.html')">
+      <span>🛍️</span>
+      <h3>تسوّق الآن</h3>
+    </div>
+
+    <div class="card contract" onclick="go('contract.html')">
+      <span>📄</span>
+      <h3>تعاقد الآن</h3>
+    </div>
+
+    <div class="card assistant" onclick="go('assistant.html')">
+      <span>💬</span>
+      <h3>المساعد</h3>
+    </div>
+
+    <div class="card clients" onclick="go('client.html')">
+      <span>🔐</span>
+      <h3>بوابة العملاء</h3>
+    </div>
+
+  </div>
+
+</main>
+
+<footer>
+  © 2025 FutureTank – جميع الحقوق محفوظة
+</footer>
+
+<script>
+function go(page){
+  window.location.href = page;
+}
+</script>
 
 </body>
 </html>
