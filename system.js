@@ -1,18 +1,12 @@
-const DB_KEY = "ft_db";
+const DB_KEY = "futuretank_db";
 
-function getDB(){
-  let db = localStorage.getItem(DB_KEY);
-  if(!db){
-    db = {
-      products: [],
-      services: [],
-      clients: [],
-      contracts: []
-    };
-    localStorage.setItem(DB_KEY, JSON.stringify(db));
-    return db;
-  }
-  return JSON.parse(db);
+function loadDB(){
+  return JSON.parse(localStorage.getItem(DB_KEY)) || {
+    services: [],
+    products: [],
+    clients: [],
+    contracts: []
+  };
 }
 
 function saveDB(db){
