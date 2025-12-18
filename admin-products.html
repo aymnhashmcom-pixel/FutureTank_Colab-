@@ -2,91 +2,50 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>🛒 إدارة المنتجات — FutureTank</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>إدارة المنتجات</title>
+
+<script src="system.js"></script>
 
 <style>
-body{font-family:Tahoma;background:#f4f9ff;padding:20px}
-.card{background:#fff;padding:15px;border-radius:8px;margin-bottom:10px}
-img,video{max-width:120px;display:block;margin-top:8px}
-button{margin-top:8px}
+body{font-family:tahoma;padding:20px}
+input,button{padding:10px;width:100%;margin-top:10px}
+button{background:#007bff;color:#fff;border:none}
 </style>
 </head>
 
 <body>
 
-<script src="auth.js"></script>
-<script>requireRole("admin");</script>
-
 <h2>🛒 إدارة المنتجات</h2>
 
-<div id="products"></div>
+<input id="pname" placeholder="اسم المنتج">
+<input id="pprice" placeholder="السعر">
+<button onclick="addProduct()">➕ إضافة المنتج</button>
 
-<h3>➕ إضافة منتج جديد</h3>
-
-<input id="name" placeholder="اسم المنتج"><br><br>
-<input id="price" placeholder="السعر"><br><br>
-<textarea id="desc" placeholder="الوصف"></textarea><br><br>
-
-<label>📷 صورة المنتج</label><br>
-<input type="file" id="image" accept="image/*"><br><br>
-
-<label>🎥 فيديو (اختياري)</label><br>
-<input type="file" id="video" accept="video/*"><br><br>
-
-<button onclick="addProduct()">إضافة المنتج</button>
+<hr>
+<div id="list"></div>
 
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-db.products = db.products || [];
+function addProduct(){
+  const db = getDB();
+  db.products.push({
+    id: Date.now(),
+    name: pname.value,
+    price: pprice.value,
+    image: ""
+  });
+  saveDB(db);
+  render();
+}
 
 function render(){
-  const div=document.getElementById("products");
-  div.innerHTML="";
-  db.products.forEach((p,i)=>{
-    div.innerHTML+=`
-    <div class="card">
-      <b>${p.name}</b><br>
-      السعر: ${p.price} جنيه<br>
-      ${p.desc||""}
-      ${p.image?`<img src="${p.image}">`:""}
-      ${p.video?`<video src="${p.video}" controls></video>`:""}
-      <br>
-      <button onclick="del(${i})">حذف</button>
-    </div>`;
-  });
+  const db = getDB();
+  list.innerHTML = db.products.map(p=>
+    `<p>🧰 ${p.name} - ${p.price} جنيه</p>`
+  ).join("");
 }
+
 render();
-
-function toBase64(file){
-  return new Promise(res=>{
-    const r=new FileReader();
-    r.onload=()=>res(r.result);
-    r.readAsDataURL(file);
-  });
-}
-
-async function addProduct(){
-  const name=nameInput.value||name.value;
-  const price=priceInput?.value||price.value;
-  const desc=document.getElementById("desc").value;
-  const img=document.getElementById("image").files[0];
-  const vid=document.getElementById("video").files[0];
-
-  const product={name,price,desc};
-
-  if(img) product.image=await toBase64(img);
-  if(vid) product.video=await toBase64(vid);
-
-  db.products.push(product);
-  localStorage.setItem("ft_db",JSON.stringify(db));
-  location.reload();
-}
-
-function del(i){
-  db.products.splice(i,1);
-  localStorage.setItem("ft_db",JSON.stringify(db));
-  location.reload();
-}
 </script>
 
 </body>
