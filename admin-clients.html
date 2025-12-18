@@ -1,65 +1,24 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>👥 إدارة العملاء</title>
-</head>
+function addClient(){
+  const db = loadDB();
 
-<body>
+  const name = clientName.value.trim();
+  const phone = clientPhone.value.trim();
 
-<h2>👥 إدارة العملاء</h2>
+  if(!name || !phone){
+    alert("الاسم ورقم الهاتف مطلوبين");
+    return;
+  }
 
-<input id="name" placeholder="اسم العميل"><br><br>
-<input id="phone" placeholder="رقم الهاتف"><br><br>
-<input id="cost" placeholder="التكلفة"><br><br>
-<input id="start" type="date"><br><br>
-<input id="end" type="date"><br><br>
-
-<button onclick="add()">➕ إضافة العميل</button>
-
-<hr>
-
-<div id="list"></div>
-
-<script src="system.js"></script>
-<script>
-const db = getDB();
-
-function add(){
-  const client = {
-    name: name.value,
-    phone: phone.value,
+  db.clients.push({
+    name,
+    phone,
     cost: cost.value,
     start: start.value,
-    end: end.value
-  };
-  if(!client.name || !client.phone) return alert("بيانات ناقصة");
-
-  db.clients.push(client);
-  saveDB(db);
-  location.reload();
-}
-
-function render(){
-  list.innerHTML="";
-  db.clients.forEach((c,i)=>{
-    list.innerHTML+=`
-      <div>
-        <b>${c.name}</b> — ${c.phone}
-        <button onclick="del(${i})">🗑</button>
-      </div>
-    `;
+    end: end.value,
+    lastVisit: lastVisit.value,
+    nextVisit: nextVisit.value
   });
-}
 
-function del(i){
-  db.clients.splice(i,1);
   saveDB(db);
-  location.reload();
+  alert("تم حفظ العميل بنجاح");
 }
-
-render();
-</script>
-
-</body>
-</html>
