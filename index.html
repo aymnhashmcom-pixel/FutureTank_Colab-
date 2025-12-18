@@ -2,47 +2,37 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>FutureTank</title>
+<title>FutureTank | حلول متكاملة لخزانات المياه</title>
 <style>
 body{
   font-family:Tahoma;
   background:#f4f9ff;
-  display:flex;
-  justify-content:center;
-  align-items:center;
   height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center
 }
 .box{
   background:#fff;
-  padding:30px;
-  border-radius:12px;
-  width:100%;
-  max-width:420px;
-  box-shadow:0 4px 15px rgba(0,0,0,.15);
+  padding:40px;
+  border-radius:14px;
+  width:350px;
   text-align:center;
+  box-shadow:0 4px 12px rgba(0,0,0,.15)
 }
-h1{margin-bottom:5px}
-p{color:#555}
-input{
-  width:100%;
-  padding:12px;
-  margin:10px 0;
-  border-radius:6px;
-  border:1px solid #ccc;
-}
-button,a{
+h1{margin-bottom:10px}
+p{color:#555;margin-bottom:20px}
+a{
   display:block;
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  border-radius:6px;
-  font-size:15px;
-  cursor:pointer;
+  padding:14px;
+  margin:10px 0;
+  border-radius:10px;
   text-decoration:none;
+  color:#fff;
+  font-size:16px
 }
-.login{background:#007bff;color:#fff}
-.public{background:#4caf50;color:#fff}
+.clients{background:#007bff}
+.public{background:#4caf50}
 </style>
 </head>
 
@@ -52,22 +42,9 @@ button,a{
   <h1>FutureTank</h1>
   <p>حلول متكاملة لخزانات المياه</p>
 
-  <h3>🔐 بوابة العملاء</h3>
-  <input id="code" placeholder="رقم الهاتف أو كود العميل">
-  <button class="login" onclick="login()">دخول</button>
-
-  <hr style="margin:20px 0">
-
+  <a class="clients" href="client-login.html">🔐 بوابة العملاء</a>
   <a class="public" href="services.html">🌐 دخول الموقع العام</a>
 </div>
-
-<script>
-function login(){
-  const v = document.getElementById("code").value.trim();
-  if(!v) return alert("ادخل رقم الهاتف أو الكود");
-  location.href = "client.html?key=" + encodeURIComponent(v);
-}
-</script>
 
 </body>
 </html>
