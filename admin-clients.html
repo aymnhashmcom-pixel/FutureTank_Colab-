@@ -2,159 +2,68 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>👥 إدارة العملاء — FutureTank</title>
-
-<script src="auth.js"></script>
-<script>requireRole("admin")</script>
-
-<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
-
+<title>👨‍💼 إدارة العملاء — FutureTank</title>
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px
-}
-.box{
-  background:#fff;
-  padding:20px;
-  border-radius:12px;
-  max-width:950px;
-  margin:auto;
-  box-shadow:0 2px 10px rgba(0,0,0,.1)
-}
-input,select{
-  padding:10px;
-  margin:5px;
-  width:180px
-}
-button{
-  padding:8px 12px;
-  margin-top:5px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  background:#0d6efd;
-  color:#fff
-}
-.del{background:#dc3545}
-.qr{background:#198754}
-.client{
-  background:#eef5ff;
-  padding:12px;
-  border-radius:10px;
-  margin-top:10px
-}
-.qrbox{
-  margin-top:10px;
-  background:#fff;
-  padding:10px;
-  display:inline-block;
-  border-radius:8px
-}
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+.box{background:#fff;padding:20px;border-radius:10px}
+input,button{width:100%;padding:10px;margin:6px 0}
+.client{background:#eef5ff;padding:10px;margin-top:8px;border-radius:8px}
 </style>
 </head>
 
 <body>
 
+<h2>👨‍💼 إدارة العملاء</h2>
+
 <div class="box">
-<h2>👥 إدارة العملاء المتعاقدين</h2>
-
-<h3>➕ إضافة عميل</h3>
-
 <input id="name" placeholder="اسم العميل">
 <input id="phone" placeholder="رقم الهاتف">
+<input id="code" placeholder="كود العميل">
 <input id="service" placeholder="الخدمة">
-<input id="lastVisit" type="date">
-<input id="nextVisit" type="date">
-<input id="contract" type="date">
-
-<select id="renewMonth">
-<option value="">شهر التجديد</option>
-<option>يناير</option><option>فبراير</option><option>مارس</option>
-<option>أبريل</option><option>مايو</option><option>يونيو</option>
-<option>يوليو</option><option>أغسطس</option><option>سبتمبر</option>
-<option>أكتوبر</option><option>نوفمبر</option><option>ديسمبر</option>
-</select>
-
-<br><br>
-<button onclick="addClient()">➕ إضافة العميل</button>
-
-<hr>
-
-<h3>📋 العملاء الحاليون</h3>
-<div id="list"></div>
+<input id="last" type="date">
+<input id="next" type="date">
+<input id="renew" type="date">
+<input id="cost" placeholder="التكلفة">
+<button onclick="add()">➕ إضافة عميل</button>
 </div>
 
+<h3>📋 العملاء</h3>
+<div id="list"></div>
+
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+const db = JSON.parse(localStorage.getItem("ft_db")||'{"clients":[]}');
 db.clients = db.clients || [];
 
 function save(){
   localStorage.setItem("ft_db",JSON.stringify(db));
 }
 
-function genCode(){
-  return "FT-" + (1000 + db.clients.length + 1);
-}
-
-function addClient(){
+function add(){
   db.clients.push({
-    code: genCode(),
-    name: name.value,
-    phone: phone.value,
-    service: service.value,
-    lastVisit: lastVisit.value,
-    nextVisit: nextVisit.value,
-    contract: contract.value,
-    renew: renewMonth.value
+    name:name.value,
+    phone:phone.value,
+    code:code.value,
+    service:service.value,
+    lastVisit:last.value,
+    nextVisit:next.value,
+    renewDate:renew.value,
+    cost:cost.value
   });
   save();
   location.reload();
 }
 
-function remove(i){
-  if(confirm("حذف العميل؟")){
-    db.clients.splice(i,1);
-    save();
-    location.reload();
-  }
-}
-
-function showQR(code, id){
-  const box = document.getElementById(id);
-  box.innerHTML="";
-  new QRCode(box,{
-    text: location.origin + "/client.html?code=" + code,
-    width:150,
-    height:150
-  });
-}
-
 function render(){
-  const box = document.getElementById("list");
-  db.clients.forEach((c,i)=>{
-    const id="qr"+i;
-    const div=document.createElement("div");
-    div.className="client";
-    div.innerHTML=`
-<b>${c.name}</b> — ${c.code}<br>
-📞 ${c.phone}<br>
-🧰 ${c.service}<br>
-📅 آخر زيارة: ${c.lastVisit || "-"}<br>
-📆 القادمة: ${c.nextVisit || "-"}<br>
-🔁 تجديد: ${c.renew || "-"}<br>
-
-<button class="qr" onclick="showQR('${c.code}','${id}')">📱 عرض QR</button>
-<button class="del" onclick="remove(${i})">🗑 حذف</button>
-
-<div class="qrbox" id="${id}"></div>
-`;
-    box.appendChild(div);
+  list.innerHTML="";
+  db.clients.forEach(c=>{
+    list.innerHTML+=`
+    <div class="client">
+      <b>${c.name}</b> — ${c.phone} — ${c.code}
+    </div>`;
   });
 }
 render();
 </script>
 
 </body>
-  </html>
+</html>
