@@ -2,140 +2,62 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>👥 إدارة العملاء — FutureTank</title>
-<style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px
-}
-.card{
-  background:#fff;
-  padding:20px;
-  border-radius:10px;
-  margin-bottom:20px;
-  box-shadow:0 3px 10px rgba(0,0,0,.15)
-}
-input{
-  width:100%;
-  padding:8px;
-  margin:6px 0;
-  border:1px solid #ccc;
-  border-radius:6px
-}
-button{
-  padding:8px 12px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-  font-size:14px
-}
-.add{background:#4caf50;color:#fff}
-.del{background:#f44336;color:#fff}
-.copy{background:#2196f3;color:#fff}
-.client{
-  border-bottom:1px solid #eee;
-  padding:10px 0
-}
-small{color:#666}
-</style>
+<title>👥 إدارة العملاء</title>
 </head>
 
 <body>
 
-<h2>👥 إدارة العملاء — FutureTank</h2>
+<h2>👥 إدارة العملاء</h2>
 
-<div class="card">
-  <h3>➕ إضافة عميل جديد</h3>
+<input id="name" placeholder="اسم العميل"><br><br>
+<input id="phone" placeholder="رقم الهاتف"><br><br>
+<input id="cost" placeholder="التكلفة"><br><br>
+<input id="start" type="date"><br><br>
+<input id="end" type="date"><br><br>
 
-  <input id="name" placeholder="اسم العميل">
-  <input id="phone" placeholder="رقم الهاتف">
-  <input id="price" placeholder="التكلفة">
-  <label>📅 بداية التعاقد</label>
-  <input type="date" id="start">
-  <label>📅 نهاية التعاقد</label>
-  <input type="date" id="end">
-  <label>🛠 آخر زيارة</label>
-  <input type="date" id="last">
-  <label>📍 الزيارة القادمة</label>
-  <input type="date" id="next">
+<button onclick="add()">➕ إضافة العميل</button>
 
-  <button class="add" onclick="addClient()">➕ إضافة العميل</button>
-</div>
+<hr>
 
-<div class="card">
-  <h3>📋 العملاء الحاليون</h3>
-  <div id="list"></div>
-</div>
+<div id="list"></div>
 
+<script src="system.js"></script>
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
-db.clients = db.clients || [];
+const db = getDB();
 
-function save(){
-  localStorage.setItem("ft_db", JSON.stringify(db));
-}
-
-function genCode(){
-  return "FT-" + Math.floor(100000 + Math.random()*900000);
-}
-
-function addClient(){
+function add(){
   const client = {
-    name: name.value.trim(),
-    phone: phone.value.trim(),
-    price: price.value || 0,
-    contractStart: start.value,
-    contractEnd: end.value,
-    lastVisit: last.value,
-    nextVisit: next.value,
-    code: genCode()
+    name: name.value,
+    phone: phone.value,
+    cost: cost.value,
+    start: start.value,
+    end: end.value
   };
-
-  if(!client.name || !client.phone){
-    alert("الاسم ورقم الهاتف مطلوبين");
-    return;
-  }
+  if(!client.name || !client.phone) return alert("بيانات ناقصة");
 
   db.clients.push(client);
-  save();
+  saveDB(db);
   location.reload();
 }
 
-function removeClient(i){
-  if(confirm("حذف العميل؟")){
-    db.clients.splice(i,1);
-    save();
-    location.reload();
-  }
-}
-
-function copyCode(code){
-  navigator.clipboard.writeText(code);
-  alert("تم نسخ كود العميل");
-}
-
 function render(){
-  const box = document.getElementById("list");
-  box.innerHTML="";
+  list.innerHTML="";
   db.clients.forEach((c,i)=>{
-    const div=document.createElement("div");
-    div.className="client";
-    div.innerHTML=`
-<b>${c.name}</b><br>
-📞 ${c.phone}<br>
-🔑 الكود: <b>${c.code}</b><br>
-📅 التعاقد: ${c.contractStart} → ${c.contractEnd}<br>
-🛠 آخر زيارة: ${c.lastVisit || "—"}<br>
-📍 القادمة: ${c.nextVisit || "—"}<br>
-💰 ${c.price} جنيه<br><br>
-
-<button class="copy" onclick="copyCode('${c.code}')">📋 نسخ الكود</button>
-<button class="del" onclick="removeClient(${i})">🗑 حذف</button>
-`;
-    box.appendChild(div);
+    list.innerHTML+=`
+      <div>
+        <b>${c.name}</b> — ${c.phone}
+        <button onclick="del(${i})">🗑</button>
+      </div>
+    `;
   });
 }
+
+function del(i){
+  db.clients.splice(i,1);
+  saveDB(db);
+  location.reload();
+}
+
 render();
 </script>
 
