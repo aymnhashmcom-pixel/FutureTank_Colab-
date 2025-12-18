@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حجز خدمة</title>
+<script src="system.js"></script>
+<style>
+body{font-family:tahoma;padding:20px}
+input,select,button{width:100%;padding:10px;margin-top:10px}
+button{background:#28a745;color:#fff;border:none}
+</style>
+</head>
+
+<body>
+
+<h2>📅 حجز خدمة</h2>
+
+<input id="name" placeholder="اسم العميل">
+<input id="phone" placeholder="رقم الهاتف">
+
+<select id="service"></select>
+
+<input type="date" id="date">
+
+<button onclick="sendBooking()">تأكيد الحجز</button>
+
+<script>
+const db = getDB();
+service.innerHTML = db.services.map(s =>
+  `<option value="${s.name}">${s.name}</option>`
+).join("");
+
+function sendBooking(){
+  const booking = {
+    id: Date.now(),
+    name: name.value,
+    phone: phone.value,
+    service: service.value,
+    date: date.value
+  };
+
+  db.bookings.push(booking);
+  saveDB(db);
+
+  const msg = `
+حجز خدمة جديد:
+👤 ${booking.name}
+📞 ${booking.phone}
+🧰 ${booking.service}
+📅 ${booking.date}
+`;
+
+  window.open(
+    `https://wa.me/${db.company.whatsapp}?text=${encodeURIComponent(msg)}`
+  );
+}
+</script>
+
+</body>
+</html>
