@@ -2,107 +2,138 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>🔐 بوابة العملاء – FutureTank</title>
+<title>🔐 بوابة عملاء FutureTank</title>
 
 <style>
-body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+body{
+  font-family:Tahoma;
+  background:#f4f9ff;
+  padding:20px
+}
+.card{
+  background:#fff;
+  max-width:600px;
+  margin:auto;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 8px rgba(0,0,0,.15)
+}
 h2{text-align:center;color:#0077b6}
 input,button{
-  width:100%;padding:10px;margin:6px 0;
-  border-radius:6px;border:1px solid #ccc
+  width:100%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
+  font-size:15px
 }
-button{background:#0077b6;color:#fff;font-size:15px;cursor:pointer}
-.card{
-  background:#fff;padding:15px;border-radius:8px;
-  margin-top:15px;box-shadow:0 2px 6px rgba(0,0,0,.1)
+button{
+  background:#0077b6;
+  color:#fff;
+  border:none;
+  cursor:pointer
 }
-.alert{background:#fffae6;padding:10px;border-radius:6px;margin:10px 0}
+.renew{background:#ff9800}
+.whatsapp{background:#25d366}
+.info{
+  background:#f1f7ff;
+  padding:15px;
+  border-radius:6px;
+  margin-top:15px
+}
+.hidden{display:none}
 </style>
 </head>
 
 <body>
 
+<div class="card">
+
 <h2>🔐 بوابة العملاء</h2>
 
-<input id="loginValue" placeholder="رقم الهاتف أو كود العميل">
-<button onclick="login()">دخول</button>
+<div id="loginBox">
+  <input id="loginInput" placeholder="رقم الهاتف أو كود العميل">
+  <button onclick="login()">دخول</button>
+</div>
 
-<div id="result"></div>
+<div id="clientBox" class="hidden">
+  <h3>👤 بيانات العميل</h3>
+
+  <div class="info">
+    <p><b>الاسم:</b> <span id="cName"></span></p>
+    <p><b>الهاتف:</b> <span id="cPhone"></span></p>
+    <p><b>التكلفة:</b> <span id="cCost"></span> جنيه</p>
+    <p><b>مدة التعاقد:</b> <span id="cStart"></span> → <span id="cEnd"></span></p>
+    <p><b>آخر زيارة:</b> <span id="cLast"></span></p>
+    <p><b>الزيارة القادمة:</b> <span id="cNext"></span></p>
+  </div>
+
+  <button class="renew" onclick="renew()">🔄 تجديد التعاقد</button>
+
+  <button class="whatsapp" onclick="sendWhats()">💬 تواصل مع خدمة العملاء</button>
+</div>
+
+</div>
 
 <script>
-const PHONE = "01150402031";
-const WHATSAPP = "201150402031";
-
-function loadDB(){
-  return JSON.parse(localStorage.getItem("ft_db") || "{}");
-}
-function saveDB(db){
-  localStorage.setItem("ft_db",JSON.stringify(db));
-}
+const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
+let currentClient = null;
 
 function login(){
-  const val = loginValue.value.trim();
-  if(!val){ alert("أدخل رقم الهاتف"); return; }
+  const val = loginInput.value.trim();
+  if(!val) return alert("أدخل رقم الهاتف أو الكود");
 
-  const db = loadDB();
-  const client = db.clients?.find(c=>c.phone===val || String(c.id)===val);
-  if(!client){ alert("العميل غير موجود"); return; }
+  currentClient = db.clients?.find(c =>
+    c.phone === val || c.code === val
+  );
 
-  const today = new Date();
-  const end = new Date(client.end);
-  const diffDays = Math.ceil((end - today)/(1000*60*60*24));
+  if(!currentClient){
+    alert("العميل غير موجود");
+    return;
+  }
 
-  document.getElementById("result").innerHTML = `
-    <div class="card">
-      <h3>👤 ${client.name}</h3>
-      <p>📞 ${client.phone}</p>
-      <p>💰 ${client.cost} جنيه</p>
-      <p>📅 التعاقد: ${client.start} → ${client.end}</p>
-      <p>🛠 آخر زيارة: ${client.lastVisit}</p>
-      <p>📍 القادمة: ${client.nextVisit}</p>
+  loginBox.classList.add("hidden");
+  clientBox.classList.remove("hidden");
 
-      ${diffDays <= 10 ? `
-        <div class="alert">
-          ⚠️ متبقي ${diffDays} أيام على تجديد التعاقد
-        </div>
-        <button onclick="renew('${client.phone}')">
-          🔄 تجديد التعاقد الآن
-        </button>
-      ` : ``}
-    </div>
-  `;
+  cName.textContent = currentClient.name;
+  cPhone.textContent = currentClient.phone;
+  cCost.textContent = currentClient.cost;
+  cStart.textContent = currentClient.start;
+  cEnd.textContent = currentClient.end;
+  cLast.textContent = currentClient.lastVisit || "-";
+  cNext.textContent = currentClient.nextVisit || "-";
 }
 
-function renew(phone){
-  if(!confirm("تأكيد تجديد التعاقد؟")) return;
+function renew(){
+  if(!confirm("هل تريد تجديد التعاقد؟")) return;
 
-  const db = loadDB();
-  const client = db.clients.find(c=>c.phone===phone);
+  const today = new Date();
+  const newStart = today.toISOString().split("T")[0];
 
-  const oldEnd = new Date(client.end);
-  const newEnd = new Date(oldEnd);
+  const newEnd = new Date();
   newEnd.setFullYear(newEnd.getFullYear()+1);
 
-  const today = new Date().toISOString().split("T")[0];
-  client.end = newEnd.toISOString().split("T")[0];
+  currentClient.start = newStart;
+  currentClient.end = newEnd.toISOString().split("T")[0];
 
-  if(!client.renewals) client.renewals=[];
-  client.renewals.push({date:today,newEnd:client.end});
+  saveDB();
 
-  saveDB(db);
+  alert("تم تجديد التعاقد بنجاح");
 
+  location.href = `contract.html?phone=${currentClient.phone}`;
+}
+
+function saveDB(){
+  localStorage.setItem("ft_db", JSON.stringify(db));
+}
+
+function sendWhats(){
   const msg = `
-تم تجديد تعاقد العميل:
-${client.name}
-📞 ${client.phone}
-🗓 حتى ${client.end}
-FutureTank
-  `;
-
-  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
-
-  alert("✅ تم تجديد التعاقد بنجاح");
-  location.reload();
+مرحبا FutureTank
+أنا ${currentClient.name}
+رقم ${currentClient.phone}
+`;
+  window.open(`https://wa.me/201150402031?text=${encodeURIComponent(msg)}`);
 }
 </script>
 
