@@ -5,34 +5,18 @@
 <title>🔐 بوابة العملاء – FutureTank</title>
 
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px;
-}
-h2{color:#0077b6;text-align:center}
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+h2{text-align:center;color:#0077b6}
 input,button{
-  width:100%;
-  padding:10px;
-  margin:6px 0;
-  border-radius:6px;
-  border:1px solid #ccc;
+  width:100%;padding:10px;margin:6px 0;
+  border-radius:6px;border:1px solid #ccc
 }
-button{
-  background:#0077b6;
-  color:#fff;
-  font-size:15px;
-  cursor:pointer;
-}
+button{background:#0077b6;color:#fff;font-size:15px;cursor:pointer}
 .card{
-  background:#fff;
-  padding:15px;
-  border-radius:8px;
-  margin-top:15px;
-  box-shadow:0 2px 6px rgba(0,0,0,.1);
+  background:#fff;padding:15px;border-radius:8px;
+  margin-top:15px;box-shadow:0 2px 6px rgba(0,0,0,.1)
 }
-.label{color:#555;font-size:14px}
-.value{font-weight:bold;margin-bottom:8px}
+.alert{background:#fffae6;padding:10px;border-radius:6px;margin:10px 0}
 </style>
 </head>
 
@@ -40,62 +24,85 @@ button{
 
 <h2>🔐 بوابة العملاء</h2>
 
-<input id="loginValue" placeholder="أدخل رقم الهاتف أو كود العميل">
+<input id="loginValue" placeholder="رقم الهاتف أو كود العميل">
 <button onclick="login()">دخول</button>
 
 <div id="result"></div>
 
 <script>
+const PHONE = "01150402031";
+const WHATSAPP = "201150402031";
+
 function loadDB(){
   return JSON.parse(localStorage.getItem("ft_db") || "{}");
+}
+function saveDB(db){
+  localStorage.setItem("ft_db",JSON.stringify(db));
 }
 
 function login(){
   const val = loginValue.value.trim();
-  if(!val){
-    alert("من فضلك أدخل رقم الهاتف أو الكود");
-    return;
-  }
+  if(!val){ alert("أدخل رقم الهاتف"); return; }
 
   const db = loadDB();
-  if(!db.clients || db.clients.length === 0){
-    alert("لا توجد بيانات عملاء");
-    return;
-  }
+  const client = db.clients?.find(c=>c.phone===val || String(c.id)===val);
+  if(!client){ alert("العميل غير موجود"); return; }
 
-  const client = db.clients.find(c =>
-    c.phone === val || String(c.id) === val
-  );
-
-  if(!client){
-    alert("❌ لم يتم العثور على العميل");
-    return;
-  }
+  const today = new Date();
+  const end = new Date(client.end);
+  const diffDays = Math.ceil((end - today)/(1000*60*60*24));
 
   document.getElementById("result").innerHTML = `
     <div class="card">
       <h3>👤 ${client.name}</h3>
+      <p>📞 ${client.phone}</p>
+      <p>💰 ${client.cost} جنيه</p>
+      <p>📅 التعاقد: ${client.start} → ${client.end}</p>
+      <p>🛠 آخر زيارة: ${client.lastVisit}</p>
+      <p>📍 القادمة: ${client.nextVisit}</p>
 
-      <div class="label">📞 رقم الهاتف</div>
-      <div class="value">${client.phone}</div>
-
-      <div class="label">💰 التكلفة</div>
-      <div class="value">${client.cost} جنيه</div>
-
-      <div class="label">📅 مدة التعاقد</div>
-      <div class="value">${client.start} → ${client.end}</div>
-
-      <div class="label">🛠 آخر زيارة</div>
-      <div class="value">${client.lastVisit}</div>
-
-      <div class="label">📍 الزيارة القادمة</div>
-      <div class="value">${client.nextVisit}</div>
-
-      <button onclick="alert('سيتم تفعيل التجديد قريبًا')">
-        🔄 تجديد التعاقد
-      </button>
+      ${diffDays <= 10 ? `
+        <div class="alert">
+          ⚠️ متبقي ${diffDays} أيام على تجديد التعاقد
+        </div>
+        <button onclick="renew('${client.phone}')">
+          🔄 تجديد التعاقد الآن
+        </button>
+      ` : ``}
     </div>
   `;
+}
+
+function renew(phone){
+  if(!confirm("تأكيد تجديد التعاقد؟")) return;
+
+  const db = loadDB();
+  const client = db.clients.find(c=>c.phone===phone);
+
+  const oldEnd = new Date(client.end);
+  const newEnd = new Date(oldEnd);
+  newEnd.setFullYear(newEnd.getFullYear()+1);
+
+  const today = new Date().toISOString().split("T")[0];
+  client.end = newEnd.toISOString().split("T")[0];
+
+  if(!client.renewals) client.renewals=[];
+  client.renewals.push({date:today,newEnd:client.end});
+
+  saveDB(db);
+
+  const msg = `
+تم تجديد تعاقد العميل:
+${client.name}
+📞 ${client.phone}
+🗓 حتى ${client.end}
+FutureTank
+  `;
+
+  window.open(`https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}`);
+
+  alert("✅ تم تجديد التعاقد بنجاح");
+  location.reload();
 }
 </script>
 
