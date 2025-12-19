@@ -12,13 +12,17 @@ body{font-family:Tahoma;background:#f4f9ff;padding:20px}
   padding:20px;
   border-radius:10px
 }
-input,button{
+input,button,a{
   width:100%;
   padding:12px;
   margin-top:10px;
   border-radius:6px;
+  display:block;
+  text-align:center;
+  text-decoration:none
 }
 button{background:#0077b6;color:#fff;border:none}
+.cash{background:#ff9800;color:#fff}
 </style>
 </head>
 
@@ -27,23 +31,36 @@ button{background:#0077b6;color:#fff;border:none}
 <div class="card">
 <h2>📄 عقد خدمة FutureTank</h2>
 
-<p>أقر أنا العميل بالموافقة على تجديد التعاقد لمدة سنة.</p>
+<p>
+أقر أنا العميل بالموافقة على تجديد التعاقد مع شركة FutureTank
+طبقاً للشروط المتفق عليها.
+</p>
 
 <input id="signName" placeholder="اسم العميل للتوقيع">
+
 <button onclick="sign()">✍️ موافق على التعاقد</button>
+
+<a class="cash" target="_blank"
+href="https://wa.me/201150402031?text=ارغب%20في%20الدفع%20اتصالات%20كاش">
+💸 الدفع عبر اتصالات كاش
+</a>
+
 </div>
 
 <script>
 const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
 const phone = new URLSearchParams(location.search).get("phone");
-const client = db.clients.find(c=>c.phone===phone);
+const client = (db.clients||[]).find(c=>c.phone===phone);
 
 function sign(){
-  if(!signName.value) return alert("اكتب اسمك");
+  if(!client) return alert("العميل غير موجود");
+  if(!signName.value) return alert("اكتب اسمك للتوقيع");
+
   client.signature = signName.value;
-  client.signedAt = new Date().toISOString();
-  localStorage.setItem("ft_db", JSON.stringify(db));
-  alert("تم توقيع العقد بنجاح");
+  client.signedAt = new Date().toISOString().split("T")[0];
+
+  localStorage.setItem("ft_db",JSON.stringify(db));
+  alert("✅ تم توقيع العقد بنجاح");
 }
 </script>
 
