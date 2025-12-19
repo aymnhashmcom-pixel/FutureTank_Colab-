@@ -2,118 +2,48 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>📄 عقد FutureTank الإلكتروني</title>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-
+<title>📄 عقد FutureTank</title>
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px
-}
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
 .card{
   background:#fff;
-  padding:20px;
-  border-radius:10px;
   max-width:700px;
   margin:auto;
-  box-shadow:0 2px 8px rgba(0,0,0,.15)
+  padding:20px;
+  border-radius:10px
 }
-h2{text-align:center;color:#0077b6}
-p{margin:8px 0}
-button{
+input,button{
   width:100%;
   padding:12px;
   margin-top:10px;
-  border:none;
   border-radius:6px;
-  background:#0077b6;
-  color:#fff;
-  font-size:16px;
-  cursor:pointer
 }
-.whatsapp{background:#25d366}
+button{background:#0077b6;color:#fff;border:none}
 </style>
 </head>
 
 <body>
 
-<div class="card" id="contractBox">
-  <h2>📄 عقد خدمات FutureTank</h2>
+<div class="card">
+<h2>📄 عقد خدمة FutureTank</h2>
 
-  <p><b>اسم العميل:</b> <span id="cName"></span></p>
-  <p><b>رقم الهاتف:</b> <span id="cPhone"></span></p>
-  <p><b>الخدمة:</b> <span id="cService"></span></p>
-  <p><b>قيمة التعاقد:</b> <span id="cCost"></span> جنيه</p>
+<p>أقر أنا العميل بالموافقة على تجديد التعاقد لمدة سنة.</p>
 
-  <p><b>تاريخ البداية:</b> <span id="cStart"></span></p>
-  <p><b>تاريخ النهاية:</b> <span id="cEnd"></span></p>
-
-  <hr>
-
-  <p>
-  يقر الطرفان بالموافقة على تنفيذ الخدمة وفق الشروط المتفق عليها،
-  وتتعهد شركة <b>FutureTank</b> بتقديم الخدمة بأعلى جودة.
-  </p>
-
-  <p>✍️ توقيع العميل: ________________________</p>
-  <p>✍️ توقيع الشركة: FutureTank</p>
-
-  <button onclick="downloadPDF()">📄 تحميل العقد PDF</button>
-  <button class="whatsapp" onclick="sendWhats()">💬 إرسال العقد واتساب</button>
+<input id="signName" placeholder="اسم العميل للتوقيع">
+<button onclick="sign()">✍️ موافق على التعاقد</button>
 </div>
 
 <script>
-const { jsPDF } = window.jspdf;
+const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
+const phone = new URLSearchParams(location.search).get("phone");
+const client = db.clients.find(c=>c.phone===phone);
 
-const params = new URLSearchParams(location.search);
-const phone = params.get("phone");
-
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
-const client = db.clients?.find(c=>c.phone===phone);
-
-if(!client){
-  alert("العميل غير موجود");
-}else{
-  cName.textContent = client.name;
-  cPhone.textContent = client.phone;
-  cService.textContent = client.service || "خدمات خزانات المياه";
-  cCost.textContent = client.cost;
-  cStart.textContent = client.start;
-  cEnd.textContent = client.end;
-}
-
-function downloadPDF(){
-  const pdf = new jsPDF();
-  pdf.setFont("Helvetica");
-
-  pdf.text("FutureTank", 105, 15, {align:"center"});
-  pdf.text("عقد خدمات", 105, 25, {align:"center"});
-
-  let y = 40;
-  pdf.text(`اسم العميل: ${client.name}`, 20, y); y+=10;
-  pdf.text(`رقم الهاتف: ${client.phone}`, 20, y); y+=10;
-  pdf.text(`الخدمة: ${client.service || "خدمات خزانات المياه"}`, 20, y); y+=10;
-  pdf.text(`قيمة التعاقد: ${client.cost} جنيه`, 20, y); y+=10;
-  pdf.text(`من ${client.start} إلى ${client.end}`, 20, y); y+=15;
-
-  pdf.text("يقر الطرفان بالموافقة على تنفيذ الخدمة.", 20, y); y+=20;
-  pdf.text("توقيع العميل: ____________________", 20, y); y+=15;
-  pdf.text("توقيع الشركة: FutureTank", 20, y);
-
-  pdf.save(`عقد_${client.name}.pdf`);
-}
-
-function sendWhats(){
-  const msg = `
-📄 عقد FutureTank
-العميل: ${client.name}
-📞 ${client.phone}
-📅 ${client.start} → ${client.end}
-💰 ${client.cost} جنيه
-  `;
-  window.open(`https://wa.me/201150402031?text=${encodeURIComponent(msg)}`);
+function sign(){
+  if(!signName.value) return alert("اكتب اسمك");
+  client.signature = signName.value;
+  client.signedAt = new Date().toISOString();
+  localStorage.setItem("ft_db", JSON.stringify(db));
+  alert("تم توقيع العقد بنجاح");
 }
 </script>
 
