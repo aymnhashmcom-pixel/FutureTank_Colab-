@@ -1,24 +1,148 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>👥 إدارة العملاء – FutureTank</title>
+
+<style>
+body{
+  font-family: Tahoma;
+  background:#f4f9ff;
+  padding:20px;
+}
+h2{color:#0077b6}
+input,button{
+  width:100%;
+  padding:8px;
+  margin:5px 0;
+  border-radius:6px;
+  border:1px solid #ccc;
+}
+button{
+  background:#0077b6;
+  color:#fff;
+  font-size:15px;
+  cursor:pointer;
+}
+.client{
+  background:#fff;
+  padding:10px;
+  border-radius:6px;
+  margin-bottom:10px;
+  box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+</style>
+</head>
+
+<body>
+
+<h2>👥 إدارة العملاء — FutureTank</h2>
+
+<h3>➕ إضافة عميل جديد</h3>
+
+<input id="clientName" placeholder="اسم العميل">
+<input id="clientPhone" placeholder="رقم الهاتف">
+<input id="cost" placeholder="التكلفة">
+<label>📅 بداية التعاقد</label>
+<input type="date" id="start">
+<label>📅 نهاية التعاقد</label>
+<input type="date" id="end">
+<label>🛠 آخر زيارة</label>
+<input type="date" id="lastVisit">
+<label>📍 الزيارة القادمة</label>
+<input type="date" id="nextVisit">
+
+<button onclick="addClient()">➕ إضافة العميل</button>
+
+<hr>
+
+<h3>📋 العملاء الحاليون</h3>
+<div id="clientsList"></div>
+
+<script>
+/* قاعدة البيانات */
+function loadDB(){
+  return JSON.parse(localStorage.getItem("ft_db") || "{}");
+}
+
+function saveDB(db){
+  localStorage.setItem("ft_db", JSON.stringify(db));
+}
+
+/* إضافة عميل */
 function addClient(){
   const db = loadDB();
+  if(!db.clients) db.clients = [];
 
   const name = clientName.value.trim();
   const phone = clientPhone.value.trim();
+  const clientCost = cost.value.trim();
+  const startDate = start.value;
+  const endDate = end.value;
 
-  if(!name || !phone){
-    alert("الاسم ورقم الهاتف مطلوبين");
+  if(!name || !phone || !clientCost || !startDate || !endDate){
+    alert("⚠️ من فضلك اكمل البيانات الأساسية");
     return;
   }
 
   db.clients.push({
+    id: Date.now(),
     name,
     phone,
-    cost: cost.value,
-    start: start.value,
-    end: end.value,
-    lastVisit: lastVisit.value,
-    nextVisit: nextVisit.value
+    cost: clientCost,
+    start: startDate,
+    end: endDate,
+    lastVisit: lastVisit.value || "—",
+    nextVisit: nextVisit.value || "—"
   });
 
   saveDB(db);
-  alert("تم حفظ العميل بنجاح");
+  alert("✅ تم حفظ العميل بنجاح");
+
+  clearForm();
+  renderClients();
 }
+
+/* تنظيف الحقول */
+function clearForm(){
+  clientName.value="";
+  clientPhone.value="";
+  cost.value="";
+  start.value="";
+  end.value="";
+  lastVisit.value="";
+  nextVisit.value="";
+}
+
+/* عرض العملاء */
+function renderClients(){
+  const db = loadDB();
+  const box = document.getElementById("clientsList");
+  box.innerHTML="";
+
+  if(!db.clients || db.clients.length===0){
+    box.innerHTML="<p>لا يوجد عملاء بعد</p>";
+    return;
+  }
+
+  db.clients.forEach(c=>{
+    const div=document.createElement("div");
+    div.className="client";
+    div.innerHTML=`
+      <strong>${c.name}</strong><br>
+      📞 ${c.phone}<br>
+      💰 ${c.cost} جنيه<br>
+      📅 ${c.start} → ${c.end}<br>
+      🛠 آخر زيارة: ${c.lastVisit}<br>
+      📍 القادمة: ${c.nextVisit}
+    `;
+    box.appendChild(div);
+  });
+}
+
+/* تحميل العملاء عند الفتح */
+renderClients();
+</script>
+
+</body>
+</html>
