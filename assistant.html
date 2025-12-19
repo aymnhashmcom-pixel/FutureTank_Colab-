@@ -2,69 +2,218 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>🤖 المساعد الذكي — فيوتشر تانك</title>
+<title>مساعد FutureTank</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <style>
-body{margin:0;font-family:Tahoma;background:#f4f9ff}
-.chat{max-width:700px;margin:40px auto;background:#fff;border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.1)}
-.head{background:#4a90e2;color:#fff;padding:16px;font-size:18px}
-.msgs{padding:16px;min-height:300px}
-.m{margin-bottom:10px}
-.bot{color:#1f3b5c}
-.user{font-weight:bold}
-.input{display:flex;border-top:1px solid #eee}
-input{flex:1;padding:14px;border:none}
-button{background:#4a90e2;color:#fff;border:none;padding:0 20px}
+body{
+  margin:0;
+  font-family:Tahoma;
+  background:#f4f9ff;
+}
+
+/* Header */
+header{
+  background:#fff;
+  padding:15px;
+  text-align:center;
+  box-shadow:0 2px 8px rgba(0,0,0,.08);
+}
+
+.logo{
+  width:60px;
+  height:60px;
+  border-radius:50%;
+  background:#e6f7ff;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:28px;
+  color:#00a8cc;
+  margin:auto;
+}
+
+h1{margin:6px 0 0;font-size:20px}
+span{font-size:13px;color:#007c99}
+
+/* Chat */
+.chat{
+  max-width:900px;
+  margin:20px auto;
+  background:#fff;
+  border-radius:12px;
+  box-shadow:0 4px 12px rgba(0,0,0,.1);
+  display:flex;
+  flex-direction:column;
+  height:70vh;
+}
+
+.messages{
+  flex:1;
+  padding:15px;
+  overflow-y:auto;
+}
+
+.msg{
+  margin-bottom:10px;
+  padding:10px 12px;
+  border-radius:10px;
+  max-width:75%;
+  font-size:14px;
+}
+
+.bot{
+  background:#e6f7ff;
+}
+
+.user{
+  background:#00a8cc;
+  color:#fff;
+  margin-right:auto;
+}
+
+/* Input */
+.input{
+  display:flex;
+  border-top:1px solid #ddd;
+}
+
+.input input{
+  flex:1;
+  padding:12px;
+  border:none;
+  outline:none;
+}
+
+.input button{
+  background:#00a8cc;
+  color:#fff;
+  border:none;
+  padding:0 20px;
+  font-size:16px;
+  cursor:pointer;
+}
 </style>
 </head>
+
 <body>
 
+<header>
+  <div class="logo">💧</div>
+  <h1>FutureTank</h1>
+  <span>مساعد العملاء الذكي</span>
+</header>
+
 <div class="chat">
-  <div class="head">🤖 المساعد الذكي — فيوتشر تانك</div>
-  <div class="msgs" id="msgs"></div>
+  <div class="messages" id="messages"></div>
+
   <div class="input">
-    <input id="q" placeholder="اكتب سؤالك هنا">
+    <input id="userInput" placeholder="اكتب سؤالك هنا...">
     <button onclick="send()">إرسال</button>
   </div>
 </div>
 
 <script>
-const data = JSON.parse(localStorage.getItem("ft_data")||"{}");
+const PHONE = "01150402031";
+const WHATSAPP = "201150402031";
 
-function add(text,cls){
-  msgs.innerHTML += `<div class="m ${cls}">${text}</div>`;
-  msgs.scrollTop = msgs.scrollHeight;
+const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
+const services = db.services || [];
+const products = db.products || [];
+
+const box = document.getElementById("messages");
+
+function bot(text){
+  const d = document.createElement("div");
+  d.className="msg bot";
+  d.innerHTML=text;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
 }
 
-function reply(q){
-  q = q.toLowerCase();
-
-  if(q.includes("سلام")||q.includes("مرحبا")||q.includes("ازيك"))
-    return "أهلاً بيك 👋 نورت فيوتشر تانك";
-
-  if(q.includes("1000"))
-    return `✔️ خزان بولي إيثيلين 1000 لتر متوفر — السعر ${data.prices?.["1000"]||"غير محدد"} جنيه`;
-
-  if(q.includes("تركيب"))
-    return "نوفر توريد + تركيب باحترافية 🔧";
-
-  if(q.includes("سعر")||q.includes("كام"))
-    return "قولي السعة المطلوبة وأنا أقولك السعر فورًا";
-
-  if(q.includes("واتس")||q.includes("تواصل"))
-    return `📲 واتساب: https://wa.me/${data.whatsapp||""}`;
-
-  return "تمام 👍 ممكن توضّح سؤالك أكتر؟";
+function user(text){
+  const d = document.createElement("div");
+  d.className="msg user";
+  d.innerText=text;
+  box.appendChild(d);
+  box.scrollTop = box.scrollHeight;
 }
+
+bot(`
+مرحباً بك في <b>FutureTank</b> 💧<br><br>
+أقدر أساعدك في:
+<ul>
+<li>🧰 الخدمات</li>
+<li>🛒 المنتجات</li>
+<li>📅 الحجز</li>
+<li>📞 التواصل</li>
+</ul>
+اكتب سؤالك 👇
+`);
 
 function send(){
-  const text = q.value.trim();
+  const input = document.getElementById("userInput");
+  const text = input.value.trim();
   if(!text) return;
-  add("أنت: "+text,"user");
-  q.value="";
-  setTimeout(()=>add("المساعد: "+reply(text),"bot"),300);
-}
+  user(text);
+  input.value="";
 
-add("المساعد: "+(data.welcome||"أنا هنا للمساعدة — اسألني عن الخزانات أو الصيانة."),"bot");
+  const t = text.toLowerCase();
+
+  if(t.includes("خدمة")){
+    if(services.length===0){
+      bot("حالياً لا توجد خدمات مسجلة.");
+    }else{
+      let html="<b>🧰 خدماتنا:</b><br>";
+      services.forEach(s=>{
+        html+=`• ${s.name}<br>`;
+      });
+      html+=`
+      <br>
+      <a href="services.html">عرض كل الخدمات</a>
+      `;
+      bot(html);
+    }
+  }
+
+  else if(t.includes("منتج")){
+    if(products.length===0){
+      bot("لا توجد منتجات حالياً.");
+    }else{
+      let html="<b>🛒 منتجاتنا:</b><br>";
+      products.forEach(p=>{
+        html+=`• ${p.name}<br>`;
+      });
+      html+=`
+      <br>
+      <a href="products.html">عرض المنتجات</a>
+      `;
+      bot(html);
+    }
+  }
+
+  else if(t.includes("حجز")){
+    bot(`
+    📅 للحجز:<br>
+    <a href="booking.html">اضغط هنا للحجز</a>
+    `);
+  }
+
+  else if(t.includes("رقم") || t.includes("تواصل")){
+    bot(`
+    📞 فون: <a href="tel:${PHONE}">${PHONE}</a><br>
+    💬 واتساب:
+    <a target="_blank"
+    href="https://wa.me/${WHATSAPP}">
+    اضغط هنا
+    </a>
+    `);
+  }
+
+  else{
+    bot("ممكن توضح أكتر؟ أنا تحت أمرك 👍");
+  }
+}
 </script>
 
 </body>
