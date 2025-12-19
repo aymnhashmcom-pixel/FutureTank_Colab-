@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>📋 إدارة العقود</title>
+<style>
+body{font-family:Tajawal;background:#eef3f9;padding:20px}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{border:1px solid #ccc;padding:8px;text-align:center}
+th{background:#0288d1;color:#fff}
+</style>
+</head>
+
+<body>
+
+<h2>📋 إدارة العقود</h2>
+
+<table>
+<thead>
+<tr>
+<th>العميل</th>
+<th>الهاتف</th>
+<th>العنوان</th>
+<th>المدة</th>
+<th>التكلفة</th>
+</tr>
+</thead>
+<tbody id="rows"></tbody>
+</table>
+
+<script>
+const db=JSON.parse(localStorage.getItem("ft_db")||"{}");
+(rows.innerHTML = (db.clients||[]).map(c=>`
+<tr>
+<td>${c.name}</td>
+<td>${c.phone}</td>
+<td>${c.address||""}</td>
+<td>${c.start} → ${c.end}</td>
+<td>${c.cost} جنيه</td>
+</tr>`).join(""));
+</script>
+
+</body>
+</html>
