@@ -4,12 +4,12 @@
 <meta charset="UTF-8">
 <title>🛒 إدارة المنتجات</title>
 <style>
-body{font-family:Tahoma;background:#f4f9ff;padding:20px}
-.card{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px}
+body{font-family:Tajawal;background:#f2f6fb;padding:20px}
+.card{background:#fff;padding:15px;border-radius:10px;margin-bottom:15px}
 input,button{width:100%;padding:10px;margin-top:8px}
-button{background:#0077b6;color:#fff;border:none;border-radius:6px}
+button{background:#0288d1;color:#fff;border:none;border-radius:6px}
 .product{border-bottom:1px solid #ddd;padding:10px 0}
-img,video{max-width:100%;margin-top:5px;border-radius:6px}
+img,video{max-width:100%;border-radius:6px;margin-top:6px}
 </style>
 </head>
 
@@ -18,15 +18,14 @@ img,video{max-width:100%;margin-top:5px;border-radius:6px}
 <h2>🛒 إدارة المنتجات</h2>
 
 <div class="card">
-<input id="name" placeholder="اسم المنتج">
-<input id="price" placeholder="السعر">
-<input type="file" id="image" accept="image/*">
-<input type="file" id="video" accept="video/*">
+<input id="pname" placeholder="اسم المنتج">
+<input id="pprice" placeholder="السعر">
+<input type="file" id="pimg" accept="image/*">
+<input type="file" id="pvid" accept="video/*">
 <button onclick="addProduct()">➕ إضافة المنتج</button>
 </div>
 
-<h3>📋 المنتجات الحالية</h3>
-<div id="list"></div>
+<div id="products"></div>
 
 <script>
 function loadDB(){
@@ -35,57 +34,48 @@ function loadDB(){
 function saveDB(db){
   localStorage.setItem("ft_db",JSON.stringify(db));
 }
-
-function fileToBase64(file,cb){
+function toBase64(file,cb){
   const r=new FileReader();
   r.onload=()=>cb(r.result);
   r.readAsDataURL(file);
 }
-
 function addProduct(){
+  if(!pname.value || !pprice.value){
+    alert("الاسم والسعر مطلوبين");return;
+  }
   const db=loadDB();
-  if(!name.value || !price.value){
-    alert("الاسم والسعر مطلوبين"); return;
-  }
+  const p={name:pname.value,price:pprice.value};
 
-  const product={name:name.value,price:price.value};
-
-  if(image.files[0]){
-    fileToBase64(image.files[0],img=>{
-      product.image=img;
-      finish(product);
+  if(pimg.files[0]){
+    toBase64(pimg.files[0],img=>{
+      p.image=img;
+      finish(p);
     });
-  }else{
-    finish(product);
-  }
+  }else finish(p);
 
-  function finish(p){
-    if(video.files[0]){
-      fileToBase64(video.files[0],vid=>{
-        p.video=vid;
-        db.products.push(p);
-        saveDB(db);
-        render();
+  function finish(prod){
+    if(pvid.files[0]){
+      toBase64(pvid.files[0],vid=>{
+        prod.video=vid;
+        db.products.push(prod);
+        saveDB(db);render();
       });
     }else{
-      db.products.push(p);
-      saveDB(db);
-      render();
+      db.products.push(prod);
+      saveDB(db);render();
     }
   }
 }
-
 function render(){
   const db=loadDB();
-  list.innerHTML="";
+  products.innerHTML="";
   (db.products||[]).forEach(p=>{
-    list.innerHTML+=`
-      <div class="product">
-        <b>${p.name}</b> – ${p.price} جنيه
-        ${p.image?`<img src="${p.image}">`:""}
-        ${p.video?`<video controls src="${p.video}"></video>`:""}
-      </div>
-    `;
+    products.innerHTML+=`
+    <div class="product">
+      <b>${p.name}</b> – ${p.price} جنيه
+      ${p.image?`<img src="${p.image}">`:""}
+      ${p.video?`<video controls src="${p.video}"></video>`:""}
+    </div>`;
   });
 }
 render();
