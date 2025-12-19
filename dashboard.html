@@ -2,78 +2,86 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>لوحة التحكم — FutureTank</title>
-<link rel="stylesheet" href="styles.css">
+<title>⚙️ لوحة تحكم FutureTank</title>
 <style>
 body{font-family:Tahoma;background:#f4f9ff;padding:20px}
-h2{margin-bottom:20px}
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:15px
-}
-.card{
+.box{
   background:#fff;
-  padding:20px;
-  border-radius:10px;
-  text-align:center;
-  box-shadow:0 2px 6px rgba(0,0,0,.1)
+  padding:15px;
+  margin-bottom:15px;
+  border-radius:8px
 }
-.card a{
-  display:block;
-  margin-top:10px;
-  text-decoration:none;
-  background:#007bff;
+a{
+  display:inline-block;
+  margin:5px;
+  padding:8px 12px;
+  background:#0077b6;
   color:#fff;
-  padding:10px;
+  text-decoration:none;
   border-radius:6px
 }
-.card a:hover{opacity:.9}
+.alert{
+  background:#fff3cd;
+  padding:10px;
+  border-radius:6px;
+  margin-bottom:10px
+}
 </style>
 </head>
 
 <body>
 
-<script src="auth.js"></script>
-<script>
-requireRole("admin");
-</script>
-
 <h2>⚙️ لوحة تحكم FutureTank</h2>
 
-<div class="grid">
-
-  <div class="card">
-    🛒 إدارة المنتجات
-    <a href="admin-products.html">فتح</a>
-  </div>
-
-  <div class="card">
-    🧰 إدارة الخدمات
-    <a href="admin-services.html">فتح</a>
-  </div>
-
-  <div class="card">
-    👥 إدارة العملاء
-    <a href="admin-clients.html">فتح</a>
-  </div>
-
-  <div class="card">
-    📋 إدارة العقود
-    <a href="contracts.html">فتح</a>
-  </div>
-
-  <div class="card">
-    🔄 تجديدات التعاقد
-    <a href="admin-renewals.html">فتح</a>
-  </div>
-
-  <div class="card">
-    📊 التقارير
-    <a href="reports.html">فتح</a>
-  </div>
-
+<div class="box">
+  <a href="admin-products.html">🛒 إدارة المنتجات</a>
+  <a href="admin-services.html">🧰 إدارة الخدمات</a>
+  <a href="admin-clients.html">👥 إدارة العملاء</a>
+  <a href="contracts.html">📋 إدارة العقود</a>
+  <a href="admin-renewals.html">🔄 تجديدات التعاقد</a>
 </div>
+
+<h3>🔔 تنبيهات قرب تجديد التعاقد</h3>
+<div id="alerts"></div>
+
+<script>
+function loadDB(){
+  return JSON.parse(localStorage.getItem("ft_db")||"{}");
+}
+
+function daysBetween(d1,d2){
+  return Math.ceil(
+    (new Date(d2)-new Date(d1))/(1000*60*60*24)
+  );
+}
+
+const db = loadDB();
+const today = new Date().toISOString().split("T")[0];
+const box = document.getElementById("alerts");
+
+const alerts = (db.clients||[]).filter(c=>{
+  if(!c.end) return false;
+  return daysBetween(today,c.end) <= 10;
+});
+
+if(alerts.length===0){
+  box.innerHTML="لا توجد تنبيهات حالياً";
+}else{
+  alerts.forEach(c=>{
+    const div=document.createElement("div");
+    div.className="alert";
+    div.innerHTML=`
+      <b>${c.name}</b><br>
+      📅 ينتهي: ${c.end}<br>
+      <a target="_blank"
+        href="https://wa.me/201150402031?text=تنبيه%20تجديد%20عقد%20${c.name}">
+        💬 تواصل واتساب
+      </a>
+    `;
+    box.appendChild(div);
+  });
+}
+</script>
 
 </body>
 </html>
