@@ -1,46 +1,91 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>إدارة المنتجات</title>
-<script src="system.js"></script>
+<title>🛒 إدارة المنتجات</title>
+<style>
+body{font-family:Tahoma;background:#f4f9ff;padding:20px}
+.card{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px}
+input,button{width:100%;padding:10px;margin-top:8px}
+button{background:#0077b6;color:#fff;border:none;border-radius:6px}
+.product{border-bottom:1px solid #ddd;padding:10px 0}
+img,video{max-width:100%;margin-top:5px;border-radius:6px}
+</style>
 </head>
+
 <body>
 
 <h2>🛒 إدارة المنتجات</h2>
 
-<input id="name" placeholder="اسم المنتج"><br><br>
-<input id="price" placeholder="السعر"><br><br>
-<input id="image" placeholder="رابط صورة المنتج"><br><br>
-<input id="video" placeholder="رابط فيديو (اختياري)"><br><br>
-
+<div class="card">
+<input id="name" placeholder="اسم المنتج">
+<input id="price" placeholder="السعر">
+<input type="file" id="image" accept="image/*">
+<input type="file" id="video" accept="video/*">
 <button onclick="addProduct()">➕ إضافة المنتج</button>
+</div>
 
-<ul id="list"></ul>
+<h3>📋 المنتجات الحالية</h3>
+<div id="list"></div>
 
 <script>
-function addProduct(){
-  const db = loadDB();
-  const name = document.getElementById("name").value;
-  const price = document.getElementById("price").value;
-  const image = document.getElementById("image").value;
-  const video = document.getElementById("video").value;
+function loadDB(){
+  return JSON.parse(localStorage.getItem("ft_db")||"{\"products\":[]}");
+}
+function saveDB(db){
+  localStorage.setItem("ft_db",JSON.stringify(db));
+}
 
-  if(!name || !price){
-    alert("الاسم والسعر مطلوبين");
-    return;
+function fileToBase64(file,cb){
+  const r=new FileReader();
+  r.onload=()=>cb(r.result);
+  r.readAsDataURL(file);
+}
+
+function addProduct(){
+  const db=loadDB();
+  if(!name.value || !price.value){
+    alert("الاسم والسعر مطلوبين"); return;
   }
 
-  db.products.push({name, price, image, video});
-  saveDB(db);
-  render();
+  const product={name:name.value,price:price.value};
+
+  if(image.files[0]){
+    fileToBase64(image.files[0],img=>{
+      product.image=img;
+      finish(product);
+    });
+  }else{
+    finish(product);
+  }
+
+  function finish(p){
+    if(video.files[0]){
+      fileToBase64(video.files[0],vid=>{
+        p.video=vid;
+        db.products.push(p);
+        saveDB(db);
+        render();
+      });
+    }else{
+      db.products.push(p);
+      saveDB(db);
+      render();
+    }
+  }
 }
 
 function render(){
-  const db = loadDB();
-  list.innerHTML = "";
-  db.products.forEach(p=>{
-    list.innerHTML += `<li>${p.name} - ${p.price}</li>`;
+  const db=loadDB();
+  list.innerHTML="";
+  (db.products||[]).forEach(p=>{
+    list.innerHTML+=`
+      <div class="product">
+        <b>${p.name}</b> – ${p.price} جنيه
+        ${p.image?`<img src="${p.image}">`:""}
+        ${p.video?`<video controls src="${p.video}"></video>`:""}
+      </div>
+    `;
   });
 }
 render();
