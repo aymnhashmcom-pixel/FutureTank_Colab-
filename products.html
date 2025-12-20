@@ -1,178 +1,78 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>منتجات FutureTank</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-  margin:0;
-  font-family:Tahoma;
-  background:#f4f9ff;
-  color:#003344;
-}
-
-/* Header */
-header{
-  background:#fff;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-  padding:15px;
-  text-align:center;
-}
-
-.logo{
-  width:70px;
-  height:70px;
-  margin:auto;
-  border-radius:50%;
-  background:#e6f7ff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:34px;
-  color:#00a8cc;
-}
-
-h1{margin:8px 0 0;font-size:22px}
-h1 span{display:block;font-size:14px;color:#007c99}
-.slogan{font-size:13px;color:#555;margin-top:5px}
-
-/* Nav */
-nav{
-  display:flex;
-  flex-wrap:wrap;
-  gap:8px;
-  justify-content:center;
-  margin:15px 0;
-}
-
-nav a{
-  text-decoration:none;
-  background:#00a8cc;
-  color:#fff;
-  padding:8px 14px;
-  border-radius:20px;
-  font-size:13px;
-}
-
-/* Products */
-main{
-  padding:20px;
-  max-width:900px;
-  margin:auto;
-}
-
-.product{
-  background:#fff;
-  border-radius:14px;
-  padding:15px;
-  margin-bottom:20px;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
-}
-
-.product img,
-.product video{
-  width:100%;
-  border-radius:10px;
-  margin-top:10px;
-}
-
-.price{
-  margin:8px 0;
-  font-weight:bold;
-  color:#007c99;
-}
-
-.actions a{
-  display:inline-block;
-  margin:5px 5px 0 0;
-  padding:8px 12px;
-  border-radius:6px;
-  text-decoration:none;
-  color:#fff;
-  font-size:13px;
-}
-
-.phone{background:#007bff}
-.whatsapp{background:#25d366}
-.cash{background:#ff9800}
-.buy{background:#4caf50}
-
-/* Footer */
-footer{
-  margin-top:30px;
-  background:#003344;
-  color:#fff;
-  text-align:center;
-  padding:15px;
-  font-size:13px;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>منتجات FutureTank</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+      direction: rtl;
+    }
+    h1 {
+      color: #1e88e5;
+    }
+    .product {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 6px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .price {
+      color: #2e7d32;
+      font-weight: bold;
+    }
+  </style>
 </head>
-
 <body>
 
-<header>
-  <div class="logo">💧</div>
-  <h1>FutureTank <span>فيوتشر تانك</span></h1>
-  <div class="slogan">نقاء الماء هو هدفنا</div>
-</header>
+  <h1>🛒 قائمة المنتجات</h1>
+  <div id="products"></div>
 
-<nav>
-  <a href="index.html">🏠 الرئيسية</a>
-  <a href="services.html">🧰 الخدمات</a>
-  <a href="products.html">🛒 المنتجات</a>
-  <a href="assistant.html">💬 المساعد</a>
-  <a href="client.html">🔐 بوابة العملاء</a>
-</nav>
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-<main id="productsBox"></main>
+    // 🔹 إعدادات Firebase (بتاعتك)
+    const firebaseConfig = {
+      apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+      authDomain: "futuretank-68c26.firebaseapp.com",
+      projectId: "futuretank-68c26",
+      storageBucket: "futuretank-68c26.firebasestorage.app",
+      messagingSenderId: "481083621438",
+      appId: "1:481083621438:web:db01077aef0511792c516f"
+    };
 
-<footer>
-© 2025 FutureTank – جميع الحقوق محفوظة
-</footer>
+    // Initialize
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-<script>
-const PHONE = "01150402031";
-const WHATSAPP = "201150402031";
+    // جلب المنتجات
+    const productsDiv = document.getElementById("products");
 
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
-const products = db.products || [];
-const box = document.getElementById("productsBox");
+    async function loadProducts() {
+      const querySnapshot = await getDocs(collection(db, "products"));
+      productsDiv.innerHTML = "";
 
-if(products.length === 0){
-  box.innerHTML = "<p style='text-align:center'>لا توجد منتجات حالياً</p>";
-}
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
 
-products.forEach(p=>{
-  const div = document.createElement("div");
-  div.className="product";
-  div.innerHTML = `
-    <h3>${p.name}</h3>
-    <div class="price">السعر: ${p.price || ""} جنيه</div>
+        const div = document.createElement("div");
+        div.className = "product";
+        div.innerHTML = `
+          <div><strong>الاسم:</strong> ${data.name}</div>
+          <div class="price">السعر: ${data.price} جنيه</div>
+        `;
 
-    ${p.image ? `<img src="${p.image}">` : ""}
-    ${p.video ? `<video src="${p.video}" controls></video>` : ""}
+        productsDiv.appendChild(div);
+      });
+    }
 
-    <div class="actions">
-      <a class="phone" href="tel:${PHONE}">📞 فون</a>
-      <a class="whatsapp" target="_blank"
-         href="https://wa.me/${WHATSAPP}?text=استفسار عن منتج: ${encodeURIComponent(p.name)}">
-         💬 واتساب
-      </a>
-      <a class="cash" target="_blank"
-         href="https://wa.me/${WHATSAPP}?text=ارغب في الدفع اتصالات كاش لمنتج: ${encodeURIComponent(p.name)}">
-         💸 اتصالات كاش
-      </a>
-      <a class="buy" href="booking.html?product=${encodeURIComponent(p.name)}">
-         🛍️ تسوّق الآن
-      </a>
-    </div>
-  `;
-  box.appendChild(div);
-});
-</script>
+    loadProducts();
+  </script>
 
 </body>
 </html>
