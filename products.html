@@ -1,150 +1,183 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
   <meta charset="UTF-8" />
-  <title>قائمة المنتجات</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="stylesheet" href="styles.css" />
-
+  <title>🛒 قائمة المنتجات</title>
   <style>
-    body { font-family: Tahoma, Arial; background:#f7f7f7; margin:0; padding:20px }
-    h1 { text-align:center }
-    .products { display:grid; grid-template-columns:repeat(auto-fill,minmax(250px,1fr)); gap:20px }
-    .product { background:#fff; padding:15px; border-radius:10px; box-shadow:0 2px 8px rgba(0,0,0,.1) }
-    .product h3 { margin:0 0 10px }
-    .product button {
-      width:100%;
-      padding:10px;
-      background:#0a7cff;
-      color:#fff;
-      border:none;
-      border-radius:6px;
-      cursor:pointer;
-      font-size:16px;
+    body {
+      font-family: Arial, sans-serif;
+      background: #f7f9fc;
+      direction: rtl;
+      padding: 20px;
     }
-    .popup {
-      position:fixed; inset:0;
-      background:rgba(0,0,0,.6);
-      display:none; align-items:center; justify-content:center;
+    h1 { text-align: center; }
+
+    .product {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
     }
-    .popup-content {
-      background:#fff; padding:20px; width:95%; max-width:400px;
-      border-radius:10px;
+
+    button {
+      background: #4a90e2;
+      color: #fff;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 15px;
     }
-    .popup-content input {
-      width:100%; margin-bottom:10px; padding:8px;
+
+    button:hover {
+      opacity: 0.9;
+    }
+
+    /* نافذة الشراء */
+    #orderModal {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: #fff;
+      padding: 20px;
+      width: 90%;
+      max-width: 400px;
+      border-radius: 10px;
+    }
+
+    input {
+      width: 100%;
+      padding: 8px;
+      margin: 6px 0;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .cancel {
+      background: #aaa;
     }
   </style>
 </head>
-
 <body>
 
 <h1>🛒 قائمة المنتجات</h1>
-
-<div class="products" id="products"></div>
+<div id="products"></div>
 
 <!-- نافذة الطلب -->
-<div class="popup" id="orderPopup">
-  <div class="popup-content">
-    <h3 id="selectedProductTitle"></h3>
+<div id="orderModal">
+  <div class="modal-content">
+    <h3 id="selectedProduct"></h3>
 
-    <input id="customerName" placeholder="الاسم الكامل" />
-    <input id="customerPhone" placeholder="رقم الموبايل" />
+    <input id="customerName" placeholder="الاسم" />
+    <input id="customerPhone" placeholder="رقم الهاتف" />
     <input id="customerAddress" placeholder="العنوان" />
 
-    <button onclick="confirmOrder()">تأكيد الطلب</button>
-    <br><br>
-    <button onclick="closePopup()">إلغاء</button>
+    <div class="actions">
+      <button onclick="confirmOrder()">تأكيد الطلب</button>
+      <button class="cancel" onclick="closeModal()">إلغاء</button>
+    </div>
   </div>
 </div>
 
-<!-- Firebase -->
 <script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  // 🔥 Firebase
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, getDocs, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
   const firebaseConfig = {
-    apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+    apiKey: "PUT_YOUR_KEY",
     authDomain: "futuretank-68c26.firebaseapp.com",
     projectId: "futuretank-68c26",
-    storageBucket: "futuretank-68c26.firebasestorage.app",
-    messagingSenderId: "481083621438",
-    appId: "1:481083621438:web:db01077aef0511792c516f"
   };
 
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  const productsDiv = document.getElementById("products");
-  let selectedProduct = null;
+  let currentProduct = null;
 
-  // تحميل المنتجات
-  const snapshot = await getDocs(collection(db, "products"));
-  snapshot.forEach(doc => {
-    const p = doc.data();
-    const div = document.createElement("div");
-    div.className = "product";
-    div.innerHTML = `
-      <h3>${p.name}</h3>
-      <p>السعر: ${p.price} جنيه</p>
-      <button onclick='openPopup(${JSON.stringify(p)})'>اشترِ الآن</button>
-    `;
-    productsDiv.appendChild(div);
-  });
+  // 🛒 تحميل المنتجات
+  async function loadProducts() {
+    const box = document.getElementById("products");
+    const snap = await getDocs(collection(db, "products"));
 
-  // فتح الطلب
-  window.openPopup = function(product) {
-    selectedProduct = product;
-    document.getElementById("selectedProductTitle").innerText =
-      product.name + " - " + product.price + " جنيه";
-    document.getElementById("orderPopup").style.display = "flex";
+    snap.forEach(doc => {
+      const p = doc.data();
+      box.innerHTML += `
+        <div class="product">
+          <h3>${p.name}</h3>
+          <p>السعر: ${p.price} جنيه</p>
+          <button onclick="openOrder('${p.name}', ${p.price})">
+            اشترِ الآن
+          </button>
+        </div>
+      `;
+    });
+  }
+
+  loadProducts();
+
+  // 🧾 فتح الطلب
+  window.openOrder = (name, price) => {
+    currentProduct = { name, price };
+    document.getElementById("selectedProduct").innerText =
+      `${name} - ${price} جنيه`;
+    document.getElementById("orderModal").style.display = "flex";
   };
 
-  window.closePopup = function() {
-    document.getElementById("orderPopup").style.display = "none";
+  // ❌ غلق
+  window.closeModal = () => {
+    document.getElementById("orderModal").style.display = "none";
   };
 
-  // تأكيد الطلب
-  window.confirmOrder = async function() {
-    const name = customerName.value;
-    const phone = customerPhone.value;
-    const address = customerAddress.value;
+  // ✅ تأكيد الطلب (مُصلّح نهائيًا)
+  window.confirmOrder = async () => {
+    const name = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const address = document.getElementById("customerAddress").value.trim();
 
     if (!name || !phone || !address) {
       alert("من فضلك أكمل البيانات");
       return;
     }
 
+    // حفظ الطلب
     await addDoc(collection(db, "orders"), {
-      productName: selectedProduct.name,
-      price: selectedProduct.price,
       customerName: name,
-      customerPhone: phone,
-      customerAddress: address,
-      status: "تم استلام الطلب",
-      createdAt: new Date()
+      phone,
+      address,
+      product: currentProduct.name,
+      price: currentProduct.price,
+      status: "قيد التنفيذ",
+      createdAt: serverTimestamp()
     });
 
-    const message = `
+    // واتساب
+    const msg = `
 طلب جديد 🛒
-------------------
-المنتج: ${selectedProduct.name}
-السعر: ${selectedProduct.price} جنيه
-
-👤 الاسم: ${name}
-📞 الهاتف: ${phone}
-📍 العنوان: ${address}
-
-الحالة: تم استلام الطلب
+المنتج: ${currentProduct.name}
+السعر: ${currentProduct.price} جنيه
+الاسم: ${name}
+الهاتف: ${phone}
+العنوان: ${address}
 `;
+    window.open(
+      "https://wa.me/201000000000?text=" + encodeURIComponent(msg),
+      "_blank"
+    );
 
-    const whatsappNumber = "2010XXXXXXXX"; // ← رقم خدمة العملاء
-    const url = "https://wa.me/" + whatsappNumber +
-                "?text=" + encodeURIComponent(message);
-
-    window.open(url, "_blank");
-    alert("✅ تم تأكيد الطلب");
-    closePopup();
+    alert("✅ تم تأكيد الطلب بنجاح");
+    closeModal();
   };
 </script>
 
