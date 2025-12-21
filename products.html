@@ -1,23 +1,95 @@
-<button onclick="buyNow('خزان مياه', 1000)">
-  اشترِ الآن
-</button>
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>المنتجات | FutureTank</title>
+<style>
+body {
+  font-family: Arial;
+  direction: rtl;
+  background: #f5f7fa;
+  padding: 20px;
+}
+.product {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+}
+button {
+  background: #0d6efd;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+button:hover { background:#084298 }
+</style>
+</head>
 
-<script>
-function buyNow(name, price) {
+<body>
+
+<h2>🛒 قائمة المنتجات</h2>
+<div id="products"></div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* 🔹 إعداد Firebase */
+const firebaseConfig = {
+  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+  projectId: "futuretank-68c26",
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const box = document.getElementById("products");
+
+/* 🔹 جلب المنتجات */
+const snap = await getDocs(collection(db,"products"));
+snap.forEach(docu => {
+  const p = docu.data();
+  box.innerHTML += `
+    <div class="product">
+      <h3>${p.name}</h3>
+      <p>السعر: ${p.price} جنيه</p>
+      <button onclick="buyNow('${p.name}', ${p.price})">
+        اشترِ الآن
+      </button>
+    </div>
+  `;
+});
+
+/* 🔹 تنفيذ الشراء */
+window.buyNow = async (name, price) => {
   const phone = prompt("📞 اكتب رقم الموبايل");
   if (!phone) return;
 
+  // حفظ الطلب
+  await addDoc(collection(db,"orders"), {
+    product: name,
+    price: price,
+    phone: phone,
+    status: "قيد التنفيذ",
+    createdAt: Date.now()
+  });
+
+  // رسالة العميل
   const msgCustomer =
     `✅ تم استلام طلبك بنجاح\n\n` +
     `🛒 المنتج: ${name}\n` +
     `💰 السعر: ${price} جنيه\n\n` +
-    `📦 سيتم التواصل معك قريبًا`;
+    `📦 حالة الطلب: قيد التنفيذ`;
 
+  // رسالة خدمة العملاء
   const msgAdmin =
     `📥 طلب جديد\n\n` +
     `🛒 المنتج: ${name}\n` +
     `💰 السعر: ${price} جنيه\n` +
-    `📞 العميل: ${phone}`;
+    `📞 رقم العميل: ${phone}`;
 
   // واتساب العميل
   window.open(
@@ -25,10 +97,13 @@ function buyNow(name, price) {
     "_blank"
   );
 
-  // واتساب خدمة العملاء (غير الرقم)
+  // 🔴 رقم خدمة العملاء (عدّله هنا فقط)
   window.open(
-    `https://wa.me/201234567890?text=${encodeURIComponent(msgAdmin)}`,
+    `https://wa.me/201001234567?text=${encodeURIComponent(msgAdmin)}`,
     "_blank"
   );
-}
+};
 </script>
+
+</body>
+</html>
