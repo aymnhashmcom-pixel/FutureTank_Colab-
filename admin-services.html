@@ -1,121 +1,74 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>🧰 إدارة الخدمات — FutureTank</title>
+<title>إدارة الخدمات | FutureTank</title>
 <style>
-body{font-family:Tahoma;background:#f4f9ff;padding:20px}
-.box{background:#fff;padding:20px;border-radius:10px}
-input,textarea,button{
-  width:100%;padding:10px;margin:6px 0;
-  border-radius:6px;border:1px solid #ccc
-}
-button{background:#007bff;color:#fff;border:none;cursor:pointer}
-.service{
-  background:#eef5ff;padding:10px;margin-top:10px;border-radius:8px
-}
-img,video{max-width:100%;margin-top:5px;border-radius:6px}
-.export{background:#4caf50}
-.delete{background:#e53935}
+body{font-family:Arial;direction:rtl;background:#f4f6f9;padding:20px}
+.box{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px}
+input,textarea,button{padding:10px;width:100%;margin-top:8px}
+button{background:#198754;color:#fff;border:none;border-radius:6px}
+.service{border-bottom:1px solid #ddd;padding:8px 0}
 </style>
 </head>
-
 <body>
 
-<h2>🧰 إدارة الخدمات — FutureTank</h2>
+<h2>🧰 إدارة الخدمات</h2>
 
 <div class="box">
-  <h3>➕ إضافة خدمة جديدة</h3>
+  <h3>➕ إضافة خدمة</h3>
   <input id="name" placeholder="اسم الخدمة">
   <textarea id="desc" placeholder="وصف الخدمة"></textarea>
-  <input type="file" id="img" accept="image/*">
-  <input type="file" id="vid" accept="video/*">
-  <button onclick="addService()">➕ إضافة الخدمة</button>
-  <button class="export" onclick="exportDB()">⬇️ تصدير قاعدة البيانات</button>
+  <button onclick="add()">إضافة</button>
 </div>
 
-<h3>📋 الخدمات الحالية</h3>
-<div id="list"></div>
+<div class="box">
+  <h3>📋 الخدمات الحالية</h3>
+  <div id="list"></div>
+</div>
 
-<script>
-const db = JSON.parse(localStorage.getItem("ft_db") || '{"services":[]}');
-db.services = db.services || [];
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-function save(){
-  localStorage.setItem("ft_db", JSON.stringify(db));
-}
+const firebaseConfig = {
+  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+  projectId: "futuretank-68c26"
+};
 
-function fileToBase64(file,cb){
-  const r = new FileReader();
-  r.onload = ()=>cb(r.result);
-  r.readAsDataURL(file);
-}
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const col = collection(db,"services");
+const list = document.getElementById("list");
 
-function addService(){
-  const s = {
-    name: name.value,
-    desc: desc.value
-  };
-  const imgFile = img.files[0];
-  const vidFile = vid.files[0];
-
-  if(imgFile){
-    fileToBase64(imgFile,(i)=>{
-      s.image=i;
-      handleVideo(s,vidFile);
-    });
-  }else handleVideo(s,vidFile);
-}
-
-function handleVideo(s,vid){
-  if(vid){
-    fileToBase64(vid,(v)=>{
-      s.video=v;
-      finish(s);
-    });
-  }else finish(s);
-}
-
-function finish(s){
-  db.services.push(s);
-  save();
-  location.reload();
-}
-
-function removeService(i){
-  if(confirm("حذف الخدمة؟")){
-    db.services.splice(i,1);
-    save();
-    location.reload();
-  }
-}
-
-function render(){
+async function load(){
   list.innerHTML="";
-  db.services.forEach((s,i)=>{
+  const snap = await getDocs(col);
+  snap.forEach(d=>{
+    const s = d.data();
     list.innerHTML+=`
-    <div class="service">
-      <b>${s.name}</b><br>
-      ${s.desc||""}
-      ${s.image?`<img src="${s.image}">`:""}
-      ${s.video?`<video src="${s.video}" controls></video>`:""}
-      <br><button class="delete" onclick="removeService(${i})">🗑 حذف</button>
-    </div>`;
+      <div class="service">
+        <b>${s.name}</b><br>${s.desc}
+        <button onclick="del('${d.id}')">🗑 حذف</button>
+      </div>
+    `;
   });
 }
+load();
 
-function exportDB(){
-  const blob = new Blob(
-    [JSON.stringify(db,null,2)],
-    {type:"application/json"}
-  );
-  const a = document.createElement("a");
-  a.href = URL.createObjectURL(blob);
-  a.download = "database.json";
-  a.click();
-}
+window.add = async ()=>{
+  const name = document.getElementById("name").value;
+  const desc = document.getElementById("desc").value;
+  if(!name||!desc) return alert("أكمل البيانات");
+  await addDoc(col,{name,desc});
+  name.value=""; desc.value="";
+  load();
+};
 
-render();
+window.del = async (id)=>{
+  await deleteDoc(doc(db,"services",id));
+  load();
+};
 </script>
 
 </body>
