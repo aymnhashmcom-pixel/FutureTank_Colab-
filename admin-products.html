@@ -1,83 +1,96 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
 <title>إدارة المنتجات</title>
-<style>
-body{font-family:Arial;direction:rtl;background:#f4f6f9;padding:20px}
-.box{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px}
-input,button{padding:10px;width:100%;margin-top:8px}
-button{background:#0d6efd;color:#fff;border:none;border-radius:6px}
-.item{border-bottom:1px solid #ddd;padding:8px 0}
-</style>
-</head>
-<body>
-
-<h2>🛒 إدارة المنتجات</h2>
-
-<div class="box">
-  <h3>➕ إضافة منتج</h3>
-  <input id="name" placeholder="اسم المنتج">
-  <input id="price" type="number" placeholder="السعر">
-  <button onclick="addProduct()">إضافة</button>
-</div>
-
-<div class="box">
-  <h3>📦 المنتجات الحالية</h3>
-  <div id="list">جارٍ التحميل...</div>
-</div>
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
-  projectId: "futuretank-68c26"
+  authDomain: "futuretank-68c26.firebaseapp.com",
+  projectId: "futuretank-68c26",
+  storageBucket: "futuretank-68c26.appspot.com"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-const col = collection(db,"products");
+const storage = getStorage(app);
+
 const list = document.getElementById("list");
 
-async function load(){
-  list.innerHTML="";
-  const snap = await getDocs(col);
-  if(snap.empty){
-    list.innerHTML="لا توجد منتجات";
+/* إضافة منتج */
+window.addProduct = async () => {
+  const name = productName.value;
+  const price = productPrice.value;
+  const imageFile = productImage.files[0];
+  const videoFile = productVideo.files[0];
+
+  if (!name || !price || !imageFile) {
+    alert("الاسم + السعر + صورة مطلوبة");
     return;
   }
-  snap.forEach(d=>{
-    const p=d.data();
-    list.innerHTML+=`
-      <div class="item">
-        ${p.name} – ${p.price} جنيه
-        <button onclick="del('${d.id}')">🗑 حذف</button>
+
+  const imgRef = ref(storage, `products/images/${Date.now()}_${imageFile.name}`);
+  await uploadBytes(imgRef, imageFile);
+  const imageUrl = await getDownloadURL(imgRef);
+
+  let videoUrl = "";
+  if (videoFile) {
+    const vidRef = ref(storage, `products/videos/${Date.now()}_${videoFile.name}`);
+    await uploadBytes(vidRef, videoFile);
+    videoUrl = await getDownloadURL(vidRef);
+  }
+
+  await addDoc(collection(db, "products"), {
+    name,
+    price,
+    imageUrl,
+    videoUrl,
+    createdAt: new Date()
+  });
+
+  alert("تم إضافة المنتج");
+  loadProducts();
+};
+
+/* تحميل المنتجات */
+async function loadProducts() {
+  list.innerHTML = "";
+  const snap = await getDocs(collection(db, "products"));
+  snap.forEach(d => {
+    const p = d.data();
+    list.innerHTML += `
+      <div>
+        <b>${p.name}</b> - ${p.price} جنيه
+        <button onclick="deleteProduct('${d.id}')">🗑 حذف</button>
       </div>
     `;
   });
 }
-load();
+loadProducts();
 
-window.addProduct = async ()=>{
-  const name=document.getElementById("name").value.trim();
-  const price=Number(document.getElementById("price").value);
-  if(!name||!price){
-    alert("أكمل البيانات");
-    return;
-  }
-  await addDoc(col,{name,price});
-  document.getElementById("name").value="";
-  document.getElementById("price").value="";
-  load();
-};
-
-window.del = async (id)=>{
-  await deleteDoc(doc(db,"products",id));
-  load();
+window.deleteProduct = async (id) => {
+  await deleteDoc(doc(db, "products", id));
+  loadProducts();
 };
 </script>
+</head>
 
+<body>
+<h2>🛒 إدارة المنتجات</h2>
+
+<input id="productName" placeholder="اسم المنتج"><br>
+<input id="productPrice" placeholder="السعر"><br>
+<input type="file" id="productImage" accept="image/*"><br>
+<input type="file" id="productVideo" accept="video/*"><br><br>
+
+<button onclick="addProduct()">➕ إضافة المنتج</button>
+
+<hr>
+<div id="list"></div>
 </body>
 </html>
