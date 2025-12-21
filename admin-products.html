@@ -1,84 +1,74 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>🛒 إدارة المنتجات</title>
+<title>إدارة المنتجات | FutureTank</title>
 <style>
-body{font-family:Tajawal;background:#f2f6fb;padding:20px}
-.card{background:#fff;padding:15px;border-radius:10px;margin-bottom:15px}
-input,button{width:100%;padding:10px;margin-top:8px}
-button{background:#0288d1;color:#fff;border:none;border-radius:6px}
-.product{border-bottom:1px solid #ddd;padding:10px 0}
-img,video{max-width:100%;border-radius:6px;margin-top:6px}
+body{font-family:Arial;direction:rtl;background:#f4f6f9;padding:20px}
+.box{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px}
+input,button{padding:10px;width:100%;margin-top:8px}
+button{background:#0d6efd;color:#fff;border:none;border-radius:6px;cursor:pointer}
+.product{border-bottom:1px solid #ddd;padding:8px 0}
 </style>
 </head>
-
 <body>
 
 <h2>🛒 إدارة المنتجات</h2>
 
-<div class="card">
-<input id="pname" placeholder="اسم المنتج">
-<input id="pprice" placeholder="السعر">
-<input type="file" id="pimg" accept="image/*">
-<input type="file" id="pvid" accept="video/*">
-<button onclick="addProduct()">➕ إضافة المنتج</button>
+<div class="box">
+  <h3>➕ إضافة منتج</h3>
+  <input id="name" placeholder="اسم المنتج">
+  <input id="price" type="number" placeholder="السعر">
+  <button onclick="addProduct()">إضافة</button>
 </div>
 
-<div id="products"></div>
+<div class="box">
+  <h3>📦 المنتجات الحالية</h3>
+  <div id="list"></div>
+</div>
 
-<script>
-function loadDB(){
-  return JSON.parse(localStorage.getItem("ft_db")||"{\"products\":[]}");
-}
-function saveDB(db){
-  localStorage.setItem("ft_db",JSON.stringify(db));
-}
-function toBase64(file,cb){
-  const r=new FileReader();
-  r.onload=()=>cb(r.result);
-  r.readAsDataURL(file);
-}
-function addProduct(){
-  if(!pname.value || !pprice.value){
-    alert("الاسم والسعر مطلوبين");return;
-  }
-  const db=loadDB();
-  const p={name:pname.value,price:pprice.value};
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  if(pimg.files[0]){
-    toBase64(pimg.files[0],img=>{
-      p.image=img;
-      finish(p);
-    });
-  }else finish(p);
+const firebaseConfig = {
+  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+  projectId: "futuretank-68c26"
+};
 
-  function finish(prod){
-    if(pvid.files[0]){
-      toBase64(pvid.files[0],vid=>{
-        prod.video=vid;
-        db.products.push(prod);
-        saveDB(db);render();
-      });
-    }else{
-      db.products.push(prod);
-      saveDB(db);render();
-    }
-  }
-}
-function render(){
-  const db=loadDB();
-  products.innerHTML="";
-  (db.products||[]).forEach(p=>{
-    products.innerHTML+=`
-    <div class="product">
-      <b>${p.name}</b> – ${p.price} جنيه
-      ${p.image?`<img src="${p.image}">`:""}
-      ${p.video?`<video controls src="${p.video}"></video>`:""}
-    </div>`;
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+const col = collection(db,"products");
+const list = document.getElementById("list");
+
+async function load(){
+  list.innerHTML="";
+  const snap = await getDocs(col);
+  snap.forEach(d=>{
+    const p = d.data();
+    list.innerHTML+=`
+      <div class="product">
+        ${p.name} – ${p.price} جنيه
+        <button onclick="del('${d.id}')">🗑 حذف</button>
+      </div>
+    `;
   });
 }
-render();
+load();
+
+window.addProduct = async ()=>{
+  const name = document.getElementById("name").value;
+  const price = Number(document.getElementById("price").value);
+  if(!name||!price) return alert("أكمل البيانات");
+  await addDoc(col,{name,price});
+  name.value=""; price.value="";
+  load();
+};
+
+window.del = async (id)=>{
+  await deleteDoc(doc(db,"products",id));
+  load();
+};
 </script>
 
 </body>
