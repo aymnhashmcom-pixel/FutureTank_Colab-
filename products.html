@@ -1,119 +1,141 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>المنتجات | FutureTank</title>
-
-<style>
-body{
-  font-family: Arial;
-  direction: rtl;
-  background:#f4f6f9;
-  padding:20px;
-}
-.product{
-  background:#fff;
-  padding:15px;
-  margin-bottom:15px;
-  border-radius:8px;
-  box-shadow:0 0 5px rgba(0,0,0,.05);
-}
-button{
-  background:#0d6efd;
-  color:#fff;
-  border:none;
-  padding:10px 18px;
-  border-radius:6px;
-  cursor:pointer;
-  font-size:15px;
-}
-button:hover{
-  background:#084298;
-}
-</style>
-</head>
-
-<body>
-
-<h2>🛒 قائمة المنتجات</h2>
-<div id="products"></div>
+<title>منتجات FutureTank</title>
+<link rel="stylesheet" href="styles.css">
 
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-/* إعداد Firebase */
+/* Firebase Config */
 const firebaseConfig = {
   apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+  authDomain: "futuretank-68c26.firebaseapp.com",
   projectId: "futuretank-68c26"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const box = document.getElementById("products");
+const productsBox = document.getElementById("products");
 
-/* جلب المنتجات */
-const snapshot = await getDocs(collection(db,"products"));
-snapshot.forEach(docu=>{
-  const p = docu.data();
-  box.innerHTML += `
-    <div class="product">
-      <h3>${p.name}</h3>
-      <p>السعر: ${p.price} جنيه</p>
-      <button onclick="buyNow('${p.name}',${p.price})">
-        اشترِ الآن
-      </button>
-    </div>
-  `;
-});
+/* تحميل المنتجات */
+async function loadProducts() {
+  const snapshot = await getDocs(collection(db, "products"));
+  productsBox.innerHTML = "";
+  snapshot.forEach(doc => {
+    const p = doc.data();
+    productsBox.innerHTML += `
+      <div class="card">
+        <h3>${p.name}</h3>
+        <p class="price">${p.price} جنيه</p>
+        <button onclick="openForm('${p.name}', ${p.price})">
+          اشترِ الآن
+        </button>
+      </div>
+    `;
+  });
+}
+loadProducts();
 
-/* تنفيذ الطلب */
-window.buyNow = async (name, price)=>{
-  const phone = prompt("📞 من فضلك أدخل رقم الموبايل");
-  if(!phone) return;
+/* فتح نموذج الطلب */
+window.openForm = (name, price) => {
+  document.getElementById("productName").value = name;
+  document.getElementById("productPrice").value = price;
+  document.getElementById("popup").style.display = "flex";
+};
 
-  // حفظ الطلب في Firestore
-  await addDoc(collection(db,"orders"),{
-    product:name,
-    price:price,
-    phone:phone,
-    status:"قيد التنفيذ",
-    createdAt:Date.now()
+/* تأكيد الطلب */
+window.confirmOrder = async () => {
+  const clientName = document.getElementById("clientName").value;
+  const phone = document.getElementById("clientPhone").value;
+  const product = document.getElementById("productName").value;
+  const price = document.getElementById("productPrice").value;
+
+  if (!clientName || !phone) {
+    alert("من فضلك أدخل الاسم ورقم الموبايل");
+    return;
+  }
+
+  await addDoc(collection(db, "orders"), {
+    type: "product",
+    product,
+    price,
+    name: clientName,
+    phone,
+    status: "تم استلام الطلب",
+    date: new Date()
   });
 
-  // رسالة العميل
-  const customerMsg =
-`✅ تم استلام طلبك بنجاح
-
-🛒 المنتج: ${name}
-💰 السعر: ${price} جنيه
-📦 الحالة: قيد التنفيذ
-
-سنتواصل معك قريبًا`;
-
-  // رسالة خدمة العملاء
-  const adminMsg =
-`📥 طلب جديد
-
-🛒 المنتج: ${name}
-💰 السعر: ${price} جنيه
-📞 رقم العميل: ${phone}
-📦 الحالة: قيد التنفيذ`;
-
-  // واتساب العميل
-  window.open(
-    `https://wa.me/2${phone}?text=${encodeURIComponent(customerMsg)}`,
-    "_blank"
-  );
-
-  // 🔴 واتساب خدمة العملاء (مُعدل)
-  window.open(
-    `https://wa.me/201150402031?text=${encodeURIComponent(adminMsg)}`,
-    "_blank"
-  );
+  window.location.href =
+    `https://wa.me/201000000000?text=طلب شراء منتج:%0A${product}%0Aالسعر: ${price} جنيه%0Aالاسم: ${clientName}%0Aالهاتف: ${phone}`;
 };
 </script>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f7f7f7;
+  padding: 20px;
+}
+.card {
+  background: #fff;
+  padding: 15px;
+  margin-bottom: 15px;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px #ddd;
+}
+.price {
+  font-weight: bold;
+  margin: 10px 0;
+}
+button {
+  background: #28a745;
+  color: #fff;
+  border: 0;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+}
+#popup {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  align-items: center;
+  justify-content: center;
+}
+.form {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  width: 300px;
+}
+input {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🛒 منتجات FutureTank</h2>
+<div id="products"></div>
+
+<!-- نافذة الطلب -->
+<div id="popup">
+  <div class="form">
+    <input id="productName" disabled>
+    <input id="productPrice" disabled>
+    <input id="clientName" placeholder="اسمك">
+    <input id="clientPhone" placeholder="رقم الموبايل">
+    <button onclick="confirmOrder()">تأكيد الطلب</button>
+  </div>
+</div>
 
 </body>
 </html>
