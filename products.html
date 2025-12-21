@@ -1,141 +1,33 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>منتجات FutureTank</title>
-<link rel="stylesheet" href="styles.css">
-
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-/* Firebase Config */
-const firebaseConfig = {
-  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
-  authDomain: "futuretank-68c26.firebaseapp.com",
-  projectId: "futuretank-68c26"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const productsBox = document.getElementById("products");
-
-/* تحميل المنتجات */
-async function loadProducts() {
-  const snapshot = await getDocs(collection(db, "products"));
-  productsBox.innerHTML = "";
-  snapshot.forEach(doc => {
-    const p = doc.data();
-    productsBox.innerHTML += `
-      <div class="card">
-        <h3>${p.name}</h3>
-        <p class="price">${p.price} جنيه</p>
-        <button onclick="openForm('${p.name}', ${p.price})">
-          اشترِ الآن
-        </button>
-      </div>
-    `;
-  });
-}
-loadProducts();
-
-/* فتح نموذج الطلب */
-window.openForm = (name, price) => {
-  document.getElementById("productName").value = name;
-  document.getElementById("productPrice").value = price;
-  document.getElementById("popup").style.display = "flex";
-};
-
-/* تأكيد الطلب */
-window.confirmOrder = async () => {
-  const clientName = document.getElementById("clientName").value;
-  const phone = document.getElementById("clientPhone").value;
-  const product = document.getElementById("productName").value;
-  const price = document.getElementById("productPrice").value;
-
-  if (!clientName || !phone) {
-    alert("من فضلك أدخل الاسم ورقم الموبايل");
-    return;
-  }
-
-  await addDoc(collection(db, "orders"), {
-    type: "product",
-    product,
-    price,
-    name: clientName,
-    phone,
-    status: "تم استلام الطلب",
-    date: new Date()
-  });
-
-  window.location.href =
-    `https://wa.me/201000000000?text=طلب شراء منتج:%0A${product}%0Aالسعر: ${price} جنيه%0Aالاسم: ${clientName}%0Aالهاتف: ${phone}`;
-};
-</script>
-
-<style>
-body {
-  font-family: Arial;
-  background: #f7f7f7;
-  padding: 20px;
-}
-.card {
-  background: #fff;
-  padding: 15px;
-  margin-bottom: 15px;
-  border-radius: 8px;
-  box-shadow: 0 2px 6px #ddd;
-}
-.price {
-  font-weight: bold;
-  margin: 10px 0;
-}
-button {
-  background: #28a745;
-  color: #fff;
-  border: 0;
-  padding: 10px 15px;
-  border-radius: 6px;
-  cursor: pointer;
-}
-#popup {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.6);
-  align-items: center;
-  justify-content: center;
-}
-.form {
-  background: #fff;
-  padding: 20px;
-  border-radius: 8px;
-  width: 300px;
-}
-input {
-  width: 100%;
-  padding: 8px;
-  margin-bottom: 10px;
-}
-</style>
-</head>
-
-<body>
-
-<h2>🛒 منتجات FutureTank</h2>
+<h1>🛒 قائمة المنتجات</h1>
 <div id="products"></div>
 
-<!-- نافذة الطلب -->
-<div id="popup">
-  <div class="form">
-    <input id="productName" disabled>
-    <input id="productPrice" disabled>
-    <input id="clientName" placeholder="اسمك">
-    <input id="clientPhone" placeholder="رقم الموبايل">
-    <button onclick="confirmOrder()">تأكيد الطلب</button>
-  </div>
-</div>
+<script type="module">
+import {
+  getFirestore,
+  collection,
+  getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-</body>
-</html>
+import { app } from "./firebase.js";
+
+const db = getFirestore(app);
+const box = document.getElementById("products");
+
+const snap = await getDocs(collection(db, "products"));
+
+snap.forEach(doc => {
+  const p = doc.data();
+
+  box.innerHTML += `
+    <div class="product">
+      <h3>${p.name}</h3>
+      <img src="${p.image}" style="width:100%;max-width:300px">
+      <p>السعر: ${p.price} جنيه</p>
+
+      ${p.video ? `<a href="${p.video}" target="_blank">🎥 مشاهدة فيديو</a>` : ""}
+
+      <button onclick="orderNow('${p.name}', ${p.price})">اشترِ الآن</button>
+    </div>
+  `;
+});
+</script>
