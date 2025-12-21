@@ -20,52 +20,62 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-const list = document.getElementById("list");
+const list = document.getElementById("productsList");
 
-/* إضافة منتج */
 window.addProduct = async () => {
-  const name = productName.value;
-  const price = productPrice.value;
-  const imageFile = productImage.files[0];
-  const videoFile = productVideo.files[0];
+  try {
+    const name = productName.value.trim();
+    const price = productPrice.value.trim();
+    const image = productImage.files[0];
+    const video = productVideo.files[0];
 
-  if (!name || !price || !imageFile) {
-    alert("الاسم + السعر + صورة مطلوبة");
-    return;
+    if (!name || !price || !image) {
+      alert("الاسم + السعر + الصورة مطلوبة");
+      return;
+    }
+
+    // رفع الصورة
+    const imgRef = ref(storage, `products/images/${Date.now()}_${image.name}`);
+    await uploadBytes(imgRef, image);
+    const imageUrl = await getDownloadURL(imgRef);
+
+    // رفع الفيديو (اختياري)
+    let videoUrl = "";
+    if (video) {
+      const vidRef = ref(storage, `products/videos/${Date.now()}_${video.name}`);
+      await uploadBytes(vidRef, video);
+      videoUrl = await getDownloadURL(vidRef);
+    }
+
+    // حفظ المنتج
+    await addDoc(collection(db, "products"), {
+      name,
+      price,
+      imageUrl,
+      videoUrl,
+      createdAt: new Date()
+    });
+
+    alert("✅ تم إضافة المنتج بنجاح");
+    productName.value = "";
+    productPrice.value = "";
+    productImage.value = "";
+    productVideo.value = "";
+    loadProducts();
+
+  } catch (e) {
+    alert("❌ خطأ: " + e.message);
   }
-
-  const imgRef = ref(storage, `products/images/${Date.now()}_${imageFile.name}`);
-  await uploadBytes(imgRef, imageFile);
-  const imageUrl = await getDownloadURL(imgRef);
-
-  let videoUrl = "";
-  if (videoFile) {
-    const vidRef = ref(storage, `products/videos/${Date.now()}_${videoFile.name}`);
-    await uploadBytes(vidRef, videoFile);
-    videoUrl = await getDownloadURL(vidRef);
-  }
-
-  await addDoc(collection(db, "products"), {
-    name,
-    price,
-    imageUrl,
-    videoUrl,
-    createdAt: new Date()
-  });
-
-  alert("تم إضافة المنتج");
-  loadProducts();
 };
 
-/* تحميل المنتجات */
 async function loadProducts() {
   list.innerHTML = "";
   const snap = await getDocs(collection(db, "products"));
   snap.forEach(d => {
     const p = d.data();
     list.innerHTML += `
-      <div>
-        <b>${p.name}</b> - ${p.price} جنيه
+      <div style="margin:10px 0">
+        <b>${p.name}</b> – ${p.price} جنيه
         <button onclick="deleteProduct('${d.id}')">🗑 حذف</button>
       </div>
     `;
@@ -81,16 +91,18 @@ window.deleteProduct = async (id) => {
 </head>
 
 <body>
+
 <h2>🛒 إدارة المنتجات</h2>
 
-<input id="productName" placeholder="اسم المنتج"><br>
-<input id="productPrice" placeholder="السعر"><br>
-<input type="file" id="productImage" accept="image/*"><br>
+<input id="productName" placeholder="اسم المنتج"><br><br>
+<input id="productPrice" placeholder="السعر"><br><br>
+<input type="file" id="productImage" accept="image/*"><br><br>
 <input type="file" id="productVideo" accept="video/*"><br><br>
 
 <button onclick="addProduct()">➕ إضافة المنتج</button>
 
 <hr>
-<div id="list"></div>
+<div id="productsList"></div>
+
 </body>
 </html>
