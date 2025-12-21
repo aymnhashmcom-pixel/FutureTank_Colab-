@@ -1,108 +1,99 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>إدارة المنتجات</title>
+<title>إدارة المنتجات – FutureTank</title>
+<style>
+body{font-family:Arial;background:#f5f5f5;padding:20px}
+.card{background:#fff;padding:20px;border-radius:8px;max-width:500px;margin:auto}
+input,button{width:100%;padding:10px;margin:8px 0}
+button{background:#2196f3;color:#fff;border:none;border-radius:4px;cursor:pointer}
+button:hover{background:#1976d2}
+.msg{margin-top:10px;font-weight:bold}
+</style>
+</head>
 
+<body>
+<div class="card">
+<h2>🛒 إضافة منتج</h2>
+
+<form id="productForm">
+<input type="text" id="name" placeholder="اسم المنتج" required>
+<input type="number" id="price" placeholder="السعر" required>
+
+<label>📷 صورة المنتج (إجباري)</label>
+<input type="file" id="image" accept="image/*" required>
+
+<label>🎥 فيديو المنتج (اختياري)</label>
+<input type="file" id="video" accept="video/*">
+
+<button type="submit">➕ إضافة المنتج</button>
+</form>
+
+<div class="msg" id="msg"></div>
+</div>
+
+<!-- Firebase -->
 <script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+  apiKey: "YOUR_API_KEY",
   authDomain: "futuretank-68c26.firebaseapp.com",
   projectId: "futuretank-68c26",
-  storageBucket: "futuretank-68c26.appspot.com"
+  storageBucket: "futuretank-68c26.appspot.com",
+  messagingSenderId: "XXXX",
+  appId: "XXXX"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const storage = getStorage(app);
 
-const list = document.getElementById("productsList");
+document.getElementById("productForm").addEventListener("submit", async (e) => {
+  e.preventDefault();
 
-window.addProduct = async () => {
+  const msg = document.getElementById("msg");
+  msg.innerText = "⏳ جاري الإضافة...";
+
   try {
-    const name = productName.value.trim();
-    const price = productPrice.value.trim();
-    const image = productImage.files[0];
-    const video = productVideo.files[0];
+    const name = document.getElementById("name").value;
+    const price = Number(document.getElementById("price").value);
+    const imageFile = document.getElementById("image").files[0];
+    const videoFile = document.getElementById("video").files[0];
 
-    if (!name || !price || !image) {
-      alert("الاسم + السعر + الصورة مطلوبة");
-      return;
-    }
-
-    // رفع الصورة
-    const imgRef = ref(storage, `products/images/${Date.now()}_${image.name}`);
-    await uploadBytes(imgRef, image);
-    const imageUrl = await getDownloadURL(imgRef);
+    // رفع الصورة (إجباري)
+    const imgRef = ref(storage, `products/images/${Date.now()}_${imageFile.name}`);
+    await uploadBytes(imgRef, imageFile);
+    const imageURL = await getDownloadURL(imgRef);
 
     // رفع الفيديو (اختياري)
-    let videoUrl = "";
-    if (video) {
-      const vidRef = ref(storage, `products/videos/${Date.now()}_${video.name}`);
-      await uploadBytes(vidRef, video);
-      videoUrl = await getDownloadURL(vidRef);
+    let videoURL = "";
+    if (videoFile) {
+      const vidRef = ref(storage, `products/videos/${Date.now()}_${videoFile.name}`);
+      await uploadBytes(vidRef, videoFile);
+      videoURL = await getDownloadURL(vidRef);
     }
 
-    // حفظ المنتج
+    // حفظ في Firestore
     await addDoc(collection(db, "products"), {
       name,
       price,
-      imageUrl,
-      videoUrl,
+      image: imageURL,
+      video: videoURL,
       createdAt: new Date()
     });
 
-    alert("✅ تم إضافة المنتج بنجاح");
-    productName.value = "";
-    productPrice.value = "";
-    productImage.value = "";
-    productVideo.value = "";
-    loadProducts();
+    msg.innerText = "✅ تم إضافة المنتج بنجاح";
+    e.target.reset();
 
-  } catch (e) {
-    alert("❌ خطأ: " + e.message);
+  } catch (err) {
+    console.error(err);
+    msg.innerText = "❌ حدث خطأ أثناء الإضافة";
   }
-};
-
-async function loadProducts() {
-  list.innerHTML = "";
-  const snap = await getDocs(collection(db, "products"));
-  snap.forEach(d => {
-    const p = d.data();
-    list.innerHTML += `
-      <div style="margin:10px 0">
-        <b>${p.name}</b> – ${p.price} جنيه
-        <button onclick="deleteProduct('${d.id}')">🗑 حذف</button>
-      </div>
-    `;
-  });
-}
-loadProducts();
-
-window.deleteProduct = async (id) => {
-  await deleteDoc(doc(db, "products", id));
-  loadProducts();
-};
+});
 </script>
-</head>
-
-<body>
-
-<h2>🛒 إدارة المنتجات</h2>
-
-<input id="productName" placeholder="اسم المنتج"><br><br>
-<input id="productPrice" placeholder="السعر"><br><br>
-<input type="file" id="productImage" accept="image/*"><br><br>
-<input type="file" id="productVideo" accept="video/*"><br><br>
-
-<button onclick="addProduct()">➕ إضافة المنتج</button>
-
-<hr>
-<div id="productsList"></div>
-
 </body>
 </html>
