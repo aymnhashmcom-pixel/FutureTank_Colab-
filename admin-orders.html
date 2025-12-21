@@ -51,7 +51,7 @@ select{
 
 <body>
 
-<!-- شاشة الدخول -->
+<!-- تسجيل الدخول -->
 <div class="login" id="loginBox">
   <h3>🔐 دخول الإدارة</h3>
   <input type="password" id="pass" placeholder="كلمة المرور">
@@ -68,14 +68,16 @@ select{
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-/* 🔑 كلمة المرور */
-const ADMIN_PASSWORD = "Future2025"; // غيّرها براحتك
+/* 🔑 كلمة مرور الإدارة */
+const ADMIN_PASSWORD = "Future2025";
+
+/* 📞 رقم خدمة العملاء (واتساب) */
+const WHATSAPP_NUMBER = "201000000000"; // عدل الرقم هنا
 
 window.login = ()=>{
-  const p = document.getElementById("pass").value;
-  if(p === ADMIN_PASSWORD){
-    document.getElementById("loginBox").style.display="none";
-    document.getElementById("panel").classList.remove("hidden");
+  if(document.getElementById("pass").value === ADMIN_PASSWORD){
+    loginBox.style.display="none";
+    panel.classList.remove("hidden");
     loadOrders();
   }else{
     alert("❌ كلمة المرور غير صحيحة");
@@ -94,19 +96,19 @@ const db = getFirestore(app);
 const ordersBox = document.getElementById("orders");
 
 async function loadOrders(){
-  ordersBox.innerHTML="⏳ تحميل الطلبات...";
+  ordersBox.innerHTML="⏳ جاري التحميل...";
   const snap = await getDocs(collection(db,"orders"));
   ordersBox.innerHTML="";
 
-  snap.forEach(docu=>{
-    const o = docu.data();
+  snap.forEach(d=>{
+    const o = d.data();
     ordersBox.innerHTML+=`
       <div class="order">
         <b>🛒 ${o.product}</b><br>
         📞 ${o.phone}<br>
         💰 ${o.price} جنيه<br>
 
-        <select id="st-${docu.id}">
+        <select id="st-${d.id}">
           <option ${o.status=="قيد التنفيذ"?"selected":""}>قيد التنفيذ</option>
           <option ${o.status=="تم الشحن"?"selected":""}>تم الشحن</option>
           <option ${o.status=="في الطريق"?"selected":""}>في الطريق</option>
@@ -114,16 +116,31 @@ async function loadOrders(){
         </select>
 
         <br>
-        <button onclick="updateStatus('${docu.id}')">💾 حفظ</button>
+        <button onclick="updateStatus('${d.id}','${o.product}','${o.phone}')">
+          💾 حفظ + واتساب
+        </button>
       </div>
     `;
   });
 }
 
-window.updateStatus = async (id)=>{
-  const s = document.getElementById("st-"+id).value;
-  await updateDoc(doc(db,"orders",id),{status:s});
-  alert("✅ تم تحديث الحالة");
+window.updateStatus = async (id, product, phone)=>{
+  const status = document.getElementById("st-"+id).value;
+
+  await updateDoc(doc(db,"orders",id),{status});
+
+  const msg = `
+مرحبا 👋
+نحب نبلغ حضرتك بخصوص طلبك:
+
+🛒 المنتج: ${product}
+📦 الحالة الحالية: ${status}
+
+شكراً لثقتكم في Future Tank 🤍
+  `;
+
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
+  window.open(url,"_blank");
 };
 </script>
 
