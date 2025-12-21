@@ -11,6 +11,30 @@ body{
   background:#f1f3f6;
   padding:20px;
 }
+.hidden{display:none}
+
+.login{
+  max-width:350px;
+  margin:80px auto;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 0 10px rgba(0,0,0,.1);
+}
+.login input,button{
+  width:100%;
+  padding:10px;
+  margin-top:10px;
+}
+button{
+  background:#0d6efd;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+button:hover{background:#0b5ed7}
+
 .order{
   background:#fff;
   padding:15px;
@@ -18,35 +42,45 @@ body{
   border-radius:8px;
   box-shadow:0 0 6px rgba(0,0,0,.06);
 }
-select,button{
+select{
   padding:8px;
   margin-top:8px;
-}
-button{
-  background:#0d6efd;
-  color:#fff;
-  border:none;
-  border-radius:5px;
-  cursor:pointer;
-}
-button:hover{
-  background:#0b5ed7;
-}
-h3{
-  margin:5px 0;
 }
 </style>
 </head>
 
 <body>
 
-<h2>📊 لوحة تحكم الطلبات</h2>
+<!-- شاشة الدخول -->
+<div class="login" id="loginBox">
+  <h3>🔐 دخول الإدارة</h3>
+  <input type="password" id="pass" placeholder="كلمة المرور">
+  <button onclick="login()">دخول</button>
+</div>
 
-<div id="orders"></div>
+<!-- لوحة التحكم -->
+<div id="panel" class="hidden">
+  <h2>📊 لوحة تحكم الطلبات</h2>
+  <div id="orders"></div>
+</div>
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+/* 🔑 كلمة المرور */
+const ADMIN_PASSWORD = "Future2025"; // غيّرها براحتك
+
+window.login = ()=>{
+  const p = document.getElementById("pass").value;
+  if(p === ADMIN_PASSWORD){
+    document.getElementById("loginBox").style.display="none";
+    document.getElementById("panel").classList.remove("hidden");
+    loadOrders();
+  }else{
+    alert("❌ كلمة المرور غير صحيحة");
+  }
+};
 
 /* Firebase */
 const firebaseConfig = {
@@ -60,20 +94,19 @@ const db = getFirestore(app);
 const ordersBox = document.getElementById("orders");
 
 async function loadOrders(){
-  ordersBox.innerHTML = "⏳ جاري تحميل الطلبات...";
+  ordersBox.innerHTML="⏳ تحميل الطلبات...";
   const snap = await getDocs(collection(db,"orders"));
-  ordersBox.innerHTML = "";
+  ordersBox.innerHTML="";
 
   snap.forEach(docu=>{
     const o = docu.data();
-    ordersBox.innerHTML += `
+    ordersBox.innerHTML+=`
       <div class="order">
-        <h3>🛒 ${o.product}</h3>
-        <p>📞 العميل: ${o.phone}</p>
-        <p>💰 السعر: ${o.price} جنيه</p>
+        <b>🛒 ${o.product}</b><br>
+        📞 ${o.phone}<br>
+        💰 ${o.price} جنيه<br>
 
-        <label>الحالة:</label><br>
-        <select id="status-${docu.id}">
+        <select id="st-${docu.id}">
           <option ${o.status=="قيد التنفيذ"?"selected":""}>قيد التنفيذ</option>
           <option ${o.status=="تم الشحن"?"selected":""}>تم الشحن</option>
           <option ${o.status=="في الطريق"?"selected":""}>في الطريق</option>
@@ -81,21 +114,17 @@ async function loadOrders(){
         </select>
 
         <br>
-        <button onclick="updateStatus('${docu.id}')">حفظ التعديل</button>
+        <button onclick="updateStatus('${docu.id}')">💾 حفظ</button>
       </div>
     `;
   });
 }
 
 window.updateStatus = async (id)=>{
-  const newStatus = document.getElementById("status-"+id).value;
-  await updateDoc(doc(db,"orders",id),{
-    status:newStatus
-  });
-  alert("✅ تم تحديث حالة الطلب");
+  const s = document.getElementById("st-"+id).value;
+  await updateDoc(doc(db,"orders",id),{status:s});
+  alert("✅ تم تحديث الحالة");
 };
-
-loadOrders();
 </script>
 
 </body>
