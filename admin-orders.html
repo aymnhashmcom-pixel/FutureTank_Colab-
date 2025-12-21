@@ -2,16 +2,30 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>إدارة الطلبات</title>
+<title>إدارة الطلبات | FutureTank</title>
 <style>
-body { font-family: Arial; direction: rtl; background:#f5f5f5; padding:20px }
-.order { background:#fff; padding:10px; margin-bottom:10px; border-radius:6px }
-select { padding:6px; margin-top:5px }
+body {
+  font-family: Arial;
+  direction: rtl;
+  background:#f1f1f1;
+  padding:20px;
+}
+.order {
+  background:#fff;
+  padding:15px;
+  margin-bottom:10px;
+  border-radius:8px;
+}
+select {
+  padding:6px;
+  margin-top:5px;
+}
 </style>
 </head>
+
 <body>
 
-<h2>📦 إدارة الطلبات</h2>
+<h2>📦 لوحة إدارة الطلبات</h2>
 <div id="orders"></div>
 
 <script type="module">
@@ -19,23 +33,24 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "PUT_KEY",
+  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
   projectId: "futuretank-68c26",
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const container = document.getElementById("orders");
+const box = document.getElementById("orders");
 
 const snap = await getDocs(collection(db,"orders"));
 snap.forEach(d => {
   const o = d.data();
-  container.innerHTML += `
+  box.innerHTML += `
     <div class="order">
-      <p>🛒 ${o.product}</p>
-      <p>📞 ${o.phone}</p>
-      <select onchange="updateStatus('${d.id}', this.value)">
+      <p>🛒 المنتج: ${o.product}</p>
+      <p>📞 العميل: ${o.phone}</p>
+      <p>📦 الحالة الحالية: <b>${o.status}</b></p>
+      <select onchange="changeStatus('${d.id}', this.value)">
         <option ${o.status=="قيد التنفيذ"?"selected":""}>قيد التنفيذ</option>
         <option ${o.status=="تم الشحن"?"selected":""}>تم الشحن</option>
         <option ${o.status=="تم التسليم"?"selected":""}>تم التسليم</option>
@@ -44,9 +59,9 @@ snap.forEach(d => {
   `;
 });
 
-window.updateStatus = async (id, status) => {
+window.changeStatus = async (id, status) => {
   await updateDoc(doc(db,"orders",id), { status });
-  alert("✅ تم تحديث الحالة");
+  alert("✅ تم تحديث حالة الطلب");
 };
 </script>
 
