@@ -2,13 +2,13 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>إدارة المنتجات | FutureTank</title>
+<title>إدارة المنتجات</title>
 <style>
 body{font-family:Arial;direction:rtl;background:#f4f6f9;padding:20px}
 .box{background:#fff;padding:15px;border-radius:8px;margin-bottom:15px}
 input,button{padding:10px;width:100%;margin-top:8px}
-button{background:#0d6efd;color:#fff;border:none;border-radius:6px;cursor:pointer}
-.product{border-bottom:1px solid #ddd;padding:8px 0}
+button{background:#0d6efd;color:#fff;border:none;border-radius:6px}
+.item{border-bottom:1px solid #ddd;padding:8px 0}
 </style>
 </head>
 <body>
@@ -24,7 +24,7 @@ button{background:#0d6efd;color:#fff;border:none;border-radius:6px;cursor:pointe
 
 <div class="box">
   <h3>📦 المنتجات الحالية</h3>
-  <div id="list"></div>
+  <div id="list">جارٍ التحميل...</div>
 </div>
 
 <script type="module">
@@ -44,10 +44,14 @@ const list = document.getElementById("list");
 async function load(){
   list.innerHTML="";
   const snap = await getDocs(col);
+  if(snap.empty){
+    list.innerHTML="لا توجد منتجات";
+    return;
+  }
   snap.forEach(d=>{
-    const p = d.data();
+    const p=d.data();
     list.innerHTML+=`
-      <div class="product">
+      <div class="item">
         ${p.name} – ${p.price} جنيه
         <button onclick="del('${d.id}')">🗑 حذف</button>
       </div>
@@ -57,11 +61,15 @@ async function load(){
 load();
 
 window.addProduct = async ()=>{
-  const name = document.getElementById("name").value;
-  const price = Number(document.getElementById("price").value);
-  if(!name||!price) return alert("أكمل البيانات");
+  const name=document.getElementById("name").value.trim();
+  const price=Number(document.getElementById("price").value);
+  if(!name||!price){
+    alert("أكمل البيانات");
+    return;
+  }
   await addDoc(col,{name,price});
-  name.value=""; price.value="";
+  document.getElementById("name").value="";
+  document.getElementById("price").value="";
   load();
 };
 
