@@ -1,13 +1,65 @@
-/* script.js - populate page from localStorage db */
-function loadDB(){ return JSON.parse(localStorage.getItem('ft_db') || '{}'); }
-document.addEventListener('DOMContentLoaded', ()=>{
-  const db = loadDB();
-  document.getElementById('prodWarranty')?.innerText = db.productWarranty || '10 سنوات';
-  document.getElementById('srvWarranty')?.innerText = db.serviceWarranty || '5 سنوات';
-  document.getElementById('phone').innerText = (db.company && db.company.phone) || '01150402031';
-  document.getElementById('footerPhone').innerText = (db.company && db.company.phone) || '01150402031';
-  const pl = document.getElementById('productsList');
-  pl.innerHTML = (db.products||[]).map(p=>`<div class="product"><strong>${p.name}</strong><div>${p.price ? p.price + ' ج.م' : ''}</div></div>`).join('') || 'لا توجد منتجات حالياً';
-  const sl = document.getElementById('servicesList');
-  sl.innerHTML = (db.services||[]).map(s=>`<div>${s.name}</div>`).join('') || 'لا توجد خدمات حالياً';
-});
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const db = getFirestore();
+
+/* إضافة منتج */
+window.addProduct = async function () {
+  const name = document.getElementById("productName").value.trim();
+  const price = Number(document.getElementById("productPrice").value);
+  const image = document.getElementById("productImage").value.trim();
+  const video = document.getElementById("productVideo").value.trim();
+
+  if (!name || !price || !image) {
+    alert("⚠️ الاسم والسعر ورابط الصورة مطلوبين");
+    return;
+  }
+
+  document.getElementById("productStatus").innerText = "⏳ جاري الإضافة...";
+
+  try {
+    await addDoc(collection(db, "products"), {
+      name,
+      price,
+      image,
+      video,
+      createdAt: new Date()
+    });
+
+    document.getElementById("productStatus").innerText = "✅ تم إضافة المنتج";
+    loadProducts();
+  } catch (e) {
+    document.getElementById("productStatus").innerText = "❌ حدث خطأ";
+    console.error(e);
+  }
+};
+
+/* تحميل المنتجات */
+async function loadProducts() {
+  const list = document.getElementById("productsList");
+  list.innerHTML = "";
+
+  const snapshot = await getDocs(collection(db, "products"));
+  snapshot.forEach(docu => {
+    const p = docu.data();
+    list.innerHTML += `
+      <div class="item">
+        <b>${p.name}</b> – ${p.price} جنيه
+        <button onclick="deleteProduct('${docu.id}')">🗑 حذف</button>
+      </div>
+    `;
+  });
+}
+
+window.deleteProduct = async function (id) {
+  await deleteDoc(doc(db, "products", id));
+  loadProducts();
+};
+
+loadProducts();
