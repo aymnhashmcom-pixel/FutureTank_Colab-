@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>📦 إدارة الطلبات</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+      direction: rtl;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .order {
+      background: #fff;
+      padding: 15px;
+      margin-bottom: 15px;
+      border-radius: 8px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .status {
+      font-weight: bold;
+      margin: 8px 0;
+    }
+
+    button {
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin: 4px 4px 0 0;
+    }
+
+    .ship { background: #f39c12; color: #fff; }
+    .done { background: #27ae60; color: #fff; }
+  </style>
+</head>
+<body>
+
+<h1>📦 لوحة إدارة الطلبات</h1>
+<div id="orders"></div>
+
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getFirestore, collection, getDocs, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "PUT_YOUR_KEY",
+    authDomain: "futuretank-68c26.firebaseapp.com",
+    projectId: "futuretank-68c26",
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const box = document.getElementById("orders");
+
+  async function loadOrders() {
+    box.innerHTML = "";
+    const q = query(collection(db, "orders"), orderBy("createdAt", "desc"));
+    const snap = await getDocs(q);
+
+    snap.forEach(d => {
+      const o = d.data();
+      box.innerHTML += `
+        <div class="order">
+          <h3>${o.product}</h3>
+          <p>👤 ${o.customerName}</p>
+          <p>📞 ${o.phone}</p>
+          <p>📍 ${o.address}</p>
+          <p>💰 ${o.price} جنيه</p>
+          <p class="status">الحالة: ${o.status}</p>
+
+          ${
+            o.status === "قيد التنفيذ"
+              ? `<button class="ship" onclick="updateStatus('${d.id}','تم الشحن')">تم الشحن</button>`
+              : ""
+          }
+
+          ${
+            o.status === "تم الشحن"
+              ? `<button class="done" onclick="updateStatus('${d.id}','تم التسليم')">تم التسليم</button>`
+              : ""
+          }
+        </div>
+      `;
+    });
+  }
+
+  window.updateStatus = async (id, status) => {
+    await updateDoc(doc(db, "orders", id), { status });
+    alert("✅ تم تحديث الحالة");
+    loadOrders();
+  };
+
+  loadOrders();
+</script>
+
+</body>
+  </html>
