@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>👥 إدارة العملاء</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 15px;
+    }
+    h2, h3 {
+      color: #2c3e50;
+    }
+    .card {
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background: #25d366;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1ebe5d;
+    }
+    .status {
+      margin-top: 10px;
+      font-weight: bold;
+    }
+    .client {
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      margin-bottom: 10px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>👥 إدارة العملاء</h2>
+
+<div class="card">
+  <h3>➕ إضافة عميل</h3>
+
+  <input type="text" id="name" placeholder="اسم العميل" required>
+  <input type="text" id="phone" placeholder="رقم الموبايل" required>
+  <input type="email" id="email" placeholder="الإيميل (اختياري)">
+  <input type="text" id="address" placeholder="العنوان" required>
+  <input type="number" id="price" placeholder="قيمة التعاقد" required>
+
+  <label>📅 بداية التعاقد</label>
+  <input type="date" id="startDate" required>
+
+  <label>📅 نهاية التعاقد</label>
+  <input type="date" id="endDate" required>
+
+  <label>🛠 آخر زيارة</label>
+  <input type="date" id="lastVisit">
+
+  <label>📍 الزيارة القادمة</label>
+  <input type="date" id="nextVisit">
+
+  <button onclick="addClient()">➕ إضافة العميل</button>
+
+  <div id="status" class="status"></div>
+</div>
+
+<h3>📋 العملاء الحاليين</h3>
+<div id="clientsList"></div>
+
+<!-- Firebase Compat -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+    authDomain: "futuretank-68c26.firebaseapp.com",
+    projectId: "futuretank-68c26",
+    storageBucket: "futuretank-68c26.firebasestorage.app",
+    messagingSenderId: "481083621438",
+    appId: "1:481083621438:web:db01077aef0511792c516f"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  function addClient() {
+    const data = {
+      name: name.value.trim(),
+      phone: phone.value.trim(),
+      email: email.value.trim(),
+      address: address.value.trim(),
+      price: Number(price.value),
+      startDate: startDate.value,
+      endDate: endDate.value,
+      lastVisit: lastVisit.value || "",
+      nextVisit: nextVisit.value || "",
+      createdAt: new Date()
+    };
+
+    if (!data.name || !data.phone || !data.address || !data.startDate || !data.endDate) {
+      status.innerText = "❌ برجاء إدخال البيانات الأساسية";
+      status.style.color = "red";
+      return;
+    }
+
+    db.collection("clients").add(data)
+      .then(() => {
+        status.innerText = "✅ تم إضافة العميل بنجاح";
+        status.style.color = "green";
+        document.querySelectorAll("input").forEach(i => i.value = "");
+        loadClients();
+      })
+      .catch(err => {
+        status.innerText = "❌ فشل الإضافة";
+        status.style.color = "red";
+        console.error(err);
+      });
+  }
+
+  function loadClients() {
+    clientsList.innerHTML = "";
+    db.collection("clients").orderBy("createdAt", "desc").get()
+      .then(snapshot => {
+        snapshot.forEach(doc => {
+          const c = doc.data();
+          clientsList.innerHTML += `
+            <div class="client">
+              <strong>${c.name}</strong><br>
+              📞 ${c.phone}<br>
+              📍 ${c.address}<br>
+              💰 ${c.price} جنيه<br>
+              📅 ${c.startDate} → ${c.endDate}
+            </div>
+          `;
+        });
+      });
+  }
+
+  loadClients();
+</script>
+
+</body>
+</html>
