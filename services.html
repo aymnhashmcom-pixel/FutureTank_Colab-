@@ -2,7 +2,7 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>الخدمات – FutureTank</title>
+<title>خدمات FutureTank</title>
 
 <!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -10,35 +10,49 @@
 
 <script>
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
+    apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
     authDomain: "futuretank-68c26.firebaseapp.com",
     projectId: "futuretank-68c26"
   };
+
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 </script>
 
 <style>
 body {
-  font-family: Arial;
+  font-family: Arial, sans-serif;
   direction: rtl;
-  background:#f7f7f7;
-  padding:20px;
+  background: #f4f6f8;
+  padding: 20px;
+}
+h2 {
+  text-align: center;
 }
 .service {
-  background:#fff;
-  border-radius:10px;
-  padding:15px;
-  margin-bottom:15px;
-  box-shadow:0 2px 5px rgba(0,0,0,.1);
+  background: #fff;
+  padding: 15px;
+  border-radius: 10px;
+  margin-bottom: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.service h3 {
+  margin: 0 0 8px;
+}
+.service p {
+  color: #555;
 }
 button {
-  background:#28a745;
-  color:#fff;
-  border:none;
-  padding:10px 15px;
-  border-radius:6px;
-  cursor:pointer;
+  background: #25d366;
+  color: #fff;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 15px;
+}
+button:hover {
+  opacity: 0.9;
 }
 </style>
 </head>
@@ -61,7 +75,7 @@ db.collection("services")
       <div class="service">
         <h3>${s.name}</h3>
         <p>${s.description || ""}</p>
-        <button onclick="book('${s.name}')">
+        <button onclick="bookService('${s.name}')">
           احجز الخدمة الآن
         </button>
       </div>
@@ -69,12 +83,19 @@ db.collection("services")
   });
 });
 
-function book(serviceName) {
+function bookService(serviceName) {
   const phone = prompt("📞 من فضلك أدخل رقم الموبايل");
-  if(!phone) return;
+  if (!phone) return;
 
-  const msg = `طلب حجز خدمة%0Aالخدمة: ${serviceName}%0Aرقم العميل: ${phone}`;
-  window.open(`https://wa.me/201XXXXXXXXX?text=${msg}`, "_blank");
+  const message =
+    `طلب حجز خدمة%0A` +
+    `الخدمة: ${serviceName}%0A` +
+    `رقم العميل: ${phone}`;
+
+  window.open(
+    `https://wa.me/201150402031?text=${message}`,
+    "_blank"
+  );
 }
 </script>
 
