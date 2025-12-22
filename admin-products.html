@@ -1,12 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>إدارة المنتجات</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "futuretank-68c26.firebaseapp.com",
+    projectId: "futuretank-68c26"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+</script>
+
+<style>
+body { font-family: Arial; direction: rtl; padding:20px }
+input, button { display:block; margin:10px 0; width:100%; padding:10px }
+.card { border:1px solid #ccc; padding:15px; border-radius:8px }
+</style>
+</head>
+
+<body>
+
 <h2>🛒 إدارة المنتجات</h2>
 
 <div class="card">
   <h3>➕ إضافة منتج</h3>
 
-  <input type="text" id="productName" placeholder="اسم المنتج" required>
-  <input type="number" id="productPrice" placeholder="السعر بالجنيه" required>
+  <input type="text" id="productName" placeholder="اسم المنتج">
+  <input type="number" id="productPrice" placeholder="السعر بالجنيه">
 
-  <input type="text" id="productImage" placeholder="رابط صورة المنتج (jpg / png)" required>
+  <input type="text" id="productImage" placeholder="رابط صورة المنتج (jpg / png)">
   <input type="text" id="productVideo" placeholder="رابط فيديو المنتج (اختياري)">
 
   <button onclick="addProduct()">➕ إضافة المنتج</button>
@@ -18,3 +47,7 @@
 
 <h3>📦 المنتجات الحالية</h3>
 <div id="productsList"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
