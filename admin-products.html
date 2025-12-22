@@ -6,11 +6,8 @@
   <input type="text" id="productName" placeholder="اسم المنتج" required>
   <input type="number" id="productPrice" placeholder="السعر بالجنيه" required>
 
-  <input type="text" id="productImage"
-         placeholder="رابط صورة مباشر (jpg / png) – إجباري">
-
-  <input type="text" id="productVideo"
-         placeholder="رابط فيديو (اختياري – YouTube / MP4)">
+  <input type="text" id="productImage" placeholder="رابط صورة المنتج (jpg / png)" required>
+  <input type="text" id="productVideo" placeholder="رابط فيديو المنتج (اختياري)">
 
   <button onclick="addProduct()">➕ إضافة المنتج</button>
 
@@ -21,91 +18,3 @@
 
 <h3>📦 المنتجات الحالية</h3>
 <div id="productsList"></div>
-
-<!-- Firebase v8 -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
-
-<script>
-  firebase.initializeApp({
-    apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
-    authDomain: "futuretank-68c26.firebaseapp.com",
-    projectId: "futuretank-68c26"
-  });
-
-  const db = firebase.firestore();
-
-  function isValidImageUrl(url) {
-    return /^https?:\/\/.+\.(jpg|jpeg|png|webp)$/i.test(url);
-  }
-
-  window.addProduct = async function () {
-    const name = productName.value.trim();
-    const price = Number(productPrice.value);
-    const image = productImage.value.trim();
-    const video = productVideo.value.trim();
-    const status = productStatus;
-
-    if (!name || !price || !image) {
-      alert("⚠️ الاسم + السعر + رابط صورة مباشر مطلوبين");
-      return;
-    }
-
-    if (!isValidImageUrl(image)) {
-      alert("❌ رابط الصورة يجب أن يكون URL مباشر وينتهي بـ jpg أو png");
-      return;
-    }
-
-    status.innerText = "⏳ جاري الإضافة...";
-
-    try {
-      await db.collection("products").add({
-        name,
-        price,
-        image,
-        video,
-        createdAt: new Date()
-      });
-
-      status.innerText = "✅ تم إضافة المنتج بنجاح";
-      productName.value = "";
-      productPrice.value = "";
-      productImage.value = "";
-      productVideo.value = "";
-
-      loadProducts();
-
-    } catch (e) {
-      console.error(e);
-      status.innerText = "❌ فشل الإضافة";
-    }
-  };
-
-  async function loadProducts() {
-    const container = document.getElementById("productsList");
-    container.innerHTML = "";
-
-    const snap = await db.collection("products").orderBy("createdAt", "desc").get();
-
-    snap.forEach(doc => {
-      const p = doc.data();
-      container.innerHTML += `
-        <div class="item">
-          <strong>${p.name}</strong> – ${p.price} جنيه
-          <br>
-          <img src="${p.image}" style="max-width:120px;margin-top:5px">
-          <br>
-          <button onclick="deleteProduct('${doc.id}')">🗑 حذف</button>
-        </div>
-      `;
-    });
-  }
-
-  async function deleteProduct(id) {
-    if (!confirm("حذف المنتج؟")) return;
-    await db.collection("products").doc(id).delete();
-    loadProducts();
-  }
-
-  loadProducts();
-  </script>
