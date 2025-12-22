@@ -31,7 +31,7 @@ body {
   border-radius: 10px;
   margin-bottom: 20px;
 }
-input, textarea {
+input, textarea, select {
   width: 100%;
   padding: 10px;
   margin: 6px 0;
@@ -40,7 +40,7 @@ button {
   background: #0a7cff;
   color: #fff;
   border: none;
-  padding: 10px 15px;
+  padding: 10px;
   border-radius: 6px;
   cursor: pointer;
 }
@@ -55,6 +55,10 @@ button {
   cursor: pointer;
   float: left;
 }
+#status {
+  font-weight: bold;
+  margin-top: 8px;
+}
 </style>
 </head>
 
@@ -65,7 +69,19 @@ button {
 <div class="card">
   <h3>➕ إضافة خدمة</h3>
 
-  <input id="name" placeholder="اسم الخدمة">
+  <!-- اختيار الخدمة -->
+  <select id="serviceSelect" onchange="syncServiceName()">
+    <option value="">— اختر خدمة جاهزة —</option>
+    <option>توريد وتركيب خزانات المياه</option>
+    <option>صيانة وإصلاح خزانات المياه</option>
+    <option>تطهير وتعقيم خزانات مياه الشرب</option>
+    <option>توريد وتركيب فلاتر المياه</option>
+    <option>صيانة وإصلاح فلاتر المياه</option>
+  </select>
+
+  <!-- إدخال يدوي -->
+  <input id="name" placeholder="أو اكتب اسم خدمة يدويًا">
+
   <textarea id="desc" placeholder="وصف الخدمة"></textarea>
   <input id="price" type="number" placeholder="سعر الخدمة بالجنيه">
   <input id="image" placeholder="رابط صورة الخدمة (jpg / png)">
@@ -80,18 +96,30 @@ button {
 
 <script>
 const servicesDiv = document.getElementById("services");
+const statusEl = document.getElementById("status");
+
+function syncServiceName() {
+  const select = document.getElementById("serviceSelect");
+  if (select.value) {
+    document.getElementById("name").value = select.value;
+  }
+}
 
 function addService() {
-  const name = name.value.trim();
-  const desc = desc.value.trim();
-  const price = price.value.trim();
-  const image = image.value.trim();
-  const video = video.value.trim();
+  const name = document.getElementById("name").value.trim();
+  const desc = document.getElementById("desc").value.trim();
+  const price = document.getElementById("price").value.trim();
+  const image = document.getElementById("image").value.trim();
+  const video = document.getElementById("video").value.trim();
 
   if (!name || !price || !image) {
-    status.innerText = "❌ الاسم + السعر + الصورة مطلوبين";
+    statusEl.innerText = "❌ الاسم + السعر + الصورة مطلوبين";
+    statusEl.style.color = "red";
     return;
   }
+
+  statusEl.innerText = "⏳ جاري الإضافة...";
+  statusEl.style.color = "#333";
 
   db.collection("services").add({
     name,
@@ -99,12 +127,16 @@ function addService() {
     price,
     image,
     video,
-    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    createdAt: Date.now()
   }).then(() => {
-    status.innerText = "✅ تمت الإضافة بنجاح";
+    statusEl.innerText = "✅ تمت إضافة الخدمة بنجاح";
+    statusEl.style.color = "green";
     document.querySelectorAll("input, textarea").forEach(i => i.value = "");
+    document.getElementById("serviceSelect").value = "";
   }).catch(err => {
-    status.innerText = "❌ خطأ في الإضافة";
+    statusEl.innerText = "❌ فشل الإضافة";
+    statusEl.style.color = "red";
+    console.error(err);
   });
 }
 
