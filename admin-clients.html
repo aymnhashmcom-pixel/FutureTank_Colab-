@@ -9,6 +9,7 @@
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
+
 <body>
 
 <h2>👥 إدارة العملاء</h2>
@@ -16,16 +17,18 @@
 <div class="card">
 <h3>➕ إضافة عميل</h3>
 
-<input id="name" placeholder="اسم العميل" required>
-<input id="phone" placeholder="رقم الموبايل" required>
-<input id="email" placeholder="الإيميل (اختياري)">
-<input id="price" type="number" placeholder="قيمة التعاقد">
+<input id="clientName" placeholder="اسم العميل" required>
+<input id="clientPhone" placeholder="رقم الموبايل" required>
+<input id="clientEmail" placeholder="الإيميل (اختياري)">
+<input id="clientAddress" placeholder="العنوان">
+
+<input id="clientPrice" type="number" placeholder="قيمة التعاقد">
 
 <label>📅 بداية التعاقد</label>
-<input id="start" type="date">
+<input id="startDate" type="date">
 
 <label>📅 نهاية التعاقد</label>
-<input id="end" type="date">
+<input id="endDate" type="date">
 
 <label>🛠 آخر زيارة</label>
 <input id="lastVisit" type="date">
@@ -43,7 +46,7 @@
 <div id="clients"></div>
 
 <script>
-/* Firebase */
+// Firebase
 firebase.initializeApp({
   apiKey: "PUT_YOUR_KEY",
   authDomain: "futuretank-68c26.firebaseapp.com",
@@ -52,47 +55,64 @@ firebase.initializeApp({
 
 const db = firebase.firestore();
 
-/* إضافة عميل */
+// إضافة عميل
 function addClient() {
-  const data = {
-    name: name.value.trim(),
-    phone: phone.value.trim(),
-    email: email.value.trim(),
-    price: Number(price.value || 0),
-    start: start.value || "",
-    end: end.value || "",
-    lastVisit: lastVisit.value || "",
-    nextVisit: nextVisit.value || "",
-    createdAt: new Date()
-  };
+  const name = document.getElementById("clientName").value.trim();
+  const phone = document.getElementById("clientPhone").value.trim();
+  const email = document.getElementById("clientEmail").value.trim();
+  const address = document.getElementById("clientAddress").value.trim();
+  const price = Number(document.getElementById("clientPrice").value || 0);
+  const start = document.getElementById("startDate").value;
+  const end = document.getElementById("endDate").value;
+  const lastVisit = document.getElementById("lastVisit").value;
+  const nextVisit = document.getElementById("nextVisit").value;
 
-  if (!data.name || !data.phone) {
+  const status = document.getElementById("status");
+
+  if (!name || !phone) {
     status.innerText = "❌ الاسم ورقم الموبايل مطلوبين";
     return;
   }
 
   status.innerText = "⏳ جاري الإضافة...";
 
-  db.collection("clients").add(data).then(() => {
-    status.innerText = "✅ تم إضافة العميل";
-    document.querySelectorAll("input").forEach(i => i.value = "");
+  db.collection("clients").add({
+    name,
+    phone,
+    email,
+    address,
+    price,
+    start,
+    end,
+    lastVisit,
+    nextVisit,
+    createdAt: new Date()
+  }).then(() => {
+    status.innerText = "✅ تم إضافة العميل بنجاح";
+
+    document.querySelectorAll(".card input").forEach(i => i.value = "");
   }).catch(() => {
     status.innerText = "❌ فشل الإضافة";
   });
 }
 
-/* تحميل العملاء */
-db.collection("clients").orderBy("createdAt","desc").onSnapshot(snap => {
-  clients.innerHTML = "";
-  snap.forEach(doc => {
+// تحميل العملاء
+db.collection("clients").orderBy("createdAt","desc")
+.onSnapshot(snapshot => {
+  const box = document.getElementById("clients");
+  box.innerHTML = "";
+
+  snapshot.forEach(doc => {
     const c = doc.data();
-    clients.innerHTML += `
+
+    box.innerHTML += `
       <div class="item">
         <b>${c.name}</b><br>
         📞 ${c.phone}<br>
         ${c.email ? "📧 "+c.email+"<br>" : ""}
+        📍 ${c.address || "—"}<br>
         💰 ${c.price} جنيه<br>
-        📅 ${c.start} → ${c.end}<br>
+        📅 ${c.start || "—"} → ${c.end || "—"}<br>
         🛠 آخر زيارة: ${c.lastVisit || "—"}<br>
         📍 القادمة: ${c.nextVisit || "—"}<br>
 
@@ -107,9 +127,9 @@ db.collection("clients").orderBy("createdAt","desc").onSnapshot(snap => {
   });
 });
 
-/* حذف عميل */
+// حذف عميل
 function deleteClient(id) {
-  if (!confirm("⚠️ حذف العميل نهائيًا؟")) return;
+  if (!confirm("⚠️ هل تريد حذف العميل؟")) return;
   db.collection("clients").doc(id).delete();
 }
 </script>
