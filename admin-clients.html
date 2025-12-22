@@ -1,73 +1,117 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
 <title>👥 إدارة العملاء</title>
-<style>
-body{font-family:Tajawal;background:#f7fbff;padding:20px}
-.card{background:#fff;padding:15px;border-radius:10px;margin-bottom:15px}
-input,button{width:100%;padding:8px;margin-top:6px}
-button{background:#00796b;color:#fff;border:none;border-radius:6px}
-.client{border-bottom:1px solid #ddd;padding:10px 0}
-a{color:#0288d1;text-decoration:none}
-</style>
-</head>
+<link rel="stylesheet" href="styles.css">
 
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+</head>
 <body>
 
 <h2>👥 إدارة العملاء</h2>
 
 <div class="card">
-<input id="name" placeholder="اسم العميل">
-<input id="phone" placeholder="رقم الهاتف">
-<input id="address" placeholder="العنوان">
-<input id="cost" placeholder="التكلفة">
-<label>بداية التعاقد</label><input type="date" id="start">
-<label>نهاية التعاقد</label><input type="date" id="end">
-<label>آخر زيارة</label><input type="date" id="last">
-<label>الزيارة القادمة</label><input type="date" id="next">
+<h3>➕ إضافة عميل</h3>
+
+<input id="name" placeholder="اسم العميل" required>
+<input id="phone" placeholder="رقم الموبايل" required>
+<input id="email" placeholder="الإيميل (اختياري)">
+<input id="price" type="number" placeholder="قيمة التعاقد">
+
+<label>📅 بداية التعاقد</label>
+<input id="start" type="date">
+
+<label>📅 نهاية التعاقد</label>
+<input id="end" type="date">
+
+<label>🛠 آخر زيارة</label>
+<input id="lastVisit" type="date">
+
+<label>📍 الزيارة القادمة</label>
+<input id="nextVisit" type="date">
+
 <button onclick="addClient()">➕ إضافة العميل</button>
+<p id="status"></p>
 </div>
 
-<div id="list"></div>
+<hr>
+
+<h3>📋 العملاء الحاليين</h3>
+<div id="clients"></div>
 
 <script>
-function loadDB(){
-  return JSON.parse(localStorage.getItem("ft_db")||"{\"clients\":[]}");
-}
-function saveDB(db){
-  localStorage.setItem("ft_db",JSON.stringify(db));
-}
-function addClient(){
-  if(!name.value||!phone.value){alert("الاسم والهاتف مطلوبين");return;}
-  const db=loadDB();
-  db.clients.push({
-    name:name.value,phone:phone.value,address:address.value,
-    cost:cost.value,start:start.value,end:end.value,
-    last:last.value,next:next.value
+/* Firebase */
+firebase.initializeApp({
+  apiKey: "PUT_YOUR_KEY",
+  authDomain: "futuretank-68c26.firebaseapp.com",
+  projectId: "futuretank-68c26"
+});
+
+const db = firebase.firestore();
+
+/* إضافة عميل */
+function addClient() {
+  const data = {
+    name: name.value.trim(),
+    phone: phone.value.trim(),
+    email: email.value.trim(),
+    price: Number(price.value || 0),
+    start: start.value || "",
+    end: end.value || "",
+    lastVisit: lastVisit.value || "",
+    nextVisit: nextVisit.value || "",
+    createdAt: new Date()
+  };
+
+  if (!data.name || !data.phone) {
+    status.innerText = "❌ الاسم ورقم الموبايل مطلوبين";
+    return;
+  }
+
+  status.innerText = "⏳ جاري الإضافة...";
+
+  db.collection("clients").add(data).then(() => {
+    status.innerText = "✅ تم إضافة العميل";
+    document.querySelectorAll("input").forEach(i => i.value = "");
+  }).catch(() => {
+    status.innerText = "❌ فشل الإضافة";
   });
-  saveDB(db);render();
 }
-function render(){
-  const db=loadDB();
-  list.innerHTML="";
-  (db.clients||[]).forEach(c=>{
-    list.innerHTML+=`
-    <div class="client">
-      <b>${c.name}</b><br>
-      📞 ${c.phone}<br>
-      📍 ${c.address||"—"}<br>
-      💰 ${c.cost} جنيه<br>
-      📅 ${c.start} → ${c.end}<br>
-      🛠 آخر زيارة: ${c.last}<br>
-      📍 القادمة: ${c.next}<br>
-      <a target="_blank" href="https://wa.me/2${c.phone}">
-      📷 متابعة الأعمال
-      </a>
-    </div>`;
+
+/* تحميل العملاء */
+db.collection("clients").orderBy("createdAt","desc").onSnapshot(snap => {
+  clients.innerHTML = "";
+  snap.forEach(doc => {
+    const c = doc.data();
+    clients.innerHTML += `
+      <div class="item">
+        <b>${c.name}</b><br>
+        📞 ${c.phone}<br>
+        ${c.email ? "📧 "+c.email+"<br>" : ""}
+        💰 ${c.price} جنيه<br>
+        📅 ${c.start} → ${c.end}<br>
+        🛠 آخر زيارة: ${c.lastVisit || "—"}<br>
+        📍 القادمة: ${c.nextVisit || "—"}<br>
+
+        <a target="_blank"
+           href="https://wa.me/201150402031?text=عميل:${c.name}">
+           💬 واتساب
+        </a>
+
+        <button onclick="deleteClient('${doc.id}')">🗑 حذف</button>
+      </div><hr>
+    `;
   });
+});
+
+/* حذف عميل */
+function deleteClient(id) {
+  if (!confirm("⚠️ حذف العميل نهائيًا؟")) return;
+  db.collection("clients").doc(id).delete();
 }
-render();
 </script>
 
 </body>
