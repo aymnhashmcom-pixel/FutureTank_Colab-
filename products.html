@@ -1,33 +1,88 @@
-<h1>🛒 قائمة المنتجات</h1>
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>المنتجات – FutureTank</title>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "futuretank-68c26.firebaseapp.com",
+    projectId: "futuretank-68c26"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+</script>
+
+<style>
+body {
+  font-family: Arial;
+  direction: rtl;
+  background:#f7f7f7;
+  padding:20px;
+}
+.product {
+  background:#fff;
+  border-radius:10px;
+  padding:15px;
+  margin-bottom:15px;
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
+}
+.product img {
+  max-width:100%;
+  border-radius:8px;
+  margin-bottom:10px;
+}
+button {
+  background:#0a7cff;
+  color:#fff;
+  border:none;
+  padding:10px 15px;
+  border-radius:6px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<h2>🛒 قائمة المنتجات</h2>
 <div id="products"></div>
 
-<script type="module">
-import {
-  getFirestore,
-  collection,
-  getDocs
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+<script>
+const productsDiv = document.getElementById("products");
 
-import { app } from "./firebase.js";
-
-const db = getFirestore(app);
-const box = document.getElementById("products");
-
-const snap = await getDocs(collection(db, "products"));
-
-snap.forEach(doc => {
-  const p = doc.data();
-
-  box.innerHTML += `
-    <div class="product">
-      <h3>${p.name}</h3>
-      <img src="${p.image}" style="width:100%;max-width:300px">
-      <p>السعر: ${p.price} جنيه</p>
-
-      ${p.video ? `<a href="${p.video}" target="_blank">🎥 مشاهدة فيديو</a>` : ""}
-
-      <button onclick="orderNow('${p.name}', ${p.price})">اشترِ الآن</button>
-    </div>
-  `;
+db.collection("products")
+.orderBy("createdAt", "desc")
+.onSnapshot(snapshot => {
+  productsDiv.innerHTML = "";
+  snapshot.forEach(doc => {
+    const p = doc.data();
+    productsDiv.innerHTML += `
+      <div class="product">
+        <img src="${p.image}" alt="${p.name}">
+        <h3>${p.name}</h3>
+        <p>السعر: ${p.price} جنيه</p>
+        <button onclick="order('${p.name}', ${p.price})">
+          اشترِ الآن
+        </button>
+      </div>
+    `;
+  });
 });
+
+function order(name, price) {
+  const phone = prompt("📞 من فضلك أدخل رقم الموبايل");
+  if(!phone) return;
+
+  const msg = `طلب جديد%0Aالمنتج: ${name}%0Aالسعر: ${price} جنيه%0Aرقم العميل: ${phone}`;
+  window.open(`https://wa.me/201XXXXXXXXX?text=${msg}`, "_blank");
+}
 </script>
+
+</body>
+</html>
