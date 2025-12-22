@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>خدمات FutureTank</title>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
@@ -14,86 +13,74 @@
     authDomain: "futuretank-68c26.firebaseapp.com",
     projectId: "futuretank-68c26"
   };
-
   firebase.initializeApp(firebaseConfig);
   const db = firebase.firestore();
 </script>
 
 <style>
 body {
-  font-family: Arial, sans-serif;
+  font-family: Arial;
   direction: rtl;
   background: #f4f6f8;
   padding: 20px;
-}
-h2 {
-  text-align: center;
 }
 .service {
   background: #fff;
   padding: 15px;
   border-radius: 10px;
   margin-bottom: 15px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
-.service h3 {
-  margin: 0 0 8px;
-}
-.service p {
-  color: #555;
+img {
+  width: 100%;
+  border-radius: 8px;
 }
 button {
   background: #25d366;
   color: #fff;
   border: none;
-  padding: 10px 16px;
+  padding: 10px;
+  width: 100%;
+  margin-top: 10px;
   border-radius: 6px;
-  cursor: pointer;
-  font-size: 15px;
-}
-button:hover {
-  opacity: 0.9;
+  font-size: 16px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>🧰 خدمات FutureTank</h2>
-<div id="services"></div>
+<h2>🧰 خدماتنا</h2>
+<div id="list"></div>
 
 <script>
-const servicesDiv = document.getElementById("services");
+const list = document.getElementById("list");
 
 db.collection("services")
 .orderBy("createdAt", "desc")
 .onSnapshot(snapshot => {
-  servicesDiv.innerHTML = "";
+  list.innerHTML = "";
   snapshot.forEach(doc => {
     const s = doc.data();
-    servicesDiv.innerHTML += `
+    list.innerHTML += `
       <div class="service">
+        <img src="${s.image}">
         <h3>${s.name}</h3>
         <p>${s.description || ""}</p>
-        <button onclick="bookService('${s.name}')">
-          احجز الخدمة الآن
+        <strong>السعر: ${s.price} جنيه</strong>
+        <button onclick="order('${s.name}')">
+          احجز عبر واتساب
         </button>
       </div>
     `;
   });
 });
 
-function bookService(serviceName) {
-  const phone = prompt("📞 من فضلك أدخل رقم الموبايل");
+function order(name) {
+  const phone = prompt("أدخل رقم الموبايل");
   if (!phone) return;
 
-  const message =
-    `طلب حجز خدمة%0A` +
-    `الخدمة: ${serviceName}%0A` +
-    `رقم العميل: ${phone}`;
-
   window.open(
-    `https://wa.me/201150402031?text=${message}`,
+    `https://wa.me/201150402031?text=طلب خدمة:%0A${name}%0Aرقم العميل:${phone}`,
     "_blank"
   );
 }
