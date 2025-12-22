@@ -1,101 +1,82 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>خدمات FutureTank</title>
-<link rel="stylesheet" href="styles.css">
+<title>الخدمات – FutureTank</title>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-import { getFirestore, collection, getDocs, addDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-const firebaseConfig = {
-  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
-  authDomain: "futuretank-68c26.firebaseapp.com",
-  projectId: "futuretank-68c26"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const servicesBox = document.getElementById("services");
-
-async function loadServices() {
-  const snapshot = await getDocs(collection(db, "services"));
-  servicesBox.innerHTML = "";
-  snapshot.forEach(doc => {
-    const s = doc.data();
-    servicesBox.innerHTML += `
-      <div class="card">
-        <h3>${s.name}</h3>
-        <p>${s.description || ""}</p>
-        <button onclick="openForm('${s.name}')">احجز الخدمة الآن</button>
-      </div>
-    `;
-  });
-}
-loadServices();
-
-window.openForm = (serviceName) => {
-  document.getElementById("serviceName").value = serviceName;
-  document.getElementById("popup").style.display = "flex";
-};
-
-window.sendOrder = async () => {
-  const name = document.getElementById("clientName").value;
-  const phone = document.getElementById("clientPhone").value;
-  const service = document.getElementById("serviceName").value;
-
-  if (!name || !phone) {
-    alert("من فضلك أدخل البيانات");
-    return;
-  }
-
-  await addDoc(collection(db, "orders"), {
-    type: "service",
-    service,
-    name,
-    phone,
-    status: "تم استلام الطلب",
-    date: new Date()
-  });
-
-  window.location.href =
-    `https://wa.me/201000000000?text=طلب خدمة: ${service}%0Aالاسم: ${name}%0Aالهاتف: ${phone}`;
-};
+<script>
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "futuretank-68c26.firebaseapp.com",
+    projectId: "futuretank-68c26"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
 </script>
 
 <style>
-body { font-family: Arial; background:#f7f7f7; padding:20px }
-.card {
-  background:#fff; padding:15px; margin-bottom:15px;
-  border-radius:8px; box-shadow:0 2px 5px #ddd
+body {
+  font-family: Arial;
+  direction: rtl;
+  background:#f7f7f7;
+  padding:20px;
+}
+.service {
+  background:#fff;
+  border-radius:10px;
+  padding:15px;
+  margin-bottom:15px;
+  box-shadow:0 2px 5px rgba(0,0,0,.1);
 }
 button {
-  background:#25a6d9; color:#fff; border:0;
-  padding:10px 15px; border-radius:6px; cursor:pointer
-}
-#popup {
-  display:none; position:fixed; inset:0;
-  background:rgba(0,0,0,.6); align-items:center; justify-content:center
-}
-.form {
-  background:#fff; padding:20px; border-radius:8px; width:300px
+  background:#28a745;
+  color:#fff;
+  border:none;
+  padding:10px 15px;
+  border-radius:6px;
+  cursor:pointer;
 }
 </style>
 </head>
 
 <body>
+
 <h2>🧰 خدمات FutureTank</h2>
 <div id="services"></div>
 
-<div id="popup">
-  <div class="form">
-    <input id="serviceName" disabled><br><br>
-    <input id="clientName" placeholder="اسمك"><br><br>
-    <input id="clientPhone" placeholder="رقم الموبايل"><br><br>
-    <button onclick="sendOrder()">تأكيد الحجز</button>
-  </div>
-</div>
+<script>
+const servicesDiv = document.getElementById("services");
+
+db.collection("services")
+.orderBy("createdAt", "desc")
+.onSnapshot(snapshot => {
+  servicesDiv.innerHTML = "";
+  snapshot.forEach(doc => {
+    const s = doc.data();
+    servicesDiv.innerHTML += `
+      <div class="service">
+        <h3>${s.name}</h3>
+        <p>${s.description || ""}</p>
+        <button onclick="book('${s.name}')">
+          احجز الخدمة الآن
+        </button>
+      </div>
+    `;
+  });
+});
+
+function book(serviceName) {
+  const phone = prompt("📞 من فضلك أدخل رقم الموبايل");
+  if(!phone) return;
+
+  const msg = `طلب حجز خدمة%0Aالخدمة: ${serviceName}%0Aرقم العميل: ${phone}`;
+  window.open(`https://wa.me/201XXXXXXXXX?text=${msg}`, "_blank");
+}
+</script>
+
 </body>
 </html>
