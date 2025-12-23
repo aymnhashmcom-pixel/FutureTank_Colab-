@@ -1,70 +1,6 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<title>🧰 خدمات FutureTank</title>
-<link rel="stylesheet" href="styles.css">
+<select id="service"></select>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-</head>
+<input id="name" placeholder="الاسم">
+<input id="phone" placeholder="رقم الهاتف">
 
-<body>
-
-<h2>🧰 طلب خدمة</h2>
-
-<div class="card">
-  <input id="name" placeholder="اسم العميل">
-  <input id="phone" placeholder="رقم الهاتف" required>
-
-  <select id="service">
-    <option>تطهير وتعقيم خزانات مياه الشرب</option>
-    <option>غسيل خزانات</option>
-    <option>صيانة خزانات</option>
-  </select>
-
-  <button onclick="submitService()">📨 إرسال الطلب</button>
-  <p id="msg"></p>
-</div>
-
-<script>
-firebase.initializeApp({
-  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
-  authDomain: "futuretank-68c26.firebaseapp.com",
-  projectId: "futuretank-68c26"
-});
-
-const db = firebase.firestore();
-
-function submitService(){
-  const name = nameInput.value || "—";
-  const phone = phoneInput.value.trim();
-  const service = document.getElementById("service").value;
-  const msg = document.getElementById("msg");
-
-  if(!phone){
-    msg.innerText = "❌ رقم الهاتف مطلوب";
-    return;
-  }
-
-  db.collection("service_requests").add({
-    clientName: name,
-    phone,
-    serviceName: service,
-    status: "pending",
-    contracted: false,
-    createdAt: new Date()
-  }).then(()=>{
-    msg.innerText = "✅ تم إرسال الطلب";
-    window.open(
-      `https://wa.me/201150402031?text=طلب خدمة:%0A${service}%0Aرقم العميل:${phone}`,
-      "_blank"
-    );
-  }).catch(()=>{
-    msg.innerText = "❌ حدث خطأ";
-  });
-}
-</script>
-
-</body>
-</html>
+<button onclick="sendRequest()">📨 إرسال الطلب</button>
