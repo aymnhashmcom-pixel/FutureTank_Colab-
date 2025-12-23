@@ -1,97 +1,59 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<title>📋 إدارة العقود</title>
-<link rel="stylesheet" href="styles.css">
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<style>
-body{direction:rtl;font-family:Arial;background:#f5f5f5;padding:20px}
-.card{background:#fff;padding:15px;border-radius:10px;margin-bottom:15px}
-table{width:100%;border-collapse:collapse;background:#fff}
-th,td{padding:10px;border-bottom:1px solid #ddd;text-align:center}
-th{background:#eee}
-.status{font-weight:bold}
-.pending{color:#ff9800}
-.active{color:#4caf50}
-</style>
-</head>
-
-<body>
-
-<h2>📋 إدارة العقود</h2>
-
-<table>
+<table border="1" width="100%">
 <thead>
 <tr>
 <th>العميل</th>
-<th>الهاتف</th>
-<th>المصدر</th>
-<th>الحالة</th>
-<th>تاريخ الطلب</th>
-<th>إجراء</th>
+<th>الخدمة</th>
+<th>الزيارة القادمة</th>
+<th>التكلفة</th>
 </tr>
 </thead>
-<tbody id="contracts"></tbody>
+<tbody id="contractsTable"></tbody>
 </table>
 
-<script>
-// Firebase init
-firebase.initializeApp({
-  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "API_KEY",
   authDomain: "futuretank-68c26.firebaseapp.com",
   projectId: "futuretank-68c26"
-});
+};
 
-const db = firebase.firestore();
-const box = document.getElementById("contracts");
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-// تحميل العقود
-db.collection("contracts")
-  .orderBy("createdAt","desc")
-  .onSnapshot(snapshot => {
-    box.innerHTML = "";
-    snapshot.forEach(doc => {
-      const c = doc.data();
-      const date = c.createdAt?.toDate
-        ? c.createdAt.toDate().toLocaleDateString("ar-EG")
-        : "—";
+const table = document.getElementById("contractsTable");
 
-      box.innerHTML += `
-        <tr>
-          <td>${c.clientName || "—"}</td>
-          <td>${c.phone || "—"}</td>
-          <td>${c.source || "—"}</td>
-          <td class="status ${c.status}">
-            ${c.status === "pending" ? "قيد المراجعة" : "نشط"}
-          </td>
-          <td>${date}</td>
-          <td>
-            <button onclick="activateContract('${doc.id}')">✔️ تفعيل</button>
-            <button onclick="deleteContract('${doc.id}')">🗑 حذف</button>
-          </td>
-        </tr>
-      `;
-    });
-  });
+async function loadContracts(){
+  const q = query(collection(db,"contracts"), orderBy("createdAt","desc"));
+  const snap = await getDocs(q);
 
-// تفعيل عقد
-function activateContract(id){
-  if(!confirm("تأكيد تفعيل العقد؟")) return;
-  db.collection("contracts").doc(id).update({
-    status:"active"
+  table.innerHTML = "";
+
+  if(snap.empty){
+    table.innerHTML = `<tr><td colspan="4">لا توجد عقود</td></tr>`;
+    return;
+  }
+
+  snap.forEach(doc=>{
+    const c = doc.data();
+    table.innerHTML += `
+      <tr>
+        <td>${c.clientName}</td>
+        <td>${c.service}</td>
+        <td>${c.nextVisit}</td>
+        <td>${c.price}</td>
+      </tr>
+    `;
   });
 }
 
-// حذف عقد
-function deleteContract(id){
-  if(!confirm("⚠️ حذف العقد نهائيًا؟")) return;
-  db.collection("contracts").doc(id).delete();
-}
+loadContracts();
 </script>
-
-</body>
-</html>
