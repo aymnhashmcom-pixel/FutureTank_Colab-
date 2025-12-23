@@ -2,87 +2,67 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>خدمات FutureTank</title>
+<title>🧰 خدمات FutureTank</title>
+<link rel="stylesheet" href="styles.css">
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
-    authDomain: "futuretank-68c26.firebaseapp.com",
-    projectId: "futuretank-68c26"
-  };
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-</script>
-
-<style>
-body {
-  font-family: Arial;
-  direction: rtl;
-  background: #f4f6f8;
-  padding: 20px;
-}
-.service {
-  background: #fff;
-  padding: 15px;
-  border-radius: 10px;
-  margin-bottom: 15px;
-}
-img {
-  width: 100%;
-  border-radius: 8px;
-}
-button {
-  background: #25d366;
-  color: #fff;
-  border: none;
-  padding: 10px;
-  width: 100%;
-  margin-top: 10px;
-  border-radius: 6px;
-  font-size: 16px;
-}
-</style>
 </head>
 
 <body>
 
-<h2>🧰 خدماتنا</h2>
-<div id="list"></div>
+<h2>🧰 طلب خدمة</h2>
+
+<div class="card">
+  <input id="name" placeholder="اسم العميل">
+  <input id="phone" placeholder="رقم الهاتف" required>
+
+  <select id="service">
+    <option>تطهير وتعقيم خزانات مياه الشرب</option>
+    <option>غسيل خزانات</option>
+    <option>صيانة خزانات</option>
+  </select>
+
+  <button onclick="submitService()">📨 إرسال الطلب</button>
+  <p id="msg"></p>
+</div>
 
 <script>
-const list = document.getElementById("list");
-
-db.collection("services")
-.orderBy("createdAt", "desc")
-.onSnapshot(snapshot => {
-  list.innerHTML = "";
-  snapshot.forEach(doc => {
-    const s = doc.data();
-    list.innerHTML += `
-      <div class="service">
-        <img src="${s.image}">
-        <h3>${s.name}</h3>
-        <p>${s.description || ""}</p>
-        <strong>السعر: ${s.price} جنيه</strong>
-        <button onclick="order('${s.name}')">
-          احجز عبر واتساب
-        </button>
-      </div>
-    `;
-  });
+firebase.initializeApp({
+  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+  authDomain: "futuretank-68c26.firebaseapp.com",
+  projectId: "futuretank-68c26"
 });
 
-function order(name) {
-  const phone = prompt("أدخل رقم الموبايل");
-  if (!phone) return;
+const db = firebase.firestore();
 
-  window.open(
-    `https://wa.me/201150402031?text=طلب خدمة:%0A${name}%0Aرقم العميل:${phone}`,
-    "_blank"
-  );
+function submitService(){
+  const name = nameInput.value || "—";
+  const phone = phoneInput.value.trim();
+  const service = document.getElementById("service").value;
+  const msg = document.getElementById("msg");
+
+  if(!phone){
+    msg.innerText = "❌ رقم الهاتف مطلوب";
+    return;
+  }
+
+  db.collection("service_requests").add({
+    clientName: name,
+    phone,
+    serviceName: service,
+    status: "pending",
+    contracted: false,
+    createdAt: new Date()
+  }).then(()=>{
+    msg.innerText = "✅ تم إرسال الطلب";
+    window.open(
+      `https://wa.me/201150402031?text=طلب خدمة:%0A${service}%0Aرقم العميل:${phone}`,
+      "_blank"
+    );
+  }).catch(()=>{
+    msg.innerText = "❌ حدث خطأ";
+  });
 }
 </script>
 
