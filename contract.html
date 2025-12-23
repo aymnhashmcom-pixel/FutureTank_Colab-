@@ -1,66 +1,75 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>📄 عقد FutureTank</title>
+<title>📄 عقد خدمة FutureTank</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <style>
-body{font-family:Tahoma;background:#f4f9ff;padding:20px}
-.card{
-  background:#fff;
-  max-width:700px;
-  margin:auto;
-  padding:20px;
-  border-radius:10px
-}
-input,button,a{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:6px;
-  display:block;
-  text-align:center;
-  text-decoration:none
-}
-button{background:#0077b6;color:#fff;border:none}
-.cash{background:#ff9800;color:#fff}
+body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
+.card{background:#fff;padding:20px;border-radius:10px;max-width:400px;margin:auto}
+input,button{width:100%;padding:10px;margin:8px 0}
+button{background:#25D366;color:#fff;border:none;border-radius:6px}
 </style>
 </head>
 
 <body>
 
 <div class="card">
-<h2>📄 عقد خدمة FutureTank</h2>
+<h3>📄 عقد خدمة FutureTank</h3>
+<p>أقر أنا العميل بالموافقة على التعاقد مع شركة FutureTank.</p>
 
-<p>
-أقر أنا العميل بالموافقة على تجديد التعاقد مع شركة FutureTank
-طبقاً للشروط المتفق عليها.
-</p>
+<input id="name" placeholder="اسم العميل">
+<input id="phone" placeholder="رقم الموبايل">
 
-<input id="signName" placeholder="اسم العميل للتوقيع">
-
-<button onclick="sign()">✍️ موافق على التعاقد</button>
-
-<a class="cash" target="_blank"
-href="https://wa.me/201150402031?text=ارغب%20في%20الدفع%20اتصالات%20كاش">
-💸 الدفع عبر اتصالات كاش
-</a>
-
+<button onclick="createContract()">✍️ موافق على التعاقد</button>
+<p id="status"></p>
 </div>
 
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-const phone = new URLSearchParams(location.search).get("phone");
-const client = (db.clients||[]).find(c=>c.phone===phone);
+firebase.initializeApp({
+  apiKey: "PUT_YOUR_KEY",
+  authDomain: "futuretank-68c26.firebaseapp.com",
+  projectId: "futuretank-68c26"
+});
 
-function sign(){
-  if(!client) return alert("العميل غير موجود");
-  if(!signName.value) return alert("اكتب اسمك للتوقيع");
+const db = firebase.firestore();
 
-  client.signature = signName.value;
-  client.signedAt = new Date().toISOString().split("T")[0];
+async function createContract(){
+  const name = nameInput.value.trim();
+  const phone = phoneInput.value.trim();
+  const status = document.getElementById("status");
 
-  localStorage.setItem("ft_db",JSON.stringify(db));
-  alert("✅ تم توقيع العقد بنجاح");
+  if(!name || !phone){
+    status.innerText="❌ الاسم ورقم الهاتف مطلوبين";
+    return;
+  }
+
+  status.innerText="⏳ جاري إنشاء التعاقد...";
+
+  // تحقق من وجود العميل
+  const snap = await db.collection("clients")
+    .where("phone","==",phone).get();
+
+  if(snap.empty){
+    await db.collection("clients").add({
+      name,
+      phone,
+      createdAt:new Date()
+    });
+  }
+
+  await db.collection("contracts").add({
+    clientName:name,
+    clientPhone:phone,
+    type:"new",
+    startDate:new Date().toISOString().slice(0,10),
+    createdAt:new Date()
+  });
+
+  status.innerText="✅ تم التعاقد بنجاح";
 }
 </script>
 
