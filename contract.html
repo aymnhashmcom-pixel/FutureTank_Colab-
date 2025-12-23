@@ -9,8 +9,8 @@
 
 <style>
 body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
-.card{background:#fff;padding:20px;border-radius:10px;max-width:400px;margin:auto}
-input,button{width:100%;padding:10px;margin:8px 0}
+.card{background:#fff;padding:20px;border-radius:10px;max-width:420px;margin:auto}
+input,button{width:100%;padding:10px;margin:10px 0}
 button{background:#25D366;color:#fff;border:none;border-radius:6px}
 </style>
 </head>
@@ -19,12 +19,12 @@ button{background:#25D366;color:#fff;border:none;border-radius:6px}
 
 <div class="card">
 <h3>📄 عقد خدمة FutureTank</h3>
-<p>أقر أنا العميل بالموافقة على التعاقد مع شركة FutureTank.</p>
 
 <input id="name" placeholder="اسم العميل">
 <input id="phone" placeholder="رقم الموبايل">
 
-<button onclick="createContract()">✍️ موافق على التعاقد</button>
+<button onclick="contract()">✍️ موافق على التعاقد</button>
+
 <p id="status"></p>
 </div>
 
@@ -37,39 +37,38 @@ firebase.initializeApp({
 
 const db = firebase.firestore();
 
-async function createContract(){
-  const name = nameInput.value.trim();
-  const phone = phoneInput.value.trim();
-  const status = document.getElementById("status");
+async function contract(){
+  const name=document.getElementById("name").value.trim();
+  const phone=document.getElementById("phone").value.trim();
+  const status=document.getElementById("status");
 
   if(!name || !phone){
     status.innerText="❌ الاسم ورقم الهاتف مطلوبين";
     return;
   }
 
-  status.innerText="⏳ جاري إنشاء التعاقد...";
+  status.innerText="⏳ جاري تسجيل التعاقد...";
 
-  // تحقق من وجود العميل
-  const snap = await db.collection("clients")
-    .where("phone","==",phone).get();
-
-  if(snap.empty){
-    await db.collection("clients").add({
-      name,
-      phone,
-      createdAt:new Date()
+  try{
+    await db.collection("contracts").add({
+      clientName: name,
+      clientPhone: phone,
+      type: "new",
+      createdAt: new Date()
     });
+
+    window.open(
+      "https://wa.me/201150402031?text=📄 تعاقد جديد\nالاسم: "
+      +name+"\nالهاتف: "+phone,
+      "_blank"
+    );
+
+    status.innerText="✅ تم تسجيل التعاقد بنجاح";
+    document.getElementById("name").value="";
+    document.getElementById("phone").value="";
+  }catch(e){
+    status.innerText="❌ فشل تسجيل التعاقد";
   }
-
-  await db.collection("contracts").add({
-    clientName:name,
-    clientPhone:phone,
-    type:"new",
-    startDate:new Date().toISOString().slice(0,10),
-    createdAt:new Date()
-  });
-
-  status.innerText="✅ تم التعاقد بنجاح";
 }
 </script>
 
