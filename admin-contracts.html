@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>📋 إدارة العقود</title>
+<link rel="stylesheet" href="styles.css">
+
+<style>
+body { direction: rtl; font-family: Arial; background:#f6f7f9; }
+.card { background:#fff; padding:15px; margin:15px 0; border-radius:8px; }
+.item { background:#fafafa; padding:10px; border-radius:6px; margin-bottom:10px; }
+button { margin:5px 0; padding:6px 10px; cursor:pointer; }
+select { padding:5px; }
+</style>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  getDocs,
+  deleteDoc,
+  doc,
+  updateDoc,
+  orderBy,
+  query
+} from
+"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+/* 🔥 Firebase Config */
+const firebaseConfig = {
+  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+  authDomain: "futuretank-68c26.firebaseapp.com",
+  projectId: "futuretank-68c26"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+/* ==========================
+   تحميل العقود
+========================== */
+async function loadContracts() {
+  const box = document.getElementById("contracts");
+  box.innerHTML = "⏳ جاري التحميل...";
+
+  const q = query(
+    collection(db, "contracts"),
+    orderBy("createdAt", "desc")
+  );
+
+  const snap = await getDocs(q);
+  box.innerHTML = "";
+
+  if (snap.empty) {
+    box.innerHTML = "لا يوجد عقود حتى الآن";
+    return;
+  }
+
+  snap.forEach(d => {
+    const c = d.data();
+
+    box.innerHTML += `
+      <div class="item">
+        <b>👤 ${c.clientName}</b><br>
+        📞 ${c.phone}<br>
+        🧰 ${c.service || "—"}<br>
+        💰 ${c.cost || 0} جنيه<br>
+        📅 ${c.startDate || "—"} → ${c.endDate || "—"}<br>
+        📍 الزيارة القادمة: ${c.nextVisit || "—"}<br>
+        🔄 الحالة:
+        <select onchange="updateStatus('${d.id}', this.value)">
+          <option ${c.status==="pending"?"selected":""}>pending</option>
+          <option ${c.status==="active"?"selected":""}>active</option>
+          <option ${c.status==="finished"?"selected":""}>finished</option>
+        </select>
+        <br>
+
+        <a target="_blank"
+           href="https://wa.me/201150402031?text=عقد:${c.clientName}">
+           💬 واتساب
+        </a>
+
+        <button onclick="deleteContract('${d.id}')">🗑 حذف</button>
+      </div>
+    `;
+  });
+}
+
+/* ==========================
+   حذف عقد
+========================== */
+window.deleteContract = async function(id) {
+  if (!confirm("هل تريد حذف العقد؟")) return;
+  await deleteDoc(doc(db, "contracts", id));
+  loadContracts();
+}
+
+/* ==========================
+   تحديث حالة العقد
+========================== */
+window.updateStatus = async function(id, status) {
+  await updateDoc(doc(db, "contracts", id), { status });
+}
+
+/* تحميل تلقائي */
+loadContracts();
+</script>
+
+</head>
+
+<body>
+
+<h2>📋 إدارة العقود</h2>
+
+<div class="card">
+  <p>جميع العقود المسجلة في النظام</p>
+</div>
+
+<div id="contracts"></div>
+
+</body>
+  </html>
