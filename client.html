@@ -4,16 +4,14 @@
 <meta charset="UTF-8">
 <title>🔐 بوابة العملاء</title>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
 
 <style>
 body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
 .card{background:#fff;padding:20px;border-radius:10px;max-width:420px;margin:auto}
 input,button{width:100%;padding:10px;margin:8px 0}
-button{border:none;border-radius:6px}
-.green{background:#25D366;color:#fff}
-.gray{background:#ccc}
+.green{background:#25D366;color:#fff;border:none;border-radius:6px}
 </style>
 </head>
 
@@ -21,75 +19,74 @@ button{border:none;border-radius:6px}
 
 <div class="card">
 <h3>🔐 بوابة العملاء</h3>
-
-<input id="phone" placeholder="رقم الموبايل">
+<input id="phone" placeholder="رقم الهاتف">
 <button class="green" onclick="login()">دخول</button>
-
 <div id="data"></div>
 </div>
 
 <script>
-firebase.initializeApp({
-  apiKey: "PUT_YOUR_KEY",
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  query,
+  where,
+  getDocs,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "API_KEY",
   authDomain: "futuretank-68c26.firebaseapp.com",
   projectId: "futuretank-68c26"
-});
+};
 
-const db = firebase.firestore();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-let currentClient=null;
+let clientData = null;
+
+function nextVisit(){
+  const d = new Date();
+  d.setMonth(d.getMonth() + 3);
+  return d.toISOString().split("T")[0];
+}
 
 async function login(){
-  const phone=document.getElementById("phone").value.trim();
-  const box=document.getElementById("data");
-  box.innerHTML="⏳ جاري البحث...";
+  const phone = document.getElementById("phone").value.trim();
+  const box = document.getElementById("data");
 
-  const snap=await db.collection("clients")
-    .where("phone","==",phone).get();
+  const q = query(collection(db,"clients"), where("phone","==",phone));
+  const snap = await getDocs(q);
 
   if(snap.empty){
-    box.innerHTML="❌ العميل غير مسجل";
+    box.innerHTML = "❌ العميل غير مسجل";
     return;
   }
 
-  currentClient=snap.docs[0].data();
+  clientData = snap.docs[0].data();
 
-  box.innerHTML=`
-    <h4>👤 بيانات العميل</h4>
-    <b>الاسم:</b> ${currentClient.name}<br>
-    <b>الهاتف:</b> ${currentClient.phone}<br>
-    <b>التكلفة:</b> ${currentClient.price||0} جنيه<br>
-    <b>مدة التعاقد:</b> ${currentClient.start||"—"} → ${currentClient.end||"—"}<br>
-    <b>آخر زيارة:</b> ${currentClient.lastVisit||"—"}<br>
-    <b>الزيارة القادمة:</b> ${currentClient.nextVisit||"—"}<br><br>
-
-    <button class="green" onclick="renew()">🔄 تجديد التعاقد</button>
-    <a target="_blank"
-       href="https://wa.me/201150402031?text=استفسار عميل: ${currentClient.name}">
-       <button class="gray">💬 تواصل مع خدمة العملاء</button>
-    </a>
+  box.innerHTML = `
+    <p>مرحبًا ${clientData.name}</p>
+    <button class="green" onclick="renew()">🔁 تجديد التعاقد</button>
   `;
 }
 
 async function renew(){
-  if(!confirm("تأكيد تجديد التعاقد؟")) return;
-
-  await db.collection("contracts").add({
-    clientName: currentClient.name,
-    clientPhone: currentClient.phone,
-    type: "renew",
-    price: currentClient.price || 0,
-    startDate: new Date().toISOString().slice(0,10),
-    createdAt: new Date()
+  await addDoc(collection(db,"contracts"),{
+    clientName: clientData.name,
+    phone: clientData.phone,
+    service: "تجديد تعاقد",
+    price: clientData.price || 0,
+    startDate: new Date().toISOString().split("T")[0],
+    nextVisit: nextVisit(),
+    status: "active",
+    createdAt: serverTimestamp(),
+    source: "client-portal"
   });
 
-  window.open(
-    "https://wa.me/201150402031?text=🔔 تم تجديد تعاقد\nالاسم: "
-    +currentClient.name+"\nالهاتف: "+currentClient.phone,
-    "_blank"
-  );
-
-  alert("✅ تم تجديد التعاقد بنجاح");
+  alert("✅ تم تسجيل التجديد");
 }
 </script>
 
