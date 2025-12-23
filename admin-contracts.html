@@ -3,125 +3,96 @@
 <head>
 <meta charset="UTF-8">
 <title>📋 إدارة العقود</title>
-<link rel="stylesheet" href="styles.css">
-
 <style>
-body { direction: rtl; font-family: Arial; background:#f6f7f9; }
-.card { background:#fff; padding:15px; margin:15px 0; border-radius:8px; }
-.item { background:#fafafa; padding:10px; border-radius:6px; margin-bottom:10px; }
-button { margin:5px 0; padding:6px 10px; cursor:pointer; }
-select { padding:5px; }
+body{
+  font-family: Arial;
+  background:#f4f6f8;
+  padding:30px;
+}
+h2{text-align:center}
+table{
+  width:100%;
+  border-collapse:collapse;
+  background:#fff;
+}
+th,td{
+  padding:10px;
+  border:1px solid #ddd;
+  text-align:center;
+}
+th{
+  background:#2c3e50;
+  color:#fff;
+}
 </style>
-
-<!-- Firebase -->
-<script type="module">
-import { initializeApp } from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-
-import {
-  getFirestore,
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc,
-  updateDoc,
-  orderBy,
-  query
-} from
-"https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-/* 🔥 Firebase Config */
-const firebaseConfig = {
-  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
-  authDomain: "futuretank-68c26.firebaseapp.com",
-  projectId: "futuretank-68c26"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-/* ==========================
-   تحميل العقود
-========================== */
-async function loadContracts() {
-  const box = document.getElementById("contracts");
-  box.innerHTML = "⏳ جاري التحميل...";
-
-  const q = query(
-    collection(db, "contracts"),
-    orderBy("createdAt", "desc")
-  );
-
-  const snap = await getDocs(q);
-  box.innerHTML = "";
-
-  if (snap.empty) {
-    box.innerHTML = "لا يوجد عقود حتى الآن";
-    return;
-  }
-
-  snap.forEach(d => {
-    const c = d.data();
-
-    box.innerHTML += `
-      <div class="item">
-        <b>👤 ${c.clientName}</b><br>
-        📞 ${c.phone}<br>
-        🧰 ${c.service || "—"}<br>
-        💰 ${c.cost || 0} جنيه<br>
-        📅 ${c.startDate || "—"} → ${c.endDate || "—"}<br>
-        📍 الزيارة القادمة: ${c.nextVisit || "—"}<br>
-        🔄 الحالة:
-        <select onchange="updateStatus('${d.id}', this.value)">
-          <option ${c.status==="pending"?"selected":""}>pending</option>
-          <option ${c.status==="active"?"selected":""}>active</option>
-          <option ${c.status==="finished"?"selected":""}>finished</option>
-        </select>
-        <br>
-
-        <a target="_blank"
-           href="https://wa.me/201150402031?text=عقد:${c.clientName}">
-           💬 واتساب
-        </a>
-
-        <button onclick="deleteContract('${d.id}')">🗑 حذف</button>
-      </div>
-    `;
-  });
-}
-
-/* ==========================
-   حذف عقد
-========================== */
-window.deleteContract = async function(id) {
-  if (!confirm("هل تريد حذف العقد؟")) return;
-  await deleteDoc(doc(db, "contracts", id));
-  loadContracts();
-}
-
-/* ==========================
-   تحديث حالة العقد
-========================== */
-window.updateStatus = async function(id, status) {
-  await updateDoc(doc(db, "contracts", id), { status });
-}
-
-/* تحميل تلقائي */
-loadContracts();
-</script>
-
 </head>
 
 <body>
 
 <h2>📋 إدارة العقود</h2>
 
-<div class="card">
-  <p>جميع العقود المسجلة في النظام</p>
-</div>
+<table>
+<thead>
+<tr>
+<th>العميل</th>
+<th>الهاتف</th>
+<th>الخدمة</th>
+<th>بداية العقد</th>
+<th>نهاية العقد</th>
+<th>الحالة</th>
+</tr>
+</thead>
+<tbody id="contractsTable">
+<tr><td colspan="6">⏳ جاري تحميل العقود...</td></tr>
+</tbody>
+</table>
 
-<div id="contracts"></div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "PUT_YOUR_KEY",
+  authDomain: "PUT_YOUR_DOMAIN",
+  projectId: "PUT_YOUR_PROJECT_ID",
+  storageBucket: "PUT_YOUR_BUCKET",
+  messagingSenderId: "PUT_YOUR_SENDER_ID",
+  appId: "PUT_YOUR_APP_ID"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
+
+const table = document.getElementById("contractsTable");
+table.innerHTML = "";
+
+const q = query(collection(db, "contracts"), orderBy("createdAt","desc"));
+const snapshot = await getDocs(q);
+
+if(snapshot.empty){
+  table.innerHTML = "<tr><td colspan='6'>❌ لا توجد عقود</td></tr>";
+}
+
+snapshot.forEach(doc=>{
+  const d = doc.data();
+  table.innerHTML += `
+    <tr>
+      <td>${d.clientName || "—"}</td>
+      <td>${d.phone || "—"}</td>
+      <td>${d.service || "—"}</td>
+      <td>${d.startDate || "—"}</td>
+      <td>${d.endDate || "—"}</td>
+      <td>${d.status || "—"}</td>
+    </tr>
+  `;
+});
+</script>
 
 </body>
-  </html>
+</html>
