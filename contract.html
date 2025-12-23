@@ -3,75 +3,78 @@
 <head>
 <meta charset="UTF-8">
 <title>📄 تعاقد الآن</title>
-<link rel="stylesheet" href="styles.css">
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+
+<style>
+body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
+.card{background:#fff;padding:20px;border-radius:10px;max-width:420px;margin:auto}
+input,button{width:100%;padding:10px;margin:8px 0}
+button{background:#4CAF50;color:#fff;border:none;border-radius:6px}
+</style>
 </head>
 
 <body>
 
-<h2>📄 عقد خدمة FutureTank</h2>
-
 <div class="card">
-  <input id="cname" placeholder="اسم العميل" required>
-  <input id="cphone" placeholder="رقم الهاتف" required>
-
-  <select id="service">
-    <option value="">— اختر الخدمة —</option>
-    <option>توريد وتركيب خزانات المياه</option>
-    <option>تطهير وتعقيم خزانات مياه الشرب</option>
-    <option>صيانة وإصلاح خزانات المياه</option>
-    <option>توريد وتركيب فلاتر المياه</option>
-    <option>صيانة وإصلاح فلاتر المياه</option>
-  </select>
-
-  <button onclick="createContract()">✍️ موافق على التعاقد</button>
-  <p id="status"></p>
+<h3>📄 تعاقد خدمة FutureTank</h3>
+<input id="name" placeholder="اسم العميل">
+<input id="phone" placeholder="رقم الهاتف">
+<input id="service" placeholder="اسم الخدمة">
+<button onclick="createContract()">✍️ موافق على التعاقد</button>
+<p id="status"></p>
 </div>
 
 <script>
-firebase.initializeApp({
-  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "API_KEY",
   authDomain: "futuretank-68c26.firebaseapp.com",
   projectId: "futuretank-68c26"
-});
+};
 
-const db = firebase.firestore();
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
-function createContract(){
-  const name = cname.value.trim();
-  const phone = cphone.value.trim();
-  const service = document.getElementById("service").value;
-  const statusBox = document.getElementById("status");
+function nextVisitDate(){
+  const d = new Date();
+  d.setMonth(d.getMonth() + 3);
+  return d.toISOString().split("T")[0];
+}
+
+async function createContract(){
+  const name = document.getElementById("name").value.trim();
+  const phone = document.getElementById("phone").value.trim();
+  const service = document.getElementById("service").value.trim();
+  const status = document.getElementById("status");
 
   if(!name || !phone || !service){
-    statusBox.innerText = "❌ برجاء إدخال جميع البيانات";
+    status.innerText = "❌ جميع البيانات مطلوبة";
     return;
   }
 
-  db.collection("contracts").add({
+  await addDoc(collection(db,"contracts"),{
     clientName: name,
     phone: phone,
     service: service,
     price: 0,
-    nextVisit: "",
-    status: "pending",
-    source: "direct_contract",
-    createdAt: new Date()
-  })
-  .then(() => {
-    statusBox.innerText = "✅ تم تسجيل العقد بنجاح";
-
-    window.open(
-      `https://wa.me/201150402031?text=📄 تعاقد جديد%0Aالاسم:${name}%0Aالهاتف:${phone}%0Aالخدمة:${service}`,
-      "_blank"
-    );
-  })
-  .catch(err => {
-    console.error(err);
-    statusBox.innerText = "❌ فشل حفظ العقد";
+    startDate: new Date().toISOString().split("T")[0],
+    nextVisit: nextVisitDate(),
+    status: "active",
+    createdAt: serverTimestamp(),
+    source: "direct_contract"
   });
+
+  status.innerText = "✅ تم تسجيل التعاقد";
+  window.open(`https://wa.me/201150402031?text=📄 تعاقد جديد%0A${name}%0A${phone}`,"_blank");
 }
 </script>
 
