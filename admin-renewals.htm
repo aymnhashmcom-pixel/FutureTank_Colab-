@@ -1,44 +1,113 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>🔄 تجديدات التعاقد</title>
-<style>
-body{font-family:Tajawal;background:#f9fbff;padding:20px}
-.card{background:#fff;padding:15px;border-radius:10px;margin-bottom:10px}
-button{background:#f57c00;color:#fff;border:none;padding:6px 12px;border-radius:6px}
-</style>
+  <meta charset="UTF-8">
+  <title>🔄 تجديدات التعاقد</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 40px;
+    }
+    h2 {
+      text-align: center;
+      color: #2c3e50;
+    }
+    .box {
+      max-width: 400px;
+      margin: auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0,0,0,.1);
+    }
+    input, button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 15px;
+    }
+    button {
+      background: #2ecc71;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      border-radius: 6px;
+    }
+    button:hover {
+      background: #27ae60;
+    }
+  </style>
 </head>
-
 <body>
 
-<h2>🔔 تنبيهات قرب التجديد</h2>
-<div id="alerts"></div>
+  <h2>🔄 تجديد التعاقد</h2>
 
-<script>
-const db=JSON.parse(localStorage.getItem("ft_db")||"{}");
-const today=new Date();
+  <div class="box">
+    <input id="clientName" placeholder="اسم العميل">
+    <input id="clientPhone" placeholder="رقم الهاتف">
+    <button onclick="submitRenewal()">تجديد التعاقد</button>
+  </div>
 
-(db.clients||[]).forEach((c,i)=>{
-  const end=new Date(c.end);
-  const diff=(end-today)/(1000*60*60*24);
-  if(diff<=10){
-    alerts.innerHTML+=`
-    <div class="card">
-      <b>${c.name}</b> – ينتهي خلال ${Math.ceil(diff)} يوم
-      <br><button onclick="renew(${i})">🔄 تجديد</button>
-    </div>`;
-  }
-});
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      Timestamp
+    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-function renew(i){
-  const newDate=prompt("أدخل تاريخ نهاية جديد (YYYY-MM-DD)");
-  if(!newDate)return;
-  db.clients[i].end=newDate;
-  localStorage.setItem("ft_db",JSON.stringify(db));
-  location.reload();
-}
-</script>
+    // 🔥 إعدادات Firebase (زي باقي المشروع)
+    const firebaseConfig = {
+      apiKey: "PUT_YOUR_KEY",
+      authDomain: "PUT_YOUR_DOMAIN",
+      projectId: "PUT_YOUR_PROJECT_ID",
+      storageBucket: "PUT_YOUR_BUCKET",
+      messagingSenderId: "PUT_YOUR_SENDER_ID",
+      appId: "PUT_YOUR_APP_ID"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    window.submitRenewal = async function () {
+
+      const name = document.getElementById("clientName").value.trim();
+      const phone = document.getElementById("clientPhone").value.trim();
+
+      if (!name || !phone) {
+        alert("⚠️ برجاء إدخال الاسم ورقم الهاتف");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "contracts"), {
+          clientName: name,
+          phone: phone,
+          service: "تجديد تعاقد",
+          status: "active",
+          address: "",
+          email: "",
+          cost: "",
+          visits: "",
+          startDate: new Date().toISOString().split("T")[0],
+          endDate: new Date(
+            new Date().setFullYear(new Date().getFullYear() + 1)
+          ).toISOString().split("T")[0],
+          createdAt: Timestamp.now()
+        });
+
+        alert("✅ تم تجديد التعاقد وظهوره في إدارة العقود");
+        document.getElementById("clientName").value = "";
+        document.getElementById("clientPhone").value = "";
+
+      } catch (err) {
+        console.error(err);
+        alert("❌ حدث خطأ أثناء التجديد");
+      }
+    };
+  </script>
 
 </body>
 </html>
