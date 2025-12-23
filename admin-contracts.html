@@ -3,129 +3,57 @@
 <head>
 <meta charset="UTF-8">
 <title>📋 إدارة العقود</title>
-<link rel="stylesheet" href="styles.css">
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<style>
+body{font-family:Arial;direction:rtl;background:#f4f4f4;padding:20px}
+.item{background:#fff;padding:15px;border-radius:8px;margin-bottom:10px}
+.tag{padding:3px 8px;border-radius:5px;font-size:12px}
+.new{background:#4CAF50;color:#fff}
+.renew{background:#2196F3;color:#fff}
+</style>
 </head>
 
 <body>
 
 <h2>📋 إدارة العقود</h2>
-
-<div class="card">
-  <h3>➕ إضافة عقد</h3>
-
-  <label>👤 العميل</label>
-  <select id="contractClient"></select>
-
-  <label>🧰 الخدمة</label>
-  <select id="contractService"></select>
-
-  <input type="number" id="contractPrice" placeholder="تكلفة العقد بالجنيه">
-
-  <label>📍 الزيارة القادمة</label>
-  <input type="date" id="nextVisit">
-
-  <button onclick="addContract()">➕ إضافة العقد</button>
-  <p id="status"></p>
-</div>
-
-<hr>
-
-<h3>📋 العقود الحالية</h3>
-<div id="contracts"></div>
+<div id="contracts">⏳ تحميل...</div>
 
 <script>
-// Firebase init
 firebase.initializeApp({
-  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+  apiKey: "PUT_YOUR_KEY",
   authDomain: "futuretank-68c26.firebaseapp.com",
   projectId: "futuretank-68c26"
 });
 
 const db = firebase.firestore();
 
-// تحميل العملاء
-db.collection("clients").onSnapshot(snap => {
-  const select = document.getElementById("contractClient");
-  select.innerHTML = "<option value=''>-- اختر العميل --</option>";
-  snap.forEach(doc => {
-    const c = doc.data();
-    select.innerHTML += `<option value="${doc.id}|${c.name}">${c.name}</option>`;
-  });
-});
+db.collection("contracts")
+.orderBy("createdAt","desc")
+.onSnapshot(snapshot=>{
+  const box=document.getElementById("contracts");
+  box.innerHTML="";
 
-// تحميل الخدمات
-db.collection("services").onSnapshot(snap => {
-  const select = document.getElementById("contractService");
-  select.innerHTML = "<option value=''>-- اختر الخدمة --</option>";
-  snap.forEach(doc => {
-    const s = doc.data();
-    select.innerHTML += `<option value="${doc.id}|${s.name}">${s.name}</option>`;
-  });
-});
-
-// إضافة عقد
-function addContract() {
-  const clientVal = document.getElementById("contractClient").value;
-  const serviceVal = document.getElementById("contractService").value;
-  const price = Number(document.getElementById("contractPrice").value || 0);
-  const nextVisit = document.getElementById("nextVisit").value;
-  const status = document.getElementById("status");
-
-  if (!clientVal || !serviceVal) {
-    status.innerText = "❌ اختر العميل والخدمة";
+  if(snapshot.empty){
+    box.innerHTML="لا توجد عقود بعد";
     return;
   }
 
-  const [clientId, clientName] = clientVal.split("|");
-  const [serviceId, serviceName] = serviceVal.split("|");
-
-  status.innerText = "⏳ جاري الحفظ...";
-
-  db.collection("contracts").add({
-    clientId,
-    clientName,
-    serviceId,
-    serviceName,
-    price,
-    nextVisit,
-    createdAt: new Date()
-  }).then(() => {
-    status.innerText = "✅ تم إضافة العقد";
-    document.querySelectorAll(".card input, .card select").forEach(e => e.value = "");
-  }).catch(() => {
-    status.innerText = "❌ فشل الإضافة";
-  });
-}
-
-// عرض العقود
-db.collection("contracts").orderBy("createdAt","desc")
-.onSnapshot(snap => {
-  const box = document.getElementById("contracts");
-  box.innerHTML = "";
-
-  snap.forEach(doc => {
-    const c = doc.data();
-    box.innerHTML += `
+  snapshot.forEach(doc=>{
+    const c=doc.data();
+    box.innerHTML+=`
       <div class="item">
-        <b>${c.clientName}</b><br>
-        🧰 ${c.serviceName}<br>
-        💰 ${c.price} جنيه<br>
-        📍 الزيارة القادمة: ${c.nextVisit || "—"}<br>
-        <button onclick="deleteContract('${doc.id}')">🗑 حذف</button>
-      </div><hr>
+        <b>${c.clientName}</b>
+        <span class="tag ${c.type}">${c.type=="renew"?"تجديد":"جديد"}</span><br>
+        📞 ${c.clientPhone}<br>
+        💰 ${c.price||0} جنيه<br>
+        📅 ${c.startDate||"—"}
+      </div>
     `;
   });
 });
-
-// حذف عقد
-function deleteContract(id) {
-  if (!confirm("⚠️ هل تريد حذف العقد؟")) return;
-  db.collection("contracts").doc(id).delete();
-}
 </script>
 
 </body>
