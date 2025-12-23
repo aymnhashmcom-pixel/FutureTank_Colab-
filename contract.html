@@ -2,73 +2,59 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>📄 عقد خدمة FutureTank</title>
+<title>📄 تعاقد الآن</title>
+<link rel="stylesheet" href="styles.css">
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
-<style>
-body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
-.card{background:#fff;padding:20px;border-radius:10px;max-width:420px;margin:auto}
-input,button{width:100%;padding:10px;margin:10px 0}
-button{background:#25D366;color:#fff;border:none;border-radius:6px}
-</style>
 </head>
 
 <body>
 
+<h2>📄 عقد خدمة FutureTank</h2>
+
 <div class="card">
-<h3>📄 عقد خدمة FutureTank</h3>
+  <input id="cname" placeholder="اسم العميل" required>
+  <input id="cphone" placeholder="رقم الهاتف" required>
 
-<input id="name" placeholder="اسم العميل">
-<input id="phone" placeholder="رقم الموبايل">
-
-<button onclick="contract()">✍️ موافق على التعاقد</button>
-
-<p id="status"></p>
+  <button onclick="createContract()">✍️ موافق على التعاقد</button>
+  <p id="status"></p>
 </div>
 
 <script>
 firebase.initializeApp({
-  apiKey: "PUT_YOUR_KEY",
+  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
   authDomain: "futuretank-68c26.firebaseapp.com",
   projectId: "futuretank-68c26"
 });
 
 const db = firebase.firestore();
 
-async function contract(){
-  const name=document.getElementById("name").value.trim();
-  const phone=document.getElementById("phone").value.trim();
-  const status=document.getElementById("status");
+function createContract(){
+  const name = cname.value.trim();
+  const phone = cphone.value.trim();
+  const status = document.getElementById("status");
 
   if(!name || !phone){
-    status.innerText="❌ الاسم ورقم الهاتف مطلوبين";
+    status.innerText = "❌ البيانات مطلوبة";
     return;
   }
 
-  status.innerText="⏳ جاري تسجيل التعاقد...";
-
-  try{
-    await db.collection("contracts").add({
-      clientName: name,
-      clientPhone: phone,
-      type: "new",
-      createdAt: new Date()
-    });
-
+  db.collection("contracts").add({
+    clientName: name,
+    phone,
+    status: "pending",
+    source: "direct_contract",
+    createdAt: new Date()
+  }).then(()=>{
+    status.innerText = "✅ تم إرسال طلب التعاقد";
     window.open(
-      "https://wa.me/201150402031?text=📄 تعاقد جديد\nالاسم: "
-      +name+"\nالهاتف: "+phone,
+      `https://wa.me/201150402031?text=📄 تعاقد جديد%0Aالاسم:${name}%0Aالهاتف:${phone}`,
       "_blank"
     );
-
-    status.innerText="✅ تم تسجيل التعاقد بنجاح";
-    document.getElementById("name").value="";
-    document.getElementById("phone").value="";
-  }catch(e){
-    status.innerText="❌ فشل تسجيل التعاقد";
-  }
+  }).catch(()=>{
+    status.innerText = "❌ فشل الإرسال";
+  });
 }
 </script>
 
