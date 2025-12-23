@@ -17,6 +17,15 @@
   <input id="cname" placeholder="اسم العميل" required>
   <input id="cphone" placeholder="رقم الهاتف" required>
 
+  <select id="service">
+    <option value="">— اختر الخدمة —</option>
+    <option>توريد وتركيب خزانات المياه</option>
+    <option>تطهير وتعقيم خزانات مياه الشرب</option>
+    <option>صيانة وإصلاح خزانات المياه</option>
+    <option>توريد وتركيب فلاتر المياه</option>
+    <option>صيانة وإصلاح فلاتر المياه</option>
+  </select>
+
   <button onclick="createContract()">✍️ موافق على التعاقد</button>
   <p id="status"></p>
 </div>
@@ -33,27 +42,35 @@ const db = firebase.firestore();
 function createContract(){
   const name = cname.value.trim();
   const phone = cphone.value.trim();
-  const status = document.getElementById("status");
+  const service = document.getElementById("service").value;
+  const statusBox = document.getElementById("status");
 
-  if(!name || !phone){
-    status.innerText = "❌ البيانات مطلوبة";
+  if(!name || !phone || !service){
+    statusBox.innerText = "❌ برجاء إدخال جميع البيانات";
     return;
   }
 
   db.collection("contracts").add({
     clientName: name,
-    phone,
+    phone: phone,
+    service: service,
+    price: 0,
+    nextVisit: "",
     status: "pending",
     source: "direct_contract",
     createdAt: new Date()
-  }).then(()=>{
-    status.innerText = "✅ تم إرسال طلب التعاقد";
+  })
+  .then(() => {
+    statusBox.innerText = "✅ تم تسجيل العقد بنجاح";
+
     window.open(
-      `https://wa.me/201150402031?text=📄 تعاقد جديد%0Aالاسم:${name}%0Aالهاتف:${phone}`,
+      `https://wa.me/201150402031?text=📄 تعاقد جديد%0Aالاسم:${name}%0Aالهاتف:${phone}%0Aالخدمة:${service}`,
       "_blank"
     );
-  }).catch(()=>{
-    status.innerText = "❌ فشل الإرسال";
+  })
+  .catch(err => {
+    console.error(err);
+    statusBox.innerText = "❌ فشل حفظ العقد";
   });
 }
 </script>
