@@ -1,139 +1,95 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>🔐 بوابة عملاء FutureTank</title>
+<title>🔐 بوابة العملاء</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px
-}
-.card{
-  background:#fff;
-  max-width:600px;
-  margin:auto;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,.15)
-}
-h2{text-align:center;color:#0077b6}
-input,button{
-  width:100%;
-  padding:12px;
-  margin:8px 0;
-  border-radius:6px;
-  border:1px solid #ccc;
-  font-size:15px
-}
-button{
-  background:#0077b6;
-  color:#fff;
-  border:none;
-  cursor:pointer
-}
-.renew{background:#ff9800}
-.whatsapp{background:#25d366}
-.info{
-  background:#f1f7ff;
-  padding:15px;
-  border-radius:6px;
-  margin-top:15px
-}
-.hidden{display:none}
+body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
+.card{background:#fff;padding:20px;border-radius:10px;max-width:420px;margin:auto}
+input,button{width:100%;padding:10px;margin:8px 0}
+button{border:none;border-radius:6px}
+.green{background:#25D366;color:#fff}
+.gray{background:#ccc}
 </style>
 </head>
 
 <body>
 
 <div class="card">
+<h3>🔐 بوابة العملاء</h3>
 
-<h2>🔐 بوابة العملاء</h2>
+<input id="phone" placeholder="رقم الموبايل">
+<button class="green" onclick="login()">دخول</button>
 
-<div id="loginBox">
-  <input id="loginInput" placeholder="رقم الهاتف أو كود العميل">
-  <button onclick="login()">دخول</button>
-</div>
-
-<div id="clientBox" class="hidden">
-  <h3>👤 بيانات العميل</h3>
-
-  <div class="info">
-    <p><b>الاسم:</b> <span id="cName"></span></p>
-    <p><b>الهاتف:</b> <span id="cPhone"></span></p>
-    <p><b>التكلفة:</b> <span id="cCost"></span> جنيه</p>
-    <p><b>مدة التعاقد:</b> <span id="cStart"></span> → <span id="cEnd"></span></p>
-    <p><b>آخر زيارة:</b> <span id="cLast"></span></p>
-    <p><b>الزيارة القادمة:</b> <span id="cNext"></span></p>
-  </div>
-
-  <button class="renew" onclick="renew()">🔄 تجديد التعاقد</button>
-
-  <button class="whatsapp" onclick="sendWhats()">💬 تواصل مع خدمة العملاء</button>
-</div>
-
+<div id="data"></div>
 </div>
 
 <script>
-const db = JSON.parse(localStorage.getItem("ft_db") || "{}");
-let currentClient = null;
+firebase.initializeApp({
+  apiKey: "PUT_YOUR_KEY",
+  authDomain: "futuretank-68c26.firebaseapp.com",
+  projectId: "futuretank-68c26"
+});
 
-function login(){
-  const val = loginInput.value.trim();
-  if(!val) return alert("أدخل رقم الهاتف أو الكود");
+const db = firebase.firestore();
 
-  currentClient = db.clients?.find(c =>
-    c.phone === val || c.code === val
-  );
+let currentClient=null;
 
-  if(!currentClient){
-    alert("العميل غير موجود");
+async function login(){
+  const phone=document.getElementById("phone").value.trim();
+  const box=document.getElementById("data");
+  box.innerHTML="⏳ جاري البحث...";
+
+  const snap=await db.collection("clients")
+    .where("phone","==",phone).get();
+
+  if(snap.empty){
+    box.innerHTML="❌ العميل غير مسجل";
     return;
   }
 
-  loginBox.classList.add("hidden");
-  clientBox.classList.remove("hidden");
+  currentClient=snap.docs[0].data();
 
-  cName.textContent = currentClient.name;
-  cPhone.textContent = currentClient.phone;
-  cCost.textContent = currentClient.cost;
-  cStart.textContent = currentClient.start;
-  cEnd.textContent = currentClient.end;
-  cLast.textContent = currentClient.lastVisit || "-";
-  cNext.textContent = currentClient.nextVisit || "-";
+  box.innerHTML=`
+    <h4>👤 بيانات العميل</h4>
+    <b>الاسم:</b> ${currentClient.name}<br>
+    <b>الهاتف:</b> ${currentClient.phone}<br>
+    <b>التكلفة:</b> ${currentClient.price||0} جنيه<br>
+    <b>مدة التعاقد:</b> ${currentClient.start||"—"} → ${currentClient.end||"—"}<br>
+    <b>آخر زيارة:</b> ${currentClient.lastVisit||"—"}<br>
+    <b>الزيارة القادمة:</b> ${currentClient.nextVisit||"—"}<br><br>
+
+    <button class="green" onclick="renew()">🔄 تجديد التعاقد</button>
+    <a target="_blank"
+       href="https://wa.me/201150402031?text=استفسار عميل: ${currentClient.name}">
+       <button class="gray">💬 تواصل مع خدمة العملاء</button>
+    </a>
+  `;
 }
 
-function renew(){
-  if(!confirm("هل تريد تجديد التعاقد؟")) return;
+async function renew(){
+  if(!confirm("تأكيد تجديد التعاقد؟")) return;
 
-  const today = new Date();
-  const newStart = today.toISOString().split("T")[0];
+  await db.collection("contracts").add({
+    clientName: currentClient.name,
+    clientPhone: currentClient.phone,
+    type: "renew",
+    price: currentClient.price || 0,
+    startDate: new Date().toISOString().slice(0,10),
+    createdAt: new Date()
+  });
 
-  const newEnd = new Date();
-  newEnd.setFullYear(newEnd.getFullYear()+1);
+  window.open(
+    "https://wa.me/201150402031?text=🔔 تم تجديد تعاقد\nالاسم: "
+    +currentClient.name+"\nالهاتف: "+currentClient.phone,
+    "_blank"
+  );
 
-  currentClient.start = newStart;
-  currentClient.end = newEnd.toISOString().split("T")[0];
-
-  saveDB();
-
-  alert("تم تجديد التعاقد بنجاح");
-
-  location.href = `contract.html?phone=${currentClient.phone}`;
-}
-
-function saveDB(){
-  localStorage.setItem("ft_db", JSON.stringify(db));
-}
-
-function sendWhats(){
-  const msg = `
-مرحبا FutureTank
-أنا ${currentClient.name}
-رقم ${currentClient.phone}
-`;
-  window.open(`https://wa.me/201150402031?text=${encodeURIComponent(msg)}`);
+  alert("✅ تم تجديد التعاقد بنجاح");
 }
 </script>
 
