@@ -2,7 +2,11 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>بوابة العملاء</title>
+<title>🔐 بوابة العملاء</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
 <style>
 body{
   font-family:Arial;
@@ -10,55 +14,50 @@ body{
   background:#f4f6f8;
   padding:20px
 }
-.box{
+.card{
   background:#fff;
   padding:20px;
-  border-radius:10px;
-  max-width:400px;
+  border-radius:12px;
+  max-width:450px;
   margin:auto
 }
 input,button{
   width:100%;
-  padding:12px;
-  margin:8px 0
+  padding:10px;
+  margin:6px 0
 }
 button{
+  border:none;
+  border-radius:6px;
   background:#4A90E2;
   color:#fff;
-  border:none;
-  font-size:16px
+  cursor:pointer
 }
 .hidden{display:none}
-.info{
-  background:#eef;
-  padding:10px;
-  border-radius:6px;
-  margin:8px 0
-}
+.row{margin:6px 0}
+.green{background:#25D366}
 </style>
 </head>
+
 <body>
 
-<div class="box" id="loginBox">
+<div class="card" id="loginBox">
   <h3>🔐 بوابة العملاء</h3>
-  <input id="phone" placeholder="رقم الهاتف">
+  <input id="phone" placeholder="رقم الموبايل">
   <button onclick="login()">دخول</button>
 </div>
 
-<div class="box hidden" id="clientBox">
+<div class="card hidden" id="clientBox">
   <h3>مرحبًا <span id="cname"></span> 👋</h3>
 
-  <div class="info">📞 الهاتف: <span id="cphone"></span></div>
-  <div class="info">📍 العنوان: <span id="caddress"></span></div>
-  <div class="info">💰 قيمة التعاقد: <span id="cprice"></span> جنيه</div>
-  <div class="info">📅 بداية التعاقد: <span id="cstart"></span></div>
-  <div class="info">📅 نهاية التعاقد: <span id="cend"></span></div>
+  <div class="row">📞 <span id="cphone"></span></div>
+  <div class="row">📍 <span id="caddress"></span></div>
+  <div class="row">💰 <span id="cprice"></span> جنيه</div>
+  <div class="row">📅 من <span id="cstart"></span> إلى <span id="cend"></span></div>
 
-  <button onclick="renew()">🔁 تجديد التعاقد</button>
+  <button class="green" onclick="renew()">🔁 تجديد التعاقد</button>
+  <p id="msg"></p>
 </div>
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <script>
 firebase.initializeApp({
@@ -68,41 +67,56 @@ firebase.initializeApp({
 });
 
 const db = firebase.firestore();
+let currentDocId = null;
 let currentClient = null;
 
-function login(){
-  const p = phone.value.trim();
-  if(!p){alert("اكتب رقم الهاتف");return;}
+function normalizePhone(p){
+  p = p.replace(/\s/g,"");
+  if(p.startsWith("+20")) p = "0"+p.slice(3);
+  if(!p.startsWith("0")) p = "0"+p;
+  return p;
+}
 
-  db.collection("clients")
-    .where("phone","==",p)
-    .get()
-    .then(s=>{
-      if(s.empty){
-        alert("العميل غير مسجل");
-        return;
-      }
-      s.forEach(d=>{
-        currentClient = d.data();
-        cname.innerText = currentClient.name || "عميل";
-        cphone.innerText = currentClient.phone || "-";
-        caddress.innerText = currentClient.address || "-";
-        cprice.innerText = currentClient.price || "0";
-        cstart.innerText = currentClient.start || "-";
-        cend.innerText = currentClient.end || "-";
-      });
-      loginBox.classList.add("hidden");
-      clientBox.classList.remove("hidden");
-    });
+function login(){
+  const p = normalizePhone(phone.value.trim());
+  db.collection("clients").where("phone","==",p).get().then(snap=>{
+    if(snap.empty){
+      alert("❌ العميل غير مسجل");
+      return;
+    }
+    const doc = snap.docs[0];
+    currentDocId = doc.id;
+    currentClient = doc.data();
+
+    cname.innerText = currentClient.name;
+    cphone.innerText = currentClient.phone;
+    caddress.innerText = currentClient.address || "-";
+    cprice.innerText = currentClient.price || 0;
+    cstart.innerText = currentClient.start || "-";
+    cend.innerText = currentClient.end || "-";
+
+    loginBox.classList.add("hidden");
+    clientBox.classList.remove("hidden");
+  });
 }
 
 function renew(){
-  const msg = `
-طلب تجديد تعاقد
-الاسم: ${currentClient.name}
-الهاتف: ${currentClient.phone}
-`;
-  location.href = "https://wa.me/2011XXXXXXX?text=" + encodeURIComponent(msg);
+  const newEnd = new Date();
+  newEnd.setFullYear(newEnd.getFullYear()+1);
+
+  db.collection("clients").doc(currentDocId).update({
+    end: newEnd.toISOString().slice(0,10),
+    lastRenew: new Date()
+  }).then(()=>{
+    msg.innerText = "✅ تم تجديد التعاقد بنجاح";
+
+    window.open(
+      `https://wa.me/201150402031?text=🔁 تجديد تعاقد%0Aالاسم: ${currentClient.name}%0Aالهاتف: ${currentClient.phone}`,
+      "_blank"
+    );
+
+    cend.innerText = newEnd.toISOString().slice(0,10);
+  });
 }
 </script>
 
