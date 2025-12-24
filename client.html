@@ -2,78 +2,107 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>🔐 بوابة العملاء</title>
+<title>بوابة العملاء</title>
+<style>
+body{
+  font-family:Arial;
+  direction:rtl;
+  background:#f4f6f8;
+  padding:20px
+}
+.box{
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  max-width:400px;
+  margin:auto
+}
+input,button{
+  width:100%;
+  padding:12px;
+  margin:8px 0
+}
+button{
+  background:#4A90E2;
+  color:#fff;
+  border:none;
+  font-size:16px
+}
+.hidden{display:none}
+.info{
+  background:#eef;
+  padding:10px;
+  border-radius:6px;
+  margin:8px 0
+}
+</style>
+</head>
+<body>
+
+<div class="box" id="loginBox">
+  <h3>🔐 بوابة العملاء</h3>
+  <input id="phone" placeholder="رقم الهاتف">
+  <button onclick="login()">دخول</button>
+</div>
+
+<div class="box hidden" id="clientBox">
+  <h3>مرحبًا <span id="cname"></span> 👋</h3>
+
+  <div class="info">📞 الهاتف: <span id="cphone"></span></div>
+  <div class="info">📍 العنوان: <span id="caddress"></span></div>
+  <div class="info">💰 قيمة التعاقد: <span id="cprice"></span> جنيه</div>
+  <div class="info">📅 بداية التعاقد: <span id="cstart"></span></div>
+  <div class="info">📅 نهاية التعاقد: <span id="cend"></span></div>
+
+  <button onclick="renew()">🔁 تجديد التعاقد</button>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
-<style>
-body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
-.card{background:#fff;padding:20px;border-radius:10px;max-width:420px;margin:auto}
-input,button{width:100%;padding:10px;margin:8px 0}
-.green{background:#25D366;color:#fff;border:none;border-radius:6px}
-</style>
-</head>
-
-<body>
-
-<div class="card">
-<h3>🔐 بوابة العملاء</h3>
-<input id="phone" placeholder="رقم الهاتف">
-<button class="green" onclick="login()">دخول</button>
-<div id="data"></div>
-</div>
-
 <script>
 firebase.initializeApp({
   apiKey: "API_KEY",
-  authDomain: "futuretank-68c26.firebaseapp.com",
-  projectId: "futuretank-68c26"
+  authDomain: "PROJECT.firebaseapp.com",
+  projectId: "PROJECT"
 });
 
 const db = firebase.firestore();
-let client = null;
+let currentClient = null;
 
-function nextVisit(){
-  const d = new Date();
-  d.setMonth(d.getMonth() + 3);
-  return d.toISOString().split("T")[0];
-}
+function login(){
+  const p = phone.value.trim();
+  if(!p){alert("اكتب رقم الهاتف");return;}
 
-async function login(){
-  const phone = document.getElementById("phone").value.trim();
-  const box = document.getElementById("data");
-
-  const snap = await db.collection("clients")
-    .where("phone","==",phone).get();
-
-  if(snap.empty){
-    box.innerHTML = "❌ العميل غير مسجل";
-    return;
-  }
-
-  client = snap.docs[0].data();
-
-  box.innerHTML = `
-    <p>مرحبًا ${client.name}</p>
-    <button class="green" onclick="renew()">🔁 تجديد التعاقد</button>
-  `;
+  db.collection("clients")
+    .where("phone","==",p)
+    .get()
+    .then(s=>{
+      if(s.empty){
+        alert("العميل غير مسجل");
+        return;
+      }
+      s.forEach(d=>{
+        currentClient = d.data();
+        cname.innerText = currentClient.name || "عميل";
+        cphone.innerText = currentClient.phone || "-";
+        caddress.innerText = currentClient.address || "-";
+        cprice.innerText = currentClient.price || "0";
+        cstart.innerText = currentClient.start || "-";
+        cend.innerText = currentClient.end || "-";
+      });
+      loginBox.classList.add("hidden");
+      clientBox.classList.remove("hidden");
+    });
 }
 
 function renew(){
-  db.collection("contracts").add({
-    clientName: client.name,
-    phone: client.phone,
-    service: "تجديد تعاقد",
-    price: client.price || 0,
-    startDate: new Date().toISOString().split("T")[0],
-    nextVisit: nextVisit(),
-    status: "active",
-    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-    source: "client_portal"
-  }).then(()=>{
-    alert("✅ تم تسجيل التجديد");
-  });
+  const msg = `
+طلب تجديد تعاقد
+الاسم: ${currentClient.name}
+الهاتف: ${currentClient.phone}
+`;
+  location.href = "https://wa.me/2011XXXXXXX?text=" + encodeURIComponent(msg);
 }
 </script>
 
