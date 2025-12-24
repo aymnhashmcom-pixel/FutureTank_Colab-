@@ -5,23 +5,27 @@
 <title>إدارة الخدمات</title>
 <style>
 body{font-family:Arial;direction:rtl;background:#f4f6f8;padding:20px}
-input,textarea,button{width:100%;padding:10px;margin:5px 0}
-.card{background:#fff;padding:15px;margin:10px 0;border-radius:8px}
-img{max-width:100%;border-radius:6px}
+.card{background:#fff;padding:20px;border-radius:10px;max-width:500px;margin:auto}
+input,button{width:100%;padding:10px;margin:6px 0}
+button{background:#4A90E2;color:#fff;border:none}
+.service{background:#eef;padding:10px;margin:6px 0;border-radius:6px}
 </style>
 </head>
 <body>
 
-<h2>🧰 إدارة الخدمات</h2>
+<div class="card">
+<h3>🧰 إدارة الخدمات</h3>
 
 <input id="name" placeholder="اسم الخدمة">
-<textarea id="desc" placeholder="وصف الخدمة"></textarea>
 <input id="price" placeholder="السعر">
 <input type="file" id="image">
+
 <button onclick="addService()">➕ إضافة خدمة</button>
 
+<div id="msg"></div>
 <hr>
-<div id="services"></div>
+<div id="list"></div>
+</div>
 
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
@@ -39,33 +43,43 @@ const db = firebase.firestore();
 const storage = firebase.storage();
 
 function addService(){
-  const file = image.files[0];
-  const ref = storage.ref("services/"+Date.now());
-  ref.put(file).then(snap=>{
-    snap.ref.getDownloadURL().then(url=>{
+  const n = name.value.trim();
+  const p = price.value.trim();
+  const f = image.files[0];
+  if(!n || !p || !f){
+    msg.innerText = "❌ كل البيانات مطلوبة";
+    return;
+  }
+
+  const ref = storage.ref("services/"+Date.now()+"_"+f.name);
+  ref.put(f).then(()=>{
+    ref.getDownloadURL().then(url=>{
       db.collection("services").add({
-        name:name.value,
-        desc:desc.value,
-        price:price.value,
-        image:url
+        name:n,
+        price:p,
+        image:url,
+        createdAt:new Date()
+      }).then(()=>{
+        msg.innerText="✅ تم حفظ الخدمة";
+        name.value=price.value=image.value="";
+        load();
       });
-      alert("تمت إضافة الخدمة");
-      name.value=desc.value=price.value="";
-      load();
     });
+  }).catch(()=>{
+    msg.innerText="❌ فشل الحفظ";
   });
 }
 
 function load(){
-  services.innerHTML="";
-  db.collection("services").onSnapshot(s=>{
+  list.innerHTML="";
+  db.collection("services").orderBy("createdAt","desc").get().then(s=>{
     s.forEach(d=>{
-      services.innerHTML+=`
-      <div class="card">
-        <img src="${d.data().image}">
-        <h3>${d.data().name}</h3>
-        <p>${d.data().desc}</p>
-        <b>${d.data().price} جنيه</b>
+      const x=d.data();
+      list.innerHTML+=`
+      <div class="service">
+        <b>${x.name}</b><br>
+        💰 ${x.price} جنيه<br>
+        <img src="${x.image}" width="100">
       </div>`;
     });
   });
