@@ -4,8 +4,8 @@
 <meta charset="UTF-8">
 <title>🔐 بوابة العملاء</title>
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
 <style>
 body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
@@ -25,27 +25,14 @@ input,button{width:100%;padding:10px;margin:8px 0}
 </div>
 
 <script>
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  query,
-  where,
-  getDocs,
-  addDoc,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
+firebase.initializeApp({
   apiKey: "API_KEY",
   authDomain: "futuretank-68c26.firebaseapp.com",
   projectId: "futuretank-68c26"
-};
+});
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-let clientData = null;
+const db = firebase.firestore();
+let client = null;
 
 function nextVisit(){
   const d = new Date();
@@ -57,36 +44,36 @@ async function login(){
   const phone = document.getElementById("phone").value.trim();
   const box = document.getElementById("data");
 
-  const q = query(collection(db,"clients"), where("phone","==",phone));
-  const snap = await getDocs(q);
+  const snap = await db.collection("clients")
+    .where("phone","==",phone).get();
 
   if(snap.empty){
     box.innerHTML = "❌ العميل غير مسجل";
     return;
   }
 
-  clientData = snap.docs[0].data();
+  client = snap.docs[0].data();
 
   box.innerHTML = `
-    <p>مرحبًا ${clientData.name}</p>
+    <p>مرحبًا ${client.name}</p>
     <button class="green" onclick="renew()">🔁 تجديد التعاقد</button>
   `;
 }
 
-async function renew(){
-  await addDoc(collection(db,"contracts"),{
-    clientName: clientData.name,
-    phone: clientData.phone,
+function renew(){
+  db.collection("contracts").add({
+    clientName: client.name,
+    phone: client.phone,
     service: "تجديد تعاقد",
-    price: clientData.price || 0,
+    price: client.price || 0,
     startDate: new Date().toISOString().split("T")[0],
     nextVisit: nextVisit(),
     status: "active",
-    createdAt: serverTimestamp(),
-    source: "client-portal"
+    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+    source: "client_portal"
+  }).then(()=>{
+    alert("✅ تم تسجيل التجديد");
   });
-
-  alert("✅ تم تسجيل التجديد");
 }
 </script>
 
