@@ -1,6 +1,49 @@
-<select id="service"></select>
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>خدمات FutureTank</title>
+<style>
+body{font-family:Arial;direction:rtl;background:#eef;padding:20px}
+.card{background:#fff;margin:15px;padding:15px;border-radius:10px}
+img{max-width:100%;border-radius:8px}
+button{padding:12px;width:100%;margin-top:8px;background:#4A90E2;color:#fff;border:none}
+</style>
+</head>
+<body>
 
-<input id="name" placeholder="الاسم">
-<input id="phone" placeholder="رقم الهاتف">
+<h2>خدماتنا</h2>
+<div id="list"></div>
 
-<button onclick="sendRequest()">📨 إرسال الطلب</button>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+ apiKey:"API_KEY",
+ authDomain:"PROJECT.firebaseapp.com",
+ projectId:"PROJECT"
+});
+const db=firebase.firestore();
+
+db.collection("services").onSnapshot(s=>{
+ list.innerHTML="";
+ s.forEach(d=>{
+  list.innerHTML+=`
+   <div class="card">
+    <img src="${d.data().image}">
+    <h3>${d.data().name}</h3>
+    <p>${d.data().desc}</p>
+    <b>${d.data().price} جنيه</b>
+    <button onclick="order('${d.data().name}')">احجز خدمة الآن</button>
+   </div>`;
+ });
+});
+
+function order(name){
+ location.href=`https://wa.me/2011XXXXXXX?text=حجز خدمة: ${name}`;
+}
+</script>
+
+</body>
+</html>
