@@ -2,89 +2,52 @@
 <html lang="ar">
 <head>
 <meta charset="UTF-8">
-<title>إدارة الخدمات</title>
-<style>
-body{font-family:Arial;direction:rtl;background:#f4f6f8;padding:20px}
-.card{background:#fff;padding:20px;border-radius:10px;max-width:500px;margin:auto}
-input,button{width:100%;padding:10px;margin:6px 0}
-button{background:#4A90E2;color:#fff;border:none}
-.service{background:#eef;padding:10px;margin:6px 0;border-radius:6px}
-</style>
+<title>🧰 إدارة الخدمات</title>
+<link rel="stylesheet" href="styles.css">
 </head>
 <body>
 
+<h2>🧰 إدارة الخدمات</h2>
+
 <div class="card">
-<h3>🧰 إدارة الخدمات</h3>
-
-<input id="name" placeholder="اسم الخدمة">
-<input id="price" placeholder="السعر">
-<input type="file" id="image">
-
-<button onclick="addService()">➕ إضافة خدمة</button>
-
-<div id="msg"></div>
-<hr>
-<div id="list"></div>
+  <input id="sname" placeholder="اسم الخدمة">
+  <input id="sprice" type="number" placeholder="السعر">
+  <textarea id="sdesc" placeholder="وصف الخدمة"></textarea>
+  <button onclick="addService()">➕ إضافة خدمة</button>
+  <p id="status"></p>
 </div>
 
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+<hr>
+<div id="list"></div>
 
+<script src="script.js"></script>
 <script>
-firebase.initializeApp({
-  apiKey: "API_KEY",
-  authDomain: "PROJECT.firebaseapp.com",
-  projectId: "PROJECT",
-  storageBucket: "PROJECT.appspot.com"
-});
-
-const db = firebase.firestore();
-const storage = firebase.storage();
-
 function addService(){
-  const n = name.value.trim();
-  const p = price.value.trim();
-  const f = image.files[0];
-  if(!n || !p || !f){
-    msg.innerText = "❌ كل البيانات مطلوبة";
-    return;
-  }
-
-  const ref = storage.ref("services/"+Date.now()+"_"+f.name);
-  ref.put(f).then(()=>{
-    ref.getDownloadURL().then(url=>{
-      db.collection("services").add({
-        name:n,
-        price:p,
-        image:url,
-        createdAt:new Date()
-      }).then(()=>{
-        msg.innerText="✅ تم حفظ الخدمة";
-        name.value=price.value=image.value="";
-        load();
-      });
-    });
-  }).catch(()=>{
-    msg.innerText="❌ فشل الحفظ";
+  const db = getDB();
+  db.services.push({
+    name: sname.value,
+    price: sprice.value,
+    desc: sdesc.value
   });
+  saveDB(db);
+  status.innerText = "✅ تم إضافة الخدمة";
+  render();
 }
 
-function load(){
-  list.innerHTML="";
-  db.collection("services").orderBy("createdAt","desc").get().then(s=>{
-    s.forEach(d=>{
-      const x=d.data();
-      list.innerHTML+=`
-      <div class="service">
-        <b>${x.name}</b><br>
-        💰 ${x.price} جنيه<br>
-        <img src="${x.image}" width="100">
-      </div>`;
-    });
+function render(){
+  const db = getDB();
+  list.innerHTML = "";
+  db.services.forEach(s=>{
+    list.innerHTML += `
+      <div class="item">
+        <b>${s.name}</b><br>
+        💰 ${s.price} جنيه<br>
+        ${s.desc}
+      </div><hr>
+    `;
   });
 }
-load();
+render();
 </script>
 
 </body>
