@@ -1,14 +1,75 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>إدارة الخدمات</title>
+<style>
+body{font-family:Arial;direction:rtl;background:#f5f7fa;padding:20px}
+input,textarea,button{width:100%;padding:10px;margin:6px 0}
+.card{background:#fff;padding:15px;margin:10px 0;border-radius:8px}
+img{max-width:100%;border-radius:6px}
+</style>
+</head>
+<body>
+
 <h2>🧰 إدارة الخدمات</h2>
 
-<select id="serviceSelect">
-  <option value="">— اختر خدمة جاهزة —</option>
-  <option>توريد وتركيب خزانات المياه</option>
-  <option>تطهير وتعقيم خزانات مياة الشرب</option>
-  <option>صيانة وإصلاح خزانات المياه</option>
-  <option>توريد وتركيب فلاتر المياه</option>
-  <option>صيانة وإصلاح فلاتر المياه</option>
-</select>
+<input id="name" placeholder="اسم الخدمة">
+<textarea id="desc" placeholder="وصف الخدمة"></textarea>
+<input id="price" placeholder="السعر">
+<input type="file" id="image">
+<button onclick="addService()">➕ إضافة خدمة</button>
 
-<button onclick="addService()">➕ إضافة</button>
+<hr>
+<div id="services"></div>
 
-<ul id="servicesList"></ul>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "API_KEY",
+  authDomain: "PROJECT.firebaseapp.com",
+  projectId: "PROJECT",
+  storageBucket: "PROJECT.appspot.com"
+});
+
+const db = firebase.firestore();
+const storage = firebase.storage();
+
+function addService(){
+  const file = image.files[0];
+  const ref = storage.ref("services/"+Date.now());
+  ref.put(file).then(snap=>{
+    snap.ref.getDownloadURL().then(url=>{
+      db.collection("services").add({
+        name:name.value,
+        desc:desc.value,
+        price:price.value,
+        image:url
+      });
+      alert("تمت الإضافة");
+      load();
+    });
+  });
+}
+
+function load(){
+  services.innerHTML="";
+  db.collection("services").onSnapshot(s=>{
+    s.forEach(d=>{
+      services.innerHTML+=`
+      <div class="card">
+        <img src="${d.data().image}">
+        <h3>${d.data().name}</h3>
+        <p>${d.data().desc}</p>
+        <b>${d.data().price} جنيه</b>
+      </div>`;
+    });
+  });
+}
+load();
+</script>
+</body>
+</html>
