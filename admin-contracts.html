@@ -1,59 +1,73 @@
-<table border="1" width="100%">
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>📋 إدارة العقود</title>
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<style>
+body{font-family:Arial;direction:rtl;background:#f4f6f8;padding:20px}
+table{width:100%;border-collapse:collapse;background:#fff}
+th,td{padding:10px;border-bottom:1px solid #ddd;text-align:center}
+th{background:#e9f2ff}
+.whatsapp{color:#25D366;font-weight:bold;text-decoration:none}
+</style>
+</head>
+
+<body>
+
+<h2>📋 إدارة العقود</h2>
+
+<table>
 <thead>
 <tr>
 <th>العميل</th>
-<th>الخدمة</th>
+<th>الهاتف</th>
 <th>الزيارة القادمة</th>
+<th>نهاية التعاقد</th>
 <th>التكلفة</th>
+<th>تواصل</th>
 </tr>
 </thead>
-<tbody id="contractsTable"></tbody>
+<tbody id="rows"></tbody>
 </table>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  query,
-  orderBy
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const firebaseConfig = {
-  apiKey: "API_KEY",
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
   authDomain: "futuretank-68c26.firebaseapp.com",
   projectId: "futuretank-68c26"
-};
+});
 
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
+const db = firebase.firestore();
+const rows = document.getElementById("rows");
 
-const table = document.getElementById("contractsTable");
-
-async function loadContracts(){
-  const q = query(collection(db,"contracts"), orderBy("createdAt","desc"));
-  const snap = await getDocs(q);
-
-  table.innerHTML = "";
-
-  if(snap.empty){
-    table.innerHTML = `<tr><td colspan="4">لا توجد عقود</td></tr>`;
-    return;
-  }
-
+db.collection("clients").orderBy("createdAt","desc").onSnapshot(snap=>{
+  rows.innerHTML = "";
   snap.forEach(doc=>{
     const c = doc.data();
-    table.innerHTML += `
+    if(!c.start || !c.end) return;
+
+    rows.innerHTML += `
       <tr>
-        <td>${c.clientName}</td>
-        <td>${c.service}</td>
-        <td>${c.nextVisit}</td>
-        <td>${c.price}</td>
+        <td>${c.name || "-"}</td>
+        <td>${c.phone || "-"}</td>
+        <td>${c.nextVisit || "-"}</td>
+        <td>${c.end || "-"}</td>
+        <td>${c.price || 0} جنيه</td>
+        <td>
+          <a class="whatsapp" target="_blank"
+          href="https://wa.me/2${c.phone}?text=مرحبا ${c.name}، بخصوص تعاقد FutureTank">
+          💬 واتساب
+          </a>
+        </td>
       </tr>
     `;
   });
-}
-
-loadContracts();
+});
 </script>
+
+</body>
+</html>
