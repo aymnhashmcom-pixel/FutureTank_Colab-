@@ -3,44 +3,32 @@
 <head>
 <meta charset="UTF-8">
 <title>🔐 بوابة العملاء</title>
-<style>
-body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
-.card{background:#fff;padding:20px;border-radius:10px;max-width:420px;margin:auto}
-input,button{width:100%;padding:10px;margin:8px 0}
-button{background:#25D366;color:#fff;border:none;border-radius:6px}
-</style>
 </head>
 <body>
 
-<div class="card">
 <h3>🔐 بوابة العملاء</h3>
-<input id="phone" placeholder="رقم الموبايل">
+<input id="phone" placeholder="رقم الهاتف">
 <button onclick="login()">دخول</button>
-<div id="box"></div>
-</div>
+<div id="data"></div>
 
+<script src="script.js"></script>
 <script>
 function login(){
-  const phone = document.getElementById("phone").value.trim();
-  const box = document.getElementById("box");
-  const clients = JSON.parse(localStorage.getItem("clients") || "[]");
-
-  const c = clients.find(x=>x.phone===phone);
+  const db = getDB();
+  const c = db.contracts.find(x=>x.phone==phone.value);
   if(!c){
-    box.innerHTML = "❌ العميل غير مسجل";
+    data.innerText="❌ لا يوجد تعاقد";
     return;
   }
-
-  box.innerHTML = `
-    <p>مرحبًا <b>${c.name}</b></p>
-    <p>📅 نهاية التعاقد: ${c.end || "-"}</p>
+  data.innerHTML = `
+    مرحبًا ${c.name}<br>
+    📄 تعاقد بتاريخ ${c.date}<br><br>
     <button onclick="renew()">🔁 تجديد التعاقد</button>
   `;
 }
 
 function renew(){
-  alert("✅ تم تسجيل طلب التجديد وسيتم التواصل معك");
-  window.open("https://wa.me/201150402031","_blank");
+  alert("✅ تم تسجيل طلب التجديد");
 }
 </script>
 
