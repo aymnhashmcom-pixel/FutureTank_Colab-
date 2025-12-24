@@ -3,51 +3,76 @@
 <head>
 <meta charset="UTF-8">
 <title>🧰 إدارة الخدمات</title>
-<link rel="stylesheet" href="styles.css">
+
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+<style>
+body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
+.card{background:#fff;padding:20px;border-radius:10px;max-width:500px;margin:auto}
+input,textarea,button{width:100%;padding:10px;margin:6px 0}
+button{background:#4CAF50;color:#fff;border:none;border-radius:6px}
+img{max-width:100%;margin-top:10px;border-radius:8px}
+</style>
 </head>
+
 <body>
 
-<h2>🧰 إدارة الخدمات</h2>
-
 <div class="card">
-  <input id="sname" placeholder="اسم الخدمة">
-  <input id="sprice" type="number" placeholder="السعر">
-  <textarea id="sdesc" placeholder="وصف الخدمة"></textarea>
-  <button onclick="addService()">➕ إضافة خدمة</button>
-  <p id="status"></p>
+<h3>🧰 إضافة خدمة</h3>
+
+<input id="name" placeholder="اسم الخدمة">
+<textarea id="desc" placeholder="وصف الخدمة"></textarea>
+<input id="price" type="number" placeholder="السعر بالجنيه">
+<input id="image" type="file" accept="image/*">
+
+<button onclick="saveService()">➕ حفظ الخدمة</button>
+<p id="status"></p>
 </div>
 
-<hr>
-<div id="list"></div>
-
-<script src="script.js"></script>
 <script>
-function addService(){
-  const db = getDB();
-  db.services.push({
-    name: sname.value,
-    price: sprice.value,
-    desc: sdesc.value
-  });
-  saveDB(db);
-  status.innerText = "✅ تم إضافة الخدمة";
-  render();
+firebase.initializeApp({
+  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+  authDomain: "futuretank-68c26.firebaseapp.com",
+  projectId: "futuretank-68c26"
+});
+
+const db = firebase.firestore();
+
+function saveService(){
+  const name = nameInput.value.trim();
+  const desc = descInput.value.trim();
+  const price = priceInput.value;
+  const file = imageInput.files[0];
+  const status = document.getElementById("status");
+
+  if(!name || !price || !file){
+    status.innerText = "❌ كل البيانات مطلوبة";
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.onload = function(e){
+    db.collection("services").add({
+      name,
+      description: desc,
+      price: Number(price),
+      image: e.target.result,
+      createdAt: new Date()
+    }).then(()=>{
+      status.innerText = "✅ تم حفظ الخدمة";
+      document.querySelectorAll("input,textarea").forEach(i=>i.value="");
+    }).catch(()=>{
+      status.innerText = "❌ فشل الحفظ";
+    });
+  };
+  reader.readAsDataURL(file);
 }
 
-function render(){
-  const db = getDB();
-  list.innerHTML = "";
-  db.services.forEach(s=>{
-    list.innerHTML += `
-      <div class="item">
-        <b>${s.name}</b><br>
-        💰 ${s.price} جنيه<br>
-        ${s.desc}
-      </div><hr>
-    `;
-  });
-}
-render();
+const nameInput = document.getElementById("name");
+const descInput = document.getElementById("desc");
+const priceInput = document.getElementById("price");
+const imageInput = document.getElementById("image");
 </script>
 
 </body>
