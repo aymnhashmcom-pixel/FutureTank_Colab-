@@ -3,120 +3,44 @@
 <head>
 <meta charset="UTF-8">
 <title>🔐 بوابة العملاء</title>
-
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-
 <style>
-body{
-  font-family:Arial;
-  direction:rtl;
-  background:#f4f6f8;
-  padding:20px
-}
-.card{
-  background:#fff;
-  padding:20px;
-  border-radius:12px;
-  max-width:450px;
-  margin:auto
-}
-input,button{
-  width:100%;
-  padding:10px;
-  margin:6px 0
-}
-button{
-  border:none;
-  border-radius:6px;
-  background:#4A90E2;
-  color:#fff;
-  cursor:pointer
-}
-.hidden{display:none}
-.row{margin:6px 0}
-.green{background:#25D366}
+body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
+.card{background:#fff;padding:20px;border-radius:10px;max-width:420px;margin:auto}
+input,button{width:100%;padding:10px;margin:8px 0}
+button{background:#25D366;color:#fff;border:none;border-radius:6px}
 </style>
 </head>
-
 <body>
 
-<div class="card" id="loginBox">
-  <h3>🔐 بوابة العملاء</h3>
-  <input id="phone" placeholder="رقم الموبايل">
-  <button onclick="login()">دخول</button>
-</div>
-
-<div class="card hidden" id="clientBox">
-  <h3>مرحبًا <span id="cname"></span> 👋</h3>
-
-  <div class="row">📞 <span id="cphone"></span></div>
-  <div class="row">📍 <span id="caddress"></span></div>
-  <div class="row">💰 <span id="cprice"></span> جنيه</div>
-  <div class="row">📅 من <span id="cstart"></span> إلى <span id="cend"></span></div>
-
-  <button class="green" onclick="renew()">🔁 تجديد التعاقد</button>
-  <p id="msg"></p>
+<div class="card">
+<h3>🔐 بوابة العملاء</h3>
+<input id="phone" placeholder="رقم الموبايل">
+<button onclick="login()">دخول</button>
+<div id="box"></div>
 </div>
 
 <script>
-firebase.initializeApp({
-  apiKey: "API_KEY",
-  authDomain: "PROJECT.firebaseapp.com",
-  projectId: "PROJECT"
-});
-
-const db = firebase.firestore();
-let currentDocId = null;
-let currentClient = null;
-
-function normalizePhone(p){
-  p = p.replace(/\s/g,"");
-  if(p.startsWith("+20")) p = "0"+p.slice(3);
-  if(!p.startsWith("0")) p = "0"+p;
-  return p;
-}
-
 function login(){
-  const p = normalizePhone(phone.value.trim());
-  db.collection("clients").where("phone","==",p).get().then(snap=>{
-    if(snap.empty){
-      alert("❌ العميل غير مسجل");
-      return;
-    }
-    const doc = snap.docs[0];
-    currentDocId = doc.id;
-    currentClient = doc.data();
+  const phone = document.getElementById("phone").value.trim();
+  const box = document.getElementById("box");
+  const clients = JSON.parse(localStorage.getItem("clients") || "[]");
 
-    cname.innerText = currentClient.name;
-    cphone.innerText = currentClient.phone;
-    caddress.innerText = currentClient.address || "-";
-    cprice.innerText = currentClient.price || 0;
-    cstart.innerText = currentClient.start || "-";
-    cend.innerText = currentClient.end || "-";
+  const c = clients.find(x=>x.phone===phone);
+  if(!c){
+    box.innerHTML = "❌ العميل غير مسجل";
+    return;
+  }
 
-    loginBox.classList.add("hidden");
-    clientBox.classList.remove("hidden");
-  });
+  box.innerHTML = `
+    <p>مرحبًا <b>${c.name}</b></p>
+    <p>📅 نهاية التعاقد: ${c.end || "-"}</p>
+    <button onclick="renew()">🔁 تجديد التعاقد</button>
+  `;
 }
 
 function renew(){
-  const newEnd = new Date();
-  newEnd.setFullYear(newEnd.getFullYear()+1);
-
-  db.collection("clients").doc(currentDocId).update({
-    end: newEnd.toISOString().slice(0,10),
-    lastRenew: new Date()
-  }).then(()=>{
-    msg.innerText = "✅ تم تجديد التعاقد بنجاح";
-
-    window.open(
-      `https://wa.me/201150402031?text=🔁 تجديد تعاقد%0Aالاسم: ${currentClient.name}%0Aالهاتف: ${currentClient.phone}`,
-      "_blank"
-    );
-
-    cend.innerText = newEnd.toISOString().slice(0,10);
-  });
+  alert("✅ تم تسجيل طلب التجديد وسيتم التواصل معك");
+  window.open("https://wa.me/201150402031","_blank");
 }
 </script>
 
