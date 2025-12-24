@@ -9,7 +9,7 @@
 
 <style>
 body{font-family:Arial;direction:rtl;background:#f5f5f5;padding:20px}
-.card{background:#fff;padding:20px;border-radius:10px;max-width:500px;margin:auto}
+.card{background:#fff;padding:20px;border-radius:10px;max-width:520px;margin:auto}
 input,textarea,button{width:100%;padding:10px;margin:6px 0}
 button{background:#4CAF50;color:#fff;border:none;border-radius:6px}
 img{max-width:100%;margin-top:10px;border-radius:8px}
@@ -31,48 +31,60 @@ img{max-width:100%;margin-top:10px;border-radius:8px}
 </div>
 
 <script>
-firebase.initializeApp({
-  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
-  authDomain: "futuretank-68c26.firebaseapp.com",
-  projectId: "futuretank-68c26"
-});
+// 🔒 حماية من التهيئة المتكررة
+if (!firebase.apps.length) {
+  firebase.initializeApp({
+    apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
+    authDomain: "futuretank-68c26.firebaseapp.com",
+    projectId: "futuretank-68c26"
+  });
+}
 
 const db = firebase.firestore();
 
+const nameInput  = document.getElementById("name");
+const descInput  = document.getElementById("desc");
+const priceInput = document.getElementById("price");
+const imageInput = document.getElementById("image");
+const statusBox  = document.getElementById("status");
+
 function saveService(){
-  const name = nameInput.value.trim();
-  const desc = descInput.value.trim();
+  statusBox.innerText = "";
+
+  const name  = nameInput.value.trim();
+  const desc  = descInput.value.trim();
   const price = priceInput.value;
-  const file = imageInput.files[0];
-  const status = document.getElementById("status");
+  const file  = imageInput.files[0];
 
   if(!name || !price || !file){
-    status.innerText = "❌ كل البيانات مطلوبة";
+    statusBox.innerText = "❌ كل البيانات مطلوبة";
     return;
   }
 
   const reader = new FileReader();
   reader.onload = function(e){
     db.collection("services").add({
-      name,
+      name: name,
       description: desc,
       price: Number(price),
       image: e.target.result,
-      createdAt: new Date()
-    }).then(()=>{
-      status.innerText = "✅ تم حفظ الخدمة";
-      document.querySelectorAll("input,textarea").forEach(i=>i.value="");
-    }).catch(()=>{
-      status.innerText = "❌ فشل الحفظ";
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    })
+    .then(()=>{
+      statusBox.innerText = "✅ تم حفظ الخدمة بنجاح";
+      nameInput.value="";
+      descInput.value="";
+      priceInput.value="";
+      imageInput.value="";
+    })
+    .catch(err=>{
+      statusBox.innerText = "❌ خطأ: " + err.message;
+      console.error("Firestore Error:", err);
     });
   };
+
   reader.readAsDataURL(file);
 }
-
-const nameInput = document.getElementById("name");
-const descInput = document.getElementById("desc");
-const priceInput = document.getElementById("price");
-const imageInput = document.getElementById("image");
 </script>
 
 </body>
