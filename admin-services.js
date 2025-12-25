@@ -1,52 +1,61 @@
 import {
+  db,
   collection,
   addDoc,
   getDocs,
   deleteDoc,
-  doc,
-  query,
-  where
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+  doc
+} from "./firebase.js";
 
-import { db } from "./firebase.js";
-
-const servicesRef = collection(db, "services");
+const form = document.getElementById("serviceForm");
+const list = document.getElementById("servicesList");
 
 async function loadServices() {
-  const snapshot = await getDocs(servicesRef);
-  const list = document.getElementById("servicesList");
   list.innerHTML = "";
-
-  snapshot.forEach(docSnap => {
-    const li = document.createElement("li");
-    li.innerHTML = `
-      ${docSnap.data().name}
-      <button onclick="deleteService('${docSnap.id}')">❌</button>
+  const snap = await getDocs(collection(db, "services"));
+  snap.forEach(d => {
+    const s = d.data();
+    list.innerHTML += `
+      <div>
+        <b>${s.name}</b><br>
+        💰 ${s.price} جنيه
+        <button onclick="deleteService('${d.id}')">🗑 حذف</button>
+      </div>
+      <hr>
     `;
-    list.appendChild(li);
   });
 }
 
-window.addService = async function () {
-  const name = document.getElementById("serviceSelect").value;
-  if (!name) return alert("اختر خدمة");
-
-  const q = query(servicesRef, where("name", "==", name));
-  const exist = await getDocs(q);
-  if (!exist.empty) return alert("الخدمة موجودة بالفعل");
-
-  await addDoc(servicesRef, {
-    name,
-    active: true,
-    createdAt: new Date()
-  });
-
-  loadServices();
-};
-
-window.deleteService = async function (id) {
+window.deleteService = async (id) => {
   await deleteDoc(doc(db, "services", id));
   loadServices();
 };
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  try {
+    const name = form.name.value;
+    const desc = form.description.value;
+    const price = Number(form.price.value);
+    const image = form.image.value;
+    const video = form.video.value;
+
+    await addDoc(collection(db, "services"), {
+      name,
+      description: desc,
+      price,
+      image,
+      video
+    });
+
+    alert("✅ تم حفظ الخدمة");
+    form.reset();
+    loadServices();
+
+  } catch (err) {
+    alert("❌ فشل الحفظ");
+  }
+});
 
 loadServices();
