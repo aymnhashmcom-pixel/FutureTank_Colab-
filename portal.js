@@ -8,11 +8,9 @@ import {
   updateDoc
 } from "./firebase.js";
 
-const form = document.getElementById("portalForm");
-
-form.addEventListener("submit", async (e) => {
+portalForm.addEventListener("submit", async e => {
   e.preventDefault();
-  const phone = document.getElementById("phone").value;
+  const phone = portalForm.phone.value;
 
   const q = query(
     collection(db, "contracts"),
@@ -22,18 +20,15 @@ form.addEventListener("submit", async (e) => {
   const snap = await getDocs(q);
 
   if (snap.empty) {
-    alert("❌ لا يوجد تعاقد بهذا الرقم");
+    alert("❌ لا يوجد تعاقد");
     return;
   }
 
-  snap.forEach(async (c) => {
-    await updateDoc(doc(db, "contracts", c.id), {
-      status: "renewed",
-      endDate: new Date(
-        new Date().setFullYear(new Date().getFullYear() + 1)
-      ).toISOString().slice(0,10)
+  snap.forEach(async d => {
+    await updateDoc(doc(db, "contracts", d.id), {
+      status: "renewed"
     });
   });
 
-  alert("🔁 تم تجديد التعاقد بنجاح");
+  alert("🔁 تم تجديد التعاقد");
 });
