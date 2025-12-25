@@ -8,14 +8,13 @@ const table = document.getElementById("contractsTable");
 
 const snap = await getDocs(collection(db, "contracts"));
 
-snap.forEach(docu => {
-  const d = docu.data();
+snap.forEach(d => {
+  const c = d.data();
   table.innerHTML += `
     <tr>
-      <td>${d.clientName}</td>
-      <td>${d.services.map(s => s.serviceName).join(", ")}</td>
-      <td>${d.nextVisit || "-"}</td>
-      <td>${d.services.reduce((t,s)=>t+s.price,0)} جنيه</td>
+      <td>${c.name}</td>
+      <td>${c.service}</td>
+      <td>${c.status}</td>
     </tr>
   `;
 });
