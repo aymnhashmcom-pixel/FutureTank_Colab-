@@ -1,76 +1,124 @@
-function getDB() {
-  return JSON.parse(localStorage.getItem("ft_db")) || { products: [] };
-}
+/*********************************
+ *  Admin Products Logic
+ *  FutureTank
+ *********************************/
 
-function saveDB(db) {
-  localStorage.setItem("ft_db", JSON.stringify(db));
-}
+const STORAGE_KEY = "ft_products";
 
-function readImage(file, callback) {
-  const reader = new FileReader();
-  reader.onload = () => callback(reader.result);
-  reader.readAsDataURL(file);
-}
+/* تحميل المنتجات عند فتح الصفحة */
+document.addEventListener("DOMContentLoaded", loadProducts);
 
+/* إضافة منتج */
 function addProduct() {
-  const name = productName.value.trim();
-  const price = productPrice.value;
-  const desc = productDesc.value.trim();
-  const file = productImage.files[0];
+  const name = document.getElementById("productName").value.trim();
+  const brand = document.getElementById("productBrand").value.trim();
+  const category = document.getElementById("productCategory").value;
+  const price = document.getElementById("productPrice").value;
+  const description = document.getElementById("productDescription").value.trim();
+  const mediaInput = document.getElementById("productMedia");
 
-  if (!name || !price) return alert("اسم المنتج والسعر مطلوبان");
-
-  const db = getDB();
-
-  const saveProduct = (img = "") => {
-    db.products.push({
-      id: Date.now(),
-      name,
-      price,
-      desc,
-      image: img
-    });
-    saveDB(db);
-    location.reload();
-  };
-
-  if (file) {
-    readImage(file, saveProduct);
-  } else {
-    saveProduct();
-  }
-}
-
-function deleteProduct(id) {
-  if (!confirm("هل تريد حذف المنتج؟")) return;
-
-  const db = getDB();
-  db.products = db.products.filter(p => p.id !== id);
-  saveDB(db);
-  location.reload();
-}
-
-function renderProducts() {
-  const db = getDB();
-  const box = document.getElementById("productsList");
-
-  if (!db.products || !db.products.length) {
-    box.innerHTML = "لا توجد منتجات بعد";
+  if (!name || !price) {
+    alert("⚠️ اسم المنتج والسعر مطلوبين");
     return;
   }
 
-  box.innerHTML = "";
-  db.products.forEach(p => {
-    box.innerHTML += `
-      <div class="item">
-        <strong>${p.name}</strong>
-        <p>💰 ${p.price} جنيه</p>
-        <p>${p.desc || ""}</p>
-        ${p.image ? `<img src="${p.image}">` : ""}
-        <button onclick="deleteProduct(${p.id})">🗑️ حذف</button>
+  const product = {
+    id: Date.now(),
+    name,
+    brand,
+    category,
+    price,
+    description,
+    media: null,
+    mediaType: null
+  };
+
+  if (mediaInput.files.length > 0) {
+    const file = mediaInput.files[0];
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      product.media = e.target.result;
+      product.mediaType = file.type.startsWith("video") ? "video" : "image";
+      saveProduct(product);
+    };
+
+    reader.readAsDataURL(file);
+  } else {
+    saveProduct(product);
+  }
+}
+
+/* حفظ المنتج */
+function saveProduct(product) {
+  const products = getProducts();
+  products.push(product);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+
+  clearForm();
+  loadProducts();
+}
+
+/* تحميل وعرض المنتجات */
+function loadProducts() {
+  const list = document.getElementById("productsList");
+  list.innerHTML = "";
+
+  const products = getProducts();
+
+  if (products.length === 0) {
+    list.innerHTML = "<p>لا توجد منتجات حالياً</p>";
+    return;
+  }
+
+  products.forEach(product => {
+    const item = document.createElement("div");
+    item.className = "product-item";
+
+    let mediaHTML = "";
+    if (product.media) {
+      if (product.mediaType === "video") {
+        mediaHTML = `<video src="${product.media}" muted></video>`;
+      } else {
+        mediaHTML = `<img src="${product.media}">`;
+      }
+    }
+
+    item.innerHTML = `
+      ${mediaHTML}
+      <div style="flex:1">
+        <strong>${product.name}</strong><br>
+        <small>${product.brand || ""}</small><br>
+        <small>القسم: ${product.category}</small><br>
+        <small>السعر: ${product.price}</small>
       </div>
+      <button class="delete-btn" onclick="deleteProduct(${product.id})">حذف</button>
     `;
+
+    list.appendChild(item);
   });
 }
 
-renderProducts();
+/* حذف منتج */
+function deleteProduct(id) {
+  if (!confirm("هل أنت متأكد من حذف المنتج؟")) return;
+
+  let products = getProducts();
+  products = products.filter(p => p.id !== id);
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+
+  loadProducts();
+}
+
+/* أدوات مساعدة */
+function getProducts() {
+  return JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+}
+
+function clearForm() {
+  document.getElementById("productName").value = "";
+  document.getElementById("productBrand").value = "";
+  document.getElementById("productPrice").value = "";
+  document.getElementById("productDescription").value = "";
+  document.getElementById("productMedia").value = "";
+      }
