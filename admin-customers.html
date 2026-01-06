@@ -2,144 +2,36 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>👥 إدارة العملاء</title>
+  <title>إدارة العملاء | FutureTank</title>
   <link rel="stylesheet" href="styles.css">
-
-  <!-- Firebase -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import {
-      getFirestore,
-      collection,
-      addDoc,
-      getDocs,
-      deleteDoc,
-      doc
-    } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
-      authDomain: "futuretank-68c26.firebaseapp.com",
-      projectId: "futuretank-68c26",
-      storageBucket: "futuretank-68c26.firebasestorage.app",
-      messagingSenderId: "481083621438",
-      appId: "1:481083621438:web:db01077aef0511792c516f"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    const customersCol = collection(db, "customers");
-
-    // إضافة عميل
-    window.addCustomer = async function () {
-      const name = document.getElementById("name").value.trim();
-      const phone = document.getElementById("phone").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const address = document.getElementById("address").value.trim();
-      const price = document.getElementById("price").value;
-      const start = document.getElementById("start").value;
-      const end = document.getElementById("end").value;
-      const lastVisit = document.getElementById("lastVisit").value;
-      const nextVisit = document.getElementById("nextVisit").value;
-      const status = document.getElementById("status");
-
-      if (!name || !phone || !price || !start || !end) {
-        status.textContent = "❌ من فضلك اكمل البيانات الأساسية";
-        return;
-      }
-
-      try {
-        await addDoc(customersCol, {
-          name,
-          phone,
-          email,
-          address,
-          price,
-          start,
-          end,
-          lastVisit,
-          nextVisit,
-          createdAt: new Date()
-        });
-
-        status.textContent = "✅ تم إضافة العميل بنجاح";
-        document.querySelectorAll("input").forEach(i => i.value = "");
-        loadCustomers();
-      } catch (e) {
-        status.textContent = "❌ فشل الإضافة";
-        console.error(e);
-      }
-    };
-
-    // تحميل العملاء
-    async function loadCustomers() {
-      const list = document.getElementById("customersList");
-      list.innerHTML = "";
-
-      const snap = await getDocs(customersCol);
-      snap.forEach(d => {
-        const c = d.data();
-        const div = document.createElement("div");
-        div.className = "card";
-
-        div.innerHTML = `
-          <b>${c.name}</b><br>
-          📞 ${c.phone}<br>
-          📧 ${c.email || "—"}<br>
-          📍 ${c.address || "—"}<br>
-          💰 ${c.price} جنيه<br>
-          📅 ${c.start} → ${c.end}<br>
-          🛠 آخر زيارة: ${c.lastVisit || "—"}<br>
-          📍 القادمة: ${c.nextVisit || "—"}<br>
-          <button onclick="deleteCustomer('${d.id}')">🗑 حذف</button>
-        `;
-        list.appendChild(div);
-      });
+  <style>
+    body { font-family: Arial; background:#f5f7fa; padding:20px }
+    h1 { color:#1e88e5 }
+    .box { background:#fff; padding:15px; border-radius:8px; margin-bottom:20px }
+    input, button {
+      width:100%; padding:10px; margin:5px 0
     }
-
-    // حذف عميل
-    window.deleteCustomer = async function (id) {
-      if (!confirm("هل أنت متأكد من الحذف؟")) return;
-      await deleteDoc(doc(db, "customers", id));
-      loadCustomers();
-    };
-
-    window.onload = loadCustomers;
-  </script>
+    button { background:#1e88e5; color:#fff; border:0; cursor:pointer }
+    .item { border-bottom:1px solid #ddd; padding:10px 0 }
+  </style>
 </head>
-
 <body>
 
-<h2>👥 إدارة العملاء</h2>
+<h1>👥 إدارة العملاء</h1>
 
-<div class="card">
+<div class="box">
   <h3>➕ إضافة عميل</h3>
-
-  <input id="name" placeholder="اسم العميل">
-  <input id="phone" placeholder="رقم الموبايل">
-  <input id="email" placeholder="الإيميل (اختياري)">
-  <input id="address" placeholder="العنوان">
-  <input id="price" type="number" placeholder="قيمة التعاقد">
-
-  <label>📅 بداية التعاقد</label>
-  <input id="start" type="date">
-
-  <label>📅 نهاية التعاقد</label>
-  <input id="end" type="date">
-
-  <label>🛠 آخر زيارة</label>
-  <input id="lastVisit" type="date">
-
-  <label>📍 الزيارة القادمة</label>
-  <input id="nextVisit" type="date">
-
-  <button onclick="addCustomer()">➕ إضافة العميل</button>
-  <p id="status"></p>
+  <input id="custName" placeholder="اسم العميل">
+  <input id="custPhone" placeholder="رقم الهاتف">
+  <input id="custAddress" placeholder="العنوان">
+  <button onclick="addCustomer()">حفظ العميل</button>
 </div>
 
-<h3>📋 العملاء الحاليين</h3>
-<div id="customersList"></div>
+<div class="box">
+  <h3>📋 قائمة العملاء</h3>
+  <div id="customersList"></div>
+</div>
 
+<script src="admin-customers.js"></script>
 </body>
 </html>
