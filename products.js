@@ -1,9 +1,7 @@
 const STORAGE_KEY = "ft_products";
+const grid = document.getElementById("productsGrid");
 
-document.addEventListener("DOMContentLoaded", loadProducts);
-
-function loadProducts() {
-  const grid = document.getElementById("productsGrid");
+document.addEventListener("DOMContentLoaded", () => {
   const products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
   if (products.length === 0) {
@@ -25,11 +23,11 @@ function loadProducts() {
     card.innerHTML = `
       ${media}
       <h3>${p.name}</h3>
-      <small>${p.brand || ""}</small><br>
+      <small>${p.brand}</small><br>
       <small>القسم: ${p.category}</small><br>
       <strong>${p.price}</strong>
     `;
 
     grid.appendChild(card);
   });
-}
+});
