@@ -1,154 +1,29 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>إدارة المنتجات | FutureTank</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <link rel="stylesheet" href="styles.css">
-
-  <style>
-    body {
-      background: #f4f6f8;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-    }
-
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
-
-    .admin-box {
-      max-width: 900px;
-      margin: auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-    }
-
-    .form-group {
-      margin-bottom: 15px;
-    }
-
-    label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
-    }
-
-    input, select, textarea {
-      width: 100%;
-      padding: 10px;
-      border-radius: 6px;
-      border: 1px solid #ccc;
-    }
-
-    textarea {
-      resize: vertical;
-      min-height: 80px;
-    }
-
-    button {
-      background: #0d6efd;
-      color: #fff;
-      border: none;
-      padding: 12px 20px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 16px;
-    }
-
-    button:hover {
-      background: #0b5ed7;
-    }
-
-    .products-list {
-      margin-top: 30px;
-    }
-
-    .product-item {
-      border: 1px solid #ddd;
-      padding: 10px;
-      border-radius: 8px;
-      margin-bottom: 10px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .product-item img,
-    .product-item video {
-      width: 80px;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 6px;
-    }
-
-    .delete-btn {
-      background: #dc3545;
-      padding: 8px 12px;
-      font-size: 14px;
-    }
-
-    .delete-btn:hover {
-      background: #bb2d3b;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>إدارة المنتجات | FutureTank</title>
+<link rel="stylesheet" href="styles.css">
 </head>
-
 <body>
 
-<h1>🛒 لوحة إدارة المنتجات</h1>
+<h2>🧰 إدارة المنتجات</h2>
 
-<div class="admin-box">
+<form id="productForm">
+  <input type="text" id="name" placeholder="اسم المنتج" required>
+  <input type="text" id="brand" placeholder="اسم الشركة / المصنع">
+  <input type="text" id="category" placeholder="القسم (ملابس – أجهزة – …)" required>
+  <input type="text" id="price" placeholder="السعر" required>
 
-  <div class="form-group">
-    <label>اسم المنتج</label>
-    <input type="text" id="productName">
-  </div>
+  <input type="file" id="media" accept="image/*,video/*">
 
-  <div class="form-group">
-    <label>الشركة / المصنع</label>
-    <input type="text" id="productBrand">
-  </div>
+  <button type="submit">➕ إضافة المنتج</button>
+</form>
 
-  <div class="form-group">
-    <label>القسم</label>
-    <select id="productCategory">
-      <option value="مياه">مياه</option>
-      <option value="ملابس">ملابس</option>
-      <option value="أجهزة كهربائية">أجهزة كهربائية</option>
-      <option value="إلكترونيات">إلكترونيات</option>
-      <option value="ماركت">ماركت</option>
-      <option value="أجهزة رياضية">أجهزة رياضية</option>
-      <option value="أخرى">أخرى</option>
-    </select>
-  </div>
+<hr>
 
-  <div class="form-group">
-    <label>السعر</label>
-    <input type="number" id="productPrice">
-  </div>
-
-  <div class="form-group">
-    <label>وصف المنتج</label>
-    <textarea id="productDescription"></textarea>
-  </div>
-
-  <div class="form-group">
-    <label>صورة أو فيديو المنتج</label>
-    <input type="file" id="productMedia" accept="image/*,video/*">
-  </div>
-
-  <button onclick="addProduct()">➕ إضافة المنتج</button>
-
-  <div class="products-list" id="productsList"></div>
-
-</div>
+<div id="productsList"></div>
 
 <script src="admin-products.js"></script>
-
 </body>
 </html>
