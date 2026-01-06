@@ -1,148 +1,45 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>لوحة التحكم | الطلبات</title>
-
-<style>
-body{
-  font-family: Arial;
-  direction: rtl;
-  background:#f1f3f6;
-  padding:20px;
-}
-.hidden{display:none}
-
-.login{
-  max-width:350px;
-  margin:80px auto;
-  background:#fff;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 0 10px rgba(0,0,0,.1);
-}
-.login input,button{
-  width:100%;
-  padding:10px;
-  margin-top:10px;
-}
-button{
-  background:#0d6efd;
-  color:#fff;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-button:hover{background:#0b5ed7}
-
-.order{
-  background:#fff;
-  padding:15px;
-  margin-bottom:15px;
-  border-radius:8px;
-  box-shadow:0 0 6px rgba(0,0,0,.06);
-}
-select{
-  padding:8px;
-  margin-top:8px;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>إدارة الطلبات | FutureTank</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body { font-family: Arial; background:#f5f7fa; padding:20px }
+    h1 { color:#1e88e5 }
+    .box { background:#fff; padding:15px; border-radius:8px; margin-bottom:20px }
+    select, input, button {
+      width:100%; padding:10px; margin:5px 0
+    }
+    button { background:#1e88e5; color:#fff; border:0; cursor:pointer }
+    .item { border-bottom:1px solid #ddd; padding:10px 0 }
+    .status { font-weight:bold }
+  </style>
 </head>
-
 <body>
 
-<!-- تسجيل الدخول -->
-<div class="login" id="loginBox">
-  <h3>🔐 دخول الإدارة</h3>
-  <input type="password" id="pass" placeholder="كلمة المرور">
-  <button onclick="login()">دخول</button>
+<h1>📦 إدارة الطلبات</h1>
+
+<div class="box">
+  <h3>➕ إضافة طلب</h3>
+
+  <select id="orderCustomer"></select>
+  <select id="orderProduct"></select>
+
+  <select id="orderStatus">
+    <option value="جديد">🟢 جديد</option>
+    <option value="قيد التنفيذ">🟡 قيد التنفيذ</option>
+    <option value="تم التسليم">✅ تم التسليم</option>
+  </select>
+
+  <button onclick="addOrder()">حفظ الطلب</button>
 </div>
 
-<!-- لوحة التحكم -->
-<div id="panel" class="hidden">
-  <h2>📊 لوحة تحكم الطلبات</h2>
-  <div id="orders"></div>
+<div class="box">
+  <h3>📋 قائمة الطلبات</h3>
+  <div id="ordersList"></div>
 </div>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, collection, getDocs, updateDoc, doc } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-/* 🔑 كلمة مرور الإدارة */
-const ADMIN_PASSWORD = "Future2025";
-
-/* 📞 رقم خدمة العملاء (واتساب) */
-const WHATSAPP_NUMBER = "201000000000"; // عدل الرقم هنا
-
-window.login = ()=>{
-  if(document.getElementById("pass").value === ADMIN_PASSWORD){
-    loginBox.style.display="none";
-    panel.classList.remove("hidden");
-    loadOrders();
-  }else{
-    alert("❌ كلمة المرور غير صحيحة");
-  }
-};
-
-/* Firebase */
-const firebaseConfig = {
-  apiKey: "AIzaSyBmWKWIPtVjUYXGOF77Zstmz3ROpvKIDog",
-  projectId: "futuretank-68c26"
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-const ordersBox = document.getElementById("orders");
-
-async function loadOrders(){
-  ordersBox.innerHTML="⏳ جاري التحميل...";
-  const snap = await getDocs(collection(db,"orders"));
-  ordersBox.innerHTML="";
-
-  snap.forEach(d=>{
-    const o = d.data();
-    ordersBox.innerHTML+=`
-      <div class="order">
-        <b>🛒 ${o.product}</b><br>
-        📞 ${o.phone}<br>
-        💰 ${o.price} جنيه<br>
-
-        <select id="st-${d.id}">
-          <option ${o.status=="قيد التنفيذ"?"selected":""}>قيد التنفيذ</option>
-          <option ${o.status=="تم الشحن"?"selected":""}>تم الشحن</option>
-          <option ${o.status=="في الطريق"?"selected":""}>في الطريق</option>
-          <option ${o.status=="تم التسليم"?"selected":""}>تم التسليم</option>
-        </select>
-
-        <br>
-        <button onclick="updateStatus('${d.id}','${o.product}','${o.phone}')">
-          💾 حفظ + واتساب
-        </button>
-      </div>
-    `;
-  });
-}
-
-window.updateStatus = async (id, product, phone)=>{
-  const status = document.getElementById("st-"+id).value;
-
-  await updateDoc(doc(db,"orders",id),{status});
-
-  const msg = `
-مرحبا 👋
-نحب نبلغ حضرتك بخصوص طلبك:
-
-🛒 المنتج: ${product}
-📦 الحالة الحالية: ${status}
-
-شكراً لثقتكم في Future Tank 🤍
-  `;
-
-  const url = `https://wa.me/${phone}?text=${encodeURIComponent(msg)}`;
-  window.open(url,"_blank");
-};
-</script>
-
+<script src="admin-orders.js"></script>
 </body>
 </html>
