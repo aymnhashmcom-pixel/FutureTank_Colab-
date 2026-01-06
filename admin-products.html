@@ -1,111 +1,39 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>🛒 إدارة المنتجات</title>
+  <title>إدارة المنتجات | FutureTank</title>
   <link rel="stylesheet" href="styles.css">
-
-  <!-- Firebase -->
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+  <style>
+    body { font-family: Arial; background:#f5f7fa; padding:20px }
+    h1 { color:#1e88e5 }
+    .box { background:#fff; padding:15px; border-radius:8px; margin-bottom:20px }
+    input, textarea, button {
+      width:100%; padding:10px; margin:5px 0
+    }
+    button { background:#1e88e5; color:#fff; border:0; cursor:pointer }
+    .item { border-bottom:1px solid #ddd; padding:10px 0 }
+    img { max-width:120px; display:block; margin:5px 0 }
+  </style>
 </head>
 <body>
 
-<h2>🛒 إدارة المنتجات</h2>
+<h1>🛒 إدارة المنتجات</h1>
 
-<div class="card">
+<div class="box">
   <h3>➕ إضافة منتج</h3>
-
-  <input type="text" id="productName" placeholder="اسم المنتج" required>
-  <input type="number" id="productPrice" placeholder="السعر بالجنيه" required>
-
-  <input type="text" id="productImage" placeholder="رابط صورة المنتج (jpg / png)" required>
-  <input type="text" id="productVideo" placeholder="رابط فيديو (اختياري)">
-
-  <button onclick="addProduct()">➕ إضافة المنتج</button>
-
-  <p id="productStatus"></p>
+  <input id="productName" placeholder="اسم المنتج">
+  <input id="productPrice" type="number" placeholder="السعر">
+  <textarea id="productDesc" placeholder="وصف المنتج"></textarea>
+  <input type="file" id="productImage" accept="image/*">
+  <button onclick="addProduct()">حفظ المنتج</button>
 </div>
 
-<hr>
+<div class="box">
+  <h3>📦 المنتجات الحالية</h3>
+  <div id="productsList"></div>
+</div>
 
-<h3>📦 المنتجات الحالية</h3>
-<div id="productsList"></div>
-
-<script>
-/* 🔥 إعداد Firebase */
-const firebaseConfig = {
-  apiKey: "PUT_YOUR_KEY",
-  authDomain: "futuretank-68c26.firebaseapp.com",
-  projectId: "futuretank-68c26"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-/* ➕ إضافة منتج */
-function addProduct() {
-  const name = productName.value.trim();
-  const price = Number(productPrice.value);
-  const image = productImage.value.trim();
-  const video = productVideo.value.trim();
-
-  if (!name || !price || !image) {
-    productStatus.innerText = "❌ من فضلك املأ كل الحقول المطلوبة";
-    return;
-  }
-
-  productStatus.innerText = "⏳ جاري الإضافة...";
-
-  db.collection("products").add({
-    name,
-    price,
-    image,
-    video,
-    createdAt: new Date()
-  })
-  .then(() => {
-    productStatus.innerText = "✅ تم إضافة المنتج بنجاح";
-    productName.value = "";
-    productPrice.value = "";
-    productImage.value = "";
-    productVideo.value = "";
-    loadProducts();
-  })
-  .catch(err => {
-    productStatus.innerText = "❌ فشل الإضافة";
-    console.error(err);
-  });
-}
-
-/* 📦 تحميل المنتجات */
-function loadProducts() {
-  productsList.innerHTML = "⏳ تحميل...";
-  db.collection("products").orderBy("createdAt", "desc").onSnapshot(snapshot => {
-    productsList.innerHTML = "";
-    snapshot.forEach(doc => {
-      const p = doc.data();
-      productsList.innerHTML += `
-        <div class="item">
-          <b>${p.name}</b> – ${p.price} جنيه
-          <button onclick="deleteProduct('${doc.id}')">🗑 حذف</button>
-        </div>
-      `;
-    });
-  });
-}
-
-/* 🗑 حذف منتج */
-function deleteProduct(id) {
-  if (!confirm("⚠️ هل أنت متأكد من حذف المنتج؟")) return;
-
-  db.collection("products").doc(id).delete()
-    .then(() => alert("✅ تم حذف المنتج"))
-    .catch(() => alert("❌ فشل الحذف"));
-}
-
-loadProducts();
-</script>
-
+<script src="admin-products.js"></script>
 </body>
 </html>
