@@ -1,61 +1,79 @@
-import {
-  db,
-  collection,
-  addDoc,
-  getDocs,
-  deleteDoc,
-  doc
-} from "./firebase.js";
+// قراءة قاعدة البيانات
+function getDB() {
+  return JSON.parse(localStorage.getItem("ft_db")) || { services: [] };
+}
 
-const form = document.getElementById("serviceForm");
-const list = document.getElementById("servicesList");
+// حفظ قاعدة البيانات
+function saveDB(db) {
+  localStorage.setItem("ft_db", JSON.stringify(db));
+}
 
-async function loadServices() {
-  list.innerHTML = "";
-  const snap = await getDocs(collection(db, "services"));
-  snap.forEach(d => {
-    const s = d.data();
-    list.innerHTML += `
-      <div>
-        <b>${s.name}</b><br>
-        💰 ${s.price} جنيه
-        <button onclick="deleteService('${d.id}')">🗑 حذف</button>
+// قراءة الصورة
+function readImage(file, callback) {
+  const reader = new FileReader();
+  reader.onload = () => callback(reader.result);
+  reader.readAsDataURL(file);
+}
+
+// إضافة خدمة
+function addService() {
+  const name = serviceName.value.trim();
+  const desc = serviceDesc.value.trim();
+  const file = serviceImage.files[0];
+
+  if (!name) return alert("اسم الخدمة مطلوب");
+
+  const db = getDB();
+
+  const saveService = (img = "") => {
+    db.services.push({
+      id: Date.now(),
+      name,
+      desc,
+      image: img
+    });
+    saveDB(db);
+    location.reload();
+  };
+
+  if (file) {
+    readImage(file, saveService);
+  } else {
+    saveService();
+  }
+}
+
+// حذف خدمة
+function deleteService(id) {
+  if (!confirm("هل تريد حذف الخدمة؟")) return;
+
+  const db = getDB();
+  db.services = db.services.filter(s => s.id !== id);
+  saveDB(db);
+  location.reload();
+}
+
+// عرض الخدمات
+function renderServices() {
+  const db = getDB();
+  const box = document.getElementById("servicesList");
+
+  if (!db.services.length) {
+    box.innerHTML = "لا توجد خدمات بعد";
+    return;
+  }
+
+  box.innerHTML = "";
+  db.services.forEach(s => {
+    box.innerHTML += `
+      <div class="item">
+        <strong>${s.name}</strong>
+        <p>${s.desc || ""}</p>
+        ${s.image ? `<img src="${s.image}">` : ""}
+        <button onclick="deleteService(${s.id})">🗑️ حذف</button>
       </div>
-      <hr>
     `;
   });
 }
 
-window.deleteService = async (id) => {
-  await deleteDoc(doc(db, "services", id));
-  loadServices();
-};
-
-form.addEventListener("submit", async (e) => {
-  e.preventDefault();
-
-  try {
-    const name = form.name.value;
-    const desc = form.description.value;
-    const price = Number(form.price.value);
-    const image = form.image.value;
-    const video = form.video.value;
-
-    await addDoc(collection(db, "services"), {
-      name,
-      description: desc,
-      price,
-      image,
-      video
-    });
-
-    alert("✅ تم حفظ الخدمة");
-    form.reset();
-    loadServices();
-
-  } catch (err) {
-    alert("❌ فشل الحفظ");
-  }
-});
-
-loadServices();
+renderServices();
