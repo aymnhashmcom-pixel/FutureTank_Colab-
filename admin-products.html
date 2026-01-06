@@ -5,35 +5,148 @@
   <title>إدارة المنتجات | FutureTank</title>
   <link rel="stylesheet" href="styles.css">
   <style>
-    body { font-family: Arial; background:#f5f7fa; padding:20px }
-    h1 { color:#1e88e5 }
-    .box { background:#fff; padding:15px; border-radius:8px; margin-bottom:20px }
-    input, textarea, button {
-      width:100%; padding:10px; margin:5px 0
+    body {
+      font-family: Arial, sans-serif;
+      background: #f2f4f7;
+      margin: 0;
     }
-    button { background:#1e88e5; color:#fff; border:0; cursor:pointer }
-    .item { border-bottom:1px solid #ddd; padding:10px 0 }
-    img { max-width:120px; display:block; margin:5px 0 }
+    header {
+      background: #1e88e5;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      font-size: 18px;
+    }
+    .container {
+      padding: 20px;
+      max-width: 900px;
+      margin: auto;
+    }
+    input, textarea, button {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+    }
+    button {
+      background: #1e88e5;
+      color: #fff;
+      border: none;
+      cursor: pointer;
+    }
+    .product {
+      background: #fff;
+      padding: 10px;
+      margin-top: 10px;
+      border-radius: 6px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .product img {
+      width: 70px;
+      height: 70px;
+      object-fit: cover;
+    }
+    .delete {
+      background: #e53935;
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      cursor: pointer;
+    }
   </style>
 </head>
+
 <body>
 
-<h1>🛒 إدارة المنتجات</h1>
+<header>
+  🛠️ لوحة إدارة المنتجات – FutureTank
+</header>
 
-<div class="box">
-  <h3>➕ إضافة منتج</h3>
-  <input id="productName" placeholder="اسم المنتج">
-  <input id="productPrice" type="number" placeholder="السعر">
-  <textarea id="productDesc" placeholder="وصف المنتج"></textarea>
-  <input type="file" id="productImage" accept="image/*">
+<div class="container">
+
+  <h3>➕ إضافة منتج جديد</h3>
+
+  <input id="name" placeholder="اسم المنتج">
+  <input id="price" placeholder="السعر">
+  <input id="category" placeholder="القسم (ملابس – إلكترونيات – ماركت...)">
+  <input id="company" placeholder="اسم الشركة / المصنع">
+  <input id="image" placeholder="رابط صورة المنتج">
+  <textarea id="desc" placeholder="وصف المنتج"></textarea>
+
   <button onclick="addProduct()">حفظ المنتج</button>
-</div>
 
-<div class="box">
+  <hr>
+
   <h3>📦 المنتجات الحالية</h3>
   <div id="productsList"></div>
+
 </div>
 
-<script src="admin-products.js"></script>
+<script>
+  const db = JSON.parse(localStorage.getItem("ft_db")) || { products: [] };
+
+  function saveDB() {
+    localStorage.setItem("ft_db", JSON.stringify(db));
+  }
+
+  function addProduct() {
+    const product = {
+      id: Date.now(),
+      name: name.value,
+      price: price.value,
+      category: category.value,
+      company: company.value,
+      image: image.value,
+      desc: desc.value
+    };
+
+    if (!product.name || !product.category) {
+      alert("اسم المنتج والقسم مطلوبين");
+      return;
+    }
+
+    db.products.push(product);
+    saveDB();
+    clearForm();
+    renderProducts();
+  }
+
+  function deleteProduct(id) {
+    if (!confirm("هل متأكد من حذف المنتج؟")) return;
+    db.products = db.products.filter(p => p.id !== id);
+    saveDB();
+    renderProducts();
+  }
+
+  function clearForm() {
+    name.value = "";
+    price.value = "";
+    category.value = "";
+    company.value = "";
+    image.value = "";
+    desc.value = "";
+  }
+
+  function renderProducts() {
+    productsList.innerHTML = "";
+    db.products.forEach(p => {
+      productsList.innerHTML += `
+        <div class="product">
+          <img src="${p.image || 'https://via.placeholder.com/100'}">
+          <div style="flex:1">
+            <b>${p.name}</b><br>
+            🏷️ ${p.category}<br>
+            🏭 ${p.company || 'غير محدد'}
+          </div>
+          <button class="delete" onclick="deleteProduct(${p.id})">حذف</button>
+        </div>
+      `;
+    });
+  }
+
+  renderProducts();
+</script>
+
 </body>
 </html>
