@@ -1,169 +1,86 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>FutureTank | فيوتشر تانك</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<style>
-body{
-  margin:0;
-  font-family: Tahoma, Arial;
-  background:#f4f9ff;
-  color:#003344;
-}
-
-/* ===== Header ===== */
-header{
-  background:#ffffff;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-  padding:20px;
-  text-align:center;
-}
-
-.logo{
-  width:90px;
-  height:90px;
-  margin:auto;
-  border-radius:50%;
-  background:#e6f7ff;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:40px;
-  color:#00a8cc;
-}
-
-h1{
-  margin:10px 0 0;
-  font-size:26px;
-}
-
-h1 span{
-  display:block;
-  font-size:16px;
-  color:#007c99;
-}
-
-.slogan{
-  margin-top:8px;
-  font-size:14px;
-  color:#555;
-}
-
-/* ===== Main ===== */
-main{
-  padding:30px 15px;
-  max-width:900px;
-  margin:auto;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-  gap:20px;
-}
-
-.card{
-  background:#fff;
-  border-radius:14px;
-  padding:25px 15px;
-  text-align:center;
-  box-shadow:0 4px 12px rgba(0,0,0,.08);
-  cursor:pointer;
-  transition:.3s;
-}
-
-.card:hover{
-  transform:translateY(-5px);
-}
-
-.card span{
-  font-size:36px;
-  display:block;
-  margin-bottom:10px;
-}
-
-.card h3{
-  margin:0;
-  font-size:18px;
-}
-
-/* colors */
-.services{background:#e6f7ff}
-.products{background:#eef9f1}
-.shop{background:#fff4e5}
-.contract{background:#f3e8ff}
-.assistant{background:#e8f0ff}
-.clients{background:#e0f7fa}
-
-/* ===== Footer ===== */
-footer{
-  margin-top:40px;
-  background:#003344;
-  color:#fff;
-  text-align:center;
-  padding:15px;
-  font-size:13px;
-}
-</style>
+  <meta charset="UTF-8">
+  <title>FutureTank | فيوتشر تانك</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f4f6f9;
+    }
+    header {
+      background: #1e88e5;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+    }
+    nav a {
+      padding: 12px 18px;
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+    }
+    nav a:hover {
+      background: #e3f2fd;
+    }
+    .hero {
+      padding: 60px 20px;
+      text-align: center;
+      background: linear-gradient(to left, #1e88e5, #42a5f5);
+      color: #fff;
+    }
+    .hero h1 {
+      margin-bottom: 10px;
+      font-size: 32px;
+    }
+    .hero p {
+      font-size: 18px;
+    }
+    footer {
+      background: #111;
+      color: #fff;
+      text-align: center;
+      padding: 15px;
+      margin-top: 40px;
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-  <div class="logo">💧</div>
-  <h1>FutureTank <span>فيوتشر تانك</span></h1>
-  <div class="slogan">نقاء الماء هو هدفنا</div>
+  <h2>💧 FutureTank – فيوتشر تانك</h2>
+  <p>نقاء الماء هو هدفنا</p>
 </header>
 
-<main>
+<nav>
+  <a href="services.html">🧰 الخدمات</a>
+  <a href="products.html">🛍️ تسوّق الآن</a>
+  <a href="contract.html">📄 تعاقد الآن</a>
+  <a href="assistant.html">💬 المساعد</a>
+  <a href="client-login.htm">🔐 بوابة العملاء</a>
+</nav>
 
-  <div class="grid">
-
-    <div class="card services" onclick="go('services.html')">
-      <span>🧰</span>
-      <h3>الخدمات</h3>
-    </div>
-
-    <div class="card products" onclick="go('products.html')">
-      <span>🛒</span>
-      <h3>المنتجات</h3>
-    </div>
-
-    <div class="card shop" onclick="go('shop.html')">
-      <span>🛍️</span>
-      <h3>تسوّق الآن</h3>
-    </div>
-
-    <div class="card contract" onclick="go('contract.html')">
-      <span>📄</span>
-      <h3>تعاقد الآن</h3>
-    </div>
-
-    <div class="card assistant" onclick="go('assistant.html')">
-      <span>💬</span>
-      <h3>المساعد</h3>
-    </div>
-
-    <div class="card clients" onclick="go('client.html')">
-      <span>🔐</span>
-      <h3>بوابة العملاء</h3>
-    </div>
-
-  </div>
-
-</main>
+<section class="hero">
+  <h1>حلول ذكية – تعامل إلكتروني كامل</h1>
+  <p>
+    منصة FutureTank تتيح للشركات والعملاء إدارة الخدمات والمنتجات والتعاقدات
+    بشكل رقمي وآمن
+  </p>
+</section>
 
 <footer>
   © 2025 FutureTank – جميع الحقوق محفوظة
 </footer>
-
-<script>
-function go(page){
-  window.location.href = page;
-}
-</script>
 
 </body>
 </html>
