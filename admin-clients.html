@@ -1,138 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<title>👥 إدارة العملاء</title>
-<link rel="stylesheet" href="styles.css">
-
-<!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
-</head>
-
-<body>
-
-<h2>👥 إدارة العملاء</h2>
-
-<div class="card">
-<h3>➕ إضافة عميل</h3>
-
-<input id="clientName" placeholder="اسم العميل" required>
-<input id="clientPhone" placeholder="رقم الموبايل" required>
-<input id="clientEmail" placeholder="الإيميل (اختياري)">
-<input id="clientAddress" placeholder="العنوان">
-
-<input id="clientPrice" type="number" placeholder="قيمة التعاقد">
-
-<label>📅 بداية التعاقد</label>
-<input id="startDate" type="date">
-
-<label>📅 نهاية التعاقد</label>
-<input id="endDate" type="date">
-
-<label>🛠 آخر زيارة</label>
-<input id="lastVisit" type="date">
-
-<label>📍 الزيارة القادمة</label>
-<input id="nextVisit" type="date">
-
-<button onclick="addClient()">➕ إضافة العميل</button>
-<p id="status"></p>
-</div>
-
-<hr>
-
-<h3>📋 العملاء الحاليين</h3>
-<div id="clients"></div>
-
-<script>
-// Firebase
-firebase.initializeApp({
-  apiKey: "PUT_YOUR_KEY",
-  authDomain: "futuretank-68c26.firebaseapp.com",
-  projectId: "futuretank-68c26"
-});
-
-const db = firebase.firestore();
-
-// إضافة عميل
-function addClient() {
-  const name = document.getElementById("clientName").value.trim();
-  const phone = document.getElementById("clientPhone").value.trim();
-  const email = document.getElementById("clientEmail").value.trim();
-  const address = document.getElementById("clientAddress").value.trim();
-  const price = Number(document.getElementById("clientPrice").value || 0);
-  const start = document.getElementById("startDate").value;
-  const end = document.getElementById("endDate").value;
-  const lastVisit = document.getElementById("lastVisit").value;
-  const nextVisit = document.getElementById("nextVisit").value;
-
-  const status = document.getElementById("status");
-
-  if (!name || !phone) {
-    status.innerText = "❌ الاسم ورقم الموبايل مطلوبين";
-    return;
-  }
-
-  status.innerText = "⏳ جاري الإضافة...";
-
-  db.collection("clients").add({
-    name,
-    phone,
-    email,
-    address,
-    price,
-    start,
-    end,
-    lastVisit,
-    nextVisit,
-    createdAt: new Date()
-  }).then(() => {
-    status.innerText = "✅ تم إضافة العميل بنجاح";
-
-    document.querySelectorAll(".card input").forEach(i => i.value = "");
-  }).catch(() => {
-    status.innerText = "❌ فشل الإضافة";
-  });
-}
-
-// تحميل العملاء
-db.collection("clients").orderBy("createdAt","desc")
-.onSnapshot(snapshot => {
-  const box = document.getElementById("clients");
-  box.innerHTML = "";
-
-  snapshot.forEach(doc => {
-    const c = doc.data();
-
-    box.innerHTML += `
-      <div class="item">
-        <b>${c.name}</b><br>
-        📞 ${c.phone}<br>
-        ${c.email ? "📧 "+c.email+"<br>" : ""}
-        📍 ${c.address || "—"}<br>
-        💰 ${c.price} جنيه<br>
-        📅 ${c.start || "—"} → ${c.end || "—"}<br>
-        🛠 آخر زيارة: ${c.lastVisit || "—"}<br>
-        📍 القادمة: ${c.nextVisit || "—"}<br>
-
-        <a target="_blank"
-           href="https://wa.me/201150402031?text=عميل:${c.name}">
-           💬 واتساب
-        </a>
-
-        <button onclick="deleteClient('${doc.id}')">🗑 حذف</button>
-      </div><hr>
-    `;
-  });
-});
-
-// حذف عميل
-function deleteClient(id) {
-  if (!confirm("⚠️ هل تريد حذف العميل؟")) return;
-  db.collection("clients").doc(id).delete();
-}
-</script>
-
-</body>
-</html>
