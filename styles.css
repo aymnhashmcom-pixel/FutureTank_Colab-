@@ -1,13 +1,80 @@
-/* FIX MOBILE WIDTH */
-html, body {
-  width: 100%;
-  max-width: 100%;
-  overflow-x: hidden;
+/* RESET + MOBILE FIX */
+* {
+  box-sizing: border-box;
 }
 
-.full-width {
+html, body {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+}
+
+/* FORCE FULL WIDTH */
+body,
+header,
+nav,
+section,
+footer {
   width: 100%;
   max-width: 100%;
+}
+
+/* HEADER */
+.main-header {
+  background: #1e88e5;
+  color: #fff;
+  text-align: center;
+  padding: 20px 10px;
+}
+
+.main-header h1 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.main-header p {
+  margin: 5px 0 0;
+  font-size: 14px;
+}
+
+/* NAV */
+.main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  background: #ffffff;
+  border-bottom: 1px solid #ddd;
+}
+
+.main-nav a {
+  padding: 10px 14px;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.main-nav a:hover {
+  background: #e3f2fd;
+}
+
+/* HERO */
+.hero {
+  padding: 30px 15px;
+  text-align: center;
+}
+
+.hero h2 {
+  font-size: 18px;
+  margin-bottom: 10px;
+}
+
+.hero p {
+  font-size: 14px;
+  line-height: 1.6;
 }
 
 /* PRODUCTS GRID */
@@ -30,4 +97,35 @@ html, body {
   height: 140px;
   object-fit: cover;
   border-radius: 8px;
+}
+
+.product-card h3 {
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.product-card p {
+  font-size: 13px;
+  margin: 4px 0;
+}
+
+/* FOOTER */
+.footer {
+  background: #111;
+  color: #fff;
+  text-align: center;
+  padding: 15px;
+  font-size: 13px;
+}
+
+/* MOBILE EXTRA FIX */
+@media (max-width: 480px) {
+  .main-header h1 {
+    font-size: 18px;
+  }
+
+  .main-nav a {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
 }
