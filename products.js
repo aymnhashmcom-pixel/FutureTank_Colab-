@@ -1,33 +1,15 @@
-const STORAGE_KEY = "ft_products";
-const grid = document.getElementById("productsGrid");
+const container = document.getElementById("products-container");
+const products = JSON.parse(localStorage.getItem("ft_products")) || [];
 
-document.addEventListener("DOMContentLoaded", () => {
-  const products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+container.innerHTML = "";
 
-  if (products.length === 0) {
-    grid.innerHTML = "<p>لا توجد منتجات حالياً</p>";
-    return;
-  }
-
-  products.forEach(p => {
-    const card = document.createElement("div");
-    card.className = "product-card";
-
-    let media = "";
-    if (p.media) {
-      media = p.mediaType === "video"
-        ? `<video src="${p.media}" controls></video>`
-        : `<img src="${p.media}">`;
-    }
-
-    card.innerHTML = `
-      ${media}
-      <h3>${p.name}</h3>
-      <small>${p.brand}</small><br>
-      <small>القسم: ${p.category}</small><br>
-      <strong>${p.price}</strong>
-    `;
-
-    grid.appendChild(card);
-  });
+products.forEach(product => {
+  container.innerHTML += `
+    <div class="product-card">
+      <img src="${product.image}" alt="${product.name}">
+      <h3>${product.name}</h3>
+      <p>القسم: ${product.category}</p>
+      <strong>${product.price}</strong>
+    </div>
+  `;
 });
