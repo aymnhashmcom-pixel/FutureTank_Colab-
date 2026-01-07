@@ -1,36 +1,0 @@
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<title>🔐 بوابة العملاء</title>
-</head>
-<body>
-
-<h3>🔐 بوابة العملاء</h3>
-<input id="phone" placeholder="رقم الهاتف">
-<button onclick="login()">دخول</button>
-<div id="data"></div>
-
-<script src="script.js"></script>
-<script>
-function login(){
-  const db = getDB();
-  const c = db.contracts.find(x=>x.phone==phone.value);
-  if(!c){
-    data.innerText="❌ لا يوجد تعاقد";
-    return;
-  }
-  data.innerHTML = `
-    مرحبًا ${c.name}<br>
-    📄 تعاقد بتاريخ ${c.date}<br><br>
-    <button onclick="renew()">🔁 تجديد التعاقد</button>
-  `;
-}
-
-function renew(){
-  alert("✅ تم تسجيل طلب التجديد");
-}
-</script>
-
-</body>
-</html>
