@@ -1,86 +1,41 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<title>خدمات FutureTank</title>
-
-<style>
-body{
-  font-family:Tahoma;
-  background:#f4f9ff;
-  padding:20px
-}
-nav a{
-  margin-left:10px;
-  text-decoration:none;
-  font-weight:bold
-}
-.card{
-  background:#fff;
-  padding:15px;
-  margin-bottom:15px;
-  border-radius:12px;
-  box-shadow:0 2px 6px rgba(0,0,0,.08)
-}
-img,video{
-  max-width:100%;
-  border-radius:8px;
-  margin:10px 0
-}
-.btn{
-  display:inline-block;
-  background:#4a90e2;
-  color:#fff;
-  padding:8px 14px;
-  border-radius:8px;
-  text-decoration:none
-}
-</style>
-</head>
-
-<body>
-
-<nav>
-<a href="index.html">الرئيسية</a>
-<a href="products.html">المنتجات</a>
-<a href="assistant.html">🤖 المساعد</a>
-<a href="services.html">الخدمات</a>
-</nav>
-
-<h2>🧰 خدماتنا</h2>
-
-<div id="services"></div>
-
-<script>
-const db = JSON.parse(localStorage.getItem("ft_db")||"{}");
-const services = db.services || [];
-const box = document.getElementById("services");
-
-if(!services.length){
-  box.innerHTML="<p>لا توجد خدمات مضافة حالياً</p>";
+* {
+  box-sizing: border-box;
 }
 
-services.forEach(s=>{
-  const div=document.createElement("div");
-  div.className="card";
-  div.innerHTML=`
-    <h3>${s.name}</h3>
-    <p>${s.desc||""}</p>
-    ${s.price?`<b>السعر: ${s.price} جنيه</b>`:""}
-    ${s.img?`<img src="${s.img}">`:""}
-    ${s.video?`<video src="${s.video}" controls></video>`:""}
-    <br><br>
-    <a class="btn" href="booking.html?type=service&name=${encodeURIComponent(s.name)}">
-      📅 احجز الخدمة
-    </a>
-  `;
-  box.appendChild(div);
-});
-</script>
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f7f7f7;
+}
 
-<footer style="margin-top:40px;text-align:center">
-© 2025 FutureTank — جميع الحقوق محفوظة
-</footer>
+.header {
+  text-align: center;
+  padding: 20px;
+  background: #0a6cff;
+  color: white;
+}
 
-</body>
-</html>
+.container {
+  width: 100%;
+  max-width: 1200px;
+  margin: auto;
+  padding: 15px;
+}
+
+.product-card {
+  background: white;
+  border-radius: 10px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.product-card img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.footer {
+  text-align: center;
+  padding: 15px;
+  background: #eee;
+}
