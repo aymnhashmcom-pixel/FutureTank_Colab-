@@ -3,21 +3,47 @@
 <head>
 <meta charset="UTF-8">
 <title>لوحة التحكم</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<h2>لوحة التحكم – العقود</h2>
-<button onclick="load()">تحديث</button>
-<pre id="out"></pre>
+<h2>🛠️ إضافة عقد جديد</h2>
+
+<input id="name" placeholder="الاسم">
+<input id="phone" placeholder="الهاتف">
+<input id="address" placeholder="العنوان">
+<input id="service" placeholder="الخدمة">
+<input id="duration" placeholder="المدة">
+<input id="cost" placeholder="التكلفة">
+<input id="lastVisit" placeholder="آخر زيارة">
+<input id="nextVisit" placeholder="الزيارة القادمة">
+
+<button onclick="save()">إرسال</button>
+<p id="status"></p>
 
 <script>
-const API =
-"https://script.google.com/macros/s/AKfycbwDwcVXY-qnVTxVxVknI1nhGvu2Gq430WGXtVUvYaHf2h_RjuKkqc74eTWpWXt1gmHV/exec";
+const API_URL = "ضع_هنا_رابط_Apps_Script";
 
-function load(){
-  fetch(API+"?action=list")
-  .then(r=>r.json())
-  .then(d=>out.innerText=JSON.stringify(d,null,2));
+async function save() {
+  const data = {
+    name: name.value,
+    phone: phone.value,
+    address: address.value,
+    service: service.value,
+    duration: duration.value,
+    cost: cost.value,
+    lastVisit: lastVisit.value,
+    nextVisit: nextVisit.value
+  };
+
+  const res = await fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  });
+
+  const r = await res.json();
+  document.getElementById("status").innerText =
+    r.success ? "✅ تم الحفظ" : "❌ خطأ";
 }
 </script>
 
