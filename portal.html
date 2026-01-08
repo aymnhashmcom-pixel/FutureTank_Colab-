@@ -1,60 +1,48 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-  <meta charset="UTF-8">
-  <title>إضافة عقد جديد</title>
-  <style>
-    body { font-family: Arial; background:#f4f6f8; padding:20px }
-    input, button { width:100%; padding:10px; margin:5px 0 }
-    button { background:#1e90ff; color:#fff; border:none }
-  </style>
+<meta charset="UTF-8">
+<title>بوابة العملاء</title>
 </head>
 <body>
 
 <h2>إضافة عقد جديد</h2>
 
-<input id="name" placeholder="الاسم">
-<input id="phone" placeholder="رقم الهاتف">
-<input id="address" placeholder="العنوان">
-<input id="service" placeholder="الخدمة">
-<input id="duration" placeholder="المدة">
-<input id="cost" placeholder="التكلفة">
-<input id="lastVisit" placeholder="آخر زيارة">
-<input id="nextVisit" placeholder="الزيارة القادمة">
+<input id="name" placeholder="الاسم"><br><br>
+<input id="phone" placeholder="رقم الهاتف"><br><br>
+<input id="address" placeholder="العنوان"><br><br>
+<input id="service" placeholder="الخدمة"><br><br>
+<input id="duration" placeholder="مدة التعاقد"><br><br>
+<input id="cost" placeholder="التكلفة"><br><br>
+<input id="lastVisit" type="date"><br><br>
+<input id="nextVisit" type="date"><br><br>
 
 <button onclick="send()">إرسال</button>
 
 <p id="msg"></p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwl53QMlNI6YsRwa2Lly_iiWQmGpJYJV_RkLa8-mzYWp-btXgx5WN-U5nmlICKi07CO/exec";
+const API =
+"https://script.google.com/macros/s/AKfycbwDwcVXY-qnVTxVxVknI1nhGvu2Gq430WGXtVUvYaHf2h_RjuKkqc74eTWpWXt1gmHV/exec";
 
-function send() {
-  const data = {
-    action: "add",
-    name: name.value,
-    phone: phone.value,
-    address: address.value,
-    service: service.value,
-    duration: duration.value,
-    cost: cost.value,
-    lastVisit: lastVisit.value,
-    nextVisit: nextVisit.value
-  };
+function send(){
+  const f = new FormData();
+  f.append("action","add");
+  f.append("name",name.value);
+  f.append("phone",phone.value);
+  f.append("address",address.value);
+  f.append("service",service.value);
+  f.append("duration",duration.value);
+  f.append("cost",cost.value);
+  f.append("lastVisit",lastVisit.value);
+  f.append("nextVisit",nextVisit.value);
 
-  fetch(API_URL, {
-    method: "POST",
-    body: JSON.stringify(data)
+  fetch(API,{method:"POST",body:f})
+  .then(r=>r.text())
+  .then(t=>{
+    msg.innerText = t=="OK" ? "✅ تم حفظ التعاقد" : "❌ حدث خطأ";
   })
-  .then(r => r.text())
-  .then(res => {
-    if (res === "OK") {
-      msg.innerHTML = "✅ تم حفظ العقد بنجاح";
-    } else {
-      msg.innerHTML = "❌ حدث خطأ";
-    }
-  })
-  .catch(() => msg.innerHTML = "❌ حدث خطأ");
+  .catch(()=>msg.innerText="❌ حدث خطأ");
 }
 </script>
 
