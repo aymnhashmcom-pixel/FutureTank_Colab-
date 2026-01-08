@@ -1,41 +1,80 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>بوابة العملاء</title>
+  <meta charset="UTF-8">
+  <title>FutureTank | بوابة العملاء</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      padding: 20px;
+      direction: rtl;
+    }
+    h2 { color: #1e88e5; }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+    }
+    button {
+      background: #1e88e5;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover { background: #1565c0; }
+    .box {
+      max-width: 400px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: auto;
+    }
+  </style>
 </head>
 <body>
 
-<h2>تجديد التعاقد</h2>
-<input id="phone" placeholder="رقم الهاتف">
-<button onclick="check()">عرض التعاقد</button>
+<div class="box">
+  <h2>إضافة عقد جديد</h2>
 
-<div id="result"></div>
+  <input id="name" placeholder="الاسم">
+  <input id="phone" placeholder="رقم الهاتف">
+  <input id="address" placeholder="العنوان">
+  <input id="service" placeholder="الخدمة">
+  <input id="duration" placeholder="المدة">
+  <input id="cost" placeholder="التكلفة">
+  <input id="lastVisit" type="date">
+  <input id="nextVisit" type="date">
+
+  <button onclick="send()">إرسال</button>
+  <p id="msg"></p>
+</div>
 
 <script>
-const API_URL = "PUT_YOUR_APPS_SCRIPT_URL_HERE";
+const API_URL = "https://script.google.com/macros/s/AKfycbwl53QMlNI6YsRwa2Lly_iiWQmGpJYJV_RkLa8-mzYWp-btXgx5WN-U5nmlICKi07CO/exec";
 
-function check() {
-  fetch(API_URL + "?phone=" + phone.value)
-    .then(r => r.json())
-    .then(c => {
-      if (!c) {
-        result.innerText = "لا يوجد تعاقد";
-        return;
-      }
-      result.innerHTML = `
-        <p>الاسم: ${c.name}</p>
-        <p>الخدمة: ${c.service}</p>
-        <p>آخر زيارة: ${c.lastVisit}</p>
-        <button onclick="renew()">🔁 جدد التعاقد</button>
-      `;
-    });
-}
+function send() {
+  const data = {
+    action: "add",
+    name: name.value,
+    phone: phone.value,
+    address: address.value,
+    service: service.value,
+    duration: duration.value,
+    cost: cost.value,
+    lastVisit: lastVisit.value,
+    nextVisit: nextVisit.value
+  };
 
-function renew() {
-  window.location.href =
-    "https://wa.me/201150402031?text=تم%20طلب%20تجديد%20التعاقد";
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(res => res.text())
+  .then(() => msg.innerText = "✅ تم تسجيل العقد بنجاح")
+  .catch(() => msg.innerText = "❌ حدث خطأ");
 }
 </script>
+
 </body>
 </html>
