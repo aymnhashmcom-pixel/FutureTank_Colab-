@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>بوابة العملاء</title>
+</head>
+<body>
+
+<h2>تجديد التعاقد</h2>
+<input id="phone" placeholder="رقم الهاتف">
+<button onclick="check()">عرض التعاقد</button>
+
+<div id="result"></div>
+
+<script>
+const API_URL = "PUT_YOUR_APPS_SCRIPT_URL_HERE";
+
+function check() {
+  fetch(API_URL + "?phone=" + phone.value)
+    .then(r => r.json())
+    .then(c => {
+      if (!c) {
+        result.innerText = "لا يوجد تعاقد";
+        return;
+      }
+      result.innerHTML = `
+        <p>الاسم: ${c.name}</p>
+        <p>الخدمة: ${c.service}</p>
+        <p>آخر زيارة: ${c.lastVisit}</p>
+        <button onclick="renew()">🔁 جدد التعاقد</button>
+      `;
+    });
+}
+
+function renew() {
+  window.location.href =
+    "https://wa.me/201150402031?text=تم%20طلب%20تجديد%20التعاقد";
+}
+</script>
+</body>
+</html>
