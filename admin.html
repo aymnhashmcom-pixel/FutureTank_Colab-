@@ -3,64 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <title>لوحة التحكم – FutureTank</title>
-<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h2>🛠️ إضافة عقد جديد</h2>
 
-<input id="name" placeholder="اسم العميل">
-<input id="phone" placeholder="رقم الهاتف">
-<input id="address" placeholder="العنوان">
-<input id="service" placeholder="الخدمة">
-<input id="duration" placeholder="مدة التعاقد">
-<input id="cost" placeholder="التكلفة">
-<input id="lastVisit" placeholder="آخر زيارة">
-<input id="nextVisit" placeholder="الزيارة القادمة">
+<input id="name" placeholder="اسم العميل"><br>
+<input id="phone" placeholder="رقم الهاتف"><br>
+<input id="address" placeholder="العنوان"><br>
+<input id="service" placeholder="الخدمة"><br>
+<input id="duration" placeholder="مدة التعاقد"><br>
+<input id="cost" placeholder="التكلفة"><br>
+<input id="lastVisit" placeholder="آخر زيارة"><br>
+<input id="nextVisit" placeholder="الزيارة القادمة"><br><br>
 
-<button onclick="saveContract()">إرسال</button>
+<button onclick="send()">إرسال</button>
 <p id="status"></p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzt5Kkg9A3t9TycMwp3rQJvq4CpGujb1UO75MlOFF9uhba-gIr_2pDs--IH7RY1yM1j/exec";
+const API = "https://script.google.com/macros/s/AKfycbz-3YkpapPQ0jYA_driUPc2KpYZplVs_MMuVNxKb1sHHgIeXlFaq_lntDOJXv-YrJa6/exec";
 
-async function saveContract() {
-  const status = document.getElementById("status");
+function send() {
+  const q = new URLSearchParams({
+    name: name.value,
+    phone: phone.value,
+    address: address.value,
+    service: service.value,
+    duration: duration.value,
+    cost: cost.value,
+    lastVisit: lastVisit.value,
+    nextVisit: nextVisit.value
+  });
 
-  const data = {
-    name: name.value.trim(),
-    phone: phone.value.trim(),
-    address: address.value.trim(),
-    service: service.value.trim(),
-    duration: duration.value.trim(),
-    cost: cost.value.trim(),
-    lastVisit: lastVisit.value.trim(),
-    nextVisit: nextVisit.value.trim()
-  };
-
-  try {
-    const res = await fetch(API_URL, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
+  fetch(API + "?" + q.toString())
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        status.innerText = "✅ تم حفظ التعاقد بنجاح";
+        window.open(
+          "https://wa.me/201150402031?text=تم%20إضافة%20تعاقد%20جديد"
+        );
+      } else {
+        status.innerText = "❌ فشل الحفظ";
+      }
+    })
+    .catch(() => {
+      status.innerText = "❌ حدث خطأ";
     });
-
-    const result = await res.json();
-
-    if (result.success) {
-      status.innerText = "✅ تم حفظ التعاقد بنجاح";
-      window.open(
-        "https://wa.me/201150402031?text=تم%20إضافة%20تعاقد%20جديد%20للعميل%20" + data.name
-      );
-    } else {
-      status.innerText = "❌ فشل الحفظ";
-    }
-
-  } catch (e) {
-    status.innerText = "❌ حدث خطأ في الاتصال";
-  }
 }
 </script>
 
