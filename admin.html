@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>لوحة التحكم - FutureTank</title>
+</head>
+<body>
+<h2>إضافة تعاقد</h2>
+
+<input id="name" placeholder="اسم العميل"><br>
+<input id="phone" placeholder="رقم الهاتف"><br>
+<input id="address" placeholder="العنوان"><br>
+<input id="service" placeholder="الخدمة"><br>
+<input id="duration" placeholder="مدة التعاقد"><br>
+<input id="cost" placeholder="التكلفة"><br>
+<input id="lastVisit" placeholder="آخر زيارة"><br>
+<input id="nextVisit" placeholder="الزيارة القادمة"><br>
+
+<button onclick="save()">حفظ التعاقد</button>
+<p id="status"></p>
+
+<script>
+const API_URL = "PUT_YOUR_APPS_SCRIPT_URL_HERE";
+
+function save() {
+  const data = {
+    name: name.value,
+    phone: phone.value,
+    address: address.value,
+    service: service.value,
+    duration: duration.value,
+    cost: cost.value,
+    lastVisit: lastVisit.value,
+    nextVisit: nextVisit.value
+  };
+
+  fetch(API_URL + "?action=add", {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(r => r.json())
+  .then(() => {
+    status.innerText = "✅ تم حفظ التعاقد بنجاح";
+  });
+}
+</script>
+</body>
+</html>
