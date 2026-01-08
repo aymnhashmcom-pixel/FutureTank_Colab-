@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>FutureTank | بوابة العملاء</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #f4f6f8;
+      padding: 20px;
+      direction: rtl;
+    }
+    h2 { color: #1e88e5; }
+    input, button {
+      width: 100%;
+      padding: 10px;
+      margin: 6px 0;
+    }
+    button {
+      background: #1e88e5;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover { background: #1565c0; }
+    .box {
+      max-width: 400px;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin: auto;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box">
+  <h2>إضافة عقد جديد</h2>
+
+  <input id="name" placeholder="الاسم">
+  <input id="phone" placeholder="رقم الهاتف">
+  <input id="address" placeholder="العنوان">
+  <input id="service" placeholder="الخدمة">
+  <input id="duration" placeholder="المدة">
+  <input id="cost" placeholder="التكلفة">
+  <input id="lastVisit" type="date">
+  <input id="nextVisit" type="date">
+
+  <button onclick="send()">إرسال</button>
+  <p id="msg"></p>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbwl53QMlNI6YsRwa2Lly_iiWQmGpJYJV_RkLa8-mzYWp-btXgx5WN-U5nmlICKi07CO/exec";
+
+function send() {
+  const data = {
+    action: "add",
+    name: name.value,
+    phone: phone.value,
+    address: address.value,
+    service: service.value,
+    duration: duration.value,
+    cost: cost.value,
+    lastVisit: lastVisit.value,
+    nextVisit: nextVisit.value
+  };
+
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(res => res.text())
+  .then(() => msg.innerText = "✅ تم تسجيل العقد بنجاح")
+  .catch(() => msg.innerText = "❌ حدث خطأ");
+}
+</script>
+
+</body>
+    </html>
