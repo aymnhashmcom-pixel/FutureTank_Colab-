@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>لوحة التحكم - FutureTank</title>
+<title>لوحة التحكم – FutureTank</title>
 </head>
 <body>
 
@@ -14,34 +14,34 @@
 <input id="service" placeholder="الخدمة"><br><br>
 <input id="duration" placeholder="مدة التعاقد"><br><br>
 <input id="cost" placeholder="التكلفة"><br><br>
-<input id="lastVisit" type="date"><br><br>
-<input id="nextVisit" type="date"><br><br>
+<input id="lastVisit" placeholder="آخر زيارة"><br><br>
+<input id="nextVisit" placeholder="الزيارة القادمة"><br><br>
 
 <button onclick="save()">حفظ التعاقد</button>
+<p id="msg"></p>
 
 <script>
-const API = "ضع هنا رابط Apps Script";
+const API =
+"https://script.google.com/macros/s/AKfycbyhtrVf_pVHKR2EddJfJaVXvfbjShzTPDmH1T1HSByE_VTEqa4siq4MHxULdGdBsGbU/exec";
 
-async function save() {
-  const data = {
-    action: "add",
-    name: name.value,
-    phone: phone.value,
-    address: address.value,
-    service: service.value,
-    duration: duration.value,
-    cost: cost.value,
-    lastVisit: lastVisit.value,
-    nextVisit: nextVisit.value
-  };
-
-  const res = await fetch(API, {
-    method: "POST",
-    body: JSON.stringify(data)
+function save() {
+  fetch(API +
+    "?action=add" +
+    "&name=" + name.value +
+    "&phone=" + phone.value +
+    "&address=" + address.value +
+    "&service=" + service.value +
+    "&duration=" + duration.value +
+    "&cost=" + cost.value +
+    "&lastVisit=" + lastVisit.value +
+    "&nextVisit=" + nextVisit.value
+  )
+  .then(r => r.text())
+  .then(t => {
+    msg.innerText = (t === "success")
+      ? "✅ تم حفظ التعاقد بنجاح"
+      : "❌ فشل الحفظ";
   });
-
-  const r = await res.json();
-  alert(r.success ? "✅ تم الحفظ" : "❌ خطأ");
 }
 </script>
 
