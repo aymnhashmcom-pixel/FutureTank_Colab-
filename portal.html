@@ -1,72 +1,56 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>FutureTank | بوابة العملاء</title>
-  <style>
-    body {
-      font-family: Arial;
-      background:#eef2f6;
-      padding:20px;
-    }
-    h1 { color:#0077cc; }
-    input, button {
-      width:100%;
-      padding:10px;
-      margin:6px 0;
-      font-size:16px;
-    }
-    button {
-      background:#28a745;
-      color:#fff;
-      border:none;
-    }
-    .box {
-      background:#fff;
-      padding:15px;
-      margin-top:15px;
-      border-radius:6px;
-    }
-  </style>
+<meta charset="UTF-8">
+<title>بوابة العملاء</title>
 </head>
 <body>
 
-<h1>🔐 بوابة العملاء</h1>
+<h2>بوابة العملاء</h2>
 
 <input id="phone" placeholder="رقم الهاتف">
-<button onclick="load()">عرض التعاقد</button>
+<button onclick="check()">عرض التعاقد</button>
 
 <div id="result"></div>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbzTgEIjN_H9h7ah8htJd0HNvXaNuLZ7LcfISez4a_8P4iVDsZW4wfZPzqxA-9fVofRG/exec";
+const API = "ضع هنا رابط Apps Script";
 
-function load() {
-  fetch(API, {
+async function check() {
+  const res = await fetch(API, {
     method: "POST",
     body: JSON.stringify({
       action: "get",
       phone: phone.value
     })
-  })
-  .then(r=>r.json())
-  .then(res=>{
-    if(!res.success){
-      result.innerHTML="❌ لا يوجد تعاقد";
-      return;
-    }
-    const c = res.contract;
-    result.innerHTML = `
-      <div class="box">
-        <b>الاسم:</b> ${c.name}<br>
-        <b>العنوان:</b> ${c.address}<br>
-        <b>الخدمة:</b> ${c.service}<br>
-        <b>المدة:</b> ${c.duration}<br>
-        <b>التكلفة:</b> ${c.cost}<br>
-        <b>آخر زيارة:</b> ${c.lastVisit}<br>
-        <b>الزيارة القادمة:</b> ${c.nextVisit}
-      </div>`;
   });
+
+  const data = await res.json();
+
+  if (!data.success) {
+    result.innerHTML = "❌ لا يوجد تعاقد";
+    return;
+  }
+
+  const c = data.contract;
+  result.innerHTML = `
+    <p>الاسم: ${c.name}</p>
+    <p>الخدمة: ${c.service}</p>
+    <p>الزيارة القادمة: ${c.nextVisit}</p>
+    <button onclick="renew()">🔁 تجديد التعاقد</button>
+  `;
+}
+
+async function renew() {
+  await fetch(API, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "renew",
+      name: "عميل",
+      phone: phone.value
+    })
+  });
+  alert("✅ تم التجديد وإرسال واتساب");
 }
 </script>
 
