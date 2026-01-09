@@ -1,45 +1,72 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>بوابة العملاء</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>FutureTank | بوابة العملاء</title>
+  <style>
+    body {
+      font-family: Arial;
+      background:#eef2f6;
+      padding:20px;
+    }
+    h1 { color:#0077cc; }
+    input, button {
+      width:100%;
+      padding:10px;
+      margin:6px 0;
+      font-size:16px;
+    }
+    button {
+      background:#28a745;
+      color:#fff;
+      border:none;
+    }
+    .box {
+      background:#fff;
+      padding:15px;
+      margin-top:15px;
+      border-radius:6px;
+    }
+  </style>
 </head>
 <body>
 
-<h2>🔁 تجديد التعاقد</h2>
+<h1>🔐 بوابة العملاء</h1>
 
 <input id="phone" placeholder="رقم الهاتف">
-<button onclick="check()">عرض التعاقد</button>
+<button onclick="load()">عرض التعاقد</button>
 
 <div id="result"></div>
 
 <script>
-const API_URL = "ضع_هنا_رابط_Apps_Script";
+const API = "https://script.google.com/macros/s/AKfycbzTgEIjN_H9h7ah8htJd0HNvXaNuLZ7LcfISez4a_8P4iVDsZW4wfZPzqxA-9fVofRG/exec";
 
-async function check() {
-  const phone = document.getElementById("phone").value;
-  const res = await fetch(`${API_URL}?action=get&phone=${phone}`);
-  const data = await res.json();
-
-  if (!data) {
-    document.getElementById("result").innerText = "❌ لا يوجد تعاقد";
-    return;
-  }
-
-  document.getElementById("result").innerHTML = `
-    <p><b>الاسم:</b> ${data.name}</p>
-    <p><b>الخدمة:</b> ${data.service}</p>
-    <p><b>العنوان:</b> ${data.address}</p>
-    <p><b>الزيارة القادمة:</b> ${data.nextVisit}</p>
-    <button onclick="renew('${data.name}')">🔁 تجديد</button>
-  `;
-}
-
-function renew(name) {
-  window.open(
-    "https://wa.me/201150402031?text=تم%20تجديد%20تعاقد%20" + name
-  );
+function load() {
+  fetch(API, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "get",
+      phone: phone.value
+    })
+  })
+  .then(r=>r.json())
+  .then(res=>{
+    if(!res.success){
+      result.innerHTML="❌ لا يوجد تعاقد";
+      return;
+    }
+    const c = res.contract;
+    result.innerHTML = `
+      <div class="box">
+        <b>الاسم:</b> ${c.name}<br>
+        <b>العنوان:</b> ${c.address}<br>
+        <b>الخدمة:</b> ${c.service}<br>
+        <b>المدة:</b> ${c.duration}<br>
+        <b>التكلفة:</b> ${c.cost}<br>
+        <b>آخر زيارة:</b> ${c.lastVisit}<br>
+        <b>الزيارة القادمة:</b> ${c.nextVisit}
+      </div>`;
+  });
 }
 </script>
 
