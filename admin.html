@@ -1,47 +1,53 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>لوحة التحكم – FutureTank</title>
+  <meta charset="UTF-8">
+  <title>لوحة التحكم</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h2>إضافة تعاقد جديد</h2>
 
-<input id="name" placeholder="اسم العميل"><br><br>
-<input id="phone" placeholder="رقم الهاتف"><br><br>
-<input id="address" placeholder="العنوان"><br><br>
-<input id="service" placeholder="الخدمة"><br><br>
-<input id="duration" placeholder="مدة التعاقد"><br><br>
-<input id="cost" placeholder="التكلفة"><br><br>
-<input id="lastVisit" placeholder="آخر زيارة"><br><br>
-<input id="nextVisit" placeholder="الزيارة القادمة"><br><br>
+<input id="name" placeholder="اسم العميل"><br>
+<input id="phone" placeholder="رقم الهاتف"><br>
+<input id="address" placeholder="العنوان"><br>
+<input id="service" placeholder="الخدمة"><br>
+<input id="duration" placeholder="مدة التعاقد"><br>
+<input id="cost" placeholder="التكلفة"><br>
+<input id="lastVisit" type="date"><br>
+<input id="nextVisit" type="date"><br><br>
 
-<button onclick="save()">حفظ التعاقد</button>
+<button onclick="saveContract()">حفظ التعاقد</button>
+
 <p id="msg"></p>
 
 <script>
-const API =
-"https://script.google.com/macros/s/AKfycbyhtrVf_pVHKR2EddJfJaVXvfbjShzTPDmH1T1HSByE_VTEqa4siq4MHxULdGdBsGbU/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyhtrVf_pVHKR2EddJfJaVXvfbjShzTPDmH1T1HSByE_VTEqa4siq4MHxULdGdBsGbU/exec";
 
-function save() {
-  fetch(API +
-    "?action=add" +
-    "&name=" + name.value +
-    "&phone=" + phone.value +
-    "&address=" + address.value +
-    "&service=" + service.value +
-    "&duration=" + duration.value +
-    "&cost=" + cost.value +
-    "&lastVisit=" + lastVisit.value +
-    "&nextVisit=" + nextVisit.value
-  )
-  .then(r => r.text())
-  .then(t => {
-    msg.innerText = (t === "success")
-      ? "✅ تم حفظ التعاقد بنجاح"
-      : "❌ فشل الحفظ";
-  });
+function saveContract() {
+  const data = {
+    action: "add",
+    name: name.value,
+    phone: phone.value,
+    address: address.value,
+    service: service.value,
+    duration: duration.value,
+    cost: cost.value,
+    lastVisit: lastVisit.value,
+    nextVisit: nextVisit.value
+  };
+
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  })
+  .then(r => r.json())
+  .then(res => {
+    msg.innerText = res.success ? "✅ تم حفظ التعاقد" : "❌ فشل الحفظ";
+  })
+  .catch(() => msg.innerText = "❌ خطأ اتصال");
 }
 </script>
 
