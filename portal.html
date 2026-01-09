@@ -1,47 +1,37 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>بوابة العملاء – FutureTank</title>
+  <meta charset="UTF-8">
+  <title>بوابة العملاء</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h2>بوابة العملاء</h2>
 
 <input id="phone" placeholder="رقم الهاتف">
-<button onclick="check()">عرض التعاقد</button>
+<button onclick="getContract()">عرض التعاقد</button>
 
-<div id="result"></div>
+<pre id="result"></pre>
 
 <script>
-const API =
-"https://script.google.com/macros/s/AKfycbyhtrVf_pVHKR2EddJfJaVXvfbjShzTPDmH1T1HSByE_VTEqa4siq4MHxULdGdBsGbU/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyhtrVf_pVHKR2EddJfJaVXvfbjShzTPDmH1T1HSByE_VTEqa4siq4MHxULdGdBsGbU/exec";
 
-function check() {
-  fetch(API + "?action=get&phone=" + phone.value)
-    .then(r => r.text())
-    .then(t => {
-      if (t === "not_found") {
-        result.innerText = "❌ لا يوجد تعاقد مسجل";
-        return;
-      }
-      const d = JSON.parse(t);
-      result.innerHTML = `
-        <p>الاسم: ${d.name}</p>
-        <p>الخدمة: ${d.service}</p>
-        <p>آخر زيارة: ${d.lastVisit}</p>
-        <p>الزيارة القادمة: ${d.nextVisit}</p>
-        <button onclick="renew('${d.name}')">
-          🔁 تجديد التعاقد
-        </button>
-      `;
-    });
-}
-
-function renew(name) {
-  window.open(
-    "https://wa.me/201150402031?text=طلب تجديد تعاقد: " + name
-  );
+function getContract() {
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "get",
+      phone: phone.value
+    })
+  })
+  .then(r => r.json())
+  .then(res => {
+    result.textContent = res.success
+      ? JSON.stringify(res.contract, null, 2)
+      : "❌ لا يوجد تعاقد";
+  });
 }
 </script>
 
