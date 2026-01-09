@@ -1,3 +1,19 @@
-body { font-family: Tahoma; direction: rtl; padding: 20px; }
-input, button { display:block; margin:10px 0; padding:8px; }
-nav a { margin:0 10px; }
+body {
+  font-family: Arial;
+  background: #f5f5f5;
+  text-align: center;
+  padding: 30px;
+}
+
+input, button {
+  padding: 10px;
+  margin: 5px;
+  width: 250px;
+}
+
+button {
+  background: #2196f3;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
