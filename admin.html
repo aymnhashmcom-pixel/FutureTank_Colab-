@@ -1,50 +1,28 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>FutureTank | لوحة التحكم</title>
-  <style>
-    body {
-      font-family: Arial;
-      background: #f5f7fa;
-      padding: 20px;
-    }
-    h1 { color:#0077cc; }
-    input, button {
-      width: 100%;
-      padding: 10px;
-      margin: 6px 0;
-      font-size: 16px;
-    }
-    button {
-      background: #0077cc;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
-    #msg { margin-top:10px; }
-  </style>
+<meta charset="UTF-8">
+<title>لوحة التحكم - FutureTank</title>
 </head>
 <body>
 
-<h1>🛠️ لوحة التحكم – إضافة تعاقد</h1>
+<h2>إضافة تعاقد جديد</h2>
 
-<input id="name" placeholder="اسم العميل">
-<input id="phone" placeholder="رقم الهاتف">
-<input id="address" placeholder="العنوان">
-<input id="service" placeholder="الخدمة">
-<input id="duration" placeholder="مدة التعاقد">
-<input id="cost" placeholder="التكلفة">
-<input id="lastVisit" type="date">
-<input id="nextVisit" type="date">
+<input id="name" placeholder="اسم العميل"><br><br>
+<input id="phone" placeholder="رقم الهاتف"><br><br>
+<input id="address" placeholder="العنوان"><br><br>
+<input id="service" placeholder="الخدمة"><br><br>
+<input id="duration" placeholder="مدة التعاقد"><br><br>
+<input id="cost" placeholder="التكلفة"><br><br>
+<input id="lastVisit" type="date"><br><br>
+<input id="nextVisit" type="date"><br><br>
 
-<button onclick="save()">💾 حفظ التعاقد</button>
-<div id="msg"></div>
+<button onclick="save()">حفظ التعاقد</button>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbzTgEIjN_H9h7ah8htJd0HNvXaNuLZ7LcfISez4a_8P4iVDsZW4wfZPzqxA-9fVofRG/exec";
+const API = "ضع هنا رابط Apps Script";
 
-function save() {
+async function save() {
   const data = {
     action: "add",
     name: name.value,
@@ -57,15 +35,13 @@ function save() {
     nextVisit: nextVisit.value
   };
 
-  fetch(API, {
+  const res = await fetch(API, {
     method: "POST",
     body: JSON.stringify(data)
-  })
-  .then(r => r.json())
-  .then(res => {
-    msg.innerText = res.success ? "✅ تم حفظ التعاقد" : "❌ خطأ";
-  })
-  .catch(()=> msg.innerText="❌ فشل الاتصال");
+  });
+
+  const r = await res.json();
+  alert(r.success ? "✅ تم الحفظ" : "❌ خطأ");
 }
 </script>
 
