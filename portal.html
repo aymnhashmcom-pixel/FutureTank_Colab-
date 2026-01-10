@@ -1,18 +1,3 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>بوابة العملاء - FutureTank</title>
-</head>
-<body>
-
-<h2>بوابة العملاء</h2>
-
-<input id="phone" placeholder="رقم الهاتف">
-<button onclick="getContract()">عرض التعاقد</button>
-
-<pre id="result"></pre>
-
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbzChjZ4ncHXP7fBfTzQSihEJX-N7BuECBOtJHiBWcEzzCSDYp3FNlZZMzztHQQ2LgAM/exec";
 
@@ -24,6 +9,9 @@ function getContract() {
 
   fetch(API_URL, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(data)
   })
   .then(r => r.json())
@@ -37,6 +25,3 @@ function getContract() {
   });
 }
 </script>
-
-</body>
-</html>
