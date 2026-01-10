@@ -1,29 +1,3 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>لوحة التحكم - FutureTank</title>
-</head>
-<body>
-
-<h2>إضافة / تجديد تعاقد</h2>
-
-<input id="name" placeholder="اسم العميل"><br>
-<input id="phone" placeholder="رقم الهاتف"><br>
-<input id="address" placeholder="العنوان"><br>
-<input id="service" placeholder="الخدمة"><br>
-<input id="duration" placeholder="مدة التعاقد"><br>
-<input id="cost" placeholder="التكلفة"><br>
-
-<label>آخر زيارة</label>
-<input id="lastVisit" type="date"><br>
-
-<label>الزيارة القادمة</label>
-<input id="nextVisit" type="date"><br><br>
-
-<button onclick="saveContract()">حفظ / تجديد التعاقد</button>
-<p id="msg"></p>
-
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbzChjZ4ncHXP7fBfTzQSihEJX-N7BuECBOtJHiBWcEzzCSDYp3FNlZZMzztHQQ2LgAM/exec";
 
@@ -42,6 +16,9 @@ function saveContract() {
 
   fetch(API_URL, {
     method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(data)
   })
   .then(r => r.json())
@@ -55,6 +32,3 @@ function saveContract() {
   });
 }
 </script>
-
-</body>
-</html>
