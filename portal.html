@@ -15,14 +15,14 @@
 <pre id="result"></pre>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwZLs7QxTshST9wYJNbrorLFmQ3ukiB0VC8QUoAh86Y8eQi01ZjCRUprDMu-v4lpxxk/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyW7NF5Jy6hFAbKX5m_mvhQUT9vGKZf6Td8xU32tcd9jWhGXGuVgWqtld6AGTs5HuWY/exec";
 
 function getContract() {
-  result.textContent = "⏳ جاري التحميل...";
+  result.textContent = "⏳ جاري البحث...";
 
   const params = new URLSearchParams({
     action: "get",
-    phone: document.getElementById("phone").value
+    phone: phone.value
   });
 
   fetch(API_URL + "?" + params.toString())
