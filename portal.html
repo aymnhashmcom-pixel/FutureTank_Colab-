@@ -15,7 +15,7 @@
 <pre id="result"></pre>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzH3FVqVyv_jwtAsw4pCr-pNieBnOquSQQEdMA0Gp7IYTX2CmzZtsGNQECAX03NYmib/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxVpvIyqM5wQF7soh7ayDfyiqPA_s5YREES7FcmVwvXT7cYgRS-O0ezJgZYCVi4yKoo/exec";
 
 function getContract() {
   const params = new URLSearchParams({
@@ -24,11 +24,11 @@ function getContract() {
   });
 
   fetch(API_URL + "?" + params.toString())
-    .then(res => res.json())
-    .then(data => {
-      result.textContent = data.success
-        ? JSON.stringify(data.contract, null, 2)
-        : "❌ لا يوجد تعاقد بهذا الرقم";
+    .then(r => r.json())
+    .then(res => {
+      result.textContent = res.success
+        ? JSON.stringify(res.contract, null, 2)
+        : "❌ لا يوجد تعاقد مسجل";
     })
     .catch(() => {
       result.textContent = "❌ خطأ اتصال بالخادم";
