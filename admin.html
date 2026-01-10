@@ -27,9 +27,12 @@
 <p id="msg"></p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwyGaswn889qrbOnedJEID5f1hJ4JOfl9hO2IO8otTJvXQf2xsJ4a2mCzqyo8TuF6n2/exec";
+const API_URL =
+"https://script.google.com/macros/s/AKfycbyDeZsuqEHsLtd303yScdjquJ8dU5bBdsU2_z7BABDlmZq3izSCPolXC6940yzHsRQi/exec";
 
 function saveContract() {
+  msg.innerText = "⏳ جاري الحفظ...";
+
   const params = new URLSearchParams({
     action: "add",
     name: name.value,
