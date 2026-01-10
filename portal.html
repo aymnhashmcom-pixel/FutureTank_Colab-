@@ -15,24 +15,23 @@
 <pre id="result"></pre>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzChjZ4ncHXP7fBfTzQSihEJX-N7BuECBOtJHiBWcEzzCSDYp3FNlZZMzztHQQ2LgAM/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwyGaswn889qrbOnedJEID5f1hJ4JOfl9hO2IO8otTJvXQf2xsJ4a2mCzqyo8TuF6n2/exec";
 
 function getContract() {
   const params = new URLSearchParams({
     action: "get",
-    phone: document.getElementById("phone").value
+    phone: phone.value
   });
 
   fetch(API_URL + "?" + params.toString())
     .then(r => r.json())
     .then(res => {
-      document.getElementById("result").textContent =
-        res.success
-          ? JSON.stringify(res.contract, null, 2)
-          : "❌ لا يوجد تعاقد";
+      result.textContent = res.success
+        ? JSON.stringify(res.contract, null, 2)
+        : "❌ لا يوجد تعاقد مسجل";
     })
     .catch(() => {
-      document.getElementById("result").textContent = "❌ خطأ اتصال بالخادم";
+      result.textContent = "❌ خطأ اتصال بالخادم";
     });
 }
 </script>
