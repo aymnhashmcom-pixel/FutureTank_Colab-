@@ -1,55 +1,26 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>لوحة التحكم</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<h2>إضافة تعاقد جديد</h2>
-
-<input id="name" placeholder="اسم العميل"><br>
-<input id="phone" placeholder="رقم الهاتف"><br>
-<input id="address" placeholder="العنوان"><br>
-<input id="service" placeholder="الخدمة"><br>
-<input id="duration" placeholder="مدة التعاقد"><br>
-<input id="cost" placeholder="التكلفة"><br>
-<input id="lastVisit" type="date"><br>
-<input id="nextVisit" type="date"><br><br>
-
-<button onclick="saveContract()">حفظ التعاقد</button>
-
-<p id="msg"></p>
-
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyhtrVf_pVHKR2EddJfJaVXvfbjShzTPDmH1T1HSByE_VTEqa4siq4MHxULdGdBsGbU/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzg1RYvL_L56L--cFyLGi34JcGoOkUVu3iYFM8FLSDpu3t-p7FWVX8Le-TQGdVrfcIB/exec";
 
 function saveContract() {
-  const data = {
-    action: "add",
-    name: name.value,
-    phone: phone.value,
-    address: address.value,
-    service: service.value,
-    duration: duration.value,
-    cost: cost.value,
-    lastVisit: lastVisit.value,
-    nextVisit: nextVisit.value
-  };
+  const form = new URLSearchParams();
+  form.append("action", "add");
+  form.append("name", name.value);
+  form.append("phone", phone.value);
+  form.append("address", address.value);
+  form.append("service", service.value);
+  form.append("duration", duration.value);
+  form.append("cost", cost.value);
+  form.append("lastVisit", lastVisit.value);
+  form.append("nextVisit", nextVisit.value);
 
   fetch(API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
+    body: form
   })
-  .then(r => r.json())
-  .then(res => {
-    msg.innerText = res.success ? "✅ تم حفظ التعاقد" : "❌ فشل الحفظ";
-  })
-  .catch(() => msg.innerText = "❌ خطأ اتصال");
+    .then(r => r.json())
+    .then(res => {
+      msg.innerText = res.success ? "✅ تم حفظ التعاقد" : "❌ فشل الحفظ";
+    })
+    .catch(() => msg.innerText = "❌ خطأ اتصال");
 }
 </script>
-
-</body>
-</html>
