@@ -15,9 +15,9 @@
 <input id="service" placeholder="الخدمة"><br>
 <input id="duration" placeholder="مدة التعاقد"><br>
 <input id="cost" placeholder="التكلفة"><br>
-<label>آخر زيارة</label><br>
+<label>آخر زيارة</label>
 <input id="lastVisit" type="date"><br>
-<label>الزيارة القادمة</label><br>
+<label>الزيارة القادمة</label>
 <input id="nextVisit" type="date"><br><br>
 
 <button onclick="saveContract()">حفظ / تجديد التعاقد</button>
@@ -25,11 +25,9 @@
 <p id="msg"></p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzg1RYvL_L56L--cFyLGi34JcGoOkUVu3iYFM8FLSDpu3t-p7FWVX8Le-TQGdVrfcIB/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzH3FVqVyv_jwtAsw4pCr-pNieBnOquSQQEdMA0Gp7IYTX2CmzZtsGNQECAX03NYmib/exec";
 
 function saveContract() {
-  msg.innerText = "⏳ جاري الحفظ...";
-
   const params = new URLSearchParams({
     action: "add",
     name: name.value,
@@ -43,11 +41,11 @@ function saveContract() {
   });
 
   fetch(API_URL + "?" + params.toString())
-    .then(r => r.json())
-    .then(res => {
-      msg.innerText = res.success
+    .then(res => res.json())
+    .then(data => {
+      msg.innerText = data.success
         ? "✅ تم حفظ / تجديد التعاقد بنجاح"
-        : "❌ فشل حفظ التعاقد";
+        : "❌ فشل الحفظ";
     })
     .catch(() => {
       msg.innerText = "❌ خطأ اتصال بالخادم";
