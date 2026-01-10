@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>لوحة التحكم - FutureTank</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -15,8 +14,10 @@
 <input id="service" placeholder="الخدمة"><br>
 <input id="duration" placeholder="مدة التعاقد"><br>
 <input id="cost" placeholder="التكلفة"><br>
+
 <label>آخر زيارة</label>
 <input id="lastVisit" type="date"><br>
+
 <label>الزيارة القادمة</label>
 <input id="nextVisit" type="date"><br><br>
 
@@ -24,10 +25,10 @@
 <p id="msg"></p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxVpvIyqM5wQF7soh7ayDfyiqPA_s5YREES7FcmVwvXT7cYgRS-O0ezJgZYCVi4yKoo/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzChjZ4ncHXP7fBfTzQSihEJX-N7BuECBOtJHiBWcEzzCSDYp3FNlZZMzztHQQ2LgAM/exec";
 
 function saveContract() {
-  const params = new URLSearchParams({
+  const data = {
     action: "add",
     name: name.value,
     phone: phone.value,
@@ -37,16 +38,21 @@ function saveContract() {
     cost: cost.value,
     lastVisit: lastVisit.value,
     nextVisit: nextVisit.value
-  });
+  };
 
-  fetch(API_URL + "?" + params.toString())
-    .then(r => r.json())
-    .then(res => {
-      msg.innerText = res.success ? "✅ تم حفظ / تجديد التعاقد بنجاح" : "❌ فشل الحفظ";
-    })
-    .catch(() => {
-      msg.innerText = "❌ خطأ اتصال بالخادم";
-    });
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify(data)
+  })
+  .then(r => r.json())
+  .then(res => {
+    msg.innerText = res.success
+      ? "✅ تم حفظ / تجديد التعاقد بنجاح"
+      : "❌ فشل الحفظ";
+  })
+  .catch(() => {
+    msg.innerText = "❌ خطأ اتصال بالخادم";
+  });
 }
 </script>
 
