@@ -2,14 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>بوابة العملاء - Future Tank</title>
+  <title>بوابة العملاء - FutureTank</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h2>بوابة العملاء</h2>
 
-<input id="phone" placeholder="أدخل رقم الهاتف">
+<input id="phone" placeholder="رقم الهاتف">
 <button onclick="getContract()">عرض التعاقد</button>
 
 <pre id="result"></pre>
@@ -20,33 +20,27 @@ const API_URL = "https://script.google.com/macros/s/AKfycbzg1RYvL_L56L--cFyLGi34
 function getContract() {
   result.textContent = "⏳ جاري البحث...";
 
-  fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "get",
-      phone: phone.value
+  fetch(API_URL + "?action=get&phone=" + encodeURIComponent(phone.value))
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        const c = res.contract;
+        result.textContent =
+          "الاسم: " + c.name + "\n" +
+          "الهاتف: " + c.phone + "\n" +
+          "العنوان: " + c.address + "\n" +
+          "الخدمة: " + c.service + "\n" +
+          "المدة: " + c.duration + "\n" +
+          "التكلفة: " + c.cost + "\n" +
+          "آخر زيارة: " + c.lastVisit + "\n" +
+          "الزيارة القادمة: " + c.nextVisit;
+      } else {
+        result.textContent = "❌ لا يوجد تعاقد بهذا الرقم";
+      }
     })
-  })
-  .then(r => r.json())
-  .then(res => {
-    if (res.success) {
-      result.textContent =
-        "الاسم: " + res.contract.name + "\n" +
-        "الهاتف: " + res.contract.phone + "\n" +
-        "العنوان: " + res.contract.address + "\n" +
-        "الخدمة: " + res.contract.service + "\n" +
-        "مدة التعاقد: " + res.contract.duration + "\n" +
-        "التكلفة: " + res.contract.cost + "\n" +
-        "آخر زيارة: " + res.contract.lastVisit + "\n" +
-        "الزيارة القادمة: " + res.contract.nextVisit;
-    } else {
-      result.textContent = "❌ لا يوجد تعاقد بهذا الرقم";
-    }
-  })
-  .catch(() => {
-    result.textContent = "❌ خطأ اتصال";
-  });
+    .catch(() => {
+      result.textContent = "❌ خطأ اتصال بالخادم";
+    });
 }
 </script>
 
