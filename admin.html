@@ -23,25 +23,24 @@
 <input id="nextVisit" type="date"><br><br>
 
 <button onclick="saveContract()">حفظ / تجديد التعاقد</button>
-
 <p id="msg"></p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwZLs7QxTshST9wYJNbrorLFmQ3ukiB0VC8QUoAh86Y8eQi01ZjCRUprDMu-v4lpxxk/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbyW7NF5Jy6hFAbKX5m_mvhQUT9vGKZf6Td8xU32tcd9jWhGXGuVgWqtld6AGTs5HuWY/exec";
 
 function saveContract() {
   msg.innerText = "⏳ جاري الحفظ...";
 
   const params = new URLSearchParams({
     action: "add",
-    name: document.getElementById("name").value,
-    phone: document.getElementById("phone").value,
-    address: document.getElementById("address").value,
-    service: document.getElementById("service").value,
-    duration: document.getElementById("duration").value,
-    cost: document.getElementById("cost").value,
-    lastVisit: document.getElementById("lastVisit").value,
-    nextVisit: document.getElementById("nextVisit").value
+    name: name.value,
+    phone: phone.value,
+    address: address.value,
+    service: service.value,
+    duration: duration.value,
+    cost: cost.value,
+    lastVisit: lastVisit.value,
+    nextVisit: nextVisit.value
   });
 
   fetch(API_URL + "?" + params.toString())
@@ -50,10 +49,10 @@ function saveContract() {
       if (data.success) {
         msg.innerText = "✅ تم حفظ / تجديد التعاقد بنجاح";
       } else {
-        msg.innerText = "❌ فشل الحفظ";
+        msg.innerText = "❌ فشل الحفظ: " + (data.error || "غير معروف");
       }
     })
-    .catch(() => {
+    .catch(err => {
       msg.innerText = "❌ خطأ اتصال بالخادم";
     });
 }
