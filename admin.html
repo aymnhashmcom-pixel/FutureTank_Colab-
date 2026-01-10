@@ -30,7 +30,7 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbzChjZ4ncHXP7fBfTzQSihEJX-N7BuECBOtJHiBWcEzzCSDYp3FNlZZMzztHQQ2LgAM/exec";
 
 function saveContract() {
-  const data = {
+  const params = new URLSearchParams({
     action: "add",
     name: document.getElementById("name").value,
     phone: document.getElementById("phone").value,
@@ -40,21 +40,17 @@ function saveContract() {
     cost: document.getElementById("cost").value,
     lastVisit: document.getElementById("lastVisit").value,
     nextVisit: document.getElementById("nextVisit").value
-  };
-
-  fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  })
-  .then(r => r.json())
-  .then(res => {
-    document.getElementById("msg").innerText =
-      res.success ? "✅ تم حفظ التعاقد" : "❌ فشل الحفظ";
-  })
-  .catch(() => {
-    document.getElementById("msg").innerText = "❌ خطأ اتصال بالخادم";
   });
+
+  fetch(API_URL + "?" + params.toString())
+    .then(r => r.json())
+    .then(res => {
+      document.getElementById("msg").innerText =
+        res.success ? "✅ تم حفظ / تجديد التعاقد" : "❌ فشل الحفظ";
+    })
+    .catch(() => {
+      document.getElementById("msg").innerText = "❌ خطأ اتصال بالخادم";
+    });
 }
 </script>
 
