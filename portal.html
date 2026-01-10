@@ -18,26 +18,22 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbzChjZ4ncHXP7fBfTzQSihEJX-N7BuECBOtJHiBWcEzzCSDYp3FNlZZMzztHQQ2LgAM/exec";
 
 function getContract() {
-  const data = {
+  const params = new URLSearchParams({
     action: "get",
     phone: document.getElementById("phone").value
-  };
-
-  fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
-  })
-  .then(r => r.json())
-  .then(res => {
-    document.getElementById("result").textContent =
-      res.success
-        ? JSON.stringify(res.contract, null, 2)
-        : "❌ لا يوجد تعاقد";
-  })
-  .catch(() => {
-    document.getElementById("result").textContent = "❌ خطأ اتصال بالخادم";
   });
+
+  fetch(API_URL + "?" + params.toString())
+    .then(r => r.json())
+    .then(res => {
+      document.getElementById("result").textContent =
+        res.success
+          ? JSON.stringify(res.contract, null, 2)
+          : "❌ لا يوجد تعاقد";
+    })
+    .catch(() => {
+      document.getElementById("result").textContent = "❌ خطأ اتصال بالخادم";
+    });
 }
 </script>
 
