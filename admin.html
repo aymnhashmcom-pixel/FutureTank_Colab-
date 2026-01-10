@@ -1,34 +1,62 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>لوحة التحكم - FutureTank</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>إضافة / تجديد تعاقد</h2>
+
+<input id="name" placeholder="اسم العميل"><br>
+<input id="phone" placeholder="رقم الهاتف"><br>
+<input id="address" placeholder="العنوان"><br>
+<input id="service" placeholder="الخدمة"><br>
+<input id="duration" placeholder="مدة التعاقد"><br>
+<input id="cost" placeholder="التكلفة"><br>
+
+<label>آخر زيارة</label>
+<input id="lastVisit" type="date"><br>
+
+<label>الزيارة القادمة</label>
+<input id="nextVisit" type="date"><br><br>
+
+<button onclick="saveContract()">حفظ / تجديد التعاقد</button>
+
+<p id="msg"></p>
+
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbzChjZ4ncHXP7fBfTzQSihEJX-N7BuECBOtJHiBWcEzzCSDYp3FNlZZMzztHQQ2LgAM/exec";
 
 function saveContract() {
   const data = {
     action: "add",
-    name: name.value,
-    phone: phone.value,
-    address: address.value,
-    service: service.value,
-    duration: duration.value,
-    cost: cost.value,
-    lastVisit: lastVisit.value,
-    nextVisit: nextVisit.value
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    address: document.getElementById("address").value,
+    service: document.getElementById("service").value,
+    duration: document.getElementById("duration").value,
+    cost: document.getElementById("cost").value,
+    lastVisit: document.getElementById("lastVisit").value,
+    nextVisit: document.getElementById("nextVisit").value
   };
 
   fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
   .then(r => r.json())
   .then(res => {
-    msg.innerText = res.success
-      ? "✅ تم حفظ / تجديد التعاقد بنجاح"
-      : "❌ فشل الحفظ";
+    document.getElementById("msg").innerText =
+      res.success ? "✅ تم حفظ التعاقد" : "❌ فشل الحفظ";
   })
   .catch(() => {
-    msg.innerText = "❌ خطأ اتصال بالخادم";
+    document.getElementById("msg").innerText = "❌ خطأ اتصال بالخادم";
   });
 }
 </script>
+
+</body>
+</html>
