@@ -27,30 +27,31 @@
 <p id="msg"></p>
 
 <script>
-const API_URL =
-"https://script.google.com/macros/s/AKfycbyDeZsuqEHsLtd303yScdjquJ8dU5bBdsU2_z7BABDlmZq3izSCPolXC6940yzHsRQi/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwZLs7QxTshST9wYJNbrorLFmQ3ukiB0VC8QUoAh86Y8eQi01ZjCRUprDMu-v4lpxxk/exec";
 
 function saveContract() {
   msg.innerText = "⏳ جاري الحفظ...";
 
   const params = new URLSearchParams({
     action: "add",
-    name: name.value,
-    phone: phone.value,
-    address: address.value,
-    service: service.value,
-    duration: duration.value,
-    cost: cost.value,
-    lastVisit: lastVisit.value,
-    nextVisit: nextVisit.value
+    name: document.getElementById("name").value,
+    phone: document.getElementById("phone").value,
+    address: document.getElementById("address").value,
+    service: document.getElementById("service").value,
+    duration: document.getElementById("duration").value,
+    cost: document.getElementById("cost").value,
+    lastVisit: document.getElementById("lastVisit").value,
+    nextVisit: document.getElementById("nextVisit").value
   });
 
   fetch(API_URL + "?" + params.toString())
-    .then(r => r.json())
-    .then(res => {
-      msg.innerText = res.success
-        ? "✅ تم حفظ / تجديد التعاقد بنجاح"
-        : "❌ فشل الحفظ";
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        msg.innerText = "✅ تم حفظ / تجديد التعاقد بنجاح";
+      } else {
+        msg.innerText = "❌ فشل الحفظ";
+      }
     })
     .catch(() => {
       msg.innerText = "❌ خطأ اتصال بالخادم";
