@@ -1,39 +1,20 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>بوابة العملاء</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<h2>بوابة العملاء</h2>
-
-<input id="phone" placeholder="رقم الهاتف">
-<button onclick="getContract()">عرض التعاقد</button>
-
-<pre id="result"></pre>
-
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyhtrVf_pVHKR2EddJfJaVXvfbjShzTPDmH1T1HSByE_VTEqa4siq4MHxULdGdBsGbU/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzg1RYvL_L56L--cFyLGi34JcGoOkUVu3iYFM8FLSDpu3t-p7FWVX8Le-TQGdVrfcIB/exec";
 
 function getContract() {
+  const form = new URLSearchParams();
+  form.append("action", "get");
+  form.append("phone", phone.value);
+
   fetch(API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "get",
-      phone: phone.value
-    })
+    body: form
   })
-  .then(r => r.json())
-  .then(res => {
-    result.textContent = res.success
-      ? JSON.stringify(res.contract, null, 2)
-      : "❌ لا يوجد تعاقد";
-  });
+    .then(r => r.json())
+    .then(res => {
+      result.textContent = res.success
+        ? JSON.stringify(res.contract, null, 2)
+        : "❌ لا يوجد تعاقد";
+    });
 }
 </script>
-
-</body>
-</html>
