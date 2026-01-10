@@ -1,27 +1,45 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>بوابة العملاء - FutureTank</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h2>بوابة العملاء</h2>
+
+<input id="phone" placeholder="رقم الهاتف">
+<button onclick="getContract()">عرض التعاقد</button>
+
+<pre id="result"></pre>
+
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbzChjZ4ncHXP7fBfTzQSihEJX-N7BuECBOtJHiBWcEzzCSDYp3FNlZZMzztHQQ2LgAM/exec";
 
 function getContract() {
   const data = {
     action: "get",
-    phone: phone.value
+    phone: document.getElementById("phone").value
   };
 
   fetch(API_URL, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
   })
   .then(r => r.json())
   .then(res => {
-    result.textContent = res.success
-      ? JSON.stringify(res.contract, null, 2)
-      : "❌ لا يوجد تعاقد مسجل";
+    document.getElementById("result").textContent =
+      res.success
+        ? JSON.stringify(res.contract, null, 2)
+        : "❌ لا يوجد تعاقد";
   })
   .catch(() => {
-    result.textContent = "❌ خطأ اتصال بالخادم";
+    document.getElementById("result").textContent = "❌ خطأ اتصال بالخادم";
   });
 }
 </script>
+
+</body>
+</html>
