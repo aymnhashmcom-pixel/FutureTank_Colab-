@@ -21,11 +21,10 @@
 <input id="nextVisit" type="date"><br><br>
 
 <button onclick="saveContract()">حفظ / تجديد التعاقد</button>
-
 <p id="msg"></p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzH3FVqVyv_jwtAsw4pCr-pNieBnOquSQQEdMA0Gp7IYTX2CmzZtsGNQECAX03NYmib/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxVpvIyqM5wQF7soh7ayDfyiqPA_s5YREES7FcmVwvXT7cYgRS-O0ezJgZYCVi4yKoo/exec";
 
 function saveContract() {
   const params = new URLSearchParams({
@@ -41,11 +40,9 @@ function saveContract() {
   });
 
   fetch(API_URL + "?" + params.toString())
-    .then(res => res.json())
-    .then(data => {
-      msg.innerText = data.success
-        ? "✅ تم حفظ / تجديد التعاقد بنجاح"
-        : "❌ فشل الحفظ";
+    .then(r => r.json())
+    .then(res => {
+      msg.innerText = res.success ? "✅ تم حفظ / تجديد التعاقد بنجاح" : "❌ فشل الحفظ";
     })
     .catch(() => {
       msg.innerText = "❌ خطأ اتصال بالخادم";
