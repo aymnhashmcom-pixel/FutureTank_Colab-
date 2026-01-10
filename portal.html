@@ -15,28 +15,20 @@
 <pre id="result"></pre>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzg1RYvL_L56L--cFyLGi34JcGoOkUVu3iYFM8FLSDpu3t-p7FWVX8Le-TQGdVrfcIB/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzH3FVqVyv_jwtAsw4pCr-pNieBnOquSQQEdMA0Gp7IYTX2CmzZtsGNQECAX03NYmib/exec";
 
 function getContract() {
-  result.textContent = "⏳ جاري البحث...";
+  const params = new URLSearchParams({
+    action: "get",
+    phone: phone.value
+  });
 
-  fetch(API_URL + "?action=get&phone=" + encodeURIComponent(phone.value))
-    .then(r => r.json())
-    .then(res => {
-      if (res.success) {
-        const c = res.contract;
-        result.textContent =
-          "الاسم: " + c.name + "\n" +
-          "الهاتف: " + c.phone + "\n" +
-          "العنوان: " + c.address + "\n" +
-          "الخدمة: " + c.service + "\n" +
-          "المدة: " + c.duration + "\n" +
-          "التكلفة: " + c.cost + "\n" +
-          "آخر زيارة: " + c.lastVisit + "\n" +
-          "الزيارة القادمة: " + c.nextVisit;
-      } else {
-        result.textContent = "❌ لا يوجد تعاقد بهذا الرقم";
-      }
+  fetch(API_URL + "?" + params.toString())
+    .then(res => res.json())
+    .then(data => {
+      result.textContent = data.success
+        ? JSON.stringify(data.contract, null, 2)
+        : "❌ لا يوجد تعاقد بهذا الرقم";
     })
     .catch(() => {
       result.textContent = "❌ خطأ اتصال بالخادم";
