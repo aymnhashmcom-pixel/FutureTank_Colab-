@@ -26,37 +26,33 @@
 <p id="msg"></p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbydywzLxl_lnYoWiUluGHjUNFumtnmwrRQOse9p6EX0-RJGpPoCjy8N3IzM7ZFK3sV0/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbz4hsHMExXis4GQeMOeBWpJWNvU7EVsU2Bxwx_-3VdpyUvC4i_GlakrL6BVy_ZJfnk6/exec";
 
 function saveContract() {
-  const msg = document.getElementById("msg");
-
   msg.innerText = "⏳ جاري الحفظ...";
-
-  const data = {
-    action: "add",
-    name: document.getElementById("name").value,
-    phone: document.getElementById("phone").value,
-    address: document.getElementById("address").value,
-    service: document.getElementById("service").value,
-    duration: document.getElementById("duration").value,
-    cost: document.getElementById("cost").value,
-    lastVisit: document.getElementById("lastVisit").value,
-    nextVisit: document.getElementById("nextVisit").value
-  };
 
   fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(data)
+    body: JSON.stringify({
+      action: "add",
+      name: name.value,
+      phone: phone.value,
+      address: address.value,
+      service: service.value,
+      duration: duration.value,
+      cost: cost.value,
+      lastVisit: lastVisit.value,
+      nextVisit: nextVisit.value
+    })
   })
-  .then(r => r.json())
-  .then(res => {
-    msg.innerText = res.success
+  .then(res => res.json())
+  .then(data => {
+    msg.innerText = data.success
       ? "✅ تم حفظ / تجديد التعاقد بنجاح"
-      : "❌ فشل الحفظ: " + (res.error || "");
+      : "❌ فشل الحفظ";
   })
-  .catch(err => {
+  .catch(() => {
     msg.innerText = "❌ خطأ اتصال بالخادم";
   });
 }
