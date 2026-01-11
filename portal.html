@@ -20,23 +20,23 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyMaCWzFd40Jd9xnZQTM0dx
 function getContract() {
   result.textContent = "⏳ جاري البحث...";
 
-  const params = new URLSearchParams({
-    action: "get",
-    phone: phone.value
-  });
-
-  fetch(API_URL + "?" + params.toString())
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        result.textContent = JSON.stringify(data.contract, null, 2);
-      } else {
-        result.textContent = "❌ لا يوجد تعاقد مسجل";
-      }
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "get",
+      phone: phone.value
     })
-    .catch(() => {
-      result.textContent = "❌ خطأ اتصال بالخادم";
-    });
+  })
+  .then(res => res.json())
+  .then(data => {
+    result.textContent = data.success
+      ? JSON.stringify(data.contract, null, 2)
+      : "❌ لا يوجد تعاقد مسجل";
+  })
+  .catch(() => {
+    result.textContent = "❌ خطأ اتصال بالخادم";
+  });
 }
 </script>
 
