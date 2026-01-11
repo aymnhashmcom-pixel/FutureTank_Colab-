@@ -15,12 +15,9 @@
 <pre id="result"></pre>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbydywzLxl_lnYoWiUluGHjUNFumtnmwrRQOse9p6EX0-RJGpPoCjy8N3IzM7ZFK3sV0/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbz4hsHMExXis4GQeMOeBWpJWNvU7EVsU2Bxwx_-3VdpyUvC4i_GlakrL6BVy_ZJfnk6/exec";
 
 function getContract() {
-  const result = document.getElementById("result");
-  const phone = document.getElementById("phone").value;
-
   result.textContent = "⏳ جاري البحث...";
 
   fetch(API_URL, {
@@ -28,13 +25,13 @@ function getContract() {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       action: "get",
-      phone: phone
+      phone: phone.value
     })
   })
-  .then(r => r.json())
-  .then(res => {
-    result.textContent = res.success
-      ? JSON.stringify(res.contract, null, 2)
+  .then(res => res.json())
+  .then(data => {
+    result.textContent = data.success
+      ? JSON.stringify(data.contract, null, 2)
       : "❌ لا يوجد تعاقد مسجل";
   })
   .catch(() => {
