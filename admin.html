@@ -31,30 +31,30 @@ const API_URL = "https://script.google.com/macros/s/AKfycbyMaCWzFd40Jd9xnZQTM0dx
 function saveContract() {
   msg.innerText = "⏳ جاري الحفظ...";
 
-  const params = new URLSearchParams({
-    action: "add",
-    name: name.value,
-    phone: phone.value,
-    address: address.value,
-    service: service.value,
-    duration: duration.value,
-    cost: cost.value,
-    lastVisit: lastVisit.value,
-    nextVisit: nextVisit.value
-  });
-
-  fetch(API_URL + "?" + params.toString())
-    .then(res => res.json())
-    .then(data => {
-      if (data.success) {
-        msg.innerText = "✅ تم حفظ / تجديد التعاقد بنجاح";
-      } else {
-        msg.innerText = "❌ فشل الحفظ: " + (data.error || "غير معروف");
-      }
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      action: "add",
+      name: name.value,
+      phone: phone.value,
+      address: address.value,
+      service: service.value,
+      duration: duration.value,
+      cost: cost.value,
+      lastVisit: lastVisit.value,
+      nextVisit: nextVisit.value
     })
-    .catch(err => {
-      msg.innerText = "❌ خطأ اتصال بالخادم";
-    });
+  })
+  .then(res => res.json())
+  .then(data => {
+    msg.innerText = data.success
+      ? "✅ تم حفظ / تجديد التعاقد بنجاح"
+      : "❌ فشل الحفظ";
+  })
+  .catch(() => {
+    msg.innerText = "❌ خطأ اتصال بالخادم";
+  });
 }
 </script>
 
