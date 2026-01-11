@@ -1,32 +1,5 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>لوحة التحكم - FutureTank</title>
-  <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
-<h2>إضافة / تجديد تعاقد</h2>
-
-<input id="name" placeholder="اسم العميل"><br>
-<input id="phone" placeholder="رقم الهاتف"><br>
-<input id="address" placeholder="العنوان"><br>
-<input id="service" placeholder="الخدمة"><br>
-<input id="duration" placeholder="مدة التعاقد"><br>
-<input id="cost" placeholder="التكلفة"><br>
-
-<label>آخر زيارة</label>
-<input id="lastVisit" type="date"><br>
-
-<label>الزيارة القادمة</label>
-<input id="nextVisit" type="date"><br><br>
-
-<button onclick="saveContract()">حفظ / تجديد التعاقد</button>
-<p id="msg"></p>
-
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyMaCWzFd40Jd9xnZQTM0dxW9DnnMCmcYMWh5NS6eG_V2jKnUW3ywKA9EMSsQLEBEZs/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbydywzLxl_lnYoWiUluGHjUNFumtnmwrRQOse9p6EX0-RJGpPoCjy8N3IzM7ZFK3sV0/exec";
 
 function saveContract() {
   msg.innerText = "⏳ جاري الحفظ...";
@@ -50,13 +23,10 @@ function saveContract() {
   .then(data => {
     msg.innerText = data.success
       ? "✅ تم حفظ / تجديد التعاقد بنجاح"
-      : "❌ فشل الحفظ";
+      : "❌ فشل الحفظ: " + (data.error || "");
   })
   .catch(() => {
     msg.innerText = "❌ خطأ اتصال بالخادم";
   });
 }
 </script>
-
-</body>
-</html>
