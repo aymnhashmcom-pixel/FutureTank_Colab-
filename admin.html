@@ -27,7 +27,7 @@
 <p id="msg"></p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbz--BmT1q0JNF5zd6RKhwnvdx8g5RigbsmlY_xqVN1AdAstwTsTxP41--0ZNbaxBHmr/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwt07L86htUpyoWLPWHTI6X6NLQLGCLbYMCyovszAxh9DKIg1r2Qpp94tIrige0xLdp/exec";
 
 function saveContract() {
   msg.innerText = "⏳ جاري الحفظ...";
@@ -48,13 +48,16 @@ function saveContract() {
     body: data
   })
   .then(res => res.json())
-  .then(result => {
-    msg.innerText = result.success
-      ? "✅ تم حفظ / تجديد التعاقد بنجاح"
-      : "❌ فشل الحفظ";
+  .then(res => {
+    if (res.success) {
+      msg.innerText = "✅ تم حفظ / تجديد التعاقد بنجاح";
+    } else {
+      msg.innerText = "❌ فشل الحفظ: " + (res.error || "");
+    }
   })
-  .catch(() => {
+  .catch(err => {
     msg.innerText = "❌ خطأ اتصال بالخادم";
+    console.error(err);
   });
 }
 </script>
