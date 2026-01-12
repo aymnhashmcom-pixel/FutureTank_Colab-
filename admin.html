@@ -23,32 +23,33 @@
 <input id="nextVisit" type="date"><br><br>
 
 <button onclick="saveContract()">حفظ / تجديد التعاقد</button>
+
 <p id="msg"></p>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzX6mum_hi9Ascf02wbrlTaUjJGzg1V0XpYe_fRuanRq6qyhq5ww_kfmAqwb5I0JxZt/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbz--BmT1q0JNF5zd6RKhwnvdx8g5RigbsmlY_xqVN1AdAstwTsTxP41--0ZNbaxBHmr/exec";
 
 function saveContract() {
   msg.innerText = "⏳ جاري الحفظ...";
 
+  const data = new URLSearchParams();
+  data.append("action", "add");
+  data.append("name", name.value);
+  data.append("phone", phone.value);
+  data.append("address", address.value);
+  data.append("service", service.value);
+  data.append("duration", duration.value);
+  data.append("cost", cost.value);
+  data.append("lastVisit", lastVisit.value);
+  data.append("nextVisit", nextVisit.value);
+
   fetch(API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "add",
-      name: name.value,
-      phone: phone.value,
-      address: address.value,
-      service: service.value,
-      duration: duration.value,
-      cost: cost.value,
-      lastVisit: lastVisit.value,
-      nextVisit: nextVisit.value
-    })
+    body: data
   })
   .then(res => res.json())
-  .then(data => {
-    msg.innerText = data.success
+  .then(result => {
+    msg.innerText = result.success
       ? "✅ تم حفظ / تجديد التعاقد بنجاح"
       : "❌ فشل الحفظ";
   })
