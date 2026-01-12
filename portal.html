@@ -3,7 +3,6 @@
 <head>
   <meta charset="UTF-8">
   <title>بوابة العملاء - FutureTank</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
@@ -24,7 +23,7 @@ function getContract() {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
-      phone: phone.value
+      phone: document.getElementById("phone").value
     })
   })
   .then(res => res.json())
