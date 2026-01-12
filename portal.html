@@ -15,23 +15,23 @@
 <pre id="result"></pre>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzX6mum_hi9Ascf02wbrlTaUjJGzg1V0XpYe_fRuanRq6qyhq5ww_kfmAqwb5I0JxZt/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbz--BmT1q0JNF5zd6RKhwnvdx8g5RigbsmlY_xqVN1AdAstwTsTxP41--0ZNbaxBHmr/exec";
 
 function getContract() {
   result.textContent = "⏳ جاري البحث...";
 
+  const data = new URLSearchParams();
+  data.append("action", "get");
+  data.append("phone", phone.value);
+
   fetch(API_URL, {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      action: "get",
-      phone: phone.value
-    })
+    body: data
   })
   .then(res => res.json())
-  .then(data => {
-    result.textContent = data.success
-      ? JSON.stringify(data.contract, null, 2)
+  .then(resultData => {
+    result.textContent = resultData.success
+      ? JSON.stringify(resultData.contract, null, 2)
       : "❌ لا يوجد تعاقد مسجل";
   })
   .catch(() => {
