@@ -3,13 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <title>لوحة التحكم - FutureTank</title>
-  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <h2>إضافة / تجديد تعاقد</h2>
 
-<input id="name" placeholder="اسم العميل"><br>
+<input id="clientName" placeholder="اسم العميل"><br>
 <input id="phone" placeholder="رقم الهاتف"><br>
 <input id="address" placeholder="العنوان"><br>
 <input id="service" placeholder="الخدمة"><br>
@@ -36,20 +35,20 @@ function saveContract() {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
-      name: name.value,
-      phone: phone.value,
-      address: address.value,
-      service: service.value,
-      duration: duration.value,
-      cost: cost.value,
-      lastVisit: lastVisit.value,
-      nextVisit: nextVisit.value
+      name: document.getElementById("clientName").value,
+      phone: document.getElementById("phone").value,
+      address: document.getElementById("address").value,
+      service: document.getElementById("service").value,
+      duration: document.getElementById("duration").value,
+      cost: document.getElementById("cost").value,
+      lastVisit: document.getElementById("lastVisit").value,
+      nextVisit: document.getElementById("nextVisit").value
     })
   })
   .then(res => res.json())
   .then(data => {
     msg.innerText = data.success
-      ? "✅ تم حفظ / تجديد التعاقد بنجاح"
+      ? "✅ تم حفظ التعاقد بنجاح"
       : "❌ فشل الحفظ: " + (data.error || "");
   })
   .catch(() => {
