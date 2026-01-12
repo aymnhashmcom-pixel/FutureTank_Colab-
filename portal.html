@@ -1,42 +1,34 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>بوابة العملاء - FutureTank</title>
-</head>
-<body>
-
-<h2>بوابة العملاء</h2>
-
-<input id="phone" placeholder="رقم الهاتف">
-<button onclick="getContract()">عرض التعاقد</button>
-
-<pre id="result"></pre>
-
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbxpkCuZF7oFgv_elOP1rqO2bSeh_QHQ62AUzsv3IdwKVm55KbLJGW9JVHi77TMxk4hy/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbw0nbTcIZz4zrMNqkrE8ypJOwBj7r0EGwfDvfJubGMFHRh2BbZcLVwf0UODHhzguV1m/exec";
 
 function getContract() {
   result.textContent = "⏳ جاري البحث...";
-
   fetch(API_URL, {
     method: "POST",
     headers: { "Content-Type": "application/x-www-form-urlencoded" },
     body: new URLSearchParams({
-      phone: document.getElementById("phone").value
+      phone: phone.value.trim()
     })
   })
   .then(res => res.json())
   .then(data => {
-    result.textContent = data.success
-      ? JSON.stringify(data.contract, null, 2)
-      : "❌ لا يوجد تعاقد مسجل";
+    if (data.success && data.contract) {
+      result.textContent = `
+الاسم: ${data.contract[0]}
+الهاتف: ${data.contract[1]}
+العنوان: ${data.contract[2]}
+الخدمة: ${data.contract[3]}
+المدة: ${data.contract[4]}
+التكلفة: ${data.contract[5]}
+آخر زيارة: ${data.contract[6]}
+الزيارة القادمة: ${data.contract[7]}
+`;
+    } else {
+      result.textContent = "❌ لا يوجد تعاقد مسجل";
+    }
   })
   .catch(() => {
     result.textContent = "❌ خطأ اتصال بالخادم";
   });
 }
 </script>
-
-</body>
-</html>
