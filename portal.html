@@ -15,7 +15,7 @@
 <pre id="result"></pre>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbz--BmT1q0JNF5zd6RKhwnvdx8g5RigbsmlY_xqVN1AdAstwTsTxP41--0ZNbaxBHmr/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwt07L86htUpyoWLPWHTI6X6NLQLGCLbYMCyovszAxh9DKIg1r2Qpp94tIrige0xLdp/exec";
 
 function getContract() {
   result.textContent = "⏳ جاري البحث...";
@@ -29,13 +29,16 @@ function getContract() {
     body: data
   })
   .then(res => res.json())
-  .then(resultData => {
-    result.textContent = resultData.success
-      ? JSON.stringify(resultData.contract, null, 2)
-      : "❌ لا يوجد تعاقد مسجل";
+  .then(res => {
+    if (res.success) {
+      result.textContent = JSON.stringify(res.contract, null, 2);
+    } else {
+      result.textContent = "❌ لا يوجد تعاقد مسجل";
+    }
   })
-  .catch(() => {
+  .catch(err => {
     result.textContent = "❌ خطأ اتصال بالخادم";
+    console.error(err);
   });
 }
 </script>
