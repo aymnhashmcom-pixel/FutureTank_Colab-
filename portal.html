@@ -3,53 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>بوابة العملاء - FutureTank</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f5f7fa;
-      padding: 20px;
-    }
-    h2 {
-      color: #1e88e5;
-    }
-    input, button {
-      padding: 10px;
-      margin: 5px 0;
-      width: 100%;
-      max-width: 400px;
-      font-size: 16px;
-    }
-    button {
-      background: #1e88e5;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background: #1565c0;
-    }
-    .box {
-      background: white;
-      padding: 15px;
-      margin-top: 15px;
-      border-radius: 5px;
-    }
-    .renew {
-      background: #43a047;
-      margin-top: 10px;
-    }
+    body { font-family: Arial; padding: 20px; }
+    .card { border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-top: 15px; }
     .whatsapp {
-      background: #25D366;
       display: inline-block;
+      margin-top: 15px;
+      background: #25d366;
+      color: #fff;
       padding: 10px 15px;
-      color: white;
+      border-radius: 6px;
       text-decoration: none;
-      border-radius: 5px;
-      margin-top: 10px;
+      font-weight: bold;
     }
   </style>
 </head>
-
 <body>
 
 <h2>بوابة العملاء</h2>
@@ -57,16 +26,10 @@
 <input id="phone" placeholder="رقم الهاتف">
 <button onclick="getContract()">عرض التعاقد</button>
 
-<div id="result" class="box"></div>
+<div id="result"></div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzpHFejdbAPXBQ5mPNonAiC0WMiNAgnsGirUxiMikx1Jeob19ldAuZWIL6wT07C9ofy/exec"; // 🔴 الصق رابط الـ Web App هنا
-
-function daysBetween(dateStr) {
-  const today = new Date();
-  const d = new Date(dateStr);
-  return Math.ceil((d - today) / (1000 * 60 * 60 * 24));
-}
+const API_URL = "https://script.google.com/macros/s/AKfycbwUd-scZifaiD2hiNY_PHBSNO7E8-BgAkdthieWJvMA_3-wZaTOBF1z2LSfuRVxVaGY/exec"; // 🔴 ضع رابط Apps Script هنا
 
 function getContract() {
   const phone = document.getElementById("phone").value.trim();
@@ -88,47 +51,39 @@ function getContract() {
       }
 
       const c = data.contract;
-      const daysLeft = daysBetween(c.nextVisit);
 
-      let html = `
-        <strong>الاسم:</strong> ${c.name}<br>
-        <strong>الهاتف:</strong> ${c.phone}<br>
-        <strong>العنوان:</strong> ${c.address}<br>
-        <strong>الخدمة:</strong> ${c.service}<br>
-        <strong>مدة التعاقد:</strong> ${c.duration}<br>
-        <strong>التكلفة:</strong> ${c.cost}<br>
-        <strong>آخر زيارة:</strong> ${c.lastVisit}<br>
-        <strong>الزيارة القادمة:</strong> ${c.nextVisit}<br>
-        <strong>الأيام المتبقية:</strong> ${daysLeft} يوم
+      const nextVisit = new Date(c.nextVisit);
+      const today = new Date();
+      const diffDays = Math.ceil((nextVisit - today) / (1000 * 60 * 60 * 24));
+
+      const waText =
+`مرحباً،
+أرغب في تجديد التعاقد الخاص بي لدى FutureTank.
+برجاء تأكيد التجديد ومراجعة البيانات.
+شكراً لحضرتكم.`;
+
+      const waLink =
+`https://wa.me/201150402031?text=${encodeURIComponent(waText)}`;
+
+      result.innerHTML = `
+        <div class="card">
+          <p><strong>الاسم:</strong> ${c.name}</p>
+          <p><strong>الهاتف:</strong> ${c.phone}</p>
+          <p><strong>العنوان:</strong> ${c.address}</p>
+          <p><strong>الخدمة:</strong> ${c.service}</p>
+          <p><strong>مدة التعاقد:</strong> ${c.duration}</p>
+          <p><strong>التكلفة:</strong> ${c.cost}</p>
+          <p><strong>آخر زيارة:</strong> ${c.lastVisit}</p>
+          <p><strong>الزيارة القادمة:</strong> ${c.nextVisit}</p>
+          <p><strong>الأيام المتبقية:</strong> ${diffDays} يوم</p>
+
+          ${diffDays <= 7 ? `<a class="whatsapp" target="_blank" href="${waLink}">📲 تجديد التعاقد عبر واتساب</a>` : ``}
+        </div>
       `;
-
-      if (daysLeft <= 7) {
-        html += `
-          <br><br>
-          <button class="renew" onclick="renewContract('${c.phone}')">
-            🔄 تجديد التعاقد
-          </button>
-        `;
-      }
-
-      html += `
-        <br><br>
-        <a class="whatsapp"
-           target="_blank"
-           href="https://wa.me/201150402031?text=مرحباً، أرغب في تجديد التعاقد الخاص بي">
-           📲 تواصل عبر واتساب
-        </a>
-      `;
-
-      result.innerHTML = html;
     })
     .catch(() => {
       result.innerHTML = "❌ خطأ اتصال بالخادم";
     });
-}
-
-function renewContract(phone) {
-  alert("✅ تم تسجيل طلب تجديد التعاقد، سيتم التواصل معك قريبًا");
 }
 </script>
 
