@@ -18,37 +18,37 @@
 const API_URL = "https://script.google.com/macros/s/AKfycbxm2p2UAJrEUG2sNi8vbkKBGsZKS4joiEEmIV8Skl6iAgZSgFzm5GP_n-RPRsDQCJJp/exec";
 
 function getContract() {
-  const phoneInput = document.getElementById("phone");
-  const resultBox = document.getElementById("result");
+  const phone = document.getElementById("phone").value.trim();
+  const result = document.getElementById("result");
 
-  resultBox.textContent = "⏳ جاري البحث...";
+  if (!phone) {
+    result.textContent = "❌ من فضلك أدخل رقم الهاتف";
+    return;
+  }
 
-  fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      phone: phoneInput.value.trim()
+  result.textContent = "⏳ جاري البحث...";
+
+  // ✅ GET فقط — بدون POST — بدون body
+  fetch(API_URL + "?phone=" + encodeURIComponent(phone))
+    .then(res => res.json())
+    .then(data => {
+      if (data.success && data.contract) {
+        result.textContent =
+`الاسم: ${data.contract.name}
+الهاتف: ${data.contract.phone}
+العنوان: ${data.contract.address}
+الخدمة: ${data.contract.service}
+مدة التعاقد: ${data.contract.duration}
+التكلفة: ${data.contract.cost}
+آخر زيارة: ${data.contract.lastVisit}
+الزيارة القادمة: ${data.contract.nextVisit}`;
+      } else {
+        result.textContent = "❌ لا يوجد تعاقد مسجل";
+      }
     })
-  })
-  .then(res => res.json())
-  .then(data => {
-    if (data.success && data.contract) {
-      resultBox.textContent =
-`الاسم: ${data.contract[0]}
-الهاتف: ${data.contract[1]}
-العنوان: ${data.contract[2]}
-الخدمة: ${data.contract[3]}
-المدة: ${data.contract[4]}
-التكلفة: ${data.contract[5]}
-آخر زيارة: ${data.contract[6]}
-الزيارة القادمة: ${data.contract[7]}`;
-    } else {
-      resultBox.textContent = "❌ لا يوجد تعاقد مسجل";
-    }
-  })
-  .catch(() => {
-    resultBox.textContent = "❌ خطأ اتصال بالخادم";
-  });
+    .catch(() => {
+      result.textContent = "❌ خطأ اتصال بالخادم";
+    });
 }
 </script>
 
