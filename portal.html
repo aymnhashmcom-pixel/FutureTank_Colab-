@@ -12,7 +12,7 @@
 <input id="phone" placeholder="رقم الهاتف">
 <button onclick="getContract()">عرض التعاقد</button>
 
-<pre id="result"></pre>
+<div id="result"></div>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxm2p2UAJrEUG2sNi8vbkKBGsZKS4joiEEmIV8Skl6iAgZSgFzm5GP_n-RPRsDQCJJp/exec";
@@ -22,33 +22,63 @@ function getContract() {
   const result = document.getElementById("result");
 
   if (!phone) {
-    result.textContent = "❌ من فضلك أدخل رقم الهاتف";
+    result.innerHTML = "❌ من فضلك أدخل رقم الهاتف";
     return;
   }
 
-  result.textContent = "⏳ جاري البحث...";
+  result.innerHTML = "⏳ جاري البحث...";
 
-  // ✅ GET فقط — بدون POST — بدون body
   fetch(API_URL + "?phone=" + encodeURIComponent(phone))
     .then(res => res.json())
     .then(data => {
       if (data.success && data.contract) {
-        result.textContent =
-`الاسم: ${data.contract.name}
-الهاتف: ${data.contract.phone}
-العنوان: ${data.contract.address}
-الخدمة: ${data.contract.service}
-مدة التعاقد: ${data.contract.duration}
-التكلفة: ${data.contract.cost}
-آخر زيارة: ${data.contract.lastVisit}
-الزيارة القادمة: ${data.contract.nextVisit}`;
+
+        let html = `
+<b>الاسم:</b> ${data.contract.name}<br>
+<b>الهاتف:</b> ${data.contract.phone}<br>
+<b>العنوان:</b> ${data.contract.address}<br>
+<b>الخدمة:</b> ${data.contract.service}<br>
+<b>مدة التعاقد:</b> ${data.contract.duration}<br>
+<b>التكلفة:</b> ${data.contract.cost}<br>
+<b>آخر زيارة:</b> ${data.contract.lastVisit}<br>
+<b>الزيارة القادمة:</b> ${data.contract.nextVisit}<br>
+<b>تاريخ انتهاء العقد:</b> ${data.contract.endDate}<br>
+`;
+
+        if (data.contract.canRenew) {
+          html += `<br><button onclick="renewContract()">🔁 تجديد التعاقد</button>`;
+        }
+
+        result.innerHTML = html;
+
       } else {
-        result.textContent = "❌ لا يوجد تعاقد مسجل";
+        result.innerHTML = "❌ لا يوجد تعاقد مسجل";
       }
     })
     .catch(() => {
-      result.textContent = "❌ خطأ اتصال بالخادم";
+      result.innerHTML = "❌ خطأ اتصال بالخادم";
     });
+}
+
+function renewContract() {
+  const phone = document.getElementById("phone").value.trim();
+  if (!phone) return;
+
+  fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({
+      action: "renew",
+      phone: phone
+    })
+  })
+  .then(res => res.json())
+  .then(data => {
+    alert(data.success ? "✅ تم تجديد التعاقد بنجاح" : "❌ فشل التجديد");
+  })
+  .catch(() => {
+    alert("❌ خطأ أثناء التجديد");
+  });
 }
 </script>
 
