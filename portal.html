@@ -3,8 +3,53 @@
 <head>
   <meta charset="UTF-8">
   <title>بوابة العملاء - FutureTank</title>
-  <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      padding: 20px;
+    }
+    h2 {
+      color: #1e88e5;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px 0;
+      width: 100%;
+      max-width: 400px;
+      font-size: 16px;
+    }
+    button {
+      background: #1e88e5;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #1565c0;
+    }
+    .box {
+      background: white;
+      padding: 15px;
+      margin-top: 15px;
+      border-radius: 5px;
+    }
+    .renew {
+      background: #43a047;
+      margin-top: 10px;
+    }
+    .whatsapp {
+      background: #25D366;
+      display: inline-block;
+      padding: 10px 15px;
+      color: white;
+      text-decoration: none;
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+  </style>
 </head>
+
 <body>
 
 <h2>بوابة العملاء</h2>
@@ -12,10 +57,16 @@
 <input id="phone" placeholder="رقم الهاتف">
 <button onclick="getContract()">عرض التعاقد</button>
 
-<div id="result"></div>
+<div id="result" class="box"></div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzpHFejdbAPXBQ5mPNonAiC0WMiNAgnsGirUxiMikx1Jeob19ldAuZWIL6wT07C9ofy/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbzpHFejdbAPXBQ5mPNonAiC0WMiNAgnsGirUxiMikx1Jeob19ldAuZWIL6wT07C9ofy/exec"; // 🔴 الصق رابط الـ Web App هنا
+
+function daysBetween(dateStr) {
+  const today = new Date();
+  const d = new Date(dateStr);
+  return Math.ceil((d - today) / (1000 * 60 * 60 * 24));
+}
 
 function getContract() {
   const phone = document.getElementById("phone").value.trim();
@@ -31,54 +82,53 @@ function getContract() {
   fetch(API_URL + "?phone=" + encodeURIComponent(phone))
     .then(res => res.json())
     .then(data => {
-      if (data.success && data.contract) {
-
-        let html = `
-<b>الاسم:</b> ${data.contract.name}<br>
-<b>الهاتف:</b> ${data.contract.phone}<br>
-<b>العنوان:</b> ${data.contract.address}<br>
-<b>الخدمة:</b> ${data.contract.service}<br>
-<b>مدة التعاقد:</b> ${data.contract.duration}<br>
-<b>التكلفة:</b> ${data.contract.cost}<br>
-<b>آخر زيارة:</b> ${data.contract.lastVisit}<br>
-<b>الزيارة القادمة:</b> ${data.contract.nextVisit}<br>
-<b>تاريخ انتهاء العقد:</b> ${data.contract.endDate}<br>
-`;
-
-        if (data.contract.canRenew) {
-          html += `<br><button onclick="renewContract()">🔁 تجديد التعاقد</button>`;
-        }
-
-        result.innerHTML = html;
-
-      } else {
+      if (!data.success) {
         result.innerHTML = "❌ لا يوجد تعاقد مسجل";
+        return;
       }
+
+      const c = data.contract;
+      const daysLeft = daysBetween(c.nextVisit);
+
+      let html = `
+        <strong>الاسم:</strong> ${c.name}<br>
+        <strong>الهاتف:</strong> ${c.phone}<br>
+        <strong>العنوان:</strong> ${c.address}<br>
+        <strong>الخدمة:</strong> ${c.service}<br>
+        <strong>مدة التعاقد:</strong> ${c.duration}<br>
+        <strong>التكلفة:</strong> ${c.cost}<br>
+        <strong>آخر زيارة:</strong> ${c.lastVisit}<br>
+        <strong>الزيارة القادمة:</strong> ${c.nextVisit}<br>
+        <strong>الأيام المتبقية:</strong> ${daysLeft} يوم
+      `;
+
+      if (daysLeft <= 7) {
+        html += `
+          <br><br>
+          <button class="renew" onclick="renewContract('${c.phone}')">
+            🔄 تجديد التعاقد
+          </button>
+        `;
+      }
+
+      html += `
+        <br><br>
+        <a class="whatsapp"
+           target="_blank"
+           href="https://wa.me/201150402031?text=مرحباً، أرغب في تجديد التعاقد الخاص بي">
+           📲 تواصل عبر واتساب
+        </a>
+      `;
+
+      result.innerHTML = html;
     })
     .catch(() => {
       result.innerHTML = "❌ خطأ اتصال بالخادم";
     });
 }
 
-function renewContract() {
-  const phone = document.getElementById("phone").value.trim();
-  if (!phone) return;
-
-  fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({
-      action: "renew",
-      phone: phone
-    })
-  })
-  .then(res => res.json())
-  .then(data => {
-    alert(data.success ? "✅ تم تجديد التعاقد بنجاح" : "❌ فشل التجديد");
-  })
-  .catch(() => {
-    alert("❌ خطأ أثناء التجديد");
-  });
+function renewContract(phone) {
+  alert("✅ تم تسجيل طلب تجديد التعاقد، سيتم التواصل معك قريبًا");
 }
 </script>
 
