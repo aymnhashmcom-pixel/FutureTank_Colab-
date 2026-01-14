@@ -3,39 +3,135 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>قريبًا | FutureTank</title>
+<title>المساعد الذكي | FutureTank</title>
 
 <style>
 body{
-  font-family:Tahoma;
-  background:#f5f7fa;
+  margin:0;
+  font-family:"Segoe UI",Tahoma;
+  background:#eef3f9;
+}
+header{
+  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+  color:#fff;
+  padding:20px;
   text-align:center;
-  padding:50px;
 }
-.box{
+.chat-box{
+  max-width:700px;
+  margin:30px auto;
   background:#fff;
-  padding:30px;
-  max-width:500px;
-  margin:auto;
-  border-radius:12px;
+  border-radius:20px;
+  box-shadow:0 30px 60px rgba(0,0,0,.2);
+  overflow:hidden;
 }
-a{
-  display:inline-block;
-  margin-top:20px;
-  padding:10px 20px;
+.messages{
+  padding:20px;
+  height:400px;
+  overflow-y:auto;
+}
+.msg{
+  margin-bottom:15px;
+  line-height:1.6;
+}
+.bot{
+  background:#f1f5fb;
+  padding:12px;
+  border-radius:15px;
+}
+.user{
   background:#0a74c9;
   color:#fff;
-  border-radius:6px;
-  text-decoration:none;
+  padding:12px;
+  border-radius:15px;
+  text-align:left;
+}
+.controls{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+  gap:10px;
+  padding:15px;
+}
+button{
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+  color:#fff;
+  cursor:pointer;
+  font-size:15px;
+}
+footer{
+  text-align:center;
+  padding:15px;
+  color:#777;
 }
 </style>
 </head>
 
 <body>
-<div class="box">
-  <h2>🚧 هذه الصفحة قيد التطوير</h2>
-  <p>سيتم إطلاقها قريبًا بإذن الله</p>
-  <a href="index.html">العودة للرئيسية</a>
+
+<header>
+  <h2>🤖 المساعد الذكي – FutureTank</h2>
+  <p>أهلاً بك، كيف أستطيع مساعدتك؟</p>
+</header>
+
+<div class="chat-box">
+  <div class="messages" id="chat">
+    <div class="msg bot">
+      👋 مرحباً بك في <b>FutureTank</b><br>
+      يسعدني مساعدتك في أي وقت 🌿
+    </div>
+  </div>
+
+  <div class="controls">
+    <button onclick="services()">🛠️ الخدمات</button>
+    <button onclick="client()">👤 بوابة العملاء</button>
+    <button onclick="newClient()">📝 عميل جديد</button>
+    <button onclick="products()">🛒 المنتجات</button>
+    <button onclick="whatsapp()">📲 واتساب</button>
+  </div>
 </div>
+
+<footer>
+© FutureTank – نقاء الماء هو هدفنا
+</footer>
+
+<script>
+const chat=document.getElementById("chat");
+
+function addBot(text){
+  chat.innerHTML+=`<div class="msg bot">${text}</div>`;
+  chat.scrollTop=chat.scrollHeight;
+}
+
+function services(){
+  addBot("🛠️ نقدم خدمات تطهير وتعقيم خزانات مياه الشرب بأعلى معايير الجودة والسلامة.");
+}
+
+function client(){
+  addBot("👤 يمكنك الدخول إلى بوابة العملاء لمراجعة بيانات التعاقد وتجديده بسهولة.");
+  window.open("portal.html","_blank");
+}
+
+function newClient(){
+  addBot("📝 مرحباً بك! يمكنك بدء تعاقد جديد بسهولة من خلال نموذج العميل الجديد.");
+  window.open("admin.html","_blank");
+}
+
+function products(){
+  addBot("🛒 نوفر منتجات مختارة لنقاء المياه – سيتم تفعيل الشراء قريباً.");
+  window.open("products.html","_blank");
+}
+
+function whatsapp(){
+  const msg="مرحباً، أحتاج مساعدة بخصوص خدمات FutureTank.";
+  window.open(
+    "https://wa.me/201150402031?text="+encodeURIComponent(msg),
+    "_blank"
+  );
+}
+</script>
+
 </body>
 </html>
