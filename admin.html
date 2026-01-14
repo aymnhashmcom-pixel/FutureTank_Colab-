@@ -6,23 +6,77 @@
 <title>لوحة التحكم | FutureTank</title>
 
 <style>
-body{font-family:Tahoma;background:#f2f4f8;padding:20px;}
-.box{max-width:500px;margin:auto;background:#fff;padding:20px;border-radius:10px;}
-input,button{width:100%;padding:10px;margin-top:8px;}
-button{background:#0a74c9;color:#fff;border:none;}
+body{
+  font-family: "Segoe UI", Tahoma;
+  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.box{
+  background:#fff;
+  width:95%;
+  max-width:520px;
+  padding:25px;
+  border-radius:16px;
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+
+h3{
+  margin-top:0;
+  color:#0a74c9;
+  text-align:center;
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border:1px solid #ccc;
+  border-radius:8px;
+  font-size:14px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  margin-top:15px;
+  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+  color:#fff;
+  border:none;
+  border-radius:10px;
+  font-size:16px;
+  cursor:pointer;
+  box-shadow:0 6px 15px rgba(0,0,0,.2);
+}
+
+button:hover{
+  opacity:.9;
+}
+
+#msg{
+  margin-top:10px;
+  text-align:center;
+  font-weight:bold;
+}
 </style>
 </head>
 
 <body>
 
-<div class="box" id="login">
+<!-- تسجيل الدخول -->
+<div class="box" id="loginBox">
   <h3>🔐 دخول لوحة التحكم</h3>
   <input id="pass" type="password" placeholder="كلمة السر">
   <button onclick="login()">دخول</button>
 </div>
 
+<!-- لوحة التحكم -->
 <div class="box" id="panel" style="display:none">
-  <h3>إضافة / تجديد تعاقد</h3>
+  <h3>📋 إدارة التعاقدات</h3>
+
   <input id="name" placeholder="اسم العميل">
   <input id="phone" placeholder="رقم الهاتف">
   <input id="address" placeholder="العنوان">
@@ -31,19 +85,22 @@ button{background:#0a74c9;color:#fff;border:none;}
   <input id="cost" placeholder="التكلفة">
   <input id="lastVisit" type="date">
   <input id="nextVisit" type="date">
-  <button onclick="save()">حفظ</button>
+
+  <button onclick="save()">💾 حفظ البيانات</button>
   <p id="msg"></p>
 </div>
 
 <script>
-const PASS="f.g31"; // غيرها
-const API_URL="https://script.google.com/macros/s/AKfycbwUd-scZifaiD2hiNY_PHBSNO7E8-BgAkdthieWJvMA_3-wZaTOBF1z2LSfuRVxVaGY/exec";
+const PASS = "الحمدلله"; // كلمة السر الجديدة
+const API_URL = "https://script.google.com/macros/s/AKfycbwUd-scZifaiD2hiNY_PHBSNO7E8-BgAkdthieWJvMA_3-wZaTOBF1z2LSfuRVxVaGY/exec";
 
 function login(){
-  if(document.getElementById("pass").value===PASS){
-    login.style.display="none";
+  if(pass.value === PASS){
+    loginBox.style.display="none";
     panel.style.display="block";
-  }else alert("كلمة السر خطأ");
+  }else{
+    alert("❌ كلمة السر غير صحيحة");
+  }
 }
 
 function save(){
@@ -61,11 +118,16 @@ function save(){
       lastVisit:lastVisit.value,
       nextVisit:nextVisit.value
     })
-  }).then(r=>r.json()).then(d=>{
-    msg.textContent=d.success?"✅ تم الحفظ":"❌ خطأ";
+  })
+  .then(r=>r.json())
+  .then(d=>{
+    msg.textContent = d.success ? "✅ تم الحفظ بنجاح" : "❌ حدث خطأ";
+  })
+  .catch(()=>{
+    msg.textContent="⚠️ خطأ في الاتصال";
   });
 }
 </script>
 
 </body>
-    </html>
+</html>
