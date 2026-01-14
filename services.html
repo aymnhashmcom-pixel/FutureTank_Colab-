@@ -3,39 +3,139 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>قريبًا | FutureTank</title>
+<title>خدمات FutureTank</title>
 
 <style>
 body{
-  font-family:Tahoma;
-  background:#f5f7fa;
-  text-align:center;
-  padding:50px;
+  margin:0;
+  font-family:"Segoe UI",Tahoma;
+  background:#f4f7fb;
+  color:#333;
 }
-.box{
-  background:#fff;
-  padding:30px;
-  max-width:500px;
-  margin:auto;
-  border-radius:12px;
-}
-a{
-  display:inline-block;
-  margin-top:20px;
-  padding:10px 20px;
-  background:#0a74c9;
+header{
+  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
   color:#fff;
-  border-radius:6px;
-  text-decoration:none;
+  padding:20px;
+  text-align:center;
+}
+.container{
+  max-width:1100px;
+  margin:30px auto;
+  padding:15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:25px;
+}
+.card{
+  background:#fff;
+  border-radius:22px;
+  padding:25px;
+  box-shadow:0 25px 50px rgba(0,0,0,.18);
+  transition:.4s;
+  position:relative;
+}
+.card:hover{
+  transform:translateY(-10px);
+}
+.card h3{
+  color:#0a74c9;
+}
+.badge{
+  position:absolute;
+  top:15px;
+  left:15px;
+  background:#ff9800;
+  color:#fff;
+  padding:6px 12px;
+  border-radius:20px;
+  font-size:13px;
+}
+button{
+  width:100%;
+  margin-top:15px;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  font-size:16px;
+  cursor:pointer;
+  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+  color:#fff;
+}
+footer{
+  text-align:center;
+  padding:20px;
+  color:#777;
 }
 </style>
 </head>
 
 <body>
-<div class="box">
-  <h2>🚧 هذه الصفحة قيد التطوير</h2>
-  <p>سيتم إطلاقها قريبًا بإذن الله</p>
-  <a href="index.html">العودة للرئيسية</a>
+
+<header>
+  <h1>🛠️ خدمات FutureTank</h1>
+  <p>نقاء الماء هو هدفنا</p>
+</header>
+
+<div class="container">
+
+  <div class="card">
+    <h3>💧 تطهير وتعقيم خزانات المياه</h3>
+    <p>
+      تنظيف وتعقيم خزانات مياه الشرب بأحدث المعدات  
+      ومواد آمنة 100%.
+    </p>
+    <button onclick="wa('تطهير وتعقيم خزانات المياه')">
+      📲 طلب الخدمة
+    </button>
+  </div>
+
+  <div class="card">
+    <h3>🔧 صيانة الخزانات</h3>
+    <p>
+      فحص شامل – معالجة تسريب – إطالة عمر الخزان.
+    </p>
+    <button onclick="wa('صيانة خزانات المياه')">
+      📲 طلب الخدمة
+    </button>
+  </div>
+
+  <div class="card">
+    <span class="badge">قريبًا</span>
+    <h3>🧪 تحليل جودة المياه</h3>
+    <p>
+      فحص عينات المياه للتأكد من مطابقتها للمواصفات.
+    </p>
+    <button disabled>
+      🚧 قيد التطوير
+    </button>
+  </div>
+
+  <div class="card">
+    <span class="badge">قريبًا</span>
+    <h3>🏭 حلول الشركات والمصانع</h3>
+    <p>
+      تعاقدات دورية وخطط مخصصة للمنشآت الكبرى.
+    </p>
+    <button disabled>
+      🚧 سيتم الإطلاق قريبًا
+    </button>
+  </div>
+
 </div>
+
+<footer>
+  © FutureTank – جميع الحقوق محفوظة
+</footer>
+
+<script>
+function wa(service){
+  const msg = `مرحباً، أرغب في طلب خدمة (${service}) من FutureTank.`;
+  window.open(
+    "https://wa.me/201150402031?text="+encodeURIComponent(msg),
+    "_blank"
+  );
+}
+</script>
+
 </body>
 </html>
