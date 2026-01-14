@@ -3,83 +3,56 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>لوحة التحكم - FutureTank</title>
+<title>لوحة التحكم | FutureTank</title>
 
 <style>
-body{
-  font-family:Tahoma;
-  background:#f2f4f8;
-  padding:20px;
-}
-
-.login, .panel{
-  max-width:500px;
-  margin:auto;
-  background:#fff;
-  padding:20px;
-  border-radius:10px;
-  box-shadow:0 5px 15px rgba(0,0,0,.1);
-}
-
-input, button{
-  width:100%;
-  padding:10px;
-  margin:6px 0;
-}
-
-button{
-  background:#0a74c9;
-  color:#fff;
-  border:none;
-  cursor:pointer;
-}
+body{font-family:Tahoma;background:#f2f4f8;padding:20px;}
+.box{max-width:500px;margin:auto;background:#fff;padding:20px;border-radius:10px;}
+input,button{width:100%;padding:10px;margin-top:8px;}
+button{background:#0a74c9;color:#fff;border:none;}
 </style>
 </head>
 
 <body>
 
-<div class="login" id="login">
+<div class="box" id="login">
   <h3>🔐 دخول لوحة التحكم</h3>
   <input id="pass" type="password" placeholder="كلمة السر">
   <button onclick="login()">دخول</button>
 </div>
 
-<div class="panel" id="panel" style="display:none">
-<h3>إضافة / تجديد تعاقد</h3>
-
-<input id="clientName" placeholder="اسم العميل">
-<input id="phone" placeholder="رقم الهاتف">
-<input id="address" placeholder="العنوان">
-<input id="service" placeholder="الخدمة">
-<input id="duration" placeholder="مدة التعاقد">
-<input id="cost" placeholder="التكلفة">
-<label>آخر زيارة</label>
-<input id="lastVisit" type="date">
-<label>الزيارة القادمة</label>
-<input id="nextVisit" type="date">
-
-<button onclick="save()">حفظ / تجديد</button>
-<p id="msg"></p>
+<div class="box" id="panel" style="display:none">
+  <h3>إضافة / تجديد تعاقد</h3>
+  <input id="name" placeholder="اسم العميل">
+  <input id="phone" placeholder="رقم الهاتف">
+  <input id="address" placeholder="العنوان">
+  <input id="service" placeholder="الخدمة">
+  <input id="duration" placeholder="مدة التعاقد">
+  <input id="cost" placeholder="التكلفة">
+  <input id="lastVisit" type="date">
+  <input id="nextVisit" type="date">
+  <button onclick="save()">حفظ</button>
+  <p id="msg"></p>
 </div>
 
 <script>
-const PASSWORD="futuretank2026";
-const API="https://script.google.com/macros/s/AKfycbwUd-scZifaiD2hiNY_PHBSNO7E8-BgAkdthieWJvMA_3-wZaTOBF1z2LSfuRVxVaGY/exec";
+const PASS="1234"; // غيرها
+const API_URL="https://script.google.com/macros/s/AKfycbwUd-scZifaiD2hiNY_PHBSNO7E8-BgAkdthieWJvMA_3-wZaTOBF1z2LSfuRVxVaGY/exec";
 
 function login(){
-  if(pass.value===PASSWORD){
+  if(document.getElementById("pass").value===PASS){
     login.style.display="none";
     panel.style.display="block";
-  }else alert("كلمة السر غير صحيحة");
+  }else alert("كلمة السر خطأ");
 }
 
 function save(){
-  msg.innerText="⏳ جاري الحفظ...";
-  fetch(API,{
+  msg.textContent="⏳ جاري الحفظ...";
+  fetch(API_URL,{
     method:"POST",
-    headers:{ "Content-Type":"application/x-www-form-urlencoded"},
+    headers:{"Content-Type":"application/x-www-form-urlencoded"},
     body:new URLSearchParams({
-      name:clientName.value,
+      name:name.value,
       phone:phone.value,
       address:address.value,
       service:service.value,
@@ -88,12 +61,9 @@ function save(){
       lastVisit:lastVisit.value,
       nextVisit:nextVisit.value
     })
-  })
-  .then(r=>r.json())
-  .then(d=>{
-    msg.innerText=d.success?"✅ تم الحفظ":"❌ خطأ";
-  })
-  .catch(()=>msg.innerText="❌ خطأ اتصال بالخادم");
+  }).then(r=>r.json()).then(d=>{
+    msg.textContent=d.success?"✅ تم الحفظ":"❌ خطأ";
+  });
 }
 </script>
 
