@@ -8,9 +8,8 @@
 <style>
 body{
   margin:0;
-  font-family: "Segoe UI", Tahoma, Arial;
+  font-family:Tahoma;
   background:#f5f7fa;
-  color:#333;
 }
 
 header{
@@ -33,52 +32,29 @@ header{
   box-shadow:0 5px 15px rgba(0,0,0,.1);
 }
 
-input{
+input, button{
   width:100%;
   padding:12px;
-  margin-bottom:10px;
-  font-size:16px;
+  margin-top:10px;
 }
 
 button{
-  width:100%;
-  padding:12px;
-  font-size:17px;
   background:#0a74c9;
   color:#fff;
   border:none;
-  border-radius:6px;
   cursor:pointer;
-}
-
-button:hover{
-  background:#085ea3;
-}
-
-.data p{
-  margin:8px 0;
-  font-size:15px;
+  border-radius:6px;
 }
 
 .whatsapp{
+  display:block;
   margin-top:15px;
-  background:#25D366;
-}
-
-.whatsapp:hover{
-  background:#1ebc5c;
-}
-
-footer{
+  background:#25d366;
+  color:#fff;
   text-align:center;
-  font-size:13px;
-  color:#777;
-  margin-top:20px;
-}
-
-@media (max-width:600px){
-  .container{padding:10px;}
-  .data p{font-size:14px;}
+  padding:12px;
+  border-radius:6px;
+  text-decoration:none;
 }
 </style>
 </head>
@@ -87,73 +63,60 @@ footer{
 
 <header>
   <h2>💧 FutureTank</h2>
-  <div>نقاء الماء هو هدفنا</div>
+  <p>بوابة العملاء</p>
 </header>
 
 <div class="container">
-
-<div class="card">
-  <h3>بوابة العملاء</h3>
-  <input id="phone" placeholder="ادخل رقم الهاتف">
-  <button onclick="loadData()">عرض التعاقد</button>
+  <div class="card">
+    <input id="phone" placeholder="ادخل رقم الهاتف">
+    <button onclick="getContract()">عرض التعاقد</button>
+    <pre id="result"></pre>
+    <a id="wa" class="whatsapp" style="display:none" target="_blank">
+      📲 جدد التعاقد الآن
+    </a>
+  </div>
 </div>
-
-<div id="result" class="card" style="display:none;margin-top:15px">
-  <h3>بيانات التعاقد</h3>
-  <div class="data" id="data"></div>
-
-  <button class="whatsapp" onclick="renew()">
-    🟢 جدد التعاقد الآن
-  </button>
-</div>
-
-</div>
-
-<footer>
-© FutureTank
-</footer>
 
 <script>
-const API =
-"https://script.google.com/macros/s/AKfycbwUd-scZifaiD2hiNY_PHBSNO7E8-BgAkdthieWJvMA_3-wZaTOBF1z2LSfuRVxVaGY/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwUd-scZifaiD2hiNY_PHBSNO7E8-BgAkdthieWJvMA_3-wZaTOBF1z2LSfuRVxVaGY/exec";
 
-let clientPhone="";
+function getContract(){
+  const phone = document.getElementById("phone").value.trim();
+  const result = document.getElementById("result");
+  const wa = document.getElementById("wa");
 
-function loadData(){
-  clientPhone=document.getElementById("phone").value.trim();
-  if(!clientPhone) return alert("ادخل رقم الهاتف");
+  if(!phone){
+    result.textContent = "❌ من فضلك أدخل رقم الهاتف";
+    return;
+  }
 
-  fetch(API+"?phone="+clientPhone)
-  .then(r=>r.json())
-  .then(d=>{
-    if(!d.found) return alert("لا يوجد تعاقد");
+  result.textContent = "⏳ جاري البحث...";
+  wa.style.display="none";
 
-    document.getElementById("data").innerHTML=`
-      <p><b>الاسم:</b> ${d.name}</p>
-      <p><b>الهاتف:</b> ${d.phone}</p>
-      <p><b>العنوان:</b> ${d.address}</p>
-      <p><b>الخدمة:</b> ${d.service}</p>
-      <p><b>مدة التعاقد:</b> ${d.duration}</p>
-      <p><b>التكلفة:</b> ${d.cost}</p>
-      <p><b>آخر زيارة:</b> ${d.lastVisit}</p>
-      <p><b>الزيارة القادمة:</b> ${d.nextVisit}</p>
-      <p><b>الأيام المتبقية:</b> ${d.daysLeft} يوم</p>
-    `;
-    document.getElementById("result").style.display="block";
-  })
-  .catch(()=>alert("خطأ اتصال بالخادم"));
-}
+  fetch(API_URL + "?phone=" + encodeURIComponent(phone))
+    .then(r=>r.json())
+    .then(d=>{
+      if(d.success){
+        result.textContent =
+`الاسم: ${d.contract.name}
+الهاتف: ${d.contract.phone}
+العنوان: ${d.contract.address}
+الخدمة: ${d.contract.service}
+مدة التعاقد: ${d.contract.duration}
+التكلفة: ${d.contract.cost}
+آخر زيارة: ${d.contract.lastVisit}
+الزيارة القادمة: ${d.contract.nextVisit}
+الأيام المتبقية: ${d.contract.daysRemaining} يوم`;
 
-function renew(){
-  const msg=encodeURIComponent(
-`مرحباً،
-أرغب في تجديد التعاقد الخاص بي لدى FutureTank.
-برجاء تأكيد التجديد ومراجعة البيانات.
-شكراً لحضرتكم.`
-  );
-  window.open("https://wa.me/2"+clientPhone+"?text="+msg,"_blank");
+        wa.href = "https://wa.me/201150402031?text=" +
+        encodeURIComponent("مرحباً، أرغب في تجديد التعاقد الخاص بي لدى FutureTank. برجاء تأكيد التجديد ومراجعة البيانات. شكراً لحضرتكم.");
+        wa.style.display="block";
+      }else{
+        result.textContent="❌ لا يوجد تعاقد مسجل";
+      }
+    });
 }
 </script>
 
 </body>
-  </html>
+</html>
