@@ -1,91 +1,159 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>بوابة العملاء - FutureTank</title>
-  <link rel="stylesheet" href="style.css">
-  <style>
-    body { font-family: Arial; padding: 20px; }
-    .card { border: 1px solid #ddd; padding: 15px; border-radius: 10px; margin-top: 15px; }
-    .whatsapp {
-      display: inline-block;
-      margin-top: 15px;
-      background: #25d366;
-      color: #fff;
-      padding: 10px 15px;
-      border-radius: 6px;
-      text-decoration: none;
-      font-weight: bold;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>بوابة العملاء | FutureTank</title>
+
+<style>
+body{
+  margin:0;
+  font-family: "Segoe UI", Tahoma, Arial;
+  background:#f5f7fa;
+  color:#333;
+}
+
+header{
+  background:#0a74c9;
+  color:#fff;
+  padding:15px;
+  text-align:center;
+}
+
+.container{
+  max-width:800px;
+  margin:20px auto;
+  padding:15px;
+}
+
+.card{
+  background:#fff;
+  border-radius:10px;
+  padding:20px;
+  box-shadow:0 5px 15px rgba(0,0,0,.1);
+}
+
+input{
+  width:100%;
+  padding:12px;
+  margin-bottom:10px;
+  font-size:16px;
+}
+
+button{
+  width:100%;
+  padding:12px;
+  font-size:17px;
+  background:#0a74c9;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+button:hover{
+  background:#085ea3;
+}
+
+.data p{
+  margin:8px 0;
+  font-size:15px;
+}
+
+.whatsapp{
+  margin-top:15px;
+  background:#25D366;
+}
+
+.whatsapp:hover{
+  background:#1ebc5c;
+}
+
+footer{
+  text-align:center;
+  font-size:13px;
+  color:#777;
+  margin-top:20px;
+}
+
+@media (max-width:600px){
+  .container{padding:10px;}
+  .data p{font-size:14px;}
+}
+</style>
 </head>
+
 <body>
 
-<h2>بوابة العملاء</h2>
+<header>
+  <h2>💧 FutureTank</h2>
+  <div>نقاء الماء هو هدفنا</div>
+</header>
 
-<input id="phone" placeholder="رقم الهاتف">
-<button onclick="getContract()">عرض التعاقد</button>
+<div class="container">
 
-<div id="result"></div>
+<div class="card">
+  <h3>بوابة العملاء</h3>
+  <input id="phone" placeholder="ادخل رقم الهاتف">
+  <button onclick="loadData()">عرض التعاقد</button>
+</div>
+
+<div id="result" class="card" style="display:none;margin-top:15px">
+  <h3>بيانات التعاقد</h3>
+  <div class="data" id="data"></div>
+
+  <button class="whatsapp" onclick="renew()">
+    🟢 جدد التعاقد الآن
+  </button>
+</div>
+
+</div>
+
+<footer>
+© FutureTank
+</footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwUd-scZifaiD2hiNY_PHBSNO7E8-BgAkdthieWJvMA_3-wZaTOBF1z2LSfuRVxVaGY/exec"; // 🔴 ضع رابط Apps Script هنا
+const API =
+"https://script.google.com/macros/s/AKfycbwUd-scZifaiD2hiNY_PHBSNO7E8-BgAkdthieWJvMA_3-wZaTOBF1z2LSfuRVxVaGY/exec";
 
-function getContract() {
-  const phone = document.getElementById("phone").value.trim();
-  const result = document.getElementById("result");
+let clientPhone="";
 
-  if (!phone) {
-    result.innerHTML = "❌ من فضلك أدخل رقم الهاتف";
-    return;
-  }
+function loadData(){
+  clientPhone=document.getElementById("phone").value.trim();
+  if(!clientPhone) return alert("ادخل رقم الهاتف");
 
-  result.innerHTML = "⏳ جاري البحث...";
+  fetch(API+"?phone="+clientPhone)
+  .then(r=>r.json())
+  .then(d=>{
+    if(!d.found) return alert("لا يوجد تعاقد");
 
-  fetch(API_URL + "?phone=" + encodeURIComponent(phone))
-    .then(res => res.json())
-    .then(data => {
-      if (!data.success) {
-        result.innerHTML = "❌ لا يوجد تعاقد مسجل";
-        return;
-      }
+    document.getElementById("data").innerHTML=`
+      <p><b>الاسم:</b> ${d.name}</p>
+      <p><b>الهاتف:</b> ${d.phone}</p>
+      <p><b>العنوان:</b> ${d.address}</p>
+      <p><b>الخدمة:</b> ${d.service}</p>
+      <p><b>مدة التعاقد:</b> ${d.duration}</p>
+      <p><b>التكلفة:</b> ${d.cost}</p>
+      <p><b>آخر زيارة:</b> ${d.lastVisit}</p>
+      <p><b>الزيارة القادمة:</b> ${d.nextVisit}</p>
+      <p><b>الأيام المتبقية:</b> ${d.daysLeft} يوم</p>
+    `;
+    document.getElementById("result").style.display="block";
+  })
+  .catch(()=>alert("خطأ اتصال بالخادم"));
+}
 
-      const c = data.contract;
-
-      const nextVisit = new Date(c.nextVisit);
-      const today = new Date();
-      const diffDays = Math.ceil((nextVisit - today) / (1000 * 60 * 60 * 24));
-
-      const waText =
+function renew(){
+  const msg=encodeURIComponent(
 `مرحباً،
 أرغب في تجديد التعاقد الخاص بي لدى FutureTank.
 برجاء تأكيد التجديد ومراجعة البيانات.
-شكراً لحضرتكم.`;
-
-      const waLink =
-`https://wa.me/201150402031?text=${encodeURIComponent(waText)}`;
-
-      result.innerHTML = `
-        <div class="card">
-          <p><strong>الاسم:</strong> ${c.name}</p>
-          <p><strong>الهاتف:</strong> ${c.phone}</p>
-          <p><strong>العنوان:</strong> ${c.address}</p>
-          <p><strong>الخدمة:</strong> ${c.service}</p>
-          <p><strong>مدة التعاقد:</strong> ${c.duration}</p>
-          <p><strong>التكلفة:</strong> ${c.cost}</p>
-          <p><strong>آخر زيارة:</strong> ${c.lastVisit}</p>
-          <p><strong>الزيارة القادمة:</strong> ${c.nextVisit}</p>
-          <p><strong>الأيام المتبقية:</strong> ${diffDays} يوم</p>
-
-          ${diffDays <= 7 ? `<a class="whatsapp" target="_blank" href="${waLink}">📲 تجديد التعاقد عبر واتساب</a>` : ``}
-        </div>
-      `;
-    })
-    .catch(() => {
-      result.innerHTML = "❌ خطأ اتصال بالخادم";
-    });
+شكراً لحضرتكم.`
+  );
+  window.open("https://wa.me/2"+clientPhone+"?text="+msg,"_blank");
 }
 </script>
 
 </body>
-</html>
+  </html>
