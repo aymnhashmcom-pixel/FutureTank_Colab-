@@ -3,39 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>قريبًا | FutureTank</title>
+<title>منتجات نقاء الماء | FutureTank</title>
 
 <style>
 body{
-  font-family:Tahoma;
-  background:#f5f7fa;
-  text-align:center;
-  padding:50px;
+  margin:0;
+  font-family:"Segoe UI",Tahoma;
+  background:#f3f6fb;
+  color:#333;
 }
-.box{
-  background:#fff;
-  padding:30px;
-  max-width:500px;
-  margin:auto;
-  border-radius:12px;
-}
-a{
-  display:inline-block;
-  margin-top:20px;
-  padding:10px 20px;
-  background:#0a74c9;
+header{
+  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
   color:#fff;
-  border-radius:6px;
-  text-decoration:none;
+  padding:25px;
+  text-align:center;
+}
+.container{
+  max-width:1200px;
+  margin:30px auto;
+  padding:15px;
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+  gap:30px;
+}
+.product{
+  background:#fff;
+  border-radius:22px;
+  padding:25px;
+  box-shadow:0 30px 60px rgba(0,0,0,.18);
+  transition:.4s;
+}
+.product:hover{
+  transform:translateY(-12px);
+}
+.product h3{
+  color:#0a74c9;
+}
+.price{
+  font-size:20px;
+  font-weight:bold;
+  margin:10px 0;
+}
+button{
+  width:100%;
+  padding:12px;
+  border:none;
+  border-radius:12px;
+  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+.badge{
+  display:inline-block;
+  background:#ff9800;
+  color:#fff;
+  padding:5px 12px;
+  border-radius:20px;
+  font-size:13px;
+  margin-bottom:10px;
+}
+footer{
+  text-align:center;
+  padding:20px;
+  color:#777;
 }
 </style>
 </head>
 
 <body>
-<div class="box">
-  <h2>🚧 هذه الصفحة قيد التطوير</h2>
-  <p>سيتم إطلاقها قريبًا بإذن الله</p>
-  <a href="index.html">العودة للرئيسية</a>
+
+<header>
+  <h1>🛒 منتجات نقاء الماء</h1>
+  <p>حلول مختارة بعناية لنقاء وصحة أفضل</p>
+</header>
+
+<div class="container">
+
+  <div class="product">
+    <span class="badge">الأكثر طلبًا</span>
+    <h3>فلتر مياه 5 مراحل</h3>
+    <p>تنقية كاملة – طعم أفضل – حماية للأسرة.</p>
+    <div class="price">قريبًا</div>
+    <button onclick="soon()">🛒 تسوق قريبًا</button>
+  </div>
+
+  <div class="product">
+    <h3>فلتر مركزي للخزانات</h3>
+    <p>تنقية المياه قبل دخولها للخزان.</p>
+    <div class="price">قريبًا</div>
+    <button onclick="soon()">🛒 تسوق قريبًا</button>
+  </div>
+
+  <div class="product">
+    <h3>مواد تعقيم آمنة</h3>
+    <p>مطابقة للمواصفات – آمنة لمياه الشرب.</p>
+    <div class="price">قريبًا</div>
+    <button onclick="soon()">🛒 تسوق قريبًا</button>
+  </div>
+
+  <div class="product">
+    <span class="badge">قيد التطوير</span>
+    <h3>أجهزة اختبار جودة المياه</h3>
+    <p>قياس الأملاح – العكارة – الجودة.</p>
+    <div class="price">🚧</div>
+    <button disabled>سيتم الإطلاق قريبًا</button>
+  </div>
+
 </div>
+
+<footer>
+  © FutureTank – نقاء الماء هو هدفنا
+</footer>
+
+<script>
+function soon(){
+  const msg="مرحباً، أرغب في الاستفسار عن منتجات FutureTank.";
+  window.open(
+    "https://wa.me/201150402031?text="+encodeURIComponent(msg),
+    "_blank"
+  );
+}
+</script>
+
 </body>
 </html>
