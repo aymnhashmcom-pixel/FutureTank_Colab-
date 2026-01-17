@@ -126,21 +126,17 @@ button.main{
   </div>
 </div>
 
-<!-- إدارة العملاء -->
 <div id="clients" class="section">
 <h3>👤 البحث عن عميل</h3>
 <input id="searchPhone" placeholder="رقم الهاتف">
 <button class="main" onclick="searchClient()">🔍 بحث</button>
-
 <div id="clientResult"></div>
-
 <button class="back" onclick="back()">رجوع</button>
 </div>
 
-<!-- التعاقدات -->
 <div id="contracts" class="section">
 <h3>📄 إضافة / تجديد تعاقد</h3>
-<input id="name" placeholder="اسم العميل">
+<input id="clientName" placeholder="اسم العميل">
 <input id="phone" placeholder="رقم الهاتف">
 <input id="address" placeholder="العنوان">
 <input id="service" placeholder="الخدمة">
@@ -174,19 +170,33 @@ function back(){
   document.querySelectorAll('.section').forEach(s=>s.style.display="none");
   dashboard.style.display="block";
 }
+
 function save(){
   msg.textContent="⏳ جاري الحفظ...";
-  fetch(API,{method:"POST",body:new URLSearchParams({
-    name:name.value,phone:phone.value,address:address.value,
-    service:service.value,duration:duration.value,cost:cost.value,
-    lastVisit:lastVisit.value,nextVisit:nextVisit.value,notes:notes.value
-  })}).then(r=>r.json()).then(d=>{
+  fetch(API,{
+    method:"POST",
+    body:new URLSearchParams({
+      name:clientName.value.trim(),
+      phone:phone.value.trim(),
+      address:address.value,
+      service:service.value,
+      duration:duration.value,
+      cost:cost.value,
+      lastVisit:lastVisit.value,
+      nextVisit:nextVisit.value,
+      contractDate:new Date().toISOString().split("T")[0],
+      endDate:nextVisit.value,
+      notes:notes.value
+    })
+  }).then(r=>r.json()).then(d=>{
     msg.textContent=d.success?"✅ تم الحفظ":"❌ خطأ";
   });
 }
+
 function searchClient(){
+  const phoneClean = searchPhone.value.trim();
   clientResult.innerHTML="⏳ جاري البحث...";
-  fetch(API+"?phone="+searchPhone.value)
+  fetch(API+"?phone="+encodeURIComponent(phoneClean))
   .then(r=>r.json())
   .then(d=>{
     if(!d.found){
@@ -195,11 +205,11 @@ function searchClient(){
     }
     clientResult.innerHTML=`
     <div class="result">
-      <b>الاسم:</b> ${d.name}<br>
-      <b>الخدمة:</b> ${d.service}<br>
-      <b>الزيارة القادمة:</b> ${d.nextVisit}<br>
-      <b>الأيام المتبقية:</b> ${d.days}<br><br>
-      <a target="_blank" href="https://wa.me/2${d.phone}?text=مرحباً،%20نود%20التواصل%20بخصوص%20تعاقدكم%20مع%20FutureTank">📲 واتساب</a>
+      <b>الاسم:</b> ${d.name || "—"}<br>
+      <b>الخدمة:</b> ${d.service || "—"}<br>
+      <b>الزيارة القادمة:</b> ${d.nextVisit || "—"}<br>
+      <b>الأيام المتبقية:</b> ${d.days || "—"}<br><br>
+      <a target="_blank" href="https://wa.me/2${d.phone}">📲 واتساب</a>
     </div>`;
   });
 }
