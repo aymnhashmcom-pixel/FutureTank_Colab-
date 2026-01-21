@@ -9,45 +9,27 @@
 body{margin:0;font-family:"Segoe UI",Tahoma;background:#f4f6fb}
 header{
   background:linear-gradient(135deg,#0a74c9,#4fc3f7);
-  color:#fff;
-  padding:15px 20px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center
+  color:#fff;padding:15px 20px;
+  display:flex;justify-content:space-between;align-items:center
 }
 header button{
-  background:#fff;
-  color:#0a74c9;
-  border:none;
-  padding:8px 14px;
-  border-radius:8px;
-  cursor:pointer
+  background:#fff;color:#0a74c9;border:none;
+  padding:8px 14px;border-radius:8px;cursor:pointer
 }
 #loginBox{
-  max-width:420px;
-  margin:90px auto;
-  background:#fff;
-  padding:25px;
-  border-radius:18px;
+  max-width:420px;margin:90px auto;background:#fff;
+  padding:25px;border-radius:18px;
   box-shadow:0 20px 40px rgba(0,0,0,.2)
 }
 input,textarea{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:1px solid #ccc;
-  border-radius:8px
+  width:100%;padding:12px;margin-top:10px;
+  border:1px solid #ccc;border-radius:8px
 }
 button.main{
-  width:100%;
-  padding:12px;
-  margin-top:15px;
+  width:100%;padding:12px;margin-top:15px;
   background:linear-gradient(135deg,#0a74c9,#4fc3f7);
-  color:#fff;
-  border:none;
-  border-radius:12px;
-  font-size:16px;
-  cursor:pointer
+  color:#fff;border:none;border-radius:12px;
+  font-size:16px;cursor:pointer
 }
 #dashboard{display:none;padding:25px}
 .cards{
@@ -56,38 +38,23 @@ button.main{
   gap:20px
 }
 .card{
-  background:#fff;
-  padding:25px;
-  border-radius:20px;
+  background:#fff;padding:25px;border-radius:20px;
   box-shadow:0 15px 35px rgba(0,0,0,.15);
-  text-align:center;
-  cursor:pointer;
-  transition:.3s
+  text-align:center;cursor:pointer;transition:.3s
 }
 .card:hover{transform:translateY(-6px)}
 .section{
-  display:none;
-  max-width:650px;
-  margin:30px auto;
-  background:#fff;
-  padding:25px;
-  border-radius:20px;
+  display:none;max-width:650px;margin:30px auto;
+  background:#fff;padding:25px;border-radius:20px;
   box-shadow:0 15px 40px rgba(0,0,0,.2)
 }
 .back{
-  margin-top:15px;
-  background:#0a74c9;
-  color:#fff;
-  border:none;
-  padding:10px 15px;
-  border-radius:8px;
-  cursor:pointer
+  margin-top:15px;background:#0a74c9;color:#fff;
+  border:none;padding:10px 15px;border-radius:8px;cursor:pointer
 }
-.result{
-  background:#f5f7fa;
-  padding:15px;
-  border-radius:12px;
-  margin-top:15px
+.note{
+  background:#fff3cd;color:#856404;
+  padding:12px;border-radius:10px;margin-top:15px
 }
 </style>
 </head>
@@ -127,27 +94,30 @@ button.main{
 </div>
 
 <div id="clients" class="section">
-<h3>👤 البحث عن عميل</h3>
-<input id="searchPhone" placeholder="رقم الهاتف">
-<button class="main" onclick="searchClient()">🔍 بحث</button>
-<div id="clientResult"></div>
-<button class="back" onclick="back()">رجوع</button>
+  <h3>👤 البحث عن عميل</h3>
+  <div class="note">
+    🚧 البحث من لوحة التحكم قيد التطوير حاليًا<br>
+    ✅ يُرجى استخدام بوابة العملاء لعرض بيانات التعاقد
+  </div>
+  <button class="back" onclick="back()">رجوع</button>
 </div>
 
 <div id="contracts" class="section">
-<h3>📄 إضافة / تجديد تعاقد</h3>
-<input id="clientName" placeholder="اسم العميل">
-<input id="phone" placeholder="رقم الهاتف">
-<input id="address" placeholder="العنوان">
-<input id="service" placeholder="الخدمة">
-<input id="duration" placeholder="مدة التعاقد">
-<input id="cost" placeholder="التكلفة">
-<input id="lastVisit" type="date">
-<input id="nextVisit" type="date">
-<textarea id="notes" placeholder="ملاحظات"></textarea>
-<button class="main" onclick="save()">💾 حفظ التعاقد</button>
-<p id="msg"></p>
-<button class="back" onclick="back()">رجوع</button>
+  <h3>📄 إضافة / تجديد تعاقد</h3>
+  <input id="name" placeholder="اسم العميل">
+  <input id="phone" placeholder="رقم الهاتف">
+  <input id="address" placeholder="العنوان">
+  <input id="service" placeholder="الخدمة">
+  <input id="duration" placeholder="مدة التعاقد">
+  <input id="cost" placeholder="التكلفة">
+  <label>آخر زيارة</label>
+  <input id="lastVisit" type="date">
+  <label>الزيارة القادمة</label>
+  <input id="nextVisit" type="date">
+  <textarea id="notes" placeholder="ملاحظات"></textarea>
+  <button class="main" onclick="save()">💾 حفظ التعاقد</button>
+  <p id="msg"></p>
+  <button class="back" onclick="back()">رجوع</button>
 </div>
 
 <script>
@@ -170,47 +140,23 @@ function back(){
   document.querySelectorAll('.section').forEach(s=>s.style.display="none");
   dashboard.style.display="block";
 }
-
 function save(){
   msg.textContent="⏳ جاري الحفظ...";
   fetch(API,{
     method:"POST",
     body:new URLSearchParams({
-      name:clientName.value.trim(),
-      phone:phone.value.trim(),
+      name:name.value,
+      phone:phone.value,
       address:address.value,
       service:service.value,
       duration:duration.value,
       cost:cost.value,
       lastVisit:lastVisit.value,
       nextVisit:nextVisit.value,
-      contractDate:new Date().toISOString().split("T")[0],
-      endDate:nextVisit.value,
       notes:notes.value
     })
   }).then(r=>r.json()).then(d=>{
-    msg.textContent=d.success?"✅ تم الحفظ":"❌ خطأ";
-  });
-}
-
-function searchClient(){
-  const phoneClean = searchPhone.value.trim();
-  clientResult.innerHTML="⏳ جاري البحث...";
-  fetch(API+"?phone="+encodeURIComponent(phoneClean))
-  .then(r=>r.json())
-  .then(d=>{
-    if(!d.found){
-      clientResult.innerHTML="❌ لا يوجد عميل بهذا الرقم";
-      return;
-    }
-    clientResult.innerHTML=`
-    <div class="result">
-      <b>الاسم:</b> ${d.name || "—"}<br>
-      <b>الخدمة:</b> ${d.service || "—"}<br>
-      <b>الزيارة القادمة:</b> ${d.nextVisit || "—"}<br>
-      <b>الأيام المتبقية:</b> ${d.days || "—"}<br><br>
-      <a target="_blank" href="https://wa.me/2${d.phone}">📲 واتساب</a>
-    </div>`;
+    msg.textContent=d.success?"✅ تم الحفظ بنجاح":"❌ حدث خطأ";
   });
 }
 </script>
