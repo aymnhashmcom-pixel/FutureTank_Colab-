@@ -15,7 +15,7 @@ body{
 header{
   background:linear-gradient(135deg,#0a74c9,#4fc3f7);
   color:#fff;
-  padding:20px;
+  padding:25px;
   text-align:center;
 }
 .container{
@@ -29,33 +29,37 @@ header{
 .card{
   background:#fff;
   border-radius:22px;
-  padding:25px;
-  box-shadow:0 25px 50px rgba(0,0,0,.18);
+  padding:20px;
+  box-shadow:0 20px 45px rgba(0,0,0,.15);
   transition:.4s;
-  position:relative;
 }
 .card:hover{
-  transform:translateY(-10px);
+  transform:translateY(-8px);
+}
+.card img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:15px;
 }
 .card h3{
   color:#0a74c9;
+  margin:15px 0 8px;
 }
-.badge{
-  position:absolute;
-  top:15px;
-  left:15px;
-  background:#ff9800;
-  color:#fff;
-  padding:6px 12px;
-  border-radius:20px;
-  font-size:13px;
+.card p{
+  font-size:14px;
+  line-height:1.7;
+}
+.price{
+  margin:10px 0;
+  font-weight:bold;
+  color:#009688;
 }
 button{
   width:100%;
-  margin-top:15px;
-  padding:12px;
+  padding:13px;
   border:none;
-  border-radius:12px;
+  border-radius:14px;
   font-size:16px;
   cursor:pointer;
   background:linear-gradient(135deg,#0a74c9,#4fc3f7);
@@ -65,6 +69,7 @@ footer{
   text-align:center;
   padding:20px;
   color:#777;
+  font-size:13px;
 }
 </style>
 </head>
@@ -72,69 +77,53 @@ footer{
 <body>
 
 <header>
-  <h1>🛠️ خدمات FutureTank</h1>
+  <h1>💧 خدمات FutureTank</h1>
   <p>نقاء الماء هو هدفنا</p>
 </header>
 
-<div class="container">
-
-  <div class="card">
-    <h3>💧 تطهير وتعقيم خزانات المياه</h3>
-    <p>
-      تنظيف وتعقيم خزانات مياه الشرب بأحدث المعدات  
-      ومواد آمنة 100%.
-    </p>
-    <button onclick="wa('تطهير وتعقيم خزانات المياه')">
-      📲 طلب الخدمة
-    </button>
-  </div>
-
-  <div class="card">
-    <h3>🔧 صيانة الخزانات</h3>
-    <p>
-      فحص شامل – معالجة تسريب – إطالة عمر الخزان.
-    </p>
-    <button onclick="wa('صيانة خزانات المياه')">
-      📲 طلب الخدمة
-    </button>
-  </div>
-
-  <div class="card">
-    <span class="badge">قريبًا</span>
-    <h3>🧪 تحليل جودة المياه</h3>
-    <p>
-      فحص عينات المياه للتأكد من مطابقتها للمواصفات.
-    </p>
-    <button disabled>
-      🚧 قيد التطوير
-    </button>
-  </div>
-
-  <div class="card">
-    <span class="badge">قريبًا</span>
-    <h3>🏭 حلول الشركات والمصانع</h3>
-    <p>
-      تعاقدات دورية وخطط مخصصة للمنشآت الكبرى.
-    </p>
-    <button disabled>
-      🚧 سيتم الإطلاق قريبًا
-    </button>
-  </div>
-
+<div class="container" id="services">
+  <p>جاري تحميل الخدمات...</p>
 </div>
 
-<footer>
-  © FutureTank – جميع الحقوق محفوظة
-</footer>
+<footer>© FutureTank</footer>
 
 <script>
-function wa(service){
-  const msg = `مرحباً، أرغب في طلب خدمة (${service}) من FutureTank.`;
-  window.open(
-    "https://wa.me/201150402031?text="+encodeURIComponent(msg),
-    "_blank"
-  );
-}
+const API =
+"https://script.google.com/macros/s/AKfycbxNosd7Ic1OLYi_A2DrDHW42GwO10ooG7YuQgbQrenghw08VWTYg2ygvjLkfUEQBDe-/exec";
+
+fetch(API + "?services=1")
+.then(res => res.json())
+.then(data => {
+  const box = document.getElementById("services");
+  box.innerHTML = "";
+
+  if (!data.length) {
+    box.innerHTML = "<p>لا توجد خدمات متاحة حالياً</p>";
+    return;
+  }
+
+  data.forEach(s => {
+    const card = document.createElement("div");
+    card.className = "card";
+    card.innerHTML = `
+      <img src="${s.image}" alt="${s.name}">
+      <h3>${s.name}</h3>
+      <p>${s.desc}</p>
+      <div class="price">💰 ${s.price} جنيه</div>
+      <button onclick="window.open(
+        'https://wa.me/201150402031?text=أرغب%20في%20خدمة%20${encodeURIComponent(s.name)}',
+        '_blank'
+      )">
+        اطلب الخدمة الآن
+      </button>
+    `;
+    box.appendChild(card);
+  });
+})
+.catch(() => {
+  document.getElementById("services").innerHTML =
+    "<p>حدث خطأ أثناء تحميل الخدمات</p>";
+});
 </script>
 
 </body>
