@@ -29,7 +29,7 @@ header{
 .product{
   background:#fff;
   border-radius:22px;
-  padding:25px;
+  padding:22px;
   box-shadow:0 30px 60px rgba(0,0,0,.18);
   transition:.4s;
 }
@@ -41,9 +41,11 @@ header{
   height:180px;
   object-fit:cover;
   border-radius:16px;
+  margin-bottom:10px;
 }
 .product h3{
   color:#0a74c9;
+  margin:10px 0 5px;
 }
 .price{
   font-size:18px;
@@ -65,6 +67,11 @@ footer{
   padding:20px;
   color:#777;
 }
+.empty{
+  text-align:center;
+  color:#777;
+  grid-column:1/-1;
+}
 </style>
 </head>
 
@@ -75,24 +82,34 @@ footer{
   <p>حلول مختارة بعناية لنقاء وصحة أفضل</p>
 </header>
 
-<div class="container" id="products"></div>
+<div class="container" id="products">
+  <div class="empty">⏳ جاري تحميل المنتجات...</div>
+</div>
 
 <footer>
   © FutureTank – نقاء الماء هو هدفنا
 </footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbzj-haerb35UMFpY00xnkVsaOH8PyoyR_BWxjG0eLLcx-KHO7HWNF5sEn3det00Scl4/exec";
+// ✅ رابط Apps Script مع باراميتر المنتجات
+const API_URL =
+"https://script.google.com/macros/s/AKfycbzj-haerb35UMFpY00xnkVsaOH8PyoyR_BWxjG0eLLcx-KHO7HWNF5sEn3det00Scl4/exec?products=1";
 
 fetch(API_URL)
   .then(res => res.json())
   .then(data => {
     const box = document.getElementById("products");
+    box.innerHTML = "";
+
+    if (!data.length) {
+      box.innerHTML = "<div class='empty'>لا توجد منتجات متاحة حالياً</div>";
+      return;
+    }
 
     data.forEach(p => {
       box.innerHTML += `
         <div class="product">
-          <img src="${p.image}">
+          <img src="${p.image}" alt="${p.name}">
           <h3>${p.name}</h3>
           <p>${p.desc}</p>
           <div class="price">${p.price} جنيه</div>
@@ -100,6 +117,10 @@ fetch(API_URL)
         </div>
       `;
     });
+  })
+  .catch(() => {
+    document.getElementById("products").innerHTML =
+      "<div class='empty'>حدث خطأ أثناء تحميل المنتجات</div>";
   });
 
 function order(name){
