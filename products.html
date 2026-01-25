@@ -36,6 +36,12 @@ header{
 .product:hover{
   transform:translateY(-12px);
 }
+.product img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+  border-radius:14px;
+}
 .product h3{
   color:#0a74c9;
 }
@@ -54,15 +60,6 @@ button{
   font-size:16px;
   cursor:pointer;
 }
-.badge{
-  display:inline-block;
-  background:#ff9800;
-  color:#fff;
-  padding:5px 12px;
-  border-radius:20px;
-  font-size:13px;
-  margin-bottom:10px;
-}
 footer{
   text-align:center;
   padding:20px;
@@ -78,49 +75,41 @@ footer{
   <p>حلول مختارة بعناية لنقاء وصحة أفضل</p>
 </header>
 
-<div class="container">
-
-  <div class="product">
-    <span class="badge">الأكثر طلبًا</span>
-    <h3>فلتر مياه 5 مراحل</h3>
-    <p>تنقية كاملة – طعم أفضل – حماية للأسرة.</p>
-    <div class="price">قريبًا</div>
-    <button onclick="soon()">🛒 تسوق قريبًا</button>
-  </div>
-
-  <div class="product">
-    <h3>فلتر مركزي للخزانات</h3>
-    <p>تنقية المياه قبل دخولها للخزان.</p>
-    <div class="price">قريبًا</div>
-    <button onclick="soon()">🛒 تسوق قريبًا</button>
-  </div>
-
-  <div class="product">
-    <h3>مواد تعقيم آمنة</h3>
-    <p>مطابقة للمواصفات – آمنة لمياه الشرب.</p>
-    <div class="price">قريبًا</div>
-    <button onclick="soon()">🛒 تسوق قريبًا</button>
-  </div>
-
-  <div class="product">
-    <span class="badge">قيد التطوير</span>
-    <h3>أجهزة اختبار جودة المياه</h3>
-    <p>قياس الأملاح – العكارة – الجودة.</p>
-    <div class="price">🚧</div>
-    <button disabled>سيتم الإطلاق قريبًا</button>
-  </div>
-
-</div>
+<div class="container" id="products"></div>
 
 <footer>
   © FutureTank – نقاء الماء هو هدفنا
 </footer>
 
 <script>
-function soon(){
-  const msg="مرحباً، أرغب في الاستفسار عن منتجات FutureTank.";
+const API_URL = "PUT_YOUR_APPS_SCRIPT_URL_HERE";
+
+fetch(API_URL + "?products=1")
+  .then(res => res.json())
+  .then(data => {
+    const box = document.getElementById("products");
+    if (!data.length) {
+      box.innerHTML = "<p style='text-align:center'>لا توجد منتجات حالياً</p>";
+      return;
+    }
+
+    data.forEach(p => {
+      box.innerHTML += `
+        <div class="product">
+          <img src="${p.image}">
+          <h3>${p.name}</h3>
+          <p>${p.desc}</p>
+          <div class="price">${p.price} جنيه</div>
+          <button onclick="order('${p.name}')">🛒 اطلب المنتج</button>
+        </div>
+      `;
+    });
+  });
+
+function order(name){
+  const msg = "أرغب في الاستفسار عن منتج: " + name;
   window.open(
-    "https://wa.me/201150402031?text="+encodeURIComponent(msg),
+    "https://wa.me/201150402031?text=" + encodeURIComponent(msg),
     "_blank"
   );
 }
