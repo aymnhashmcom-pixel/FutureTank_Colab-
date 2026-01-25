@@ -1,97 +1,8 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>خدمات FutureTank</title>
-
-<style>
-body{
-  margin:0;
-  font-family:"Segoe UI",Tahoma;
-  background:#f4f7fb;
-  color:#333;
-}
-header{
-  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
-  color:#fff;
-  padding:25px;
-  text-align:center;
-}
-.container{
-  max-width:1100px;
-  margin:30px auto;
-  padding:15px;
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
-  gap:25px;
-}
-.card{
-  background:#fff;
-  border-radius:22px;
-  padding:20px;
-  box-shadow:0 20px 45px rgba(0,0,0,.15);
-  transition:.4s;
-}
-.card:hover{
-  transform:translateY(-8px);
-}
-.card img{
-  width:100%;
-  height:180px;
-  object-fit:cover;
-  border-radius:15px;
-}
-.card h3{
-  color:#0a74c9;
-  margin:15px 0 8px;
-}
-.card p{
-  font-size:14px;
-  line-height:1.7;
-}
-.price{
-  margin:10px 0;
-  font-weight:bold;
-  color:#009688;
-}
-button{
-  width:100%;
-  padding:13px;
-  border:none;
-  border-radius:14px;
-  font-size:16px;
-  cursor:pointer;
-  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
-  color:#fff;
-}
-footer{
-  text-align:center;
-  padding:20px;
-  color:#777;
-  font-size:13px;
-}
-</style>
-</head>
-
-<body>
-
-<header>
-  <h1>💧 خدمات FutureTank</h1>
-  <p>نقاء الماء هو هدفنا</p>
-</header>
-
-<div class="container" id="services">
-  <p>جاري تحميل الخدمات...</p>
-</div>
-
-<footer>© FutureTank</footer>
-
 <script>
 const API =
-"https://script.google.com/macros/s/AKfycbxNosd7Ic1OLYi_A2DrDHW42GwO10ooG7YuQgbQrenghw08VWTYg2ygvjLkfUEQBDe-/exec";
+"https://script.google.com/macros/s/AKfycbyAaJxK4VVMzMpavJjXL1HNNWk_cHeRsouj7Jt6pvAg2_tjxIuotItocqEFoWDhKeXh/exec?services=1";
 
-fetch(API + "?services=1")
+fetch(API)
 .then(res => res.json())
 .then(data => {
   const box = document.getElementById("services");
@@ -103,28 +14,20 @@ fetch(API + "?services=1")
   }
 
   data.forEach(s => {
-    const card = document.createElement("div");
-    card.className = "card";
-    card.innerHTML = `
-      <img src="${s.image}" alt="${s.name}">
-      <h3>${s.name}</h3>
-      <p>${s.desc}</p>
-      <div class="price">💰 ${s.price} جنيه</div>
-      <button onclick="window.open(
-        'https://wa.me/201150402031?text=أرغب%20في%20خدمة%20${encodeURIComponent(s.name)}',
-        '_blank'
-      )">
-        اطلب الخدمة الآن
-      </button>
+    box.innerHTML += `
+      <div class="card">
+        <img src="${s.image}">
+        <h3>${s.name}</h3>
+        <p>${s.desc}</p>
+        <div class="price">💰 ${s.price} جنيه</div>
+        <button onclick="window.open(
+          'https://wa.me/201150402031?text=أرغب%20في%20خدمة%20${encodeURIComponent(s.name)}',
+          '_blank'
+        )">
+          اطلب الخدمة الآن
+        </button>
+      </div>
     `;
-    box.appendChild(card);
   });
-})
-.catch(() => {
-  document.getElementById("services").innerHTML =
-    "<p>حدث خطأ أثناء تحميل الخدمات</p>";
 });
 </script>
-
-</body>
-</html>
