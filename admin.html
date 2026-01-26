@@ -1,40 +1,27 @@
-<script>
-const PASS="الحمدلله";
-const API = "https://script.google.com/macros/s/AKfycbyAaJxK4VVMzMpavJjXL1HNNWk_cHeRsouj7Jt6pvAg2_tjxIuotItocqEFoWDhKeXh/exec";
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+  <meta charset="UTF-8">
+  <title>⚙️ لوحة التحكم</title>
+</head>
+<body>
 
-function login(){
-  if(pass.value===PASS){
-    loginBox.style.display="none";
-    topBar.style.display="flex";
-    dashboard.style.display="block";
-  }else alert("كلمة السر خطأ");
-}
-function logout(){location.reload()}
-function openSection(id){
-  dashboard.style.display="none";
-  document.getElementById(id).style.display="block";
-}
-function back(){
-  document.querySelectorAll('.section').forEach(s=>s.style.display="none");
-  dashboard.style.display="block";
-}
-function save(){
-  msg.textContent="⏳ جاري الحفظ...";
-  fetch(API,{
-    method:"POST",
-    body:new URLSearchParams({
-      name:name.value,
-      phone:phone.value,
-      address:address.value,
-      service:service.value,
-      duration:duration.value,
-      cost:cost.value,
-      lastVisit:lastVisit.value,
-      nextVisit:nextVisit.value,
-      notes:notes.value
-    })
-  }).then(r=>r.json()).then(d=>{
-    msg.textContent=d.success?"✅ تم الحفظ بنجاح":"❌ حدث خطأ";
+<h2>⚙️ لوحة التحكم</h2>
+<div id="status">جاري التحقق...</div>
+
+<script>
+const API = "https://script.google.com/macros/s/AKfycbyYo2Tiz5V-9B2EssSYYrG3PTgOy-wwJ4oCGAv5reGuVFTl2G3PdZVvUj_dBrasKBSs/exec";
+
+fetch(API + "?admin=true")
+  .then(r => r.json())
+  .then(d => {
+    document.getElementById("status").innerText = "✅ النظام يعمل بنجاح";
+  })
+  .catch(() => {
+    document.getElementById("status").innerText = "⚠️ خطأ في الاتصال";
   });
-}
 </script>
+
+<footer>© FutureTank – لوحة التحكم</footer>
+</body>
+</html>
