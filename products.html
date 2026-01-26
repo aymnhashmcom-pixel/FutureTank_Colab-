@@ -1,47 +1,40 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>🛒 منتجات FutureTank</title>
-<style>
-body{font-family:Arial;background:#f5faff}
-.product{background:#fff;margin:15px;padding:15px;border-radius:10px;box-shadow:0 0 5px #ccc}
-img{width:100%;border-radius:8px}
-</style>
+  <meta charset="UTF-8">
+  <title>🛒 منتجات FutureTank</title>
 </head>
 <body>
 
 <h2>🛒 منتجات نقاء الماء</h2>
 <p>حلول مختارة بعناية</p>
 
-<div id="products"></div>
-
-<footer>© FutureTank – نقاء الماء هو هدفنا</footer>
+<div id="products">جاري التحميل...</div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyAaJxK4VVMzMpavJjXL1HNNWk_cHeRsouj7Jt6pvAg2_tjxIuotItocqEFoWDhKeXh/exec";
+const API = "https://script.google.com/macros/s/AKfycbyYo2Tiz5V-9B2EssSYYrG3PTgOy-wwJ4oCGAv5reGuVFTl2G3PdZVvUj_dBrasKBSs/exec";
 
-fetch(API_URL + "?type=products")
-.then(res => res.json())
-.then(items => {
-  const box = document.getElementById("products");
-  box.innerHTML = "";
-
-  items.forEach(p => {
-    box.innerHTML += `
-      <div class="product">
-        <img src="${p.image}">
-        <h3>${p.name}</h3>
+fetch(API + "?type=products")
+  .then(r => r.json())
+  .then(list => {
+    let html = "";
+    list.forEach(p => {
+      html += `
+        <hr>
+        <h4>${p.name}</h4>
+        <img src="${p.image}" width="150"><br>
         <p>${p.description}</p>
-        <b>${p.price} جنيه</b><br><br>
-        <a href="https://wa.me/201097720045?text=أرغب في الاستفسار عن منتج: ${p.name}" target="_blank">
-          🛒 اطلب المنتج الآن
-        </a>
-      </div>
-    `;
+        <b>${p.price} جنيه</b><br>
+        <a href="https://wa.me/?text=أرغب في الاستفسار عن منتج: ${p.name}">🛒 اطلب المنتج الآن</a>
+      `;
+    });
+    document.getElementById("products").innerHTML = html;
+  })
+  .catch(() => {
+    document.getElementById("products").innerText = "⚠️ فشل تحميل المنتجات";
   });
-});
 </script>
 
+<footer>© FutureTank – نقاء الماء هو هدفنا</footer>
 </body>
 </html>
