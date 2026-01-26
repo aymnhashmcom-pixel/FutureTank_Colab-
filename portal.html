@@ -4,54 +4,115 @@
 <meta charset="UTF-8">
 <title>💧 FutureTank | بوابة العملاء</title>
 <style>
-body{font-family:Arial;background:#f5faff;text-align:center}
-.card{background:#fff;margin:20px auto;padding:20px;max-width:420px;border-radius:10px;box-shadow:0 0 10px #ccc}
-h2{color:#0077cc}
-.error{color:red}
+body {
+  font-family: Arial, sans-serif;
+  background: #f5faff;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+header {
+  background: #1e88e5;
+  color: white;
+  padding: 15px;
+  font-size: 22px;
+}
+.container {
+  padding: 20px;
+}
+input {
+  padding: 10px;
+  width: 80%;
+  max-width: 300px;
+  font-size: 16px;
+}
+button {
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-size: 16px;
+  background: #1e88e5;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+.result {
+  margin-top: 20px;
+  background: white;
+  padding: 15px;
+  border-radius: 8px;
+  text-align: right;
+}
+footer {
+  margin-top: 30px;
+  color: #555;
+}
 </style>
 </head>
+
 <body>
 
-<h2>💧 FutureTank</h2>
-<p>بوابة العملاء</p>
+<header>💧 FutureTank<br>بوابة العملاء</header>
 
-<div class="card" id="content">
-جاري التحميل...
+<div class="container">
+  <input type="text" id="phone" placeholder="أدخل رقم الهاتف">
+  <br>
+  <button onclick="search()">عرض التعاقد</button>
+
+  <div id="status"></div>
+  <div id="result" class="result" style="display:none;"></div>
 </div>
 
 <footer>© FutureTank – نقاء الماء هو هدفنا</footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyAaJxK4VVMzMpavJjXL1HNNWk_cHeRsouj7Jt6pvAg2_tjxIuotItocqEFoWDhKeXh/exec";
+const API =
+"https://script.google.com/macros/s/AKfycbxxWUbHv0tD8310f23bldbgxf2dCzHJDGrpv7p_Ldols3BhlmjTGvPI_QPASN97kAlQ/exec?phone=";
 
-const phone = new URLSearchParams(window.location.search).get("phone");
+function formatDate(d){
+  if(!d) return "-";
+  return new Date(d).toLocaleDateString("ar-EG");
+}
 
-fetch(`${API_URL}?phone=${phone}`)
-.then(res => res.json())
-.then(data => {
-  if (!data || data.error) {
-    document.getElementById("content").innerHTML =
-      "<p class='error'>⚠️ حدث خطأ في الاتصال</p>";
+function search(){
+  const phone = document.getElementById("phone").value.trim();
+  if(!phone){
+    alert("من فضلك أدخل رقم الهاتف");
     return;
   }
 
-  document.getElementById("content").innerHTML = `
-    <h3>📄 عرض التعاقد</h3>
-    <p><b>الاسم:</b> ${data.name}</p>
-    <p><b>الهاتف:</b> ${data.phone}</p>
-    <p><b>العنوان:</b> ${data.address}</p>
-    <p><b>الخدمة:</b> ${data.service}</p>
-    <p><b>مدة التعاقد:</b> ${data.contract_months} شهر</p>
-    <p><b>آخر زيارة:</b> ${data.last_visit}</p>
-    <p><b>الزيارة القادمة:</b> ${data.next_visit}</p>
-    <p><b>الأيام المتبقية:</b> ${data.remaining_days} يوم</p>
-    <a href="https://wa.me/2${data.phone}" target="_blank">📲 جدد التعاقد الآن</a>
-  `;
-})
-.catch(() => {
-  document.getElementById("content").innerHTML =
-    "<p class='error'>⚠️ حدث خطأ في الاتصال</p>";
-});
+  document.getElementById("status").innerText = "جاري البحث...";
+  document.getElementById("result").style.display="none";
+
+  fetch(API + phone)
+    .then(r => r.json())
+    .then(data => {
+      if(data.error){
+        document.getElementById("status").innerText = "⚠️ العميل غير موجود";
+        return;
+      }
+
+      document.getElementById("status").innerText = "";
+
+      document.getElementById("result").innerHTML = `
+        <b>👤 اسم العميل:</b> ${data.name}<br>
+        <b>📞 الهاتف:</b> ${data.phone}<br>
+        <b>📍 العنوان:</b> ${data.address}<br>
+        <b>🧰 الخدمة:</b> ${data.service}<br>
+        <b>⏳ مدة التعاقد:</b> ${data.contract_months} شهر<br>
+        <b>🔁 عدد الزيارات:</b> ${data.visits}<br>
+        <b>💰 التكلفة:</b> ${data.cost}<br>
+        <b>📅 تاريخ التعاقد:</b> ${formatDate(data.contract_date)}<br>
+        <b>📅 نهاية التعاقد:</b> ${formatDate(data.end_date)}<br>
+        <b>🕒 آخر زيارة:</b> ${formatDate(data.last_visit)}<br>
+        <b>➡️ الزيارة القادمة:</b> ${formatDate(data.next_visit)}<br>
+        <b>⏰ الأيام المتبقية:</b> ${data.remaining_days} يوم
+      `;
+      document.getElementById("result").style.display="block";
+    })
+    .catch(()=>{
+      document.getElementById("status").innerText = "⚠️ حدث خطأ في الاتصال";
+    });
+}
 </script>
 
 </body>
