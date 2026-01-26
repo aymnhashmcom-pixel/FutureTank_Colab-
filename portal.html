@@ -2,142 +2,55 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>💧 FutureTank | بوابة العملاء</title>
-
 <style>
-body{
-  margin:0;
-  font-family:"Segoe UI",Tahoma;
-  background:#f3f6fb;
-  color:#333;
-}
-header{
-  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
-  color:#fff;
-  padding:25px;
-  text-align:center;
-}
-.box{
-  max-width:500px;
-  margin:40px auto;
-  background:#fff;
-  padding:25px;
-  border-radius:20px;
-  box-shadow:0 20px 40px rgba(0,0,0,.15);
-}
-input,button{
-  width:100%;
-  padding:12px;
-  margin:10px 0;
-  border-radius:10px;
-  border:1px solid #ccc;
-  font-size:16px;
-}
-button{
-  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
-  color:#fff;
-  border:none;
-  cursor:pointer;
-}
-#result{
-  white-space:pre-line;
-  margin-top:15px;
-  font-size:15px;
-}
-#wa{
-  display:none;
-  text-align:center;
-  margin-top:15px;
-}
-#wa a{
-  display:block;
-  padding:12px;
-  background:#25d366;
-  color:#fff;
-  border-radius:10px;
-  text-decoration:none;
-}
-footer{
-  text-align:center;
-  margin:30px;
-  color:#777;
-}
+body{font-family:Arial;background:#f5faff;text-align:center}
+.card{background:#fff;margin:20px auto;padding:20px;max-width:420px;border-radius:10px;box-shadow:0 0 10px #ccc}
+h2{color:#0077cc}
+.error{color:red}
 </style>
 </head>
-
 <body>
 
-<header>
-  <h1>💧 FutureTank</h1>
-  <p>بوابة العملاء</p>
-</header>
+<h2>💧 FutureTank</h2>
+<p>بوابة العملاء</p>
 
-<div class="box">
-  <input id="phone" placeholder="📞 رقم الهاتف">
-  <button onclick="getContract()">📄 عرض التعاقد</button>
-  <div id="result"></div>
-
-  <div id="wa">
-    <a id="waLink" target="_blank">📲 جدد التعاقد الآن</a>
-  </div>
+<div class="card" id="content">
+جاري التحميل...
 </div>
 
-<footer>
-  © FutureTank – نقاء الماء هو هدفنا
-</footer>
+<footer>© FutureTank – نقاء الماء هو هدفنا</footer>
 
 <script>
-document.addEventListener("DOMContentLoaded", function(){
+const API_URL = "https://script.google.com/macros/s/AKfycbyAaJxK4VVMzMpavJjXL1HNNWk_cHeRsouj7Jt6pvAg2_tjxIuotItocqEFoWDhKeXh/exec";
 
-  const API =
-  "https://script.google.com/macros/s/AKfycbyAaJxK4VVMzMpavJjXL1HNNWk_cHeRsouj7Jt6pvAg2_tjxIuotItocqEFoWDhKeXh/exec";
+const phone = new URLSearchParams(window.location.search).get("phone");
 
-  window.getContract = function(){
-    const phone = document.getElementById("phone").value.trim();
-    const result = document.getElementById("result");
-    const wa = document.getElementById("wa");
-    const waLink = document.getElementById("waLink");
-
-    if(!phone){
-      result.textContent="❌ من فضلك أدخل رقم الهاتف";
-      return;
-    }
-
-    result.textContent="⏳ جاري البحث...";
-    wa.style.display="none";
-
-    fetch(API+"?phone="+encodeURIComponent(phone))
-    .then(r=>r.json())
-    .then(d=>{
-      if(!d.success){
-        result.textContent="❌ لا يوجد تعاقد مسجل";
-        return;
-      }
-
-      const c = d.contract;
-
-      result.textContent =
-`الاسم: ${c.name}
-الهاتف: ${c.phone}
-العنوان: ${c.address}
-الخدمة: ${c.service}
-مدة التعاقد: ${c.duration} شهر
-آخر زيارة: ${c.lastVisit}
-الزيارة القادمة: ${c.nextVisit}
-الأيام المتبقية: ${c.daysLeft} يوم`;
-
-      waLink.href =
-      "https://wa.me/201150402031?text=" +
-      encodeURIComponent("أرغب في تجديد التعاقد");
-
-      wa.style.display="block";
-    })
-    .catch(()=>{
-      result.textContent="⚠️ حدث خطأ في الاتصال";
-    });
+fetch(`${API_URL}?phone=${phone}`)
+.then(res => res.json())
+.then(data => {
+  if (!data || data.error) {
+    document.getElementById("content").innerHTML =
+      "<p class='error'>⚠️ حدث خطأ في الاتصال</p>";
+    return;
   }
 
+  document.getElementById("content").innerHTML = `
+    <h3>📄 عرض التعاقد</h3>
+    <p><b>الاسم:</b> ${data.name}</p>
+    <p><b>الهاتف:</b> ${data.phone}</p>
+    <p><b>العنوان:</b> ${data.address}</p>
+    <p><b>الخدمة:</b> ${data.service}</p>
+    <p><b>مدة التعاقد:</b> ${data.contract_months} شهر</p>
+    <p><b>آخر زيارة:</b> ${data.last_visit}</p>
+    <p><b>الزيارة القادمة:</b> ${data.next_visit}</p>
+    <p><b>الأيام المتبقية:</b> ${data.remaining_days} يوم</p>
+    <a href="https://wa.me/2${data.phone}" target="_blank">📲 جدد التعاقد الآن</a>
+  `;
+})
+.catch(() => {
+  document.getElementById("content").innerHTML =
+    "<p class='error'>⚠️ حدث خطأ في الاتصال</p>";
 });
 </script>
 
