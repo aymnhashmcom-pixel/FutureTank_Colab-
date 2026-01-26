@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-<meta charset="UTF-8">
-<title>الخدمات | FutureTank</title>
+  <meta charset="UTF-8">
+  <title>🧰 خدمات FutureTank</title>
 </head>
 <body>
 
@@ -10,18 +10,21 @@
 <div id="services">جاري التحميل...</div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyAaJxK4VVMzMpavJjXL1HNNWk_cHeRsouj7Jt6pvAg2_tjxIuotItocqEFoWDhKeXh/exec";
+const API = "https://script.google.com/macros/s/AKfycbyYo2Tiz5V-9B2EssSYYrG3PTgOy-wwJ4oCGAv5reGuVFTl2G3PdZVvUj_dBrasKBSs/exec";
 
-fetch(API_URL + "?type=services")
-.then(r=>r.json())
-.then(list=>{
-  let html="";
-  list.forEach(s=>{
-    html+=`<p>✔️ ${s.name}</p>`;
+fetch(API + "?type=services")
+  .then(r => r.json())
+  .then(list => {
+    let html = "<ul>";
+    list.forEach(s => html += `<li>${s.name}</li>`);
+    html += "</ul>";
+    document.getElementById("services").innerHTML = html;
+  })
+  .catch(() => {
+    document.getElementById("services").innerText = "⚠️ خطأ في تحميل الخدمات";
   });
-  document.getElementById("services").innerHTML=html;
-});
 </script>
 
+<footer>© FutureTank – نقاء الماء هو هدفنا</footer>
 </body>
 </html>
