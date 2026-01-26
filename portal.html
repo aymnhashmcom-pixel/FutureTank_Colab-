@@ -4,16 +4,57 @@
   <meta charset="UTF-8">
   <title>FutureTank | بوابة العملاء</title>
   <link rel="stylesheet" href="style.css">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    input, button {
+      padding: 10px;
+      margin: 5px;
+      width: 250px;
+      max-width: 90%;
+    }
+    #result {
+      margin-top: 20px;
+      padding: 15px;
+      border-radius: 8px;
+      background: #f7f7f7;
+    }
+  </style>
 </head>
 <body>
 
+<!-- ===== الهيدر ===== -->
 <h2>💧 FutureTank</h2>
+<p>نقاء الماء هو هدفنا</p>
+
+<hr>
+
+<!-- ===== بوابة العملاء ===== -->
 <h3>بوابة العملاء</h3>
 
 <input type="text" id="phone" placeholder="أدخل رقم الهاتف">
-<button onclick="searchClient()">عرض التعاقد</button>
+<br>
+<button type="button" onclick="searchClient()">عرض التعاقد</button>
 
-<div id="result">جاري التحميل...</div>
+<div id="result"></div>
+
+<hr>
+
+<!-- ===== روابط الموقع (باقي الموقع ظاهر) ===== -->
+<p>
+  <a href="index.html">الرئيسية</a> |
+  <a href="services.html">الخدمات</a> |
+  <a href="products.html">المنتجات</a> |
+  <a href="shop.html">المتجر</a>
+</p>
+
+<footer>
+  <br>
+  © FutureTank – نقاء الماء هو هدفنا
+</footer>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbyl6jVUN-Nh_ljWVj1XrhQbAgM4tGtxF3-tBoYKrHdTaoKi3_LtJAIOP2LEOOCQS8_E/exec";
@@ -23,11 +64,11 @@ function searchClient() {
   const result = document.getElementById("result");
 
   if (!phone) {
-    result.innerHTML = "⚠️ أدخل رقم الهاتف";
+    result.innerHTML = "⚠️ من فضلك أدخل رقم الهاتف";
     return;
   }
 
-  result.innerHTML = "جاري البحث...";
+  result.innerHTML = "🔍 جاري البحث...";
 
   fetch(`${API_URL}?phone=${encodeURIComponent(phone)}`)
     .then(res => res.json())
@@ -38,6 +79,7 @@ function searchClient() {
       }
 
       result.innerHTML = `
+        <h4>بيانات التعاقد</h4>
         <p><strong>الاسم:</strong> ${data.name}</p>
         <p><strong>الهاتف:</strong> ${data.phone}</p>
         <p><strong>العنوان:</strong> ${data.address}</p>
@@ -52,9 +94,8 @@ function searchClient() {
         <p><strong>الأيام المتبقية:</strong> ${data.remaining_days} يوم</p>
       `;
     })
-    .catch(err => {
+    .catch(() => {
       result.innerHTML = "⚠️ حدث خطأ في الاتصال";
-      console.error(err);
     });
 }
 
@@ -63,10 +104,6 @@ function formatDate(d) {
   return date.toLocaleDateString("ar-EG");
 }
 </script>
-
-<footer>
-  © FutureTank – نقاء الماء هو هدفنا
-</footer>
 
 </body>
 </html>
