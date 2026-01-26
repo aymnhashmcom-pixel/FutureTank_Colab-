@@ -1,33 +1,27 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>الخدمات | FutureTank</title>
+</head>
+<body>
+
+<h2>🧰 خدمات FutureTank</h2>
+<div id="services">جاري التحميل...</div>
+
 <script>
-const API =
-"https://script.google.com/macros/s/AKfycbyAaJxK4VVMzMpavJjXL1HNNWk_cHeRsouj7Jt6pvAg2_tjxIuotItocqEFoWDhKeXh/exec?services=1";
+const API_URL = "https://script.google.com/macros/s/AKfycbyAaJxK4VVMzMpavJjXL1HNNWk_cHeRsouj7Jt6pvAg2_tjxIuotItocqEFoWDhKeXh/exec";
 
-fetch(API)
-.then(res => res.json())
-.then(data => {
-  const box = document.getElementById("services");
-  box.innerHTML = "";
-
-  if (!data.length) {
-    box.innerHTML = "<p>لا توجد خدمات متاحة حالياً</p>";
-    return;
-  }
-
-  data.forEach(s => {
-    box.innerHTML += `
-      <div class="card">
-        <img src="${s.image}">
-        <h3>${s.name}</h3>
-        <p>${s.desc}</p>
-        <div class="price">💰 ${s.price} جنيه</div>
-        <button onclick="window.open(
-          'https://wa.me/201150402031?text=أرغب%20في%20خدمة%20${encodeURIComponent(s.name)}',
-          '_blank'
-        )">
-          اطلب الخدمة الآن
-        </button>
-      </div>
-    `;
+fetch(API_URL + "?type=services")
+.then(r=>r.json())
+.then(list=>{
+  let html="";
+  list.forEach(s=>{
+    html+=`<p>✔️ ${s.name}</p>`;
   });
+  document.getElementById("services").innerHTML=html;
 });
 </script>
+
+</body>
+</html>
