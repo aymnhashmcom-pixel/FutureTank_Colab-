@@ -2,121 +2,69 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>💧 FutureTank | بوابة العملاء</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <style>
-    body{
-      font-family:Tahoma;
-      background:#f3f6fb;
-      text-align:center;
-      padding:20px;
-    }
-    .card{
-      max-width:500px;
-      margin:20px auto;
-      background:#fff;
-      padding:20px;
-      border-radius:16px;
-      box-shadow:0 10px 30px rgba(0,0,0,.15);
-    }
-    input,button{
-      width:90%;
-      padding:12px;
-      margin:8px 0;
-      border-radius:10px;
-      font-size:16px;
-    }
-    button{
-      border:none;
-      background:#0a74c9;
-      color:#fff;
-      cursor:pointer;
-    }
-    nav a{
-      margin:0 8px;
-      color:#0a74c9;
-      text-decoration:none;
-      font-weight:bold;
-    }
-    #result{
-      margin-top:15px;
-      text-align:right;
-    }
-  </style>
+  <title>Future Tank</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 
-<h2>💧 FutureTank</h2>
-<p>نقاء الماء هو هدفنا</p>
+<header class="header">
+  <img src="logo.png" class="logo" alt="Future Tank">
+  <h1>نقاء المياه يبدأ من هنا</h1>
+  <p>حلول متكاملة لخزانات المياه</p>
+</header>
 
-<nav>
-  <a href="index.html">بوابة العملاء</a>
-  <a href="services.html">الخدمات</a>
-  <a href="products.html">المنتجات</a>
-  <a href="shop.html">المتجر</a>
-</nav>
+<section class="actions">
+  <a href="#services" class="btn">الخدمات</a>
+  <a href="#products" class="btn">المنتجات</a>
+  <a href="#client" class="btn primary">بياناتي / تجديد التعاقد</a>
+</section>
 
-<div class="card">
-  <h3>بوابة العملاء</h3>
+<section id="services" class="section">
+  <h2>خدماتنا</h2>
 
-  <input type="text" id="phone" placeholder="أدخل رقم الهاتف">
-  <button onclick="loadClient()">عرض التعاقد</button>
+  <div class="card">
+    <img src="service1.jpg">
+    <h3>تنظيف خزانات</h3>
+    <p>تنظيف وتعقيم بأعلى معايير الأمان</p>
+  </div>
 
-  <div id="result"></div>
-</div>
+  <div class="card">
+    <img src="service2.jpg">
+    <h3>عزل الخزانات</h3>
+    <p>حماية كاملة من التسرب والبكتيريا</p>
+  </div>
+</section>
 
-<footer>
-  © FutureTank – نقاء الماء هو هدفنا
+<section id="products" class="section">
+  <h2>المنتجات</h2>
+
+  <div class="card">
+    <img src="product1.jpg">
+    <h3>خزان مياه</h3>
+    <p>جودة عالية وعمر افتراضي طويل</p>
+  </div>
+</section>
+
+<section id="client" class="section">
+  <h2>بيانات العميل</h2>
+
+  <div class="client-box">
+    <p><strong>الاسم:</strong> ———</p>
+    <p><strong>نوع التعاقد:</strong> سنوي</p>
+    <p><strong>تاريخ الانتهاء:</strong> ———</p>
+
+    <a class="whatsapp-btn"
+       href="https://wa.me/XXXXXXXXXXX?text=أرغب%20في%20تجديد%20التعاقد"
+       target="_blank">
+       🔁 تجديد التعاقد عبر واتساب
+    </a>
+  </div>
+</section>
+
+<footer class="footer">
+  © Future Tank
 </footer>
-
-<script>
-const API =
-"https://script.google.com/macros/s/AKfycbyIRaBfKb2Bt_olTXCAyxCQTQieTL6iT_0a66uK04-GE03IKP-z7ZmHUunwNUUev78B/exec";
-
-function loadClient(){
-  const phone = document.getElementById("phone").value.trim();
-  const result = document.getElementById("result");
-
-  if(!phone){
-    result.innerHTML = "⚠️ أدخل رقم الهاتف";
-    return;
-  }
-
-  result.innerHTML = "🔍 جاري البحث...";
-
-  fetch(`${API}?phone=${encodeURIComponent(phone)}&v=${Date.now()}`)
-    .then(r => r.json())
-    .then(d => {
-      if(d.error){
-        result.innerHTML = "⚠️ العميل غير موجود";
-        return;
-      }
-
-      result.innerHTML = `
-        <hr>
-        <p><b>الاسم:</b> ${d.name}</p>
-        <p><b>الهاتف:</b> ${d.phone}</p>
-        <p><b>العنوان:</b> ${d.address}</p>
-        <p><b>الخدمة:</b> ${d.service}</p>
-        <p><b>مدة التعاقد:</b> ${d.contract_months} شهر</p>
-        <p><b>عدد الزيارات:</b> ${d.visits}</p>
-        <p><b>التكلفة:</b> ${d.cost} جنيه</p>
-        <p><b>آخر زيارة:</b> ${formatDate(d.last_visit)}</p>
-        <p><b>الزيارة القادمة:</b> ${formatDate(d.next_visit)}</p>
-        <p><b>الأيام المتبقية:</b> ${d.remaining_days} يوم</p>
-      `;
-    })
-    .catch(()=>{
-      result.innerHTML = "⚠️ حدث خطأ في الاتصال";
-    });
-}
-
-function formatDate(d){
-  if(!d) return "—";
-  return new Date(d).toLocaleDateString("ar-EG");
-}
-</script>
 
 </body>
 </html>
