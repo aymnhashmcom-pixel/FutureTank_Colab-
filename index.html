@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 <header class="navbar">
@@ -52,8 +53,8 @@
 
     <input
       type="text"
-      id="searchInput"
-      placeholder="اكتب اسم العميل أو رقم الهاتف"
+      id="phoneInput"
+      placeholder="اكتب رقم الموبايل"
       class="search-input"
     >
 
@@ -63,17 +64,22 @@
 
     <div id="clientData" class="client-data hidden">
       <p><strong>الاسم:</strong> <span id="clientName"></span></p>
-      <p><strong>نوع التعاقد:</strong> <span id="clientPlan"></span></p>
+      <p><strong>الخدمة:</strong> <span id="clientService"></span></p>
       <p><strong>تاريخ الانتهاء:</strong> <span id="clientEnd"></span></p>
+      <p><strong>الأيام المتبقية:</strong> <span id="remainingDays"></span></p>
 
       <a
+        id="renewBtn"
         class="renew-btn"
         target="_blank"
-        href="https://wa.me/201150402031?text=مرحبا%20ارغب%20في%20تجديد%20التعاقد%20مع%20Future%20Tank"
       >
         🔁 تجديد التعاقد عبر واتساب
       </a>
     </div>
+
+    <p id="errorMsg" class="error hidden">
+      ❌ لا توجد بيانات لهذا الرقم
+    </p>
 
   </div>
 </section>
@@ -84,4 +90,4 @@
 
 <script src="script.js"></script>
 </body>
-    </html>
+</html>
