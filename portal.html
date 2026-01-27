@@ -3,117 +3,64 @@
 <head>
 <meta charset="UTF-8">
 <title>FutureTank | بوابة العملاء</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="style.css">
 
 <style>
 body{
-  font-family: Tahoma, Arial;
-  background: linear-gradient(135deg,#eaf3fb,#f7fbff);
-  margin:0;
-  padding:0;
-  color:#333;
-}
-
-header{
-  background:#0a74c9;
-  color:#fff;
+  font-family:Tahoma;
+  background:#f3f6fb;
+  text-align:center;
   padding:20px;
-  text-align:center;
 }
-
-header h2{
-  margin:0;
-  font-size:26px;
-}
-
-header p{
-  margin:5px 0 0;
-  font-size:14px;
-  opacity:.9;
-}
-
-nav{
-  background:#fff;
-  padding:10px;
-  text-align:center;
-  box-shadow:0 2px 8px rgba(0,0,0,.08);
-}
-
-nav a{
-  margin:0 10px;
-  color:#0a74c9;
-  text-decoration:none;
-  font-weight:bold;
-  font-size:14px;
-}
-
 .card{
-  max-width:520px;
-  margin:30px auto;
+  max-width:500px;
+  margin:20px auto;
   background:#fff;
-  padding:25px;
-  border-radius:18px;
-  box-shadow:0 15px 35px rgba(0,0,0,.15);
+  padding:20px;
+  border-radius:16px;
+  box-shadow:0 10px 30px rgba(0,0,0,.15);
 }
-
-.card h3{
-  margin-top:0;
-  color:#0a74c9;
-}
-
 input,button{
-  width:100%;
-  padding:14px;
-  margin:10px 0;
-  border-radius:12px;
-  font-size:15px;
+  width:90%;
+  padding:12px;
+  margin:8px 0;
+  border-radius:10px;
 }
-
-input{
-  border:1px solid #ccc;
-}
-
 button{
   border:none;
   background:#0a74c9;
   color:#fff;
+  font-size:16px;
   cursor:pointer;
 }
-
-button:hover{
-  background:#095fa3;
+.whatsapp{
+  display:block;
+  margin-top:15px;
+  background:#25d366;
+  color:#fff;
+  text-decoration:none;
+  padding:12px;
+  border-radius:10px;
+  font-weight:bold;
 }
-
-#result{
-  margin-top:20px;
-  background:#f5f8fc;
-  padding:15px;
-  border-radius:12px;
-  font-size:14px;
-}
-
-footer{
-  text-align:center;
-  padding:20px;
-  font-size:13px;
-  color:#777;
+nav a{
+  margin:0 8px;
+  color:#0a74c9;
+  text-decoration:none;
 }
 </style>
 </head>
 
 <body>
 
-<header>
-  <h2>💧 FutureTank</h2>
-  <p>نقاء الماء هو هدفنا</p>
-</header>
+<h2>💧 FutureTank</h2>
+<p>نقاء الماء هو هدفنا</p>
 
 <nav>
   <a href="index.html">الرئيسية</a>
   <a href="services.html">الخدمات</a>
   <a href="products.html">المنتجات</a>
-  <a href="shop.html">تسوق الآن</a>
+  <a href="shop.html">المتجر</a>
 </nav>
 
 <div class="card">
@@ -130,20 +77,20 @@ footer{
 </footer>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyYo2Tiz5V-9B2EssSYYrG3PTgOy-wwJ4oCGAv5reGuVFTl2G3PdZVvUj_dBrasKBSs/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbxHE2unMaaiYKL0-u20jPa3pFoF1cnY7GYqe5rvIKcP8MrtPcQk-3hK5v-rRGaLNJdB/exec";
 
 function searchClient(){
   const phone = document.getElementById("phone").value.trim();
   const result = document.getElementById("result");
 
   if(!phone){
-    result.innerHTML = "⚠️ من فضلك أدخل رقم الهاتف";
+    result.innerHTML = "⚠️ أدخل رقم الهاتف";
     return;
   }
 
   result.innerHTML = "🔍 جاري البحث...";
 
-  fetch(`${API_URL}?phone=${encodeURIComponent(phone)}&v=${Date.now()}`)
+  fetch(`${API_URL}?phone=${encodeURIComponent(phone)}`)
     .then(res => res.json())
     .then(data => {
       if(data.error){
@@ -151,7 +98,19 @@ function searchClient(){
         return;
       }
 
+      const msg = `
+السلام عليكم
+أرغب في تجديد التعاقد
+الاسم: ${data.name}
+الهاتف: ${data.phone}
+الخدمة: ${data.service}
+      `;
+
+      const whatsappLink =
+        "https://wa.me/2XXXXXXXXXX?text=" + encodeURIComponent(msg);
+
       result.innerHTML = `
+        <hr>
         <p><b>الاسم:</b> ${data.name}</p>
         <p><b>الهاتف:</b> ${data.phone}</p>
         <p><b>العنوان:</b> ${data.address}</p>
@@ -162,10 +121,14 @@ function searchClient(){
         <p><b>آخر زيارة:</b> ${formatDate(data.last_visit)}</p>
         <p><b>الزيارة القادمة:</b> ${formatDate(data.next_visit)}</p>
         <p><b>ينتهي التعاقد بعد:</b> ${data.remaining_days} يوم</p>
+
+        <a class="whatsapp" href="${whatsappLink}" target="_blank">
+          🔁 تجديد التعاقد عبر واتساب
+        </a>
       `;
     })
     .catch(()=>{
-      result.innerHTML = "⚠️ حدث خطأ في الاتصال";
+      result.innerHTML = "⚠️ خطأ في الاتصال";
     });
 }
 
