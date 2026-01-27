@@ -2,59 +2,136 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>FutureTank | بوابة العملاء</title>
-<link rel="stylesheet" href="style.css">
+<title>Future Tank | بوابة العملاء</title>
 
 <style>
 body{
-  font-family:Tahoma;
-  background:#f3f6fb;
+  margin:0;
+  font-family:Tahoma, Arial;
+  background:#f4f8fc;
+  color:#222;
+}
+
+header{
+  background:#0a74c9;
+  color:#fff;
+  padding:18px;
   text-align:center;
-  padding:20px;
 }
-.card{
-  max-width:500px;
-  margin:20px auto;
-  background:#fff;
-  padding:20px;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+header h1{
+  margin:0;
+  font-size:26px;
 }
-input,button{
-  width:90%;
+
+header p{
+  margin:6px 0 0;
+  font-size:14px;
+}
+
+nav{
+  background:#ffffff;
   padding:12px;
-  margin:8px 0;
-  border-radius:10px;
+  text-align:center;
+  box-shadow:0 4px 15px rgba(0,0,0,.08);
 }
-button{
+
+nav a{
+  margin:0 10px;
+  color:#0a74c9;
+  text-decoration:none;
+  font-weight:bold;
+}
+
+.container{
+  max-width:900px;
+  margin:30px auto;
+  padding:15px;
+}
+
+.search-box{
+  background:#fff;
+  padding:25px;
+  border-radius:18px;
+  box-shadow:0 15px 35px rgba(0,0,0,.12);
+  text-align:center;
+}
+
+.search-box input{
+  width:90%;
+  padding:14px;
+  margin-top:10px;
+  border-radius:12px;
+  border:1px solid #ccc;
+  font-size:16px;
+}
+
+.search-box button{
+  margin-top:15px;
+  padding:14px 30px;
   border:none;
+  border-radius:14px;
   background:#0a74c9;
   color:#fff;
   font-size:16px;
   cursor:pointer;
 }
+
+.result-card{
+  margin-top:30px;
+  background:#fff;
+  padding:25px;
+  border-radius:20px;
+  box-shadow:0 15px 40px rgba(0,0,0,.15);
+}
+
+.result-card h3{
+  margin-top:0;
+  color:#0a74c9;
+}
+
+.data-row{
+  display:flex;
+  justify-content:space-between;
+  padding:8px 0;
+  border-bottom:1px solid #eee;
+  font-size:15px;
+}
+
+.data-row span:first-child{
+  font-weight:bold;
+}
+
 .whatsapp{
   display:block;
-  margin-top:15px;
+  margin-top:25px;
   background:#25d366;
   color:#fff;
   text-decoration:none;
-  padding:12px;
-  border-radius:10px;
+  padding:14px;
+  border-radius:14px;
+  font-size:16px;
   font-weight:bold;
+  text-align:center;
 }
-nav a{
-  margin:0 8px;
-  color:#0a74c9;
-  text-decoration:none;
+
+footer{
+  margin-top:40px;
+  padding:18px;
+  text-align:center;
+  background:#0a74c9;
+  color:#fff;
+  font-size:14px;
 }
 </style>
 </head>
 
 <body>
 
-<h2>💧 FutureTank</h2>
-<p>نقاء الماء هو هدفنا</p>
+<header>
+  <h1>💧 Future Tank</h1>
+  <p>نقاء المياه يبدأ من هنا</p>
+</header>
 
 <nav>
   <a href="index.html">الرئيسية</a>
@@ -63,38 +140,45 @@ nav a{
   <a href="shop.html">المتجر</a>
 </nav>
 
-<div class="card">
-  <h3>بوابة العملاء</h3>
+<div class="container">
 
-  <input type="text" id="phone" placeholder="أدخل رقم الهاتف">
-  <button onclick="searchClient()">عرض التعاقد</button>
+  <div class="search-box">
+    <h2>بوابة العملاء</h2>
+    <p>ادخل رقم الهاتف لعرض بيانات التعاقد</p>
+
+    <input type="text" id="phone" placeholder="مثال: 01XXXXXXXXX">
+    <br>
+    <button onclick="searchClient()">🔍 عرض التعاقد</button>
+  </div>
 
   <div id="result"></div>
+
 </div>
 
 <footer>
-  © FutureTank – نقاء الماء هو هدفنا
+  © Future Tank – جميع الحقوق محفوظة
 </footer>
 
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbxHE2unMaaiYKL0-u20jPa3pFoF1cnY7GYqe5rvIKcP8MrtPcQk-3hK5v-rRGaLNJdB/exec";
+const WHATSAPP_NUMBER = "201150402031";
 
 function searchClient(){
   const phone = document.getElementById("phone").value.trim();
   const result = document.getElementById("result");
 
   if(!phone){
-    result.innerHTML = "⚠️ أدخل رقم الهاتف";
+    result.innerHTML = "<p style='text-align:center'>⚠️ من فضلك أدخل رقم الهاتف</p>";
     return;
   }
 
-  result.innerHTML = "🔍 جاري البحث...";
+  result.innerHTML = "<p style='text-align:center'>🔍 جاري البحث...</p>";
 
   fetch(`${API_URL}?phone=${encodeURIComponent(phone)}`)
-    .then(res => res.json())
+    .then(r => r.json())
     .then(data => {
       if(data.error){
-        result.innerHTML = "⚠️ العميل غير موجود";
+        result.innerHTML = "<p style='text-align:center'>❌ العميل غير موجود</p>";
         return;
       }
 
@@ -106,29 +190,30 @@ function searchClient(){
 الخدمة: ${data.service}
       `;
 
-      const whatsappLink =
-        "https://wa.me/2XXXXXXXXXX?text=" + encodeURIComponent(msg);
-
       result.innerHTML = `
-        <hr>
-        <p><b>الاسم:</b> ${data.name}</p>
-        <p><b>الهاتف:</b> ${data.phone}</p>
-        <p><b>العنوان:</b> ${data.address}</p>
-        <p><b>الخدمة:</b> ${data.service}</p>
-        <p><b>مدة التعاقد:</b> ${data.contract_months} شهر</p>
-        <p><b>عدد الزيارات:</b> ${data.visits}</p>
-        <p><b>التكلفة:</b> ${data.cost} جنيه</p>
-        <p><b>آخر زيارة:</b> ${formatDate(data.last_visit)}</p>
-        <p><b>الزيارة القادمة:</b> ${formatDate(data.next_visit)}</p>
-        <p><b>ينتهي التعاقد بعد:</b> ${data.remaining_days} يوم</p>
+        <div class="result-card">
+          <h3>بيانات التعاقد</h3>
 
-        <a class="whatsapp" href="${whatsappLink}" target="_blank">
-          🔁 تجديد التعاقد عبر واتساب
-        </a>
+          <div class="data-row"><span>الاسم</span><span>${data.name}</span></div>
+          <div class="data-row"><span>الهاتف</span><span>${data.phone}</span></div>
+          <div class="data-row"><span>العنوان</span><span>${data.address}</span></div>
+          <div class="data-row"><span>الخدمة</span><span>${data.service}</span></div>
+          <div class="data-row"><span>مدة التعاقد</span><span>${data.contract_months} شهر</span></div>
+          <div class="data-row"><span>عدد الزيارات</span><span>${data.visits}</span></div>
+          <div class="data-row"><span>التكلفة</span><span>${data.cost} جنيه</span></div>
+          <div class="data-row"><span>آخر زيارة</span><span>${formatDate(data.last_visit)}</span></div>
+          <div class="data-row"><span>الزيارة القادمة</span><span>${formatDate(data.next_visit)}</span></div>
+          <div class="data-row"><span>ينتهي بعد</span><span>${data.remaining_days} يوم</span></div>
+
+          <a class="whatsapp" target="_blank"
+             href="https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}">
+             🔁 تجديد التعاقد عبر واتساب
+          </a>
+        </div>
       `;
     })
     .catch(()=>{
-      result.innerHTML = "⚠️ خطأ في الاتصال";
+      result.innerHTML = "<p style='text-align:center'>⚠️ خطأ في الاتصال</p>";
     });
 }
 
