@@ -2,67 +2,76 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Future Tank</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<header class="header">
-  <img src="logo.png" class="logo" alt="Future Tank">
-  <h1>نقاء المياه يبدأ من هنا</h1>
-  <p>حلول متكاملة لخزانات المياه</p>
+<!-- ====== Navbar ====== -->
+<header class="navbar">
+  <div class="logo">Future Tank</div>
+  <nav>
+    <a href="#services">الخدمات</a>
+    <a href="#products">المنتجات</a>
+    <a href="#portal">بوابة العملاء</a>
+  </nav>
 </header>
 
-<section class="actions">
-  <a href="#services" class="btn">الخدمات</a>
-  <a href="#products" class="btn">المنتجات</a>
-  <a href="#client" class="btn primary">بياناتي / تجديد التعاقد</a>
+<!-- ====== Hero ====== -->
+<section class="hero">
+  <h1>نقاء المياه يبدأ من هنا</h1>
+  <p>حلول متكاملة لخزانات المياه</p>
 </section>
 
+<!-- ====== Services ====== -->
 <section id="services" class="section">
   <h2>خدماتنا</h2>
 
-  <div class="card">
-    <img src="service1.jpg">
-    <h3>تنظيف خزانات</h3>
-    <p>تنظيف وتعقيم بأعلى معايير الأمان</p>
-  </div>
+  <div class="cards">
+    <div class="card">
+      <h3>تنظيف خزانات</h3>
+      <p>تنظيف وتعقيم بأعلى معايير الأمان</p>
+    </div>
 
-  <div class="card">
-    <img src="service2.jpg">
-    <h3>عزل الخزانات</h3>
-    <p>حماية كاملة من التسرب والبكتيريا</p>
+    <div class="card">
+      <h3>عزل الخزانات</h3>
+      <p>حماية كاملة من التسرب والبكتيريا</p>
+    </div>
   </div>
 </section>
 
-<section id="products" class="section">
+<!-- ====== Products ====== -->
+<section id="products" class="section light">
   <h2>المنتجات</h2>
 
-  <div class="card">
-    <img src="product1.jpg">
+  <div class="card single">
     <h3>خزان مياه</h3>
     <p>جودة عالية وعمر افتراضي طويل</p>
   </div>
 </section>
 
-<section id="client" class="section">
-  <h2>بيانات العميل</h2>
+<!-- ====== Client Portal ====== -->
+<section id="portal" class="section portal">
+  <h2>بوابة العملاء</h2>
 
   <div class="client-box">
     <p><strong>الاسم:</strong> ———</p>
     <p><strong>نوع التعاقد:</strong> سنوي</p>
     <p><strong>تاريخ الانتهاء:</strong> ———</p>
 
-    <a class="whatsapp-btn"
-       href="https://wa.me/XXXXXXXXXXX?text=أرغب%20في%20تجديد%20التعاقد"
-       target="_blank">
-       🔁 تجديد التعاقد عبر واتساب
+    <a
+      class="renew-btn"
+      target="_blank"
+      href="https://wa.me/201150402031?text=مرحبا%20ارغب%20في%20تجديد%20التعاقد%20مع%20Future%20Tank"
+    >
+      🔁 تجديد التعاقد عبر واتساب
     </a>
   </div>
 </section>
 
-<footer class="footer">
+<!-- ====== Footer ====== -->
+<footer>
   © Future Tank
 </footer>
 
