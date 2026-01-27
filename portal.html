@@ -13,7 +13,7 @@ body{
   padding:20px;
 }
 .card{
-  max-width:500px;
+  max-width:520px;
   margin:20px auto;
   background:#fff;
   padding:20px;
@@ -25,18 +25,26 @@ input,button{
   padding:12px;
   margin:8px 0;
   border-radius:10px;
+  font-size:15px;
 }
 button{
   border:none;
   background:#0a74c9;
   color:#fff;
-  font-size:16px;
   cursor:pointer;
+}
+nav{
+  margin-bottom:15px;
 }
 nav a{
   margin:0 8px;
   color:#0a74c9;
   text-decoration:none;
+  font-weight:bold;
+}
+#result{
+  margin-top:15px;
+  text-align:right;
 }
 </style>
 </head>
@@ -63,10 +71,12 @@ nav a{
 </div>
 
 <footer>
+  <br>
   © FutureTank – نقاء الماء هو هدفنا
 </footer>
 
 <script>
+/* 🔗 رابط Apps Script */
 const API_URL = "https://script.google.com/macros/s/AKfycbyIRaBfKb2Bt_olTXCAyxCQTQieTL6iT_0a66uK04-GE03IKP-z7ZmHUunwNUUev78B/exec";
 
 function searchClient(){
@@ -74,15 +84,19 @@ function searchClient(){
   const result = document.getElementById("result");
 
   if(!phone){
-    result.innerHTML = "⚠️ أدخل رقم الهاتف";
+    result.innerHTML = "⚠️ من فضلك أدخل رقم الهاتف";
     return;
   }
 
   result.innerHTML = "🔍 جاري البحث...";
 
-  fetch(`${API_URL}?phone=${encodeURIComponent(phone)}`)
+  // ✅ كاسر الكاش (الحل النهائي للمشكلة)
+  const cacheBreaker = new Date().getTime();
+
+  fetch(`${API_URL}?phone=${encodeURIComponent(phone)}&t=${cacheBreaker}`)
     .then(res => res.json())
     .then(data => {
+
       if(data.error){
         result.innerHTML = "⚠️ العميل غير موجود";
         return;
@@ -97,13 +111,16 @@ function searchClient(){
         <p><b>مدة التعاقد:</b> ${data.contract_months} شهر</p>
         <p><b>عدد الزيارات:</b> ${data.visits}</p>
         <p><b>التكلفة:</b> ${data.cost} جنيه</p>
+        <p><b>تاريخ التعاقد:</b> ${formatDate(data.contract_date)}</p>
+        <p><b>تاريخ الانتهاء:</b> ${formatDate(data.end_date)}</p>
         <p><b>آخر زيارة:</b> ${formatDate(data.last_visit)}</p>
-        <p><b>الزيارة القادمة:</b> ${data.next_visit ? formatDate(data.next_visit) : "—"}</p>
+        <p><b>الزيارة القادمة:</b> ${formatDate(data.next_visit)}</p>
         <p><b>الأيام المتبقية:</b> ${data.remaining_days} يوم</p>
       `;
     })
-    .catch(()=>{
-      result.innerHTML = "⚠️ خطأ في الاتصال";
+    .catch(err=>{
+      console.error(err);
+      result.innerHTML = "⚠️ حدث خطأ في الاتصال";
     });
 }
 
