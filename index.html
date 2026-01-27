@@ -8,7 +8,6 @@
 </head>
 <body>
 
-<!-- ====== Navbar ====== -->
 <header class="navbar">
   <div class="logo">Future Tank</div>
   <nav>
@@ -18,22 +17,18 @@
   </nav>
 </header>
 
-<!-- ====== Hero ====== -->
 <section class="hero">
   <h1>نقاء المياه يبدأ من هنا</h1>
   <p>حلول متكاملة لخزانات المياه</p>
 </section>
 
-<!-- ====== Services ====== -->
 <section id="services" class="section">
   <h2>خدماتنا</h2>
-
   <div class="cards">
     <div class="card">
       <h3>تنظيف خزانات</h3>
       <p>تنظيف وتعقيم بأعلى معايير الأمان</p>
     </div>
-
     <div class="card">
       <h3>عزل الخزانات</h3>
       <p>حماية كاملة من التسرب والبكتيريا</p>
@@ -41,10 +36,8 @@
   </div>
 </section>
 
-<!-- ====== Products ====== -->
 <section id="products" class="section light">
   <h2>المنتجات</h2>
-
   <div class="card single">
     <h3>خزان مياه</h3>
     <p>جودة عالية وعمر افتراضي طويل</p>
@@ -56,24 +49,39 @@
   <h2>بوابة العملاء</h2>
 
   <div class="client-box">
-    <p><strong>الاسم:</strong> ———</p>
-    <p><strong>نوع التعاقد:</strong> سنوي</p>
-    <p><strong>تاريخ الانتهاء:</strong> ———</p>
 
-    <a
-      class="renew-btn"
-      target="_blank"
-      href="https://wa.me/201150402031?text=مرحبا%20ارغب%20في%20تجديد%20التعاقد%20مع%20Future%20Tank"
+    <input
+      type="text"
+      id="searchInput"
+      placeholder="اكتب اسم العميل أو رقم الهاتف"
+      class="search-input"
     >
-      🔁 تجديد التعاقد عبر واتساب
-    </a>
+
+    <button onclick="searchClient()" class="search-btn">
+      🔍 بحث
+    </button>
+
+    <div id="clientData" class="client-data hidden">
+      <p><strong>الاسم:</strong> <span id="clientName"></span></p>
+      <p><strong>نوع التعاقد:</strong> <span id="clientPlan"></span></p>
+      <p><strong>تاريخ الانتهاء:</strong> <span id="clientEnd"></span></p>
+
+      <a
+        class="renew-btn"
+        target="_blank"
+        href="https://wa.me/201150402031?text=مرحبا%20ارغب%20في%20تجديد%20التعاقد%20مع%20Future%20Tank"
+      >
+        🔁 تجديد التعاقد عبر واتساب
+      </a>
+    </div>
+
   </div>
 </section>
 
-<!-- ====== Footer ====== -->
 <footer>
   © Future Tank
 </footer>
 
+<script src="script.js"></script>
 </body>
-</html>
+    </html>
