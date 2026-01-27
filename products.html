@@ -4,7 +4,6 @@
 <meta charset="UTF-8">
 <title>FutureTank | المنتجات</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css">
 
 <style>
 body{
@@ -15,26 +14,36 @@ body{
 header{
   background:#0a74c9;
   color:#fff;
-  padding:20px;
+  padding:30px;
   text-align:center;
 }
 .products{
-  max-width:900px;
-  margin:30px auto;
+  max-width:1000px;
+  margin:40px auto;
   display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-  gap:20px;
+  grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:25px;
   padding:15px;
 }
-.product{
+.card{
   background:#fff;
-  padding:20px;
-  border-radius:16px;
-  box-shadow:0 8px 20px rgba(0,0,0,.12);
+  border-radius:18px;
+  box-shadow:0 10px 25px rgba(0,0,0,.12);
+  overflow:hidden;
   text-align:center;
 }
-.product h3{
+.card img{
+  width:100%;
+  height:180px;
+  object-fit:cover;
+}
+.card h3{
   color:#0a74c9;
+  margin:15px 0 5px;
+}
+.card p{
+  padding:0 15px 20px;
+  color:#555;
 }
 footer{
   text-align:center;
@@ -52,20 +61,25 @@ footer{
 </header>
 
 <div class="products">
-  <div class="product">
+
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1581090700227-1e37b190418e">
     <h3>فلتر 5 مراحل</h3>
-    <p>تنقية فعالة لمياه الشرب.</p>
+    <p>تنقية فعالة لمياه الشرب بجودة عالية.</p>
   </div>
 
-  <div class="product">
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1615484477778-ca3b77940c25">
     <h3>فلتر 7 مراحل</h3>
-    <p>أعلى كفاءة وجودة.</p>
+    <p>أعلى كفاءة لتنقية المياه.</p>
   </div>
 
-  <div class="product">
+  <div class="card">
+    <img src="https://images.unsplash.com/photo-1606761568499-6d2451b23c66">
     <h3>خزان مياه صحي</h3>
-    <p>خامات آمنة ومعتمدة.</p>
+    <p>خامات آمنة ومعتمدة للاستخدام الآدمي.</p>
   </div>
+
 </div>
 
 <footer>
