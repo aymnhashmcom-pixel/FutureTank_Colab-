@@ -6,7 +6,7 @@ function searchClient() {
     return;
   }
 
-  // بيانات تجريبية (مكان الربط الحقيقي لاحقًا)
+  // بيانات تجريبية (مكان Google Sheet لاحقًا)
   const client = {
     name: "أحمد محمد",
     plan: "سنوي",
