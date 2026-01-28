@@ -1,16 +1,36 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>Future Tank | الخدمات</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Future Tank | خدماتنا</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 
-<body onload="loadServices()">
+<body>
 
-<h2 style="text-align:center">خدماتنا</h2>
-<div class="cards" id="servicesList"></div>
+<header class="navbar">
+  <div class="logo">Future Tank</div>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="services.html">الخدمات</a>
+    <a href="products.html">المنتجات</a>
+  </nav>
+</header>
+
+<section class="section">
+  <h2>خدماتنا</h2>
+  <div id="servicesList" class="cards"></div>
+</section>
+
+<footer>
+  © Future Tank – جميع الحقوق محفوظة
+</footer>
 
 <script src="script.js"></script>
+<script>
+  loadServices();
+</script>
+
 </body>
 </html>
