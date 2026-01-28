@@ -1,9 +1,11 @@
 const API =
   "https://script.google.com/macros/s/AKfycbwFU-0YAoqGHyZnHNOQwimoHzzJ6EqX8D-vWiY2DsL8E---HDxUkgNu3tyQ15itWJrd/exec";
 
+/* ===============================
+   بوابة العملاء
+================================ */
 function searchClient() {
-  const phoneInput = document.getElementById("searchInput");
-  const phone = phoneInput.value.trim();
+  const phone = document.getElementById("searchInput").value.trim();
 
   if (!phone) {
     alert("من فضلك أدخل رقم الهاتف");
@@ -19,7 +21,7 @@ function searchClient() {
       }
 
       const box = document.getElementById("clientData");
-      box.classList.remove("hidden");
+      box.style.display = "block";
 
       setText("name", data.name);
       setText("phone", data.phone);
@@ -27,7 +29,7 @@ function searchClient() {
       setText("service", data.service);
       setText("months", data.contract_months);
       setText("visits", data.visits);
-      setText("cost", data.cost);
+      setText("cost", data.cost ? data.cost + " جنيه" : "—");
 
       setText("start", formatDate(data.contract_date));
       setText("end", formatDate(data.end_date));
@@ -35,43 +37,41 @@ function searchClient() {
       setText("next", formatDate(data.next_visit));
       setText("remaining", data.remaining_days);
 
+      // زر واتساب
       const msg = `
 السلام عليكم
 أرغب في تجديد التعاقد
 الاسم: ${data.name || ""}
 الهاتف: ${data.phone || ""}
 الخدمة: ${data.service || ""}
-      `.trim();
+      `;
 
       const renewBtn = document.querySelector(".renew-btn");
       if (renewBtn) {
         renewBtn.href =
-          "https://wa.me/201150402031?text=" +
-          encodeURIComponent(msg);
+          "https://wa.me/201150402031?text=" + encodeURIComponent(msg);
       }
     })
-    .catch((err) => {
-      console.error(err);
+    .catch(() => {
       alert("حدث خطأ في الاتصال");
     });
 }
 
 function setText(id, value) {
   const el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = value ? value : "—";
+  if (el) el.textContent = value || "—";
 }
 
 function formatDate(d) {
   if (!d) return "—";
-  const date = new Date(d);
-  if (isNaN(date)) return "—";
-  return date.toLocaleDateString("ar-EG");
+  return new Date(d).toLocaleDateString("ar-EG");
 }
 
-/* ===== دعم active / نشط ===== */
+/* ===============================
+   فلترة الخدمات والمنتجات
+   تقبل active أو نشط
+================================ */
 function isActive(status) {
   if (!status) return false;
-  const s = status.toString().toLowerCase();
-  return s === "active" || s === "نشط";
+  return status === "active" || status === "نشط";
 }
