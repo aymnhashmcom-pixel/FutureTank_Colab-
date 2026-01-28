@@ -1,19 +1,20 @@
-const API = "https://script.google.com/macros/s/AKfycbxHE2unMaaiYKL0-u20jPa3pFoF1cnY7GYqe5rvIKcP8MrtPcQk-3hK5v-rRGaLNJdB/exec";
+const API = "https://script.google.com/macros/s/AKfycbw_3BPEWUkLFirsOGUp77QDK7tRftx8QPO7sBexroEeSzdoI1UrAcMf_93fo_WOz8Hq/exec";
 
 // ===== Services =====
 function loadServices(){
   fetch(API + "?type=services")
-    .then(r=>r.json())
-    .then(data=>{
+    .then(r => r.json())
+    .then(data => {
       const box = document.getElementById("servicesList");
+      if(!box) return;
       box.innerHTML = "";
-      data.forEach(s=>{
+      data.forEach(s => {
         box.innerHTML += `
           <div class="card">
             <img src="${s.image}" alt="${s.name}">
             <h3>${s.name}</h3>
             <p>${s.desc}</p>
-            <span>${s.price} جنيه</span>
+            <strong>${s.price} جنيه</strong>
           </div>
         `;
       });
@@ -23,17 +24,18 @@ function loadServices(){
 // ===== Products =====
 function loadProducts(){
   fetch(API + "?type=products")
-    .then(r=>r.json())
-    .then(data=>{
+    .then(r => r.json())
+    .then(data => {
       const box = document.getElementById("productsList");
+      if(!box) return;
       box.innerHTML = "";
-      data.forEach(p=>{
+      data.forEach(p => {
         box.innerHTML += `
           <div class="card">
             <img src="${p.image}" alt="${p.name}">
             <h3>${p.name}</h3>
             <p>${p.desc}</p>
-            <span>${p.price} جنيه</span>
+            <strong>${p.price} جنيه</strong>
           </div>
         `;
       });
