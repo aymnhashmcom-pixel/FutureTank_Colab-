@@ -13,52 +13,65 @@ function searchClient() {
   fetch(API + "?phone=" + encodeURIComponent(phone))
     .then((res) => res.json())
     .then((data) => {
-      if (data.error) {
+      if (!data || data.error) {
         alert("العميل غير موجود");
         return;
       }
 
-      // إظهار البوكس
       const box = document.getElementById("clientData");
       box.classList.remove("hidden");
 
-      // تعبئة البيانات
-      document.getElementById("name").textContent = data.name || "—";
-      document.getElementById("phone").textContent = data.phone || "—";
-      document.getElementById("address").textContent = data.address || "—";
-      document.getElementById("service").textContent = data.service || "—";
-      document.getElementById("months").textContent = data.contract_months || "—";
-      document.getElementById("visits").textContent = data.visits || "—";
-      document.getElementById("cost").textContent = data.cost || "—";
+      setText("name", data.name);
+      setText("phone", data.phone);
+      setText("address", data.address);
+      setText("service", data.service);
+      setText("months", data.contract_months);
+      setText("visits", data.visits);
+      setText("cost", data.cost);
 
-      document.getElementById("start").textContent = formatDate(
-        data.contract_date
-      );
-      document.getElementById("end").textContent = formatDate(data.end_date);
-      document.getElementById("last").textContent = formatDate(data.last_visit);
-      document.getElementById("next").textContent = formatDate(data.next_visit);
-      document.getElementById("remaining").textContent =
-        data.remaining_days || "—";
+      setText("start", formatDate(data.contract_date));
+      setText("end", formatDate(data.end_date));
+      setText("last", formatDate(data.last_visit));
+      setText("next", formatDate(data.next_visit));
+      setText("remaining", data.remaining_days);
 
-      // تحديث زر واتساب
       const msg = `
 السلام عليكم
 أرغب في تجديد التعاقد
-الاسم: ${data.name}
-الهاتف: ${data.phone}
-الخدمة: ${data.service}
-      `;
+الاسم: ${data.name || ""}
+الهاتف: ${data.phone || ""}
+الخدمة: ${data.service || ""}
+      `.trim();
 
       const renewBtn = document.querySelector(".renew-btn");
-      renewBtn.href =
-        "https://wa.me/201150402031?text=" + encodeURIComponent(msg);
+      if (renewBtn) {
+        renewBtn.href =
+          "https://wa.me/201150402031?text=" +
+          encodeURIComponent(msg);
+      }
     })
-    .catch(() => {
+    .catch((err) => {
+      console.error(err);
       alert("حدث خطأ في الاتصال");
     });
 }
 
+function setText(id, value) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.textContent = value ? value : "—";
+}
+
 function formatDate(d) {
   if (!d) return "—";
-  return new Date(d).toLocaleDateString("ar-EG");
+  const date = new Date(d);
+  if (isNaN(date)) return "—";
+  return date.toLocaleDateString("ar-EG");
+}
+
+/* ===== دعم active / نشط ===== */
+function isActive(status) {
+  if (!status) return false;
+  const s = status.toString().toLowerCase();
+  return s === "active" || s === "نشط";
 }
