@@ -118,7 +118,7 @@ body {
 
 .client-box {
   background: #ffffff;
-  padding: 28px;
+  padding: 30px;
   border-radius: 22px;
   max-width: 520px;
   margin: auto;
@@ -146,31 +146,31 @@ body {
   cursor: pointer;
 }
 
-/* بيانات العميل */
+/* ========== بيانات العميل (الإصلاح الحقيقي) ========== */
 .client-data {
   margin-top: 25px;
   font-size: 15px;
 }
 
-/* 👈 هنا الإصلاح المهم */
-.client-data p {
+.data-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 15px;
-  margin: 8px 0;
-  padding: 10px;
+  padding: 10px 0;
   border-bottom: 1px dashed #e0e0e0;
 }
 
-.client-data strong {
+.data-row span:first-child {
+  font-weight: 700;
   color: #1976d2;
   white-space: nowrap;
 }
 
-.client-data span {
+.data-row span:last-child {
   font-weight: 600;
   text-align: left;
+  direction: ltr;
 }
 
 /* زر التجديد */
