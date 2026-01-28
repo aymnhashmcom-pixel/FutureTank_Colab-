@@ -78,6 +78,8 @@ body {
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
   transition: 0.3s ease;
   text-align: center;
+  text-decoration: none;
+  color: inherit;
 }
 
 .card:hover {
@@ -109,7 +111,87 @@ body {
   font-size: 18px;
 }
 
-/* ========== Footer ========== */
+/* ========== Portal (بوابة العملاء) ========== */
+.portal {
+  background: #eaf3ff;
+}
+
+.client-box {
+  background: #ffffff;
+  padding: 28px;
+  border-radius: 22px;
+  max-width: 520px;
+  margin: auto;
+  box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+}
+
+/* input + button */
+.search-input {
+  width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #ccddee;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.search-btn {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* بيانات العميل */
+.client-data {
+  margin-top: 25px;
+  font-size: 15px;
+}
+
+/* 👈 هنا الإصلاح المهم */
+.client-data p {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin: 8px 0;
+  padding: 10px;
+  border-bottom: 1px dashed #e0e0e0;
+}
+
+.client-data strong {
+  color: #1976d2;
+  white-space: nowrap;
+}
+
+.client-data span {
+  font-weight: 600;
+  text-align: left;
+}
+
+/* زر التجديد */
+.renew-btn {
+  display: block;
+  margin-top: 20px;
+  text-align: center;
+  background: linear-gradient(135deg, #25d366, #1ebc59);
+  color: white;
+  padding: 14px;
+  border-radius: 14px;
+  text-decoration: none;
+  font-weight: 800;
+}
+
+/* Helpers */
+.hidden {
+  display: none;
+}
+
+/* Footer */
 footer {
   text-align: center;
   padding: 25px 15px;
@@ -117,4 +199,4 @@ footer {
   color: #777;
   background: #ffffff;
   margin-top: 60px;
-  }
+}
