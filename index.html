@@ -6,83 +6,51 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-<header class="navbar">
-  <div class="logo">Future Tank</div>
-  <nav>
-    <a href="#services">الخدمات</a>
-    <a href="#products">المنتجات</a>
-    <a href="#portal">بوابة العملاء</a>
-  </nav>
+<header class="hero">
+  <h1>💧 Future Tank</h1>
+  <p>نقاء الماء هو هدفنا</p>
 </header>
 
-<section class="hero">
-  <h1>نقاء المياه يبدأ من هنا</h1>
-  <p>حلول متكاملة لخزانات المياه</p>
-</section>
-
-<section id="services" class="section">
-  <h2>خدماتنا</h2>
+<section class="section">
   <div class="cards">
-    <div class="card">
-      <h3>تنظيف خزانات</h3>
-      <p>تنظيف وتعقيم بأعلى معايير الأمان</p>
-    </div>
-    <div class="card">
-      <h3>عزل الخزانات</h3>
-      <p>حماية كاملة من التسرب والبكتيريا</p>
-    </div>
-  </div>
-</section>
 
-<section id="products" class="section light">
-  <h2>المنتجات</h2>
-  <div class="card single">
-    <h3>خزان مياه</h3>
-    <p>جودة عالية وعمر افتراضي طويل</p>
-  </div>
-</section>
+    <a class="card link-card" href="portal.html">
+      <h3>بوابة العملاء</h3>
+      <p>عرض بيانات التعاقد وتجديده</p>
+    </a>
 
-<section id="portal" class="section portal">
-  <h2>بوابة العملاء</h2>
+    <a class="card link-card" href="admin.html">
+      <h3>لوحة التحكم</h3>
+      <p>إدارة العملاء والخدمات</p>
+    </a>
 
-  <div class="client-box">
+    <a class="card link-card" href="new.html">
+      <h3>عميل جديد</h3>
+      <p>إضافة تعاقد جديد</p>
+    </a>
 
-    <input
-      type="text"
-      id="searchInput"
-      placeholder="اكتب رقم الهاتف"
-      class="search-input"
-    >
+    <a class="card link-card" href="services.html">
+      <h3>الخدمات</h3>
+      <p>خدمات Future Tank</p>
+    </a>
 
-    <button onclick="searchClient()" class="search-btn">🔍 بحث</button>
+    <a class="card link-card" href="products.html">
+      <h3>منتجات نقاء الماء</h3>
+      <p>خزانات ومنتجات معتمدة</p>
+    </a>
 
-    <div id="clientData" class="client-data hidden">
+    <a class="card link-card" href="shop.html">
+      <h3>تسوق الآن</h3>
+      <p>اطلب بسهولة</p>
+    </a>
 
-      <p><strong>الاسم:</strong> <span id="name"></span></p>
-      <p><strong>رقم الهاتف:</strong> <span id="phone"></span></p>
-      <p><strong>العنوان:</strong> <span id="address"></span></p>
-      <p><strong>الخدمة:</strong> <span id="service"></span></p>
-      <p><strong>مدة التعاقد:</strong> <span id="months"></span> شهر</p>
-      <p><strong>عدد الزيارات:</strong> <span id="visits"></span></p>
-      <p><strong>التكلفة:</strong> <span id="cost"></span> جنيه</p>
-      <p><strong>تاريخ التعاقد:</strong> <span id="start"></span></p>
-      <p><strong>تاريخ انتهاء العقد:</strong> <span id="end"></span></p>
-      <p><strong>آخر زيارة:</strong> <span id="last"></span></p>
-      <p><strong>الزيارة القادمة:</strong> <span id="next"></span></p>
-
-      <p><strong>⏳ ينتهي التعاقد بعد:</strong> <span id="remaining"></span> يوم</p>
-
-      <a
-        class="renew-btn"
-        target="_blank"
-        href="https://wa.me/201150402031?text=مرحبا%20ارغب%20في%20تجديد%20التعاقد%20مع%20Future%20Tank"
-      >
-        🔁 تجديد التعاقد عبر واتساب
-      </a>
-
-    </div>
+    <a class="card link-card" href="assistant.html">
+      <h3>المساعد الذكي</h3>
+      <p>اسأل واستفسر فورًا</p>
+    </a>
 
   </div>
 </section>
@@ -91,6 +59,5 @@
   © Future Tank
 </footer>
 
-<script src="script.js"></script>
 </body>
-  </html>
+</html>
