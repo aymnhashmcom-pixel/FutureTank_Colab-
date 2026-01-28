@@ -20,8 +20,7 @@ function searchClient() {
         return;
       }
 
-      const box = document.getElementById("clientData");
-      box.style.display = "block";
+      document.getElementById("clientData").style.display = "block";
 
       setText("name", data.name);
       setText("phone", data.phone);
@@ -40,9 +39,9 @@ function searchClient() {
       const msg = `
 السلام عليكم
 أرغب في تجديد التعاقد
-الاسم: ${data.name || ""}
-الهاتف: ${data.phone || ""}
-الخدمة: ${data.service || ""}
+الاسم: ${data.name}
+الهاتف: ${data.phone}
+الخدمة: ${data.service}
       `;
 
       const renewBtn = document.querySelector(".renew-btn");
@@ -51,9 +50,7 @@ function searchClient() {
           "https://wa.me/201150402031?text=" + encodeURIComponent(msg);
       }
     })
-    .catch(() => {
-      alert("حدث خطأ في الاتصال");
-    });
+    .catch(() => alert("حدث خطأ في الاتصال"));
 }
 
 function setText(id, value) {
@@ -79,18 +76,28 @@ function loadServices() {
       list.innerHTML = "";
 
       data.forEach((item) => {
+        const msg = `
+السلام عليكم
+أرغب في طلب خدمة:
+${item.name}
+السعر: ${item.price} جنيه
+        `;
+
         list.innerHTML += `
           <div class="card">
             <img src="${item.image}" alt="${item.name}">
             <h3>${item.name}</h3>
             <p>${item.desc}</p>
             <strong>${item.price} جنيه</strong>
+
+            <a class="action-btn"
+               target="_blank"
+               href="https://wa.me/201150402031?text=${encodeURIComponent(msg)}">
+               🛠️ اطلب الخدمة الآن
+            </a>
           </div>
         `;
       });
-    })
-    .catch(() => {
-      console.log("خطأ في تحميل الخدمات");
     });
 }
 
@@ -107,17 +114,27 @@ function loadProducts() {
       list.innerHTML = "";
 
       data.forEach((item) => {
+        const msg = `
+السلام عليكم
+أرغب في شراء المنتج:
+${item.name}
+السعر: ${item.price} جنيه
+        `;
+
         list.innerHTML += `
           <div class="card">
             <img src="${item.image}" alt="${item.name}">
             <h3>${item.name}</h3>
             <p>${item.desc}</p>
             <strong>${item.price} جنيه</strong>
+
+            <a class="action-btn"
+               target="_blank"
+               href="https://wa.me/201150402031?text=${encodeURIComponent(msg)}">
+               🛒 اطلب المنتج الآن
+            </a>
           </div>
         `;
       });
-    })
-    .catch(() => {
-      console.log("خطأ في تحميل المنتجات");
     });
 }
