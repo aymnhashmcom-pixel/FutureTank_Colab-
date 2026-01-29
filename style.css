@@ -78,8 +78,6 @@ body {
   box-shadow: 0 10px 25px rgba(0,0,0,0.08);
   transition: 0.3s ease;
   text-align: center;
-  text-decoration: none;
-  color: inherit;
 }
 
 .card:hover {
@@ -111,6 +109,24 @@ body {
   font-size: 18px;
 }
 
+/* ========== زر الطلب (خدمة / منتج) ========== */
+.action-btn {
+  display: block;
+  margin-top: 15px;
+  padding: 13px;
+  background: linear-gradient(135deg, #1976d2, #42a5f5);
+  color: #fff;
+  border-radius: 14px;
+  font-weight: 800;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+.action-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 25px rgba(0,0,0,0.2);
+}
+
 /* ========== Portal (بوابة العملاء) ========== */
 .portal {
   background: #eaf3ff;
@@ -125,7 +141,6 @@ body {
   box-shadow: 0 15px 35px rgba(0,0,0,0.12);
 }
 
-/* input + button */
 .search-input {
   width: 100%;
   padding: 14px;
@@ -146,7 +161,7 @@ body {
   cursor: pointer;
 }
 
-/* ========== بيانات العميل (الإصلاح الحقيقي) ========== */
+/* ========== بيانات العميل (منسقة صح) ========== */
 .client-data {
   margin-top: 25px;
   font-size: 15px;
@@ -174,7 +189,8 @@ body {
 }
 
 /* زر التجديد */
-.renew-btn {
+.renew-btn,
+.whatsapp {
   display: block;
   margin-top: 20px;
   text-align: center;
@@ -199,4 +215,4 @@ footer {
   color: #777;
   background: #ffffff;
   margin-top: 60px;
-}
+  }
