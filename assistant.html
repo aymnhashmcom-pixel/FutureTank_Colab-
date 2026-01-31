@@ -27,7 +27,7 @@ header{
 }
 .messages{
   padding:20px;
-  height:400px;
+  height:380px;
   overflow-y:auto;
 }
 .msg{
@@ -61,6 +61,18 @@ button{
   cursor:pointer;
   font-size:15px;
 }
+.input-box{
+  display:flex;
+  gap:10px;
+  padding:15px;
+  border-top:1px solid #eee;
+}
+input{
+  flex:1;
+  padding:12px;
+  border-radius:10px;
+  border:1px solid #ccc;
+}
 footer{
   text-align:center;
   padding:15px;
@@ -91,6 +103,11 @@ footer{
     <button onclick="products()">🛒 المنتجات</button>
     <button onclick="whatsapp()">📲 واتساب</button>
   </div>
+
+  <div class="input-box">
+    <input id="userInput" placeholder="اكتب سؤالك هنا…" onkeydown="if(event.key==='Enter') sendText()">
+    <button onclick="sendText()">إرسال</button>
+  </div>
 </div>
 
 <footer>
@@ -98,11 +115,48 @@ footer{
 </footer>
 
 <script>
-const chat=document.getElementById("chat");
+const chat = document.getElementById("chat");
 
 function addBot(text){
-  chat.innerHTML+=`<div class="msg bot">${text}</div>`;
-  chat.scrollTop=chat.scrollHeight;
+  chat.innerHTML += `<div class="msg bot">${text}</div>`;
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function addUser(text){
+  chat.innerHTML += `<div class="msg user">${text}</div>`;
+  chat.scrollTop = chat.scrollHeight;
+}
+
+function sendText(){
+  const input = document.getElementById("userInput");
+  const text = input.value.trim();
+  if(!text) return;
+  addUser(text);
+  input.value="";
+  understand(text);
+}
+
+function understand(t){
+  const text = t.toLowerCase();
+
+  if(text.includes("سلام") || text.includes("اهلا") || text.includes("مرحبا")){
+    addBot("أهلاً وسهلاً بحضرتك 🌿 كيف أقدر أساعدك؟");
+  }
+  else if(text.includes("خدم")){
+    services();
+  }
+  else if(text.includes("عقد") || text.includes("تعاقد") || text.includes("بيانات")){
+    client();
+  }
+  else if(text.includes("منتج") || text.includes("شراء") || text.includes("خزان")){
+    products();
+  }
+  else if(text.includes("واتس") || text.includes("تواصل") || text.includes("رقم")){
+    whatsapp();
+  }
+  else{
+    addBot("فهمتك جزئياً 🤝 تحب أساعدك في الخدمات، التعاقد، المنتجات، ولا التواصل؟");
+  }
 }
 
 function services(){
@@ -115,21 +169,18 @@ function client(){
 }
 
 function newClient(){
-  addBot("📝 مرحباً بك! يمكنك بدء تعاقد جديد بسهولة من خلال نموذج العميل الجديد.");
+  addBot("📝 يمكنك بدء تعاقد جديد بسهولة من خلال نموذج العميل الجديد.");
   window.open("admin.html","_blank");
 }
 
 function products(){
-  addBot("🛒 نوفر منتجات مختارة لنقاء المياه – سيتم تفعيل الشراء قريباً.");
+  addBot("🛒 نوفر منتجات مختارة لنقاء المياه.");
   window.open("products.html","_blank");
 }
 
 function whatsapp(){
   const msg="مرحباً، أحتاج مساعدة بخصوص خدمات FutureTank.";
-  window.open(
-    "https://wa.me/201150402031?text="+encodeURIComponent(msg),
-    "_blank"
-  );
+  window.open("https://wa.me/201150402031?text="+encodeURIComponent(msg),"_blank");
 }
 </script>
 
