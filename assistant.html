@@ -100,7 +100,7 @@ footer{
     <button onclick="services()">🛠️ الخدمات</button>
     <button onclick="client()">👤 بوابة العملاء</button>
     <button onclick="newClient()">📝 عميل جديد</button>
-    <button onclick="products()">🛒 المنتجات</button>
+    <button onclick="shop()">🛒 تسوق الآن</button>
     <button onclick="whatsapp()">📲 واتساب</button>
   </div>
 
@@ -121,15 +121,14 @@ function addBot(text){
   chat.innerHTML += `<div class="msg bot">${text}</div>`;
   chat.scrollTop = chat.scrollHeight;
 }
-
 function addUser(text){
   chat.innerHTML += `<div class="msg user">${text}</div>`;
   chat.scrollTop = chat.scrollHeight;
 }
 
 function sendText(){
-  const input = document.getElementById("userInput");
-  const text = input.value.trim();
+  const input=document.getElementById("userInput");
+  const text=input.value.trim();
   if(!text) return;
   addUser(text);
   input.value="";
@@ -137,50 +136,72 @@ function sendText(){
 }
 
 function understand(t){
-  const text = t.toLowerCase();
+  const text=t.toLowerCase();
 
-  if(text.includes("سلام") || text.includes("اهلا") || text.includes("مرحبا")){
+  // تحية
+  if(/سلام|اهلا|أهلا|مرحبا/.test(text)){
     addBot("أهلاً وسهلاً بحضرتك 🌿 كيف أقدر أساعدك؟");
+    return;
   }
-  else if(text.includes("خدم")){
-    services();
+
+  // صيانة وإصلاح
+  if(/صيانة|اصلاح|إصلاح|مكسور|كسر|تسريب/.test(text)){
+    addBot(
+      "🛠️ تمام، بنقدّم خدمات صيانة وإصلاح خزانات المياه، ومعالجة الكسور والتسريبات بأعلى جودة."
+    );
+    whatsapp("صيانة خزانات");
+    return;
   }
-  else if(text.includes("عقد") || text.includes("تعاقد") || text.includes("بيانات")){
+
+  // توريد وتركيب
+  if(/توريد|تركيب/.test(text)){
+    addBot(
+      "🚚 بنوفر توريد وتركيب خزانات المياه والفلاتر المعتمدة حسب احتياجك."
+    );
+    whatsapp("توريد وتركيب خزانات");
+    return;
+  }
+
+  // خزانات وفلاتر
+  if(/خزان|خزانات|فلتر|فلاتر/.test(text)){
+    addBot("💧 لدينا خزانات وفلاتر مياه معتمدة بنقاء عالي وخدمة تركيب مميزة.");
+    shop();
+    return;
+  }
+
+  // تعاقد
+  if(/تجديد|تعاقد|عقد|بيانات/.test(text)){
     client();
+    return;
   }
-  else if(text.includes("منتج") || text.includes("شراء") || text.includes("خزان")){
-    products();
-  }
-  else if(text.includes("واتس") || text.includes("تواصل") || text.includes("رقم")){
-    whatsapp();
-  }
-  else{
-    addBot("فهمتك جزئياً 🤝 تحب أساعدك في الخدمات، التعاقد، المنتجات، ولا التواصل؟");
-  }
+
+  addBot("فهمتك جزئياً 🤝 تحب أساعدك في الصيانة، التوريد، التعاقد، أو التواصل؟");
 }
 
+// الأزرار
 function services(){
-  addBot("🛠️ نقدم خدمات تطهير وتعقيم خزانات مياه الشرب بأعلى معايير الجودة والسلامة.");
+  addBot(
+    "🛠️ خدماتنا تشمل:\n<br>• صيانة وإصلاح خزانات\n• تطهير وتعقيم\n• توريد وتركيب خزانات وفلاتر"
+  );
 }
-
 function client(){
-  addBot("👤 يمكنك الدخول إلى بوابة العملاء لمراجعة بيانات التعاقد وتجديده بسهولة.");
+  addBot("👤 تقدر تدخل بوابة العملاء لمراجعة أو تجديد التعاقد.");
   window.open("portal.html","_blank");
 }
-
 function newClient(){
-  addBot("📝 يمكنك بدء تعاقد جديد بسهولة من خلال نموذج العميل الجديد.");
+  addBot("📝 يسعدنا بدء تعاقد جديد معك.");
   window.open("admin.html","_blank");
 }
-
-function products(){
-  addBot("🛒 نوفر منتجات مختارة لنقاء المياه.");
-  window.open("products.html","_blank");
+function shop(){
+  addBot("🛒 تقدر تطلب الخزانات أو الفلاتر بسهولة عبر واتساب.");
+  whatsapp("طلب منتجات");
 }
-
-function whatsapp(){
-  const msg="مرحباً، أحتاج مساعدة بخصوص خدمات FutureTank.";
-  window.open("https://wa.me/201150402031?text="+encodeURIComponent(msg),"_blank");
+function whatsapp(reason="استفسار"){
+  const msg=`مرحباً، أحتاج مساعدة بخصوص ${reason} من FutureTank.`;
+  window.open(
+    "https://wa.me/201150402031?text="+encodeURIComponent(msg),
+    "_blank"
+  );
 }
 </script>
 
