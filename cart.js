@@ -1,55 +1,51 @@
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 function addToCart(name, price) {
-  cart.push({ name, price });
+  const item = cart.find(p => p.name === name);
+  if (item) {
+    item.qty += 1;
+  } else {
+    cart.push({ name, price, qty: 1 });
+  }
   localStorage.setItem("cart", JSON.stringify(cart));
-  alert("✅ تم إضافة المنتج إلى السلة");
-}
-
-function loadCart() {
-  const cartList = document.getElementById("cartList");
-  const totalBox = document.getElementById("total");
-  cartList.innerHTML = "";
-  let total = 0;
-
-  cart.forEach((item, index) => {
-    total += item.price;
-    cartList.innerHTML += `
-      <div class="card">
-        <h3>${item.name}</h3>
-        <p>${item.price} جنيه</p>
-        <button onclick="removeItem(${index})">❌ حذف</button>
-      </div>
-    `;
-  });
-
-  totalBox.innerText = "الإجمالي: " + total + " جنيه";
+  alert("تمت إضافة المنتج إلى السلة ✅");
 }
 
 function removeItem(index) {
   cart.splice(index, 1);
   localStorage.setItem("cart", JSON.stringify(cart));
-  loadCart();
+  location.reload();
 }
 
-function sendWhatsApp() {
-  if (cart.length === 0) {
-    alert("السلة فارغة");
-    return;
-  }
+function renderCart() {
+  const container = document.getElementById("cartItems");
+  const totalEl = document.getElementById("total");
+  let total = 0;
+  container.innerHTML = "";
 
-  let message = "🛒 طلب جديد:%0A";
+  cart.forEach((item, i) => {
+    total += item.price * item.qty;
+    container.innerHTML += `
+      <div class="card">
+        <h4>${item.name}</h4>
+        <p>${item.price} جنيه × ${item.qty}</p>
+        <button onclick="removeItem(${i})">❌ حذف</button>
+      </div>
+    `;
+  });
+
+  totalEl.innerText = total;
+}
+
+function checkoutWhatsApp() {
+  let message = "🛒 طلب جديد:\n";
   let total = 0;
 
   cart.forEach(item => {
-    message += `- ${item.name} (${item.price} جنيه)%0A`;
-    total += item.price;
+    message += `- ${item.name} × ${item.qty} (${item.price * item.qty} جنيه)\n`;
+    total += item.price * item.qty;
   });
 
-  message += `%0Aالإجمالي: ${total} جنيه`;
-
-  window.open(
-    "https://wa.me/201150402031?text=" + message,
-    "_blank"
-  );
-    }
+  message += `\nالإجمالي: ${total} جنيه`;
+  window.open(`https://wa.me/201150402031?text=${encodeURIComponent(message)}`);
+}
