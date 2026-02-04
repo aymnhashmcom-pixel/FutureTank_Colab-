@@ -1,28 +1,30 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>FutureTank | السلة</title>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="style.css">
-<script src="cart.js"></script>
+  <meta charset="UTF-8">
+  <title>Future Tank | سلة المشتريات</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
 
-<body onload="loadCart()">
+<body>
 
-<header class="hero">
-  <h1>🛒 سلة المشتريات</h1>
+<header class="navbar">
+  <div class="logo">Future Tank</div>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="shop.html">التسوق</a>
+  </nav>
 </header>
 
 <section class="section">
-  <div id="cartList" class="cards"></div>
+  <h2>🛒 سلة المشتريات</h2>
 
-  <h2 id="total"></h2>
+  <div id="cartItems"></div>
 
-  <br>
-  <button class="card link-card" onclick="sendWhatsApp()">
-    📲 إتمام الطلب عبر واتساب
-  </button>
+  <h3>الإجمالي: <span id="total">0</span> جنيه</h3>
+
+  <button onclick="checkoutWhatsApp()">📲 إتمام الطلب عبر واتساب</button>
 
   <br><br>
   <a href="shop.html">⬅️ العودة للتسوق</a>
@@ -31,6 +33,11 @@
 <footer>
   © Future Tank
 </footer>
+
+<script src="cart.js"></script>
+<script>
+  renderCart();
+</script>
 
 </body>
 </html>
