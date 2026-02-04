@@ -1,53 +1,58 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>FutureTank | تسوق الآن</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Future Tank | الملابس</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="hero">
-  <h1>🛒 تسوق الآن</h1>
-  <p>اختر القسم واطلب بسهولة</p>
+<header class="navbar">
+  <div class="logo">Future Tank</div>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="shop.html">التسوق</a>
+    <a href="cart.html">🧾 السلة</a>
+  </nav>
 </header>
 
 <section class="section">
+  <h2>👕 الملابس</h2>
+  <p>اختر المنتج المناسب</p>
+
   <div class="cards">
 
-    <a class="card link-card" href="shop-clothes.html">
-      <h3>👕 ملابس</h3>
-      <p>منتجات مختارة</p>
-    </a>
+    <div class="card">
+      <img src="images/tshirt.jpg" alt="تيشيرت قطن" style="width:100%;border-radius:10px">
+      <h3>تيشيرت قطن</h3>
+      <p>خامة ممتازة</p>
+      <strong>250 جنيه</strong>
+      <br><br>
+      <button onclick="addToCart('تيشيرت قطن', 250)">🛒 أضف إلى السلة</button>
+    </div>
 
-    <a class="card link-card" href="#">
-      <h3>🏠 عقارات</h3>
-      <p>قريبًا</p>
-    </a>
-
-    <a class="card link-card" href="#">
-      <h3>🚗 سيارات</h3>
-      <p>قريبًا</p>
-    </a>
-
-    <a class="card link-card" href="#">
-      <h3>📱 إلكترونيات</h3>
-      <p>قريبًا</p>
-    </a>
-
-    <a class="card link-card" href="#">
-      <h3>🛒 ماركت</h3>
-      <p>قريبًا</p>
-    </a>
+    <div class="card">
+      <img src="images/jeans.jpg" alt="بنطلون جينز" style="width:100%;border-radius:10px">
+      <h3>بنطلون جينز</h3>
+      <p>مقاسات متعددة</p>
+      <strong>450 جنيه</strong>
+      <br><br>
+      <button onclick="addToCart('بنطلون جينز', 450)">🛒 أضف إلى السلة</button>
+    </div>
 
   </div>
+
+  <br>
+  <a href="cart.html">🧾 عرض السلة</a> |
+  <a href="shop.html">⬅️ العودة للتسوق</a>
 </section>
 
 <footer>
   © Future Tank
 </footer>
 
+<script src="cart.js"></script>
 </body>
-</html>
+  </html>
