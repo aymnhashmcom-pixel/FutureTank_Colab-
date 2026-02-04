@@ -2,9 +2,10 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>FutureTank | ملابس</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FutureTank | الملابس</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="style.css">
+<script src="cart.js"></script>
 </head>
 
 <body>
@@ -17,27 +18,39 @@
 <section class="section">
   <div class="cards">
 
+    <!-- منتج 1 -->
     <div class="card">
-      <img src="https://via.placeholder.com/300" alt="">
       <h3>تيشيرت قطن</h3>
       <p>خامة ممتازة</p>
-      <strong>250 جنيه</strong><br><br>
-      <a class="card link-card" href="https://wa.me/201XXXXXXXXX?text=أريد شراء تيشيرت قطن">
+      <strong>250 جنيه</strong>
+      <br><br>
+      <button onclick="addToCart('تيشيرت قطن', 250)">
         🛒 أضف إلى السلة
-      </a>
+      </button>
     </div>
 
+    <!-- منتج 2 -->
     <div class="card">
-      <img src="https://via.placeholder.com/300" alt="">
       <h3>بنطلون جينز</h3>
-      <p>مقاســات متعددة</p>
-      <strong>450 جنيه</strong><br><br>
-      <a class="card link-card" href="https://wa.me/201XXXXXXXXX?text=أريد شراء بنطلون جينز">
+      <p>مقاسات متعددة</p>
+      <strong>450 جنيه</strong>
+      <br><br>
+      <button onclick="addToCart('بنطلون جينز', 450)">
         🛒 أضف إلى السلة
-      </a>
+      </button>
     </div>
 
   </div>
+
+  <br>
+
+  <!-- زر السلة -->
+  <a class="card link-card" href="cart.html">
+    🧾 عرض السلة
+  </a>
+
+  <br><br>
+  <a href="shop.html">⬅️ العودة للتسوق</a>
 </section>
 
 <footer>
@@ -45,4 +58,4 @@
 </footer>
 
 </body>
-  </html>
+    </html>
