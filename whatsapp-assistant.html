@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مساعد FutureTank | واتساب</title>
+
+<style>
+body{
+  margin:0;
+  font-family:"Segoe UI",Tahoma;
+  background:#eef3f9;
+}
+.container{
+  max-width:500px;
+  margin:40px auto;
+  background:#fff;
+  border-radius:20px;
+  box-shadow:0 20px 40px rgba(0,0,0,.15);
+  padding:25px;
+  text-align:center;
+}
+h2{
+  color:#0a74c9;
+  margin-bottom:5px;
+}
+p{
+  color:#555;
+  margin-bottom:25px;
+}
+button{
+  width:100%;
+  padding:14px;
+  margin-bottom:12px;
+  border:none;
+  border-radius:14px;
+  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+  color:#fff;
+  font-size:16px;
+  cursor:pointer;
+}
+button:hover{
+  opacity:.9;
+}
+footer{
+  margin-top:20px;
+  font-size:13px;
+  color:#777;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+  <h2>🤖 مساعد FutureTank</h2>
+  <p>💧 نقاء الماء هو هدفنا<br>اختر الخدمة المناسبة 👇</p>
+
+  <button onclick="go('صيانة وإصلاح خزانات المياه')">🛠️ صيانة وإصلاح خزانات</button>
+
+  <button onclick="go('تطهير وتعقيم خزانات مياه الشرب')">💧 تطهير وتعقيم خزانات المياه</button>
+
+  <button onclick="go('توريد وتركيب خزانات المياه')">🚰 توريد وتركيب خزانات المياه</button>
+
+  <button onclick="go('توريد وتركيب فلاتر المياه')">🧊 توريد وتركيب فلاتر المياه</button>
+
+  <button onclick="go('أنا عميل حالي وأحتاج متابعة التعاقد')">👤 عميل حالي / متابعة تعاقد</button>
+
+  <button onclick="go('أحتاج التحدث مع خدمة العملاء')">📞 التحدث مع خدمة العملاء</button>
+
+  <footer>
+    © FutureTank – نقاء الماء هو هدفنا
+  </footer>
+</div>
+
+<script>
+function go(service){
+  const phone = "201150402031";
+  const msg = `مرحباً، أحتاج مساعدة بخصوص: ${service}`;
+  window.location.href = "https://wa.me/" + phone + "?text=" + encodeURIComponent(msg);
+}
+</script>
+
+</body>
+  </html>
