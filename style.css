@@ -31,19 +31,19 @@ body {
   font-size: 18px;
 }
 
-.navbar nav a {
+.navbar a {
   color: #fff;
   text-decoration: none;
   margin-right: 12px;
   font-size: 14px;
 }
 
-.navbar nav a:hover {
+.navbar a:hover {
   text-decoration: underline;
 }
 
 /* =========================
-   HERO (الصفحة الرئيسية)
+   HERO
    ========================= */
 .hero {
   text-align: center;
@@ -66,124 +66,105 @@ body {
    SECTIONS
    ========================= */
 .section {
-  padding: 25px 20px;
-}
-
-.section h1,
-.section h2 {
-  margin-bottom: 10px;
-  color: #0b4da2;
-}
-
-.section p {
-  margin-bottom: 15px;
-  color: #555;
+  padding: 30px 20px;
 }
 
 /* =========================
-   CARDS (عام)
+   PORTAL
    ========================= */
-.cards {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 20px;
+.portal {
+  max-width: 720px;
+  margin: 0 auto;
 }
 
-.card {
+.client-box {
   background: #fff;
-  border-radius: 14px;
-  padding: 18px;
+  padding: 22px;
+  border-radius: 16px;
+  box-shadow: 0 8px 18px rgba(0,0,0,.08);
+}
+
+.client-box h2 {
   text-align: center;
-  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
-}
-
-.card h3 {
-  margin: 10px 0 6px;
-}
-
-.card p {
-  font-size: 14px;
-  margin-bottom: 6px;
-}
-
-.card strong {
-  display: block;
-  margin-top: 6px;
-  font-size: 16px;
-  color: #000;
+  color: #0b4da2;
+  margin-bottom: 20px;
 }
 
 /* =========================
-   BUTTONS
+   SEARCH
    ========================= */
-button,
-.card a {
+.search-input {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.search-btn {
+  width: 100%;
   background: #0b4da2;
   color: #fff;
   border: none;
-  padding: 10px 16px;
-  border-radius: 8px;
+  padding: 12px;
+  border-radius: 10px;
   cursor: pointer;
-  text-decoration: none;
-  font-size: 14px;
+  font-size: 15px;
 }
 
-button:hover,
-.card a:hover {
+.search-btn:hover {
   background: #083b7d;
 }
 
 /* =========================
-   PRODUCTS (تسوق الآن)
+   CLIENT DATA
    ========================= */
-.card img {
-  max-width: 100%;
-  border-radius: 12px;
-  margin-bottom: 10px;
+.client-data {
+  margin-top: 20px;
 }
 
-/* =========================
-   PORTAL (بوابة العملاء)
-   ========================= */
-.portal {
-  max-width: 700px;
-  margin: 0 auto;
-}
-
-.portal .card {
-  text-align: right;
-  padding: 20px;
-}
-
-.portal .card p {
+.data-row {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
+  padding: 10px 0;
   border-bottom: 1px solid #eee;
   font-size: 14px;
 }
 
-.portal .card p strong {
+.data-row span:first-child {
   color: #0b4da2;
-  min-width: 140px;
+  font-weight: bold;
 }
 
-.portal .card p:last-child {
+.data-row:last-child {
   border-bottom: none;
 }
 
-.portal .card a {
-  display: inline-block;
-  margin-top: 15px;
+/* =========================
+   RENEW BUTTON
+   ========================= */
+.renew-btn {
+  display: block;
+  text-align: center;
+  margin-top: 20px;
   background: #25d366;
   color: #fff;
-  padding: 12px 18px;
-  border-radius: 10px;
+  padding: 14px;
+  border-radius: 12px;
   text-decoration: none;
+  font-size: 15px;
 }
 
-.portal .card a:hover {
+.renew-btn:hover {
   background: #1da851;
+}
+
+/* =========================
+   HELPERS
+   ========================= */
+.hidden {
+  display: none;
 }
 
 /* =========================
