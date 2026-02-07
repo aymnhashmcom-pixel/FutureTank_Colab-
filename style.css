@@ -31,6 +31,7 @@ body {
   font-size: 18px;
 }
 
+.navbar nav a,
 .navbar a {
   color: #fff;
   text-decoration: none;
@@ -69,35 +70,35 @@ body {
   padding: 30px 20px;
 }
 
+.section h2 {
+  margin-bottom: 15px;
+  color: #0b4da2;
+  text-align: center;
+}
+
 /* =========================
-   PORTAL
+   PORTAL – بوابة العملاء
    ========================= */
-.portal {
-  max-width: 720px;
-  margin: 0 auto;
+body.portal {
+  background: #eef2f7;
 }
 
 .client-box {
+  max-width: 700px;
+  margin: 0 auto;
   background: #fff;
-  padding: 22px;
+  padding: 25px;
   border-radius: 16px;
-  box-shadow: 0 8px 18px rgba(0,0,0,.08);
-}
-
-.client-box h2 {
+  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
   text-align: center;
-  color: #0b4da2;
-  margin-bottom: 20px;
 }
 
-/* =========================
-   SEARCH
-   ========================= */
+/* البحث */
 .search-input {
   width: 100%;
-  padding: 12px 14px;
+  padding: 12px;
   border-radius: 10px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   font-size: 15px;
   margin-bottom: 12px;
 }
@@ -109,50 +110,50 @@ body {
   border: none;
   padding: 12px;
   border-radius: 10px;
-  cursor: pointer;
   font-size: 15px;
+  cursor: pointer;
 }
 
 .search-btn:hover {
   background: #083b7d;
 }
 
-/* =========================
-   CLIENT DATA
-   ========================= */
+/* بيانات العميل */
 .client-data {
-  margin-top: 20px;
+  margin-top: 25px;
+  text-align: right;
+  border-top: 1px solid #eee;
+  padding-top: 15px;
 }
 
 .data-row {
   display: flex;
   justify-content: space-between;
   padding: 10px 0;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #f0f0f0;
   font-size: 14px;
 }
 
 .data-row span:first-child {
   color: #0b4da2;
   font-weight: bold;
+  min-width: 150px;
 }
 
 .data-row:last-child {
   border-bottom: none;
 }
 
-/* =========================
-   RENEW BUTTON
-   ========================= */
+/* زر واتساب */
 .renew-btn {
   display: block;
-  text-align: center;
   margin-top: 20px;
   background: #25d366;
   color: #fff;
+  text-decoration: none;
+  text-align: center;
   padding: 14px;
   border-radius: 12px;
-  text-decoration: none;
   font-size: 15px;
 }
 
@@ -160,9 +161,7 @@ body {
   background: #1da851;
 }
 
-/* =========================
-   HELPERS
-   ========================= */
+/* إخفاء */
 .hidden {
   display: none;
 }
@@ -177,4 +176,4 @@ footer {
   margin-top: 40px;
   font-size: 14px;
   color: #555;
-}
+   }
