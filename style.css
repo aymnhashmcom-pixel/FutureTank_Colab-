@@ -11,7 +11,7 @@
 body {
   background: #f5f7fa;
   color: #222;
-  line-height: 1.6;
+  line-height: 1.7;
 }
 
 /* =========================
@@ -43,15 +43,36 @@ body {
 }
 
 /* =========================
+   HERO (الصفحة الرئيسية)
+   ========================= */
+.hero {
+  text-align: center;
+  padding: 40px 20px;
+  background: #ffffff;
+}
+
+.hero h1 {
+  font-size: 26px;
+  margin-bottom: 8px;
+  color: #0b4da2;
+}
+
+.hero p {
+  font-size: 15px;
+  color: #555;
+}
+
+/* =========================
    SECTIONS
    ========================= */
 .section {
-  padding: 20px;
+  padding: 25px 20px;
 }
 
 .section h1,
 .section h2 {
   margin-bottom: 10px;
+  color: #0b4da2;
 }
 
 .section p {
@@ -64,30 +85,32 @@ body {
    ========================= */
 .cards {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 20px;
 }
 
 .card {
   background: #fff;
-  border-radius: 12px;
-  padding: 15px;
+  border-radius: 14px;
+  padding: 18px;
   text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.08);
+  box-shadow: 0 6px 14px rgba(0,0,0,0.08);
 }
 
 .card h3 {
-  margin: 10px 0 5px;
+  margin: 10px 0 6px;
 }
 
 .card p {
   font-size: 14px;
+  margin-bottom: 6px;
 }
 
 .card strong {
   display: block;
-  margin-top: 5px;
+  margin-top: 6px;
   font-size: 16px;
+  color: #000;
 }
 
 /* =========================
@@ -98,7 +121,7 @@ button,
   background: #0b4da2;
   color: #fff;
   border: none;
-  padding: 10px 14px;
+  padding: 10px 16px;
   border-radius: 8px;
   cursor: pointer;
   text-decoration: none;
@@ -115,7 +138,7 @@ button:hover,
    ========================= */
 .card img {
   max-width: 100%;
-  border-radius: 10px;
+  border-radius: 12px;
   margin-bottom: 10px;
 }
 
@@ -123,15 +146,44 @@ button:hover,
    PORTAL (بوابة العملاء)
    ========================= */
 .portal {
-  padding: 20px;
+  max-width: 700px;
+  margin: 0 auto;
 }
 
 .portal .card {
   text-align: right;
+  padding: 20px;
 }
 
 .portal .card p {
-  margin-bottom: 6px;
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #eee;
+  font-size: 14px;
+}
+
+.portal .card p strong {
+  color: #0b4da2;
+  min-width: 140px;
+}
+
+.portal .card p:last-child {
+  border-bottom: none;
+}
+
+.portal .card a {
+  display: inline-block;
+  margin-top: 15px;
+  background: #25d366;
+  color: #fff;
+  padding: 12px 18px;
+  border-radius: 10px;
+  text-decoration: none;
+}
+
+.portal .card a:hover {
+  background: #1da851;
 }
 
 /* =========================
@@ -139,9 +191,9 @@ button:hover,
    ========================= */
 footer {
   text-align: center;
-  padding: 15px;
+  padding: 18px;
   background: #eee;
-  margin-top: 30px;
+  margin-top: 40px;
   font-size: 14px;
   color: #555;
-  }
+}
