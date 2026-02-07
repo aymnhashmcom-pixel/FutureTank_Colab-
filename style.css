@@ -1,202 +1,156 @@
-/* =========================
-   GLOBAL RESET
-========================= */
+/* =====================
+   RESET + BASE
+===================== */
 * {
   box-sizing: border-box;
-  margin: 0;
-  padding: 0;
   font-family: "Cairo", Arial, sans-serif;
 }
 
 body {
-  background: #f6f9fc;
+  margin: 0;
+  background: #f5f8fc;
   color: #222;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 
-/* =========================
-   HEADER & NAV
-========================= */
-header {
+/* =====================
+   HEADER / NAV (ANY PAGE)
+===================== */
+header, .header {
   background: #0b6fc2;
   color: #fff;
-  padding: 15px 20px;
-}
-
-header h1 {
-  font-size: 26px;
+  padding: 15px;
   text-align: center;
 }
 
-nav {
-  margin-top: 10px;
-  text-align: center;
-}
-
-nav a {
+header a, nav a {
   color: #fff;
   text-decoration: none;
-  margin: 0 10px;
-  font-size: 15px;
-}
-
-nav a:hover {
-  text-decoration: underline;
-}
-
-/* =========================
-   MAIN CONTAINERS
-========================= */
-.container,
-.portal-container,
-.services-container,
-.products-container {
-  max-width: 1100px;
-  margin: 30px auto;
-  background: #fff;
-  padding: 25px;
-  border-radius: 10px;
-  box-shadow: 0 8px 25px rgba(0,0,0,0.08);
-}
-
-/* =========================
-   TITLES
-========================= */
-h2 {
-  color: #0b6fc2;
-  margin-bottom: 20px;
-  text-align: center;
-}
-
-/* =========================
-   CLIENT PORTAL
-========================= */
-.client-data {
-  width: 100%;
-}
-
-.data-row {
-  display: flex;
-  justify-content: space-between;
-  padding: 10px 0;
-  border-bottom: 1px solid #eee;
-}
-
-.data-row span:first-child {
-  color: #666;
-}
-
-.data-row span:last-child {
-  font-weight: bold;
-}
-
-/* =========================
-   BUTTONS
-========================= */
-button,
-.btn,
-.renew-btn {
-  display: inline-block;
-  background: #0b6fc2;
-  color: #fff;
-  border: none;
-  padding: 12px 22px;
-  border-radius: 8px;
-  font-size: 15px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: 0.3s;
-}
-
-button:hover,
-.btn:hover,
-.renew-btn:hover {
-  background: #094f8a;
-}
-
-/* =========================
-   SERVICES & PRODUCTS
-========================= */
-.card-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 20px;
-}
-
-.card {
-  background: #f9fbfd;
-  border-radius: 10px;
-  padding: 18px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
-  transition: 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-4px);
-}
-
-/* =========================
-   FOOTER
-========================= */
-footer {
-  text-align: center;
-  padding: 20px;
-  color: #666;
+  margin: 0 8px;
   font-size: 14px;
 }
 
-/* =========================
-   RESPONSIVE – DESKTOP
-========================= */
+/* =====================
+   UNIVERSAL PAGE FIX
+   (THE MAGIC PART)
+===================== */
+main,
+section,
+.page,
+.content,
+.container,
+.portal,
+.services,
+.products {
+  max-width: 1100px;
+  margin: 25px auto;
+  background: #fff;
+  padding: 22px;
+  border-radius: 10px;
+  box-shadow: 0 6px 22px rgba(0,0,0,.08);
+}
+
+/* لو الصفحة مفيهاش container */
+body > div {
+  max-width: 1100px;
+  margin: 25px auto;
+}
+
+/* =====================
+   TITLES
+===================== */
+h1, h2, h3 {
+  color: #0b6fc2;
+  margin-bottom: 15px;
+}
+
+/* =====================
+   CLIENT DATA / PORTAL
+===================== */
+.client-data,
+.portal-data,
+.contract-data {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+.client-data div,
+.portal-data div,
+.contract-data div {
+  background: #f9fbfd;
+  padding: 12px 15px;
+  border-radius: 8px;
+  border: 1px solid #eee;
+}
+
+/* =====================
+   CARDS (SERVICES / PRODUCTS)
+===================== */
+.card,
+.service,
+.product {
+  background: #f9fbfd;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+}
+
+/* =====================
+   BUTTONS
+===================== */
+button,
+.btn,
+a.btn {
+  display: inline-block;
+  background: #0b6fc2;
+  color: #fff;
+  padding: 12px 22px;
+  border-radius: 8px;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover,
+.btn:hover {
+  background: #094f8a;
+}
+
+/* =====================
+   DESKTOP FIX
+===================== */
 @media (min-width: 992px) {
 
-  .client-data {
-    display: grid;
+  .client-data,
+  .portal-data,
+  .contract-data {
     grid-template-columns: 1fr 1fr;
-    gap: 14px 40px;
   }
 
-  .renew-btn {
-    grid-column: 1 / -1;
-    max-width: 420px;
-    margin: 30px auto 0;
-    text-align: center;
+  .products,
+  .services {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
+    gap: 20px;
   }
 }
 
-/* =========================
-   RESPONSIVE – MOBILE
-========================= */
+/* =====================
+   MOBILE FIX
+===================== */
 @media (max-width: 768px) {
 
-  header h1 {
-    font-size: 22px;
+  main,
+  section,
+  .container,
+  body > div {
+    margin: 15px;
+    padding: 16px;
   }
 
   nav a {
     display: inline-block;
     margin: 6px;
-    font-size: 14px;
   }
-
-  .container,
-  .portal-container,
-  .services-container,
-  .products-container {
-    margin: 15px;
-    padding: 18px;
-  }
-
-  .data-row {
-    flex-direction: column;
-    gap: 4px;
-  }
-
-  .data-row span:first-child {
-    font-size: 13px;
-  }
-
-  .data-row span:last-child {
-    font-size: 15px;
-  }
-    }
+}
