@@ -2,112 +2,87 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>Future Tank | بوابة العملاء</title>
+  <title>بوابة العملاء | Future Tank</title>
   <link rel="stylesheet" href="style.css">
 </head>
+<body>
 
-<body class="portal">
-
-<header class="hero">
+<header class="main-header">
   <h1>💧 Future Tank</h1>
   <p>نقاء المياه يبدأ من هنا</p>
 </header>
 
-<nav class="navbar">
-  <div class="logo">Future Tank</div>
-  <div>
-    <a href="index.html">الرئيسية</a>
-    <a href="services.html">الخدمات</a>
-    <a href="products.html">المنتجات</a>
-  </div>
-</nav>
+<section class="portal-container">
+  <h2>🔍 عرض التعاقد</h2>
 
-<section class="section">
-  <div class="client-box">
+  <input
+    type="text"
+    id="phone"
+    placeholder="ادخل رقم الهاتف"
+  >
 
-    <h2>بوابة العملاء</h2>
+  <button onclick="searchClient()">بحث</button>
 
-    <input
-      type="text"
-      id="phone"
-      class="search-input"
-      placeholder="اكتب رقم الهاتف">
-
-    <button class="search-btn" onclick="searchClient()">
-      🔍 عرض التعاقد
-    </button>
-
-    <div id="result" class="client-data hidden"></div>
-
-  </div>
+  <div id="result" class="client-data hidden"></div>
 </section>
 
-<script>
-const API_URL = "https://script.google.com/macros/s/AKfycbwFU-0YAoqGHyZnHNOQwimoHzzJ6EqX8D-vWiY2DsL8E---HDxUkgNu3tyQ15itWJrd/exec";
-const WHATSAPP = "201150402031";
+<footer class="main-footer">
+  © Future Tank — جميع الحقوق محفوظة
+</footer>
 
-function searchClient(){
+<script>
+const clients = {
+  "01100077169": {
+    name: "محمود",
+    phone: "01100077169",
+    address: "برج طيبة – المعادي",
+    service: "تطهير وتعقيم خزانات مياه الشرب",
+    duration: "12 شهر",
+    visits: "12",
+    price: "800 جنيه",
+    start: "30/1/2026",
+    end: "30/1/2027",
+    lastVisit: "1/1/2026",
+    nextVisit: "31/1/2026",
+    remaining: "357 يوم"
+  }
+};
+
+function searchClient() {
   const phone = document.getElementById("phone").value.trim();
   const result = document.getElementById("result");
 
-  if(!phone){
-    alert("من فضلك أدخل رقم الهاتف");
+  if (!clients[phone]) {
+    result.classList.remove("hidden");
+    result.innerHTML = "<p style='color:red'>❌ لا يوجد تعاقد بهذا الرقم</p>";
     return;
   }
 
+  const c = clients[phone];
+
   result.classList.remove("hidden");
-  result.innerHTML = "🔍 جاري البحث...";
+  result.innerHTML = `
+    <div class="data-row"><span>الاسم</span><span>${c.name}</span></div>
+    <div class="data-row"><span>رقم الهاتف</span><span>${c.phone}</span></div>
+    <div class="data-row"><span>العنوان</span><span>${c.address}</span></div>
+    <div class="data-row"><span>الخدمة</span><span>${c.service}</span></div>
+    <div class="data-row"><span>مدة التعاقد</span><span>${c.duration}</span></div>
+    <div class="data-row"><span>عدد الزيارات</span><span>${c.visits}</span></div>
+    <div class="data-row"><span>التكلفة</span><span>${c.price}</span></div>
+    <div class="data-row"><span>تاريخ التعاقد</span><span>${c.start}</span></div>
+    <div class="data-row"><span>تاريخ الانتهاء</span><span>${c.end}</span></div>
+    <div class="data-row"><span>آخر زيارة</span><span>${c.lastVisit}</span></div>
+    <div class="data-row"><span>الزيارة القادمة</span><span>${c.nextVisit}</span></div>
+    <div class="data-row"><span>⏳ المتبقي</span><span>${c.remaining}</span></div>
 
-  fetch(API_URL + "?phone=" + encodeURIComponent(phone))
-    .then(r => r.json())
-    .then(data => {
-      if(data.error){
-        result.innerHTML = "❌ العميل غير موجود";
-        return;
-      }
-
-      const msg = `
-السلام عليكم
-أرغب في تجديد التعاقد
-الاسم: ${data.name}
-الهاتف: ${data.phone}
-      `;
-
-      result.innerHTML = `
-        <div class="data-row"><span>الاسم</span><span>${data.name}</span></div>
-        <div class="data-row"><span>رقم الهاتف</span><span>${data.phone}</span></div>
-        <div class="data-row"><span>العنوان</span><span>${data.address}</span></div>
-        <div class="data-row"><span>الخدمة</span><span>${data.service}</span></div>
-        <div class="data-row"><span>مدة التعاقد</span><span>${data.contract_months} شهر</span></div>
-        <div class="data-row"><span>عدد الزيارات</span><span>${data.visits}</span></div>
-        <div class="data-row"><span>التكلفة</span><span>${data.cost} جنيه</span></div>
-        <div class="data-row"><span>تاريخ التعاقد</span><span>${format(data.contract_date)}</span></div>
-        <div class="data-row"><span>تاريخ الانتهاء</span><span>${format(data.end_date)}</span></div>
-        <div class="data-row"><span>آخر زيارة</span><span>${format(data.last_visit)}</span></div>
-        <div class="data-row"><span>الزيارة القادمة</span><span>${format(data.next_visit)}</span></div>
-        <div class="data-row"><span>⏳ المتبقي</span><span>${data.remaining_days} يوم</span></div>
-
-        <a class="renew-btn"
-           target="_blank"
-           href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">
-           🔁 تجديد التعاقد عبر واتساب
-        </a>
-      `;
-    })
-    .catch(()=>{
-      result.innerHTML = "⚠️ خطأ في الاتصال";
-    });
-}
-
-function format(d){
-  if(!d) return "—";
-  return new Date(d).toLocaleDateString("ar-EG");
+    <a class="renew-btn"
+       href="https://wa.me/201150402031?text=السلام عليكم%0Aأرغب في تجديد التعاقد%0Aالاسم: ${c.name}%0Aالهاتف: ${c.phone}"
+       target="_blank">
+       🔁 تجديد التعاقد عبر واتساب
+    </a>
+  `;
 }
 </script>
-
-<footer>
-  © Future Tank — جميع الحقوق محفوظة
-</footer>
 
 </body>
 </html>
