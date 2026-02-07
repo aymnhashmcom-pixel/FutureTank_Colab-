@@ -1,179 +1,52 @@
 /* =========================
-   RESET & BASE
+   FORCE FIX – بوابة العملاء
    ========================= */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: "Tahoma", Arial, sans-serif;
-}
 
-body {
-  background: #f5f7fa;
-  color: #222;
-  line-height: 1.7;
-}
-
-/* =========================
-   NAVBAR
-   ========================= */
-.navbar {
-  background: #0b4da2;
-  color: #fff;
-  padding: 12px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.navbar .logo {
-  font-weight: bold;
-  font-size: 18px;
-}
-
-.navbar nav a,
-.navbar a {
-  color: #fff;
-  text-decoration: none;
-  margin-right: 12px;
-  font-size: 14px;
-}
-
-.navbar a:hover {
-  text-decoration: underline;
-}
-
-/* =========================
-   HERO
-   ========================= */
-.hero {
-  text-align: center;
-  padding: 40px 20px;
-  background: #ffffff;
-}
-
-.hero h1 {
-  font-size: 26px;
-  margin-bottom: 8px;
-  color: #0b4da2;
-}
-
-.hero p {
-  font-size: 15px;
-  color: #555;
-}
-
-/* =========================
-   SECTIONS
-   ========================= */
-.section {
-  padding: 30px 20px;
-}
-
-.section h2 {
-  margin-bottom: 15px;
-  color: #0b4da2;
-  text-align: center;
-}
-
-/* =========================
-   PORTAL – بوابة العملاء
-   ========================= */
-body.portal {
-  background: #eef2f7;
-}
-
-.client-box {
-  max-width: 700px;
-  margin: 0 auto;
-  background: #fff;
-  padding: 25px;
-  border-radius: 16px;
-  box-shadow: 0 8px 18px rgba(0,0,0,0.08);
-  text-align: center;
-}
-
-/* البحث */
-.search-input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  font-size: 15px;
-  margin-bottom: 12px;
-}
-
-.search-btn {
-  width: 100%;
-  background: #0b4da2;
-  color: #fff;
-  border: none;
-  padding: 12px;
-  border-radius: 10px;
-  font-size: 15px;
-  cursor: pointer;
-}
-
-.search-btn:hover {
-  background: #083b7d;
-}
-
-/* بيانات العميل */
+#result,
 .client-data {
-  margin-top: 25px;
-  text-align: right;
-  border-top: 1px solid #eee;
-  padding-top: 15px;
+  display: block;
+  width: 100%;
 }
 
 .data-row {
-  display: flex;
+  display: flex !important;
   justify-content: space-between;
+  align-items: center;
+  gap: 10px;
   padding: 10px 0;
-  border-bottom: 1px solid #f0f0f0;
+  border-bottom: 1px solid #e6e6e6;
   font-size: 14px;
 }
 
-.data-row span:first-child {
-  color: #0b4da2;
-  font-weight: bold;
-  min-width: 150px;
+.data-row span {
+  display: block !important;
+  white-space: normal;
 }
 
-.data-row:last-child {
-  border-bottom: none;
+.data-row span:first-child {
+  font-weight: bold;
+  color: #0b4da2;
+  min-width: 160px;
+}
+
+.data-row span:last-child {
+  text-align: left;
+  color: #222;
 }
 
 /* زر واتساب */
 .renew-btn {
-  display: block;
+  display: block !important;
   margin-top: 20px;
   background: #25d366;
   color: #fff;
-  text-decoration: none;
   text-align: center;
   padding: 14px;
   border-radius: 12px;
   font-size: 15px;
 }
 
-.renew-btn:hover {
-  background: #1da851;
-}
-
 /* إخفاء */
 .hidden {
-  display: none;
-}
-
-/* =========================
-   FOOTER
-   ========================= */
-footer {
-  text-align: center;
-  padding: 18px;
-  background: #eee;
-  margin-top: 40px;
-  font-size: 14px;
-  color: #555;
+  display: none !important;
    }
