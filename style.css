@@ -1,52 +1,93 @@
-/* =========================
-   FORCE FIX – بوابة العملاء
-   ========================= */
+body {
+  font-family: "Cairo", sans-serif;
+  background: #f4f7fb;
+  margin: 0;
+  padding: 0;
+}
 
-#result,
-.client-data {
-  display: block;
+.main-header {
+  background: #0b4da2;
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+}
+
+.portal-container {
+  max-width: 500px;
+  margin: 30px auto;
+  background: #fff;
+  padding: 25px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px rgba(0,0,0,.08);
+}
+
+.portal-container h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.portal-container input {
   width: 100%;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  margin-bottom: 12px;
+  font-size: 15px;
+}
+
+.portal-container button {
+  width: 100%;
+  padding: 14px;
+  background: #0b4da2;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.client-data {
+  margin-top: 20px;
+  background: #fafafa;
+  border-radius: 14px;
+  padding: 18px;
 }
 
 .data-row {
-  display: flex !important;
+  display: flex;
   justify-content: space-between;
-  align-items: center;
-  gap: 10px;
   padding: 10px 0;
-  border-bottom: 1px solid #e6e6e6;
-  font-size: 14px;
-}
-
-.data-row span {
-  display: block !important;
-  white-space: normal;
+  border-bottom: 1px solid #e5e5e5;
+  font-size: 15px;
 }
 
 .data-row span:first-child {
   font-weight: bold;
   color: #0b4da2;
-  min-width: 160px;
 }
 
 .data-row span:last-child {
-  text-align: left;
   color: #222;
 }
 
-/* زر واتساب */
 .renew-btn {
-  display: block !important;
+  display: block;
   margin-top: 20px;
   background: #25d366;
   color: #fff;
-  text-align: center;
   padding: 14px;
   border-radius: 12px;
-  font-size: 15px;
+  text-align: center;
+  font-weight: bold;
+  text-decoration: none;
 }
 
-/* إخفاء */
 .hidden {
-  display: none !important;
-   }
+  display: none;
+}
+
+.main-footer {
+  text-align: center;
+  padding: 20px;
+  color: #777;
+}
