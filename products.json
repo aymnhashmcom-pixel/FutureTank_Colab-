@@ -1,0 +1,12 @@
+[
+  {
+    "name": "تيشيرت قطن",
+    "price": 250,
+    "image": "images/tshirt.jpg"
+  },
+  {
+    "name": "بنطلون جينز",
+    "price": 450,
+    "image": "images/jeans.jpg"
+  }
+]
