@@ -14,16 +14,49 @@ body {
 }
 
 /* =====================
-   HEADER / NAV (ANY PAGE)
+   HEADER / HERO
 ===================== */
-header, .header {
-  background: #0b6fc2;
+header,
+.hero,
+.main-header {
+  background: linear-gradient(135deg, #0b6fc2, #4a90e2);
   color: #fff;
-  padding: 15px;
+  padding: 35px 15px;
   text-align: center;
 }
 
-header a, nav a {
+header h1,
+.hero h1,
+.main-header h1 {
+  margin: 0 0 10px;
+  color: #fff;
+}
+
+header p,
+.hero p,
+.main-header p {
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* =====================
+   NAVBAR
+===================== */
+.navbar {
+  background: #0b6fc2;
+  padding: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.navbar .logo {
+  color: #fff;
+  font-weight: bold;
+}
+
+.navbar a {
   color: #fff;
   text-decoration: none;
   margin: 0 8px;
@@ -31,126 +64,148 @@ header a, nav a {
 }
 
 /* =====================
-   UNIVERSAL PAGE FIX
-   (THE MAGIC PART)
+   LAYOUT CONTAINERS
 ===================== */
 main,
-section,
-.page,
-.content,
+.section,
 .container,
-.portal,
-.services,
-.products {
+.portal-container {
   max-width: 1100px;
-  margin: 25px auto;
+  margin: 30px auto;
   background: #fff;
-  padding: 22px;
-  border-radius: 10px;
-  box-shadow: 0 6px 22px rgba(0,0,0,.08);
-}
-
-/* لو الصفحة مفيهاش container */
-body > div {
-  max-width: 1100px;
-  margin: 25px auto;
+  padding: 25px;
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.08);
 }
 
 /* =====================
    TITLES
 ===================== */
-h1, h2, h3 {
+h2 {
   color: #0b6fc2;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
+  text-align: center;
 }
 
 /* =====================
-   CLIENT DATA / PORTAL
+   CARDS (HOME / SERVICES / PRODUCTS)
 ===================== */
-.client-data,
-.portal-data,
-.contract-data {
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #f9fbfd;
+  padding: 22px;
+  border-radius: 14px;
+  text-align: center;
+  text-decoration: none;
+  color: inherit;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 14px 28px rgba(0,0,0,.15);
+}
+
+/* =====================
+   PORTAL / CLIENT DATA
+===================== */
+.portal-container input {
+  width: 100%;
+  padding: 14px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  font-size: 16px;
+}
+
+.portal-container button {
+  width: 100%;
+  padding: 14px;
+  font-size: 16px;
+}
+
+.client-data {
+  margin-top: 20px;
   display: grid;
   grid-template-columns: 1fr;
   gap: 12px;
 }
 
-.client-data div,
-.portal-data div,
-.contract-data div {
+.data-row {
+  display: flex;
+  justify-content: space-between;
   background: #f9fbfd;
   padding: 12px 15px;
   border-radius: 8px;
   border: 1px solid #eee;
 }
 
-/* =====================
-   CARDS (SERVICES / PRODUCTS)
-===================== */
-.card,
-.service,
-.product {
-  background: #f9fbfd;
-  padding: 16px;
-  border-radius: 10px;
-  box-shadow: 0 4px 14px rgba(0,0,0,.06);
+.data-row span:first-child {
+  font-weight: bold;
+  color: #0b6fc2;
 }
 
-/* =====================
-   BUTTONS
-===================== */
-button,
-.btn,
-a.btn {
-  display: inline-block;
-  background: #0b6fc2;
+.renew-btn {
+  display: block;
+  margin-top: 20px;
+  background: #25d366;
   color: #fff;
-  padding: 12px 22px;
-  border-radius: 8px;
+  text-align: center;
+  padding: 14px;
+  border-radius: 12px;
+  font-size: 15px;
   text-decoration: none;
-  border: none;
-  cursor: pointer;
-}
-
-button:hover,
-.btn:hover {
-  background: #094f8a;
 }
 
 /* =====================
-   DESKTOP FIX
+   FOOTER
+===================== */
+footer,
+.main-footer {
+  text-align: center;
+  padding: 20px;
+  background: #fff;
+  margin-top: 40px;
+  font-size: 14px;
+  color: #555;
+}
+
+/* =====================
+   UTILITIES
+===================== */
+.hidden {
+  display: none;
+}
+
+/* =====================
+   DESKTOP
 ===================== */
 @media (min-width: 992px) {
-
-  .client-data,
-  .portal-data,
-  .contract-data {
+  .client-data {
     grid-template-columns: 1fr 1fr;
-  }
-
-  .products,
-  .services {
-    display: grid;
-    grid-template-columns: repeat(auto-fill,minmax(260px,1fr));
-    gap: 20px;
   }
 }
 
 /* =====================
-   MOBILE FIX
+   MOBILE
 ===================== */
 @media (max-width: 768px) {
+  .navbar {
+    flex-direction: column;
+    gap: 10px;
+  }
 
   main,
-  section,
+  .section,
   .container,
-  body > div {
+  .portal-container {
     margin: 15px;
-    padding: 16px;
+    padding: 18px;
   }
-
-  nav a {
-    display: inline-block;
-    margin: 6px;
-  }
-}
+   }
