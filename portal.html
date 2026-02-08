@@ -30,7 +30,51 @@
 </footer>
 
 <script>
-/* نفس كود JS بدون أي تغيير */
+const clients = {
+  "01100077169": {
+    name: "محمود",
+    phone: "01100077169",
+    address: "برج طيبة – المعادي",
+    service: "تطهير وتعقيم خزانات مياه الشرب",
+    duration: "12 شهر",
+    visits: "12",
+    price: "800 جنيه",
+    start: "30/1/2026",
+    end: "30/1/2027",
+    lastVisit: "1/1/2026",
+    nextVisit: "31/1/2026",
+    remaining: "357 يوم"
+  }
+};
+
+function searchClient() {
+  const phone = document.getElementById("phone").value.trim();
+  const result = document.getElementById("result");
+
+  if (!clients[phone]) {
+    result.classList.remove("hidden");
+    result.innerHTML = "<p style='color:red'>❌ لا يوجد تعاقد بهذا الرقم</p>";
+    return;
+  }
+
+  const c = clients[phone];
+
+  result.classList.remove("hidden");
+  result.innerHTML = `
+    <div class="data-row"><span>الاسم</span><span>${c.name}</span></div>
+    <div class="data-row"><span>رقم الهاتف</span><span>${c.phone}</span></div>
+    <div class="data-row"><span>العنوان</span><span>${c.address}</span></div>
+    <div class="data-row"><span>الخدمة</span><span>${c.service}</span></div>
+    <div class="data-row"><span>مدة التعاقد</span><span>${c.duration}</span></div>
+    <div class="data-row"><span>عدد الزيارات</span><span>${c.visits}</span></div>
+    <div class="data-row"><span>التكلفة</span><span>${c.price}</span></div>
+    <div class="data-row"><span>تاريخ التعاقد</span><span>${c.start}</span></div>
+    <div class="data-row"><span>تاريخ الانتهاء</span><span>${c.end}</span></div>
+    <div class="data-row"><span>آخر زيارة</span><span>${c.lastVisit}</span></div>
+    <div class="data-row"><span>الزيارة القادمة</span><span>${c.nextVisit}</span></div>
+    <div class="data-row"><span>⏳ المتبقي</span><span>${c.remaining}</span></div>
+  `;
+}
 </script>
 
 </body>
