@@ -14,11 +14,19 @@
   <p>إدارة المنتجات</p>
 </header>
 
-<section class="section">
+<!-- 🔐 شاشة الدخول -->
+<section class="section" id="loginBox">
+  <h3>🔐 تسجيل الدخول</h3>
+  <input id="loginPassword" type="password" placeholder="كلمة السر">
+  <button onclick="login()">دخول</button>
+  <p id="loginMsg"></p>
+</section>
+
+<!-- 📦 لوحة الإضافة -->
+<section class="section" id="adminPanel" style="display:none">
 
   <h3>➕ إضافة منتج جديد</h3>
 
-  <input id="password" type="password" placeholder="كلمة السر">
   <input id="name" placeholder="اسم المنتج">
   <textarea id="description" placeholder="وصف المنتج"></textarea>
 
@@ -43,17 +51,47 @@
 </footer>
 
 <script>
-const API = "https://script.google.com/macros/s/AKfycbxZAx5KopONcngaUUZK8Dd68ktOogOhq0OEH4eOVjz6USZSZK8g22BLTeml8ZBjN3D4/exec";
+const API =
+"https://script.google.com/macros/s/AKfycbxZAx5KopONcngaUUZK8Dd68ktOogOhq0OEH4eOVjz6USZSZK8g22BLTeml8ZBjN3D4/exec";
 
+let AUTH = false;
+
+/* ===============================
+   🔐 تسجيل الدخول
+================================ */
+function login() {
+  const pass = document.getElementById("loginPassword").value;
+
+  fetch(API + "?admin=true&check=1&password=" + encodeURIComponent(pass))
+    .then(r => r.json())
+    .then(res => {
+      if (res.success) {
+        AUTH = true;
+        document.getElementById("loginBox").style.display = "none";
+        document.getElementById("adminPanel").style.display = "block";
+      } else {
+        document.getElementById("loginMsg").innerText = "❌ كلمة السر غير صحيحة";
+      }
+    })
+    .catch(() => {
+      document.getElementById("loginMsg").innerText = "⚠️ خطأ في الاتصال";
+    });
+}
+
+/* ===============================
+   ➕ إضافة منتج
+================================ */
 function addProduct() {
+  if (!AUTH) return;
+
   const data = {
     admin: true,
-    password: document.getElementById("password").value,
-    name: document.getElementById("name").value,
-    description: document.getElementById("description").value,
-    category: document.getElementById("category").value,
-    price: document.getElementById("price").value,
-    image: document.getElementById("image").value
+    action: "addProduct",
+    name: name.value,
+    description: description.value,
+    category: category.value,
+    price: price.value,
+    image: image.value
   };
 
   fetch(API, {
@@ -62,11 +100,12 @@ function addProduct() {
   })
   .then(r => r.json())
   .then(res => {
-    document.getElementById("msg").innerText =
-      res.success ? "✅ تم إضافة المنتج بنجاح" : "❌ خطأ في البيانات";
+    msg.innerText = res.success
+      ? "✅ تم إضافة المنتج بنجاح"
+      : "❌ حدث خطأ";
   })
   .catch(() => {
-    document.getElementById("msg").innerText = "⚠️ فشل الاتصال";
+    msg.innerText = "⚠️ فشل الاتصال";
   });
 }
 </script>
