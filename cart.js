@@ -51,21 +51,27 @@ function removeItem(index) {
   renderCart();
 }
 
-// ====== واتساب ======
+// ====== إتمام الطلب عبر واتساب (مباشر) ======
 function checkoutWhatsApp() {
   if (cart.length === 0) {
     alert("❌ السلة فارغة");
     return;
   }
 
-  let message = "🛒 طلب جديد:%0A";
+  let message = "🛒 طلب جديد من موقع Future Tank:%0A%0A";
 
   cart.forEach(item => {
     message += `- ${item.name} : ${item.price} جنيه%0A`;
   });
 
   const total = cart.reduce((sum, item) => sum + item.price, 0);
-  message += `%0Aالإجمالي: ${total} جنيه`;
+  message += `%0A💰 الإجمالي: ${total} جنيه`;
 
-  window.open(`https://wa.me/?text=${message}`, "_blank");
-}
+  // 👈 رقم واتساب المباشر
+  const phone = "201150402031";
+
+  window.open(
+    `https://wa.me/${phone}?text=${message}`,
+    "_blank"
+  );
+    }
