@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>Future Tank | الملابس</title>
+  <title>Future Tank | تسوق الآن</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
 </head>
@@ -13,52 +13,42 @@
   <div class="logo">Future Tank</div>
   <nav>
     <a href="index.html">الرئيسية</a>
-    <a href="shop.html">التسوق</a>
     <a href="cart.html">🧾 السلة</a>
   </nav>
 </header>
 
 <section class="section">
-  <h2>👕 الملابس</h2>
-  <p>اختر المنتج المناسب</p>
+  <h2>🛒 تسوق الآن</h2>
+  <p style="text-align:center">اختر القسم المناسب</p>
 
   <div class="cards">
 
-    <!-- منتج 1 -->
-    <div class="card">
-      <img src="tshirt.jpg" alt="تيشيرت قطن" style="width:100%; border-radius:10px;">
-      <h3>تيشيرت قطن</h3>
-      <p>خامة ممتازة</p>
-      <strong>250 جنيه</strong>
-      <br><br>
-      <button onclick="addToCart('تيشيرت قطن', 250)">
-        🛒 أضف إلى السلة
-      </button>
-    </div>
+    <a href="shop-clothes.html" class="card">
+      <h3>👕 ملابس</h3>
+      <p>رجالي – حريمي – أطفال</p>
+    </a>
 
-    <!-- منتج 2 -->
-    <div class="card">
-      <img src="jeans.jpg" alt="بنطلون جينز" style="width:100%; border-radius:10px;">
-      <h3>بنطلون جينز</h3>
-      <p>مقاسات متعددة</p>
-      <strong>450 جنيه</strong>
-      <br><br>
-      <button onclick="addToCart('بنطلون جينز', 450)">
-        🛒 أضف إلى السلة
-      </button>
-    </div>
+    <a href="shop-realestate.html" class="card">
+      <h3>🏠 عقارات</h3>
+      <p>بيع – إيجار</p>
+    </a>
+
+    <a href="shop-cars.html" class="card">
+      <h3>🚗 سيارات</h3>
+      <p>جديدة – مستعملة</p>
+    </a>
+
+    <a href="shop-services.html" class="card">
+      <h3>🛠️ خدمات</h3>
+      <p>خدمات متنوعة</p>
+    </a>
 
   </div>
-
-  <br>
-  <a href="cart.html">🧾 عرض السلة</a> |
-  <a href="shop.html">⬅️ العودة للتسوق</a>
 </section>
 
 <footer>
   © Future Tank
 </footer>
 
-<script src="cart.js"></script>
 </body>
 </html>
