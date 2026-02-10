@@ -36,9 +36,11 @@ fetch(API_URL+"?type=services")
 .then(res=>res.json())
 .then(data=>{
 const list=document.getElementById("servicesList");
+list.innerHTML="";
 data.forEach(s=>{
 list.innerHTML+=`
 <div class="card">
+<img src="${s.image}" style="width:100%;border-radius:12px;margin-bottom:10px;">
 <h3>${s.name}</h3>
 <p>${s.desc}</p>
 <strong>${s.price} ج</strong>
@@ -47,7 +49,7 @@ list.innerHTML+=`
 });
 </script>
 
-<!-- Floating Social (نفس الجزء السابق) -->
+<!-- Floating Social -->
 <div id="ft-social-menu">
 <a class="ft-icon" href="https://wa.me/201150402031" target="_blank">📲</a>
 <a class="ft-icon" href="https://www.facebook.com/share/17pbzT4Hnm/" target="_blank">📘</a>
