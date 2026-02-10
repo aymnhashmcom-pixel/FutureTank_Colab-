@@ -1,112 +1,88 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>⚙️ لوحة التحكم | Future Tank</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚙️ لوحة التحكم | Future Tank</title>
+<link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<header class="main-header">
-  <h1>⚙️ لوحة التحكم</h1>
-  <p>إدارة المنتجات</p>
-</header>
+<h2 style="text-align:center">⚙️ لوحة التحكم</h2>
 
-<!-- 🔐 شاشة الدخول -->
-<section class="section" id="loginBox">
-  <h3>🔐 تسجيل الدخول</h3>
-  <input id="loginPassword" type="password" placeholder="كلمة السر">
-  <button onclick="login()">دخول</button>
-  <p id="loginMsg"></p>
-</section>
+<div id="loginBox" style="text-align:center;margin-top:30px;">
+<h3>🔐 تسجيل الدخول</h3>
+<input type="password" id="password" placeholder="كلمة السر" style="padding:10px;border-radius:8px;border:1px solid #ccc;">
+<br><br>
+<button onclick="login()" style="padding:10px 20px;border:none;border-radius:8px;background:#4fc3f7;color:#fff;cursor:pointer;">دخول</button>
+<p id="loginMsg" style="color:red;"></p>
+</div>
 
-<!-- 📦 لوحة الإضافة -->
-<section class="section" id="adminPanel" style="display:none">
+<div id="adminPanel" style="display:none;text-align:center;margin-top:40px;">
+<h3>➕ إضافة منتج جديد</h3>
 
-  <h3>➕ إضافة منتج جديد</h3>
+<input id="name" placeholder="اسم المنتج" style="padding:10px;width:80%;margin:5px;"><br>
+<input id="desc" placeholder="وصف المنتج" style="padding:10px;width:80%;margin:5px;"><br>
+<input id="category" placeholder="القسم" style="padding:10px;width:80%;margin:5px;"><br>
+<input id="price" placeholder="السعر" style="padding:10px;width:80%;margin:5px;"><br>
+<input id="image" placeholder="رابط الصورة" style="padding:10px;width:80%;margin:5px;"><br><br>
 
-  <input id="name" placeholder="اسم المنتج">
-  <textarea id="description" placeholder="وصف المنتج"></textarea>
+<button onclick="addProduct()" style="padding:10px 20px;border:none;border-radius:8px;background:#0a74c9;color:#fff;cursor:pointer;">💾 حفظ المنتج</button>
 
-  <select id="category">
-    <option value="water">💧 منتجات نقاء الماء</option>
-    <option value="clothes">👕 ملابس</option>
-    <option value="realestate">🏠 عقارات</option>
-    <option value="cars">🚗 سيارات</option>
-  </select>
+<p id="status"></p>
+</div>
 
-  <input id="price" type="number" placeholder="السعر">
-  <input id="image" placeholder="رابط الصورة أو الفيديو">
-
-  <button onclick="addProduct()">💾 حفظ المنتج</button>
-
-  <div id="msg" style="margin-top:10px"></div>
-
-</section>
-
-<footer>
-  © Future Tank — لوحة التحكم
+<footer style="text-align:center;margin-top:40px;">
+© Future Tank — لوحة التحكم
 </footer>
 
 <script>
-const API =
-"https://script.google.com/macros/s/AKfycbxZAx5KopONcngaUUZK8Dd68ktOogOhq0OEH4eOVjz6USZSZK8g22BLTeml8ZBjN3D4/exec";
+const API_URL="https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
-let AUTH = false;
+let adminPassword="";
 
-/* ===============================
-   🔐 تسجيل الدخول
-================================ */
-function login() {
-  const pass = document.getElementById("loginPassword").value;
+function login(){
+const pass=document.getElementById("password").value;
 
-  fetch(API + "?admin=true&check=1&password=" + encodeURIComponent(pass))
-    .then(r => r.json())
-    .then(res => {
-      if (res.success) {
-        AUTH = true;
-        document.getElementById("loginBox").style.display = "none";
-        document.getElementById("adminPanel").style.display = "block";
-      } else {
-        document.getElementById("loginMsg").innerText = "❌ كلمة السر غير صحيحة";
-      }
-    })
-    .catch(() => {
-      document.getElementById("loginMsg").innerText = "⚠️ خطأ في الاتصال";
-    });
+fetch(API_URL+"?admin=true&check=1&password="+encodeURIComponent(pass))
+.then(res=>res.json())
+.then(data=>{
+if(data.success){
+adminPassword=pass;
+document.getElementById("loginBox").style.display="none";
+document.getElementById("adminPanel").style.display="block";
+}else{
+document.getElementById("loginMsg").innerText="❌ كلمة السر غير صحيحة";
+}
+});
 }
 
-/* ===============================
-   ➕ إضافة منتج
-================================ */
-function addProduct() {
-  if (!AUTH) return;
+function addProduct(){
 
-  const data = {
-    admin: true,
-    action: "addProduct",
-    name: name.value,
-    description: description.value,
-    category: category.value,
-    price: price.value,
-    image: image.value
-  };
+const product={
+admin:true,
+action:"addProduct",
+password:adminPassword,
+name:document.getElementById("name").value,
+description:document.getElementById("desc").value,
+category:document.getElementById("category").value,
+price:document.getElementById("price").value,
+image:document.getElementById("image").value
+};
 
-  fetch(API, {
-    method: "POST",
-    body: JSON.stringify(data)
-  })
-  .then(r => r.json())
-  .then(res => {
-    msg.innerText = res.success
-      ? "✅ تم إضافة المنتج بنجاح"
-      : "❌ حدث خطأ";
-  })
-  .catch(() => {
-    msg.innerText = "⚠️ فشل الاتصال";
-  });
+fetch(API_URL,{
+method:"POST",
+body:JSON.stringify(product)
+})
+.then(res=>res.json())
+.then(data=>{
+if(data.success){
+document.getElementById("status").innerHTML="✅ تم إضافة المنتج بنجاح";
+}else{
+document.getElementById("status").innerHTML="❌ حدث خطأ";
+}
+});
 }
 </script>
 
