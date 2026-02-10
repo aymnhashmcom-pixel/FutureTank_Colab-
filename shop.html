@@ -1,64 +1,65 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>Future Tank | تسوق الآن</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="style.css">
-</head>
+<meta charset="UTF-8">
+<title>Future Tank | تسوق الآن</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="style.css">
 
+<style>
+#ft-float-btn{position:fixed;bottom:20px;right:20px;background:#4fc3f7;color:#fff;width:60px;height:60px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;cursor:pointer;box-shadow:0 8px 20px rgba(0,0,0,.3);z-index:9999;}
+#ft-social-menu{position:fixed;bottom:95px;right:20px;display:none;flex-direction:column;gap:10px;z-index:9999;}
+.ft-icon{width:48px;height:48px;border-radius:50%;background:#fff;display:flex;align-items:center;justify-content:center;font-size:20px;text-decoration:none;box-shadow:0 5px 15px rgba(0,0,0,.2);transition:.3s;}
+.ft-icon:hover{transform:scale(1.1);}
+</style>
+
+</head>
 <body>
 
 <header class="navbar">
-  <div class="logo">Future Tank</div>
-  <nav>
-    <a href="index.html">الرئيسية</a>
-    <a href="cart.html">🧾 السلة</a>
-  </nav>
+<div class="logo">Future Tank</div>
+<nav>
+<a href="index.html">الرئيسية</a>
+<a href="cart.html">🧾 السلة</a>
+</nav>
 </header>
 
 <section class="section">
-  <h2>🛒 تسوق الآن</h2>
-  <p style="text-align:center">اختر القسم المناسب</p>
+<h2>🛒 تسوق الآن</h2>
+<p style="text-align:center">اختر القسم المناسب</p>
 
-  <div class="cards">
-
-    <!-- ملابس (غير متوفر حالياً) -->
-    <a href="coming-soon.html" class="card">
-      <h3>👕 ملابس</h3>
-      <p>رجالي – حريمي – أطفال</p>
-    </a>
-
-    <!-- عقارات (غير متوفر حالياً) -->
-    <a href="coming-soon.html" class="card">
-      <h3>🏠 عقارات</h3>
-      <p>بيع – إيجار</p>
-    </a>
-
-    <!-- سيارات (غير متوفر حالياً) -->
-    <a href="coming-soon.html" class="card">
-      <h3>🚗 سيارات</h3>
-      <p>جديدة – مستعملة</p>
-    </a>
-
-    <!-- خدمات (غير متوفر حالياً) -->
-    <a href="coming-soon.html" class="card">
-      <h3>🛠️ خدمات</h3>
-      <p>خدمات متنوعة</p>
-    </a>
-
-    <!-- خزانات المياه (القسم الأساسي) -->
-    <a href="shop-water.html" class="card">
-      <h3>💧 خزانات المياه</h3>
-      <p>خزانات – إكسسوارات – صيانة</p>
-    </a>
-
-  </div>
+<div class="cards">
+<a href="coming-soon.html" class="card"><h3>👕 ملابس</h3><p>رجالي – حريمي – أطفال</p></a>
+<a href="coming-soon.html" class="card"><h3>🏠 عقارات</h3><p>بيع – إيجار</p></a>
+<a href="coming-soon.html" class="card"><h3>🚗 سيارات</h3><p>جديدة – مستعملة</p></a>
+<a href="coming-soon.html" class="card"><h3>🛠️ خدمات</h3><p>خدمات متنوعة</p></a>
+<a href="shop-water.html" class="card"><h3>💧 خزانات المياه</h3><p>خزانات – إكسسوارات – صيانة</p></a>
+</div>
 </section>
 
-<footer>
-  © Future Tank
-</footer>
+<footer>© Future Tank</footer>
+
+<!-- Floating Social -->
+<div id="ft-social-menu">
+<a class="ft-icon" href="https://wa.me/201150402031" target="_blank">📲</a>
+<a class="ft-icon" href="https://www.facebook.com/share/17pbzT4Hnm/" target="_blank">📘</a>
+<a class="ft-icon" href="https://www.instagram.com/aymn_hashm" target="_blank">📸</a>
+<a class="ft-icon" href="https://youtube.com/channel/UCyqPviD7dH7R7BkDxrodHfA" target="_blank">▶️</a>
+<a class="ft-icon" href="https://www.tiktok.com/@user7817618680338" target="_blank">🎵</a>
+<a class="ft-icon" href="https://www.threads.com/@aymn_hashm" target="_blank">🧵</a>
+<a class="ft-icon" href="mailto:aymnhashm.com@gmail.com">✉️</a>
+</div>
+
+<div id="ft-float-btn">💬</div>
+
+<script>
+const btn=document.getElementById("ft-float-btn");
+const menu=document.getElementById("ft-social-menu");
+btn.onclick=()=>{menu.style.display=menu.style.display==="flex"?"none":"flex";}
+document.addEventListener("click",function(e){
+if(!btn.contains(e.target)&&!menu.contains(e.target)){menu.style.display="none";}
+});
+</script>
 
 </body>
 </html>
