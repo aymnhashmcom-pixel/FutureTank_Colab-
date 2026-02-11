@@ -8,7 +8,7 @@
 
 body {
   margin: 0;
-  background: #f5f8fc;
+  background: #f2f8fd;
   color: #222;
   line-height: 1.8;
 }
@@ -19,7 +19,7 @@ body {
 header,
 .hero,
 .main-header {
-  background: linear-gradient(135deg, #0b6fc2, #4a90e2);
+  background: linear-gradient(135deg, #0b6fc2, #4fc3f7);
   color: #fff;
   padding: 35px 15px;
   text-align: center;
@@ -32,46 +32,26 @@ header h1,
   color: #fff;
 }
 
-header p,
-.hero p,
-.main-header p {
-  margin: 0;
-  opacity: 0.9;
-}
-
 /* =====================
    NAVBAR
 ===================== */
 .navbar {
   background: #0b6fc2;
-  padding: 12px 16px;
+  padding: 14px 20px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  flex-wrap: wrap;
-}
-
-.navbar .logo {
-  color: #fff;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-.navbar nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
 }
 
 .navbar a {
   color: #fff;
   text-decoration: none;
-  margin: 6px 10px;
+  margin: 0 8px;
   font-size: 14px;
 }
 
 /* =====================
-   LAYOUT CONTAINERS
+   CONTAINERS
 ===================== */
 main,
 .section,
@@ -81,8 +61,8 @@ main,
   margin: 30px auto;
   background: #fff;
   padding: 25px;
-  border-radius: 14px;
-  box-shadow: 0 8px 24px rgba(0,0,0,.08);
+  border-radius: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.08);
 }
 
 /* =====================
@@ -90,12 +70,12 @@ main,
 ===================== */
 h2 {
   color: #0b6fc2;
-  margin-bottom: 20px;
   text-align: center;
+  margin-bottom: 25px;
 }
 
 /* =====================
-   CARDS (HOME / SERVICES / PRODUCTS)
+   CARDS
 ===================== */
 .cards {
   display: grid;
@@ -104,30 +84,33 @@ h2 {
 }
 
 .card {
-  background: #f9fbfd;
+  background: #ffffff;
   padding: 20px;
-  border-radius: 14px;
+  border-radius: 18px;
   text-align: center;
   text-decoration: none;
   color: inherit;
-  box-shadow: 0 6px 18px rgba(0,0,0,.08);
-  transition: transform .2s ease, box-shadow .2s ease;
-  max-width: 100%;
-  overflow: hidden;
+  border: 1px solid #e3f2fd;
+  box-shadow: 0 6px 20px rgba(0,0,0,.06);
+  transition: all .3s ease;
 }
 
 .card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 14px 28px rgba(0,0,0,.15);
+  background: #4fc3f7;
+  color: #fff;
+  transform: translateY(-6px);
+  box-shadow: 0 14px 30px rgba(0,0,0,.15);
+}
+
+.card:hover p,
+.card:hover strong {
+  color: #fff;
 }
 
 .card img {
   width: 100%;
-  max-width: 100%;
-  height: auto;
-  border-radius: 12px;
+  border-radius: 14px;
   margin-bottom: 12px;
-  display: block;
 }
 
 .card h3 {
@@ -141,56 +124,42 @@ h2 {
 }
 
 /* =====================
-   PORTAL / CLIENT DATA
+   CLIENT DATA
 ===================== */
-.portal-container input {
-  width: 100%;
-  padding: 14px;
-  margin: 12px 0;
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
-}
-
-.portal-container button {
-  width: 100%;
-  padding: 14px;
-  font-size: 16px;
-}
-
 .client-data {
   margin-top: 20px;
   display: grid;
-  grid-template-columns: 1fr;
   gap: 12px;
 }
 
 .data-row {
+  background: #f7fbff;
+  padding: 14px;
+  border-radius: 12px;
+  border: 1px solid #e0f2fb;
   display: flex;
   justify-content: space-between;
-  gap: 10px;
-  background: #f9fbfd;
-  padding: 12px 15px;
-  border-radius: 8px;
-  border: 1px solid #eee;
 }
 
 .data-row span:first-child {
   font-weight: bold;
   color: #0b6fc2;
-  min-width: 130px;
 }
 
 .renew-btn {
   display: block;
   margin-top: 20px;
-  background: #25d366;
+  background: #4fc3f7;
   color: #fff;
   text-align: center;
   padding: 14px;
-  border-radius: 12px;
-  font-size: 15px;
+  border-radius: 14px;
   text-decoration: none;
+  transition: .3s;
+}
+
+.renew-btn:hover {
+  background: #0b6fc2;
 }
 
 /* =====================
@@ -203,61 +172,63 @@ footer,
   background: #fff;
   margin-top: 40px;
   font-size: 14px;
-  color: #555;
+  color: #777;
 }
 
 /* =====================
-   UTILITIES
+   FLOATING SOCIAL
 ===================== */
-.hidden {
-  display: none;
+
+#ft-float-btn{
+position:fixed;
+bottom:20px;
+right:20px;
+background:#4fc3f7;
+color:#fff;
+width:60px;
+height:60px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+cursor:pointer;
+box-shadow:0 8px 25px rgba(0,0,0,.25);
+z-index:9999;
+transition:.3s;
 }
 
-/* =====================
-   DESKTOP
-===================== */
-@media (min-width: 992px) {
-  .client-data {
-    grid-template-columns: 1fr 1fr;
-  }
+#ft-float-btn:hover{
+transform:scale(1.1);
 }
 
-/* =====================
-   MOBILE (FINAL FIX)
-===================== */
-@media (max-width: 768px) {
+#ft-social-menu{
+position:fixed;
+bottom:95px;
+right:20px;
+display:none;
+flex-direction:column;
+gap:12px;
+z-index:9999;
+}
 
-  .navbar {
-    flex-direction: column;
-    gap: 10px;
-  }
+.ft-icon{
+width:50px;
+height:50px;
+border-radius:50%;
+background:#ffffff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:18px;
+color:#4fc3f7;
+text-decoration:none;
+box-shadow:0 6px 18px rgba(0,0,0,.15);
+transition:.3s;
+}
 
-  main,
-  .section,
-  .container,
-  .portal-container {
-    margin: 15px;
-    padding: 18px;
-  }
-
-  .cards {
-    grid-template-columns: 1fr;
-  }
-
-  .card {
-    padding: 16px;
-  }
-
-  .card h3 {
-    font-size: 16px;
-  }
-
-  .card p {
-    font-size: 13px;
-  }
-
-  .data-row {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.ft-icon:hover{
+background:#4fc3f7;
+color:#fff;
+transform:scale(1.1);
 }
