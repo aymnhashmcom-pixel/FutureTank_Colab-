@@ -12,6 +12,7 @@
 
 <header class="main-header">
 <h1>💧 Future Tank</h1>
+<p>نقاء الماء هو هدفنا</p>
 </header>
 
 <main class="container">
@@ -38,6 +39,11 @@ list.innerHTML+=`
 <h3>${s.name}</h3>
 <p>${s.desc}</p>
 <strong>${s.price} ج</strong>
+<a href="https://wa.me/201150402031?text=أريد طلب خدمة ${s.name}" 
+   target="_blank" 
+   class="renew-btn">
+طلب الخدمة
+</a>
 </div>`;
 });
 });
@@ -62,4 +68,14 @@ list.innerHTML+=`
 const btn=document.getElementById("ft-float-btn");
 const menu=document.getElementById("ft-social-menu");
 
-btn.onclick=()=>{menu.style
+btn.onclick=()=>{menu.style.display=menu.style.display==="flex"?"none":"flex";}
+
+document.addEventListener("click",function(e){
+if(!btn.contains(e.target)&&!menu.contains(e.target)){
+menu.style.display="none";
+}
+});
+</script>
+
+</body>
+</html>
