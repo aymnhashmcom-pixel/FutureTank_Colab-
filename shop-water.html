@@ -5,15 +5,22 @@
 <title>خزانات المياه | Future Tank</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
 
 <body>
 
-<header class="main-header">
-<h1>💧 خزانات المياه</h1>
+<header class="navbar">
+<div class="logo">Future Tank</div>
+<nav>
+<a href="index.html">الرئيسية</a>
+<a href="shop.html">التسوق</a>
+<a href="cart.html">🧾 السلة</a>
+</nav>
 </header>
 
 <main class="container">
+<h2>💧 خزانات المياه</h2>
 <div id="productsList" class="cards"></div>
 </main>
 
@@ -28,22 +35,36 @@ fetch(API_URL+"?type=products&category=خزانات المياه")
 .then(res=>res.json())
 .then(data=>{
 const list=document.getElementById("productsList");
-
-if(data.length===0){
-list.innerHTML="<p style='text-align:center'>لا توجد منتجات حالياً</p>";
-return;
-}
-
+list.innerHTML="";
 data.forEach(p=>{
 list.innerHTML+=`
 <div class="card">
-<img src="${p.image}" style="width:100%;border-radius:12px;margin-bottom:10px;">
+<img src="${p.image}">
 <h3>${p.name}</h3>
 <p>${p.desc}</p>
 <strong>${p.price} ج</strong>
+
+<button onclick='addToCart(${JSON.stringify(p)})' 
+style="margin-top:10px;background:#0b6fc2;color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;">
+🛒 أضف للسلة
+</button>
+
+<a href="https://wa.me/201150402031?text=أريد طلب ${p.name} بسعر ${p.price} جنيه"
+target="_blank"
+class="renew-btn">
+📲 طلب مباشر
+</a>
+
 </div>`;
 });
 });
+
+function addToCart(product){
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+cart.push(product);
+localStorage.setItem("cart",JSON.stringify(cart));
+alert("تم إضافة المنتج للسلة ✅");
+}
 </script>
 
 </body>
