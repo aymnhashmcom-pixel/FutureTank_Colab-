@@ -14,7 +14,7 @@ body {
 }
 
 /* =====================
-   HEADER / HERO
+   HEADER
 ===================== */
 header,
 .hero,
@@ -26,9 +26,8 @@ header,
 }
 
 header h1,
-.hero h1,
 .main-header h1 {
-  margin: 0 0 10px;
+  margin: 0;
   color: #fff;
 }
 
@@ -75,6 +74,37 @@ h2 {
 }
 
 /* =====================
+   BUTTONS (احترافي)
+===================== */
+button {
+  padding: 12px 22px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg,#4fc3f7,#0b6fc2);
+  color: #fff;
+  cursor: pointer;
+  font-size: 15px;
+  transition: .3s;
+}
+
+button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0,0,0,.2);
+}
+
+/* =====================
+   INPUTS
+===================== */
+input {
+  padding: 12px;
+  width: 80%;
+  margin: 8px 0;
+  border-radius: 12px;
+  border: 1px solid #ddd;
+  font-size: 15px;
+}
+
+/* =====================
    CARDS
 ===================== */
 .cards {
@@ -113,32 +143,23 @@ h2 {
   margin-bottom: 12px;
 }
 
-.card h3 {
-  margin: 10px 0;
-  font-size: 17px;
-}
-
-.card p {
-  font-size: 14px;
-  color: #555;
-}
-
 /* =====================
    CLIENT DATA
 ===================== */
 .client-data {
   margin-top: 20px;
   display: grid;
-  gap: 12px;
+  gap: 14px;
 }
 
 .data-row {
   background: #f7fbff;
-  padding: 14px;
-  border-radius: 12px;
+  padding: 16px;
+  border-radius: 14px;
   border: 1px solid #e0f2fb;
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
 .data-row span:first-child {
@@ -146,20 +167,37 @@ h2 {
   color: #0b6fc2;
 }
 
+/* 🔥 المتبقي بشكل احترافي */
+.remaining-box{
+margin-top:20px;
+padding:18px;
+border-radius:18px;
+text-align:center;
+font-size:18px;
+font-weight:bold;
+background:linear-gradient(135deg,#4fc3f7,#0b6fc2);
+color:#fff;
+box-shadow:0 10px 25px rgba(0,0,0,.15);
+}
+
+/* =====================
+   RENEW BUTTON
+===================== */
 .renew-btn {
   display: block;
-  margin-top: 20px;
-  background: #4fc3f7;
+  margin-top: 25px;
+  background: linear-gradient(135deg,#25d366,#1da851);
   color: #fff;
   text-align: center;
-  padding: 14px;
-  border-radius: 14px;
+  padding: 15px;
+  border-radius: 16px;
   text-decoration: none;
   transition: .3s;
+  font-weight: bold;
 }
 
 .renew-btn:hover {
-  background: #0b6fc2;
+  transform: scale(1.05);
 }
 
 /* =====================
