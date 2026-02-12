@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Future Tank | عرض القسم</title>
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+
+<body>
+
+<header class="navbar">
+<div class="logo">Future Tank</div>
+<nav>
+<a href="index.html">الرئيسية</a>
+<a href="shop.html">التسوق</a>
+<a href="cart.html">🧾 السلة</a>
+</nav>
+</header>
+
+<main class="container">
+<h2 id="categoryTitle">القسم</h2>
+<div id="productsList" class="cards"></div>
+</main>
+
+<footer class="main-footer">
+© Future Tank — نقاء الماء هو هدفنا
+</footer>
+
+<script>
+const API_URL="https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
+
+const urlParams = new URLSearchParams(window.location.search);
+const category = urlParams.get("cat");
+
+document.getElementById("categoryTitle").innerText = category;
+
+fetch(API_URL+"?type=products&category="+encodeURIComponent(category))
+.then(res=>res.json())
+.then(data=>{
+const list=document.getElementById("productsList");
+list.innerHTML="";
+
+if(data.length===0){
+list.innerHTML="<p style='text-align:center'>لا توجد منتجات في هذا القسم حالياً</p>";
+return;
+}
+
+data.forEach(p=>{
+list.innerHTML+=`
+<div class="card">
+<img src="${p.image}">
+<h3>${p.name}</h3>
+<p>${p.desc}</p>
+<strong>${p.price} ج</strong>
+<br><br>
+<button onclick="addToCart('${p.name}','${p.price}')" style="background:#4fc3f7;border:none;padding:10px 15px;border-radius:8px;color:#fff;cursor:pointer;">🛒 أضف للسلة</button>
+<a href="https://wa.me/201150402031?text=أرغب%20في%20طلب%20${p.name}" target="_blank" style="display:block;margin-top:8px;color:#0b6fc2;">📲 طلب مباشر</a>
+</div>`;
+});
+});
+
+function addToCart(name,price){
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+cart.push({name,price});
+localStorage.setItem("cart",JSON.stringify(cart));
+alert("تم إضافة المنتج إلى السلة");
+}
+</script>
+
+</body>
+</html>
