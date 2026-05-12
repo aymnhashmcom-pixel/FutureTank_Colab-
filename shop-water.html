@@ -2,69 +2,247 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>خزانات المياه | Future Tank</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>💧 خزانات المياه | Future Tank</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+.badge{
+display:inline-block;
+padding:6px 12px;
+border-radius:30px;
+font-size:13px;
+margin-bottom:10px;
+font-weight:bold;
+}
+
+.badge.available{
+background:#e8f9ee;
+color:#1b8f46;
+}
+
+.badge.sold{
+background:#ffe9e9;
+color:#d63031;
+}
+
+.badge.hot{
+background:#fff4d9;
+color:#ff9800;
+}
+
+.product-actions{
+display:flex;
+gap:10px;
+margin-top:15px;
+flex-wrap:wrap;
+justify-content:center;
+}
+
+.cart-btn,
+.order-btn{
+border:none;
+padding:10px 14px;
+border-radius:10px;
+cursor:pointer;
+font-size:14px;
+text-decoration:none;
+transition:.3s;
+}
+
+.cart-btn{
+background:#0b6fc2;
+color:#fff;
+}
+
+.order-btn{
+background:#25d366;
+color:#fff;
+}
+
+.cart-btn:hover,
+.order-btn:hover{
+transform:scale(1.05);
+}
+
+</style>
+
 </head>
 
 <body>
 
 <header class="navbar">
+
 <div class="logo">Future Tank</div>
+
 <nav>
 <a href="index.html">الرئيسية</a>
 <a href="shop.html">التسوق</a>
 <a href="cart.html">🧾 السلة</a>
 </nav>
+
 </header>
 
-<main class="container">
-<h2>💧 خزانات المياه</h2>
-<div id="productsList" class="cards"></div>
-</main>
+<section class="section">
 
-<footer class="main-footer">
+<h2>💧 خزانات المياه</h2>
+
+<div id="productsList" class="cards"></div>
+
+</section>
+
+<footer>
 © Future Tank — نقاء الماء هو هدفنا
 </footer>
 
+<!-- Floating Social -->
+<div id="ft-social-menu">
+
+<a class="ft-icon"
+href="https://wa.me/201150402031"
+target="_blank">
+<i class="fab fa-whatsapp"></i>
+</a>
+
+<a class="ft-icon"
+href="https://www.facebook.com/share/17pbzT4Hnm/"
+target="_blank">
+<i class="fab fa-facebook-f"></i>
+</a>
+
+<a class="ft-icon"
+href="https://www.instagram.com/aymn_hashm"
+target="_blank">
+<i class="fab fa-instagram"></i>
+</a>
+
+<a class="ft-icon"
+href="https://youtube.com/channel/UCyqPviD7dH7R7BkDxrodHfA"
+target="_blank">
+<i class="fab fa-youtube"></i>
+</a>
+
+</div>
+
+<div id="ft-float-btn">
+<i class="fas fa-share-alt"></i>
+</div>
+
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
-fetch(API_URL+"?type=products&category=خزانات المياه")
-.then(res=>res.json())
-.then(data=>{
-const list=document.getElementById("productsList");
-list.innerHTML="";
-data.forEach(p=>{
-list.innerHTML+=`
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
+
+fetch(API_URL + "?type=products&category=خزانات المياه")
+
+.then(res => res.json())
+
+.then(data => {
+
+const list = document.getElementById("productsList");
+
+list.innerHTML = "";
+
+data.forEach(product => {
+
+let badgeClass = "available";
+
+if(product.badge === "غير متوفر"){
+badgeClass = "sold";
+}
+
+if(product.badge === "الأكثر مبيعاً"){
+badgeClass = "hot";
+}
+
+list.innerHTML += `
+
 <div class="card">
-<img src="${p.image}">
-<h3>${p.name}</h3>
-<p>${p.desc}</p>
-<strong>${p.price} ج</strong>
 
-<button onclick='addToCart(${JSON.stringify(p)})' 
-style="margin-top:10px;background:#0b6fc2;color:#fff;border:none;padding:10px 14px;border-radius:8px;cursor:pointer;">
+<img src="${product.image}">
+
+<div class="badge ${badgeClass}">
+${product.badge}
+</div>
+
+<h3>${product.name}</h3>
+
+<p>${product.desc}</p>
+
+<strong>${product.price} ج</strong>
+
+<div class="product-actions">
+
+<button class="cart-btn"
+onclick='addToCart(${JSON.stringify(product)})'>
 🛒 أضف للسلة
 </button>
 
-<a href="https://wa.me/201150402031?text=أريد طلب ${p.name} بسعر ${p.price} جنيه"
+<a class="order-btn"
 target="_blank"
-class="renew-btn">
+href="https://wa.me/201150402031?text=السلام عليكم أريد طلب المنتج: ${product.name}">
 📲 طلب مباشر
 </a>
 
-</div>`;
+</div>
+
+</div>
+
+`;
+
 });
+
 });
 
 function addToCart(product){
-let cart=JSON.parse(localStorage.getItem("cart"))||[];
+
+let cart =
+JSON.parse(localStorage.getItem("cart")) || [];
+
 cart.push(product);
-localStorage.setItem("cart",JSON.stringify(cart));
-alert("تم إضافة المنتج للسلة ✅");
+
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
+);
+
+alert("✅ تم إضافة المنتج للسلة");
+
 }
+
+/* SOCIAL */
+
+const btn =
+document.getElementById("ft-float-btn");
+
+const menu =
+document.getElementById("ft-social-menu");
+
+btn.onclick = () => {
+
+menu.style.display =
+menu.style.display === "flex"
+? "none"
+: "flex";
+
+};
+
+document.addEventListener("click",function(e){
+
+if(
+!btn.contains(e.target) &&
+!menu.contains(e.target)
+){
+menu.style.display="none";
+}
+
+});
+
 </script>
 
 </body>
