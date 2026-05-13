@@ -1,77 +1,98 @@
-// ====== إعداد السلة ======
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-// ====== إضافة منتج ======
-function addToCart(name, price) {
-  cart.push({
-    name: name,
-    price: price,
-    qty: 1
-  });
+const cartContainer = document.getElementById("cart-items");
+const totalElement = document.getElementById("total");
 
-  localStorage.setItem("cart", JSON.stringify(cart));
-  alert("✅ تم إضافة المنتج إلى السلة");
+function renderCart(){
+
+cartContainer.innerHTML="";
+
+let total=0;
+
+if(cart.length===0){
+
+cartContainer.innerHTML="<h3>🛒 السلة فارغة</h3>";
+
+totalElement.innerText="0";
+
+return;
+
 }
 
-// ====== عرض السلة ======
-function renderCart() {
-  const cartItemsDiv = document.getElementById("cartItems");
-  const totalSpan = document.getElementById("total");
+cart.forEach((item,index)=>{
 
-  if (!cartItemsDiv) return;
+const cleanPrice = parseFloat(
+String(item.price)
+.replace("جنيه","")
+.replace("ج","")
+.replace(/,/g,"")
+.trim()
+) || 0;
 
-  cartItemsDiv.innerHTML = "";
-  let total = 0;
+total += cleanPrice;
 
-  if (cart.length === 0) {
-    cartItemsDiv.innerHTML = "<p>🛒 السلة فارغة</p>";
-    totalSpan.textContent = "0";
-    return;
-  }
+cartContainer.innerHTML += `
+<div class="card">
+<h3>${item.name}</h3>
 
-  cart.forEach((item, index) => {
-    total += item.price * item.qty;
+<p>
+السعر: ${cleanPrice} جنيه
+</p>
 
-    cartItemsDiv.innerHTML += `
-      <div class="card">
-        <strong>${item.name}</strong><br>
-        السعر: ${item.price} جنيه<br>
-        <button onclick="removeItem(${index})">❌ حذف</button>
-      </div>
-    `;
-  });
+<button onclick="removeItem(${index})">
+❌ حذف
+</button>
+</div>
+`;
 
-  totalSpan.textContent = total;
+});
+
+totalElement.innerText=total;
+
 }
 
-// ====== حذف عنصر ======
-function removeItem(index) {
-  cart.splice(index, 1);
-  localStorage.setItem("cart", JSON.stringify(cart));
-  renderCart();
+function removeItem(index){
+
+cart.splice(index,1);
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+renderCart();
+
 }
 
-// ====== إتمام الطلب عبر واتساب (مباشر) ======
-function checkoutWhatsApp() {
-  if (cart.length === 0) {
-    alert("❌ السلة فارغة");
-    return;
-  }
+renderCart();
 
-  let message = "🛒 طلب جديد من موقع Future Tank:%0A%0A";
+const whatsappBtn=document.getElementById("whatsapp-order");
 
-  cart.forEach(item => {
-    message += `- ${item.name} : ${item.price} جنيه%0A`;
-  });
+if(whatsappBtn){
 
-  const total = cart.reduce((sum, item) => sum + item.price, 0);
-  message += `%0A💰 الإجمالي: ${total} جنيه`;
+whatsappBtn.onclick=function(){
 
-  // 👈 رقم واتساب المباشر
-  const phone = "201150402031";
+if(cart.length===0){
 
-  window.open(
-    `https://wa.me/${phone}?text=${message}`,
-    "_blank"
-  );
-    }
+alert("السلة فارغة");
+
+return;
+
+}
+
+let message="السلام عليكم%0A";
+message+="أرغب في طلب المنتجات التالية:%0A%0A";
+
+cart.forEach(item=>{
+
+message += `🔹 ${item.name} - ${item.price} جنيه%0A`;
+
+});
+
+message += `%0A💰 الإجمالي: ${totalElement.innerText} جنيه`;
+
+window.open(
+`https://wa.me/201150402031?text=${message}`,
+"_blank"
+);
+
+};
+
+}
