@@ -2,10 +2,15 @@
 <html lang="ar" dir="rtl">
 
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Future Tank | عرض القسم</title>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Future Tank | عرض القسم
+</title>
 
 <link rel="stylesheet" href="style.css">
 
@@ -73,9 +78,19 @@ Future Tank
 </div>
 
 <nav>
-<a href="index.html">الرئيسية</a>
-<a href="shop.html">التسوق</a>
-<a href="cart.html">🧾 السلة</a>
+
+<a href="index.html">
+الرئيسية
+</a>
+
+<a href="shop.html">
+التسوق
+</a>
+
+<a href="cart.html">
+🧾 السلة
+</a>
+
 </nav>
 
 </header>
@@ -117,6 +132,26 @@ encodeURIComponent(category)
 .then(res=>res.json())
 
 .then(data=>{
+
+/* =========================
+ترتيب المنتجات تلقائي
+========================= */
+
+data.sort((a,b)=>{
+
+const order = {
+
+"الأكثر مبيعاً":1,
+"متوفر":2,
+"غير متوفر":3
+
+};
+
+return (order[a.badge] || 99)
+-
+(order[b.badge] || 99);
+
+});
 
 const list =
 document.getElementById("productsList");
@@ -187,7 +222,9 @@ onclick="addToCart(
 class="order-link"
 href="https://wa.me/201150402031?text=أرغب%20في%20طلب%20${p.name}"
 target="_blank">
+
 📲 طلب مباشر
+
 </a>
 
 </div>
@@ -201,12 +238,15 @@ target="_blank">
 function addToCart(name,price,image){
 
 let cart =
-JSON.parse(localStorage.getItem("cart")) || [];
+JSON.parse(localStorage.getItem("cart"))
+|| [];
 
 cart.push({
+
 name:name,
 price:price,
 image:image
+
 });
 
 localStorage.setItem(
