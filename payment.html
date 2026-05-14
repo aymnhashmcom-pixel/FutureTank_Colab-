@@ -19,6 +19,12 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 
 <style>
 
+body{
+
+background:#f5f9ff;
+
+}
+
 .payment-box{
 
 max-width:700px;
@@ -55,6 +61,7 @@ font-size:22px;
 font-weight:bold;
 direction:ltr;
 margin-top:10px;
+color:#222;
 
 }
 
@@ -68,6 +75,7 @@ border-radius:10px;
 color:#fff;
 cursor:pointer;
 font-size:15px;
+transition:.3s;
 
 }
 
@@ -85,6 +93,7 @@ padding:15px;
 border-radius:12px;
 font-size:14px;
 line-height:2;
+border:1px solid #ffe082;
 
 }
 
@@ -100,12 +109,49 @@ border-radius:14px;
 text-decoration:none;
 font-size:17px;
 font-weight:bold;
+transition:.3s;
 
 }
 
 .whatsapp-btn:hover{
 
 opacity:.9;
+
+}
+
+.bank-note{
+
+margin-top:12px;
+font-size:14px;
+line-height:2;
+color:#555;
+
+}
+
+.qr-box{
+
+margin-top:20px;
+text-align:center;
+
+}
+
+.qr-box img{
+
+width:180px;
+height:180px;
+border-radius:14px;
+border:1px solid #ddd;
+padding:8px;
+background:#fff;
+
+}
+
+.secure-text{
+
+margin-top:12px;
+font-size:13px;
+color:#777;
+line-height:1.9;
 
 }
 
@@ -162,6 +208,20 @@ onclick="copyText('instapay-number')">
 
 </button>
 
+<div class="qr-box">
+
+<img
+src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=01150402031"
+alt="QR Code">
+
+<p class="secure-text">
+
+📱 يمكن مسح الـ QR مباشرة للدفع السريع
+
+</p>
+
+</div>
+
 </div>
 
 <!-- ETISALAT CASH -->
@@ -198,20 +258,40 @@ onclick="copyText('cash-number')">
 <div class="pay-card">
 
 <div class="pay-title">
-🏦 الحساب البنكي
+🏦 التحويل البنكي
 </div>
 
 <p>
-
-سيتم إضافته قريبًا بإذن الله
-
+البنك الأهلي المصري
 </p>
+
+<div class="bank-note">
+
+✅ التحويل البنكي متاح للعملاء والشركات
+
+<br><br>
+
+🔒 حفاظًا على الأمان والخصوصية
+يتم إرسال بيانات الحساب البنكي الكاملة
+عبر واتساب فقط بعد التواصل.
+
+</div>
+
+<a
+class="whatsapp-btn"
+target="_blank"
+href="https://wa.me/201150402031?text=السلام%20عليكم%20أرغب%20في%20بيانات%20التحويل%20البنكي">
+
+📲 طلب بيانات الحساب البنكي
+
+</a>
 
 </div>
 
 <div class="notice">
 
-⚠️ بعد التحويل يرجى إرسال صورة التحويل عبر واتساب لتأكيد الطلب وتجهيز الشحنة.
+⚠️ بعد التحويل يرجى إرسال صورة التحويل عبر واتساب
+لتأكيد الطلب وتجهيز الشحنة.
 
 </div>
 
