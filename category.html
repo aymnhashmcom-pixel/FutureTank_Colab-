@@ -65,6 +65,45 @@ text-decoration:none;
 font-weight:bold;
 }
 
+.review-box{
+margin-top:20px;
+padding-top:15px;
+border-top:1px solid #eee;
+text-align:right;
+}
+
+.review-input{
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:8px;
+border:1px solid #ccc;
+}
+
+.review-btn{
+margin-top:10px;
+background:#0b6fc2;
+color:#fff;
+border:none;
+padding:10px 15px;
+border-radius:8px;
+cursor:pointer;
+}
+
+.review-item{
+background:#f7fbff;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+font-size:14px;
+}
+
+.stars{
+color:#ff9800;
+font-size:16px;
+margin-top:5px;
+}
+
 </style>
 
 </head>
@@ -227,9 +266,89 @@ target="_blank">
 
 </a>
 
+<!-- REVIEWS -->
+
+<div class="review-box">
+
+<h4>
+⭐ التقييمات
+</h4>
+
+<div id="reviews-${p.id}">
+
+جاري تحميل التقييمات...
+
+</div>
+
+<input
+type="text"
+id="name-${p.id}"
+class="review-input"
+placeholder="الاسم">
+
+<input
+type="text"
+id="phone-${p.id}"
+class="review-input"
+placeholder="رقم الهاتف">
+
+<select
+id="rating-${p.id}"
+class="review-input">
+
+<option value="5">
+★★★★★ ممتاز
+</option>
+
+<option value="4">
+★★★★ جيد جدًا
+</option>
+
+<option value="3">
+★★★ جيد
+</option>
+
+<option value="2">
+★★ مقبول
+</option>
+
+<option value="1">
+★ ضعيف
+</option>
+
+</select>
+
+<textarea
+id="comment-${p.id}"
+class="review-input"
+placeholder="اكتب تعليقك">
+</textarea>
+
+<button
+class="review-btn"
+onclick="submitReview(
+'${p.name}',
+${p.id}
+)">
+
+إرسال التقييم
+
+</button>
+
+</div>
+
 </div>
 
 `;
+
+setTimeout(()=>{
+
+loadReviews(
+p.name,
+p.id
+);
+
+},300);
 
 });
 
@@ -255,6 +374,164 @@ JSON.stringify(cart)
 );
 
 alert("✅ تم إضافة المنتج إلى السلة");
+
+}
+
+/* =========================
+LOAD REVIEWS
+========================= */
+
+function loadReviews(product,id){
+
+fetch(
+API_URL +
+"?type=reviews&product=" +
+encodeURIComponent(product)
+)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+const box =
+document.getElementById(
+"reviews-"+id
+);
+
+box.innerHTML="";
+
+if(data.length===0){
+
+box.innerHTML=
+"<p>لا توجد تقييمات بعد</p>";
+
+return;
+
+}
+
+data.forEach(r=>{
+
+let stars = "";
+
+for(let i=0;i<r.rating;i++){
+
+stars += "⭐";
+
+}
+
+box.innerHTML += `
+
+<div class="review-item">
+
+<strong>
+${r.name}
+</strong>
+
+(••${r.phone})
+
+<div class="stars">
+${stars}
+</div>
+
+<p>
+${r.comment}
+</p>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+/* =========================
+ADD REVIEW
+========================= */
+
+function submitReview(product,id){
+
+const name =
+document.getElementById(
+"name-"+id
+).value;
+
+const phone =
+document.getElementById(
+"phone-"+id
+).value;
+
+const rating =
+document.getElementById(
+"rating-"+id
+).value;
+
+const comment =
+document.getElementById(
+"comment-"+id
+).value;
+
+if(
+name==="" ||
+phone==="" ||
+comment===""
+){
+
+alert("يرجى استكمال البيانات");
+
+return;
+
+}
+
+fetch(API_URL,{
+
+method:"POST",
+
+body:JSON.stringify({
+
+action:"addReview",
+
+product:product,
+
+name:name,
+
+phone:phone,
+
+rating:rating,
+
+comment:comment
+
+})
+
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+if(data.success){
+
+alert("✅ تم إرسال التقييم");
+
+document.getElementById(
+"name-"+id
+).value="";
+
+document.getElementById(
+"phone-"+id
+).value="";
+
+document.getElementById(
+"comment-"+id
+).value="";
+
+loadReviews(product,id);
+
+}
+
+});
 
 }
 
