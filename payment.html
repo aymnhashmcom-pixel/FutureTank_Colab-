@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Future Tank | الدفع
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+.payment-box{
+
+max-width:700px;
+margin:auto;
+background:#fff;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.pay-card{
+
+background:#f7fbff;
+padding:20px;
+border-radius:18px;
+margin-top:20px;
+border:1px solid #dbefff;
+
+}
+
+.pay-title{
+
+font-size:20px;
+font-weight:bold;
+margin-bottom:10px;
+color:#0b6fc2;
+
+}
+
+.pay-number{
+
+font-size:22px;
+font-weight:bold;
+direction:ltr;
+margin-top:10px;
+
+}
+
+.copy-btn{
+
+margin-top:15px;
+background:#4fc3f7;
+border:none;
+padding:12px 18px;
+border-radius:10px;
+color:#fff;
+cursor:pointer;
+font-size:15px;
+
+}
+
+.copy-btn:hover{
+
+background:#0b6fc2;
+
+}
+
+.notice{
+
+margin-top:25px;
+background:#fff8e1;
+padding:15px;
+border-radius:12px;
+font-size:14px;
+line-height:2;
+
+}
+
+.whatsapp-btn{
+
+display:block;
+margin-top:25px;
+background:#25D366;
+color:#fff;
+text-align:center;
+padding:15px;
+border-radius:14px;
+text-decoration:none;
+font-size:17px;
+font-weight:bold;
+
+}
+
+.whatsapp-btn:hover{
+
+opacity:.9;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="main-header">
+
+<h1>
+💳 Future Tank
+</h1>
+
+<p>
+طرق الدفع المتاحة
+</p>
+
+</header>
+
+<main class="container">
+
+<div class="payment-box">
+
+<h2>
+اختر طريقة الدفع المناسبة
+</h2>
+
+<!-- INSTAPAY -->
+
+<div class="pay-card">
+
+<div class="pay-title">
+💳 InstaPay
+</div>
+
+<p>
+التحويل على رقم:
+</p>
+
+<div class="pay-number"
+id="instapay-number">
+
+01150402031
+
+</div>
+
+<button
+class="copy-btn"
+onclick="copyText('instapay-number')">
+
+📋 نسخ الرقم
+
+</button>
+
+</div>
+
+<!-- ETISALAT CASH -->
+
+<div class="pay-card">
+
+<div class="pay-title">
+📲 اتصالات كاش
+</div>
+
+<p>
+التحويل على رقم:
+</p>
+
+<div class="pay-number"
+id="cash-number">
+
+01150402031
+
+</div>
+
+<button
+class="copy-btn"
+onclick="copyText('cash-number')">
+
+📋 نسخ الرقم
+
+</button>
+
+</div>
+
+<!-- BANK -->
+
+<div class="pay-card">
+
+<div class="pay-title">
+🏦 الحساب البنكي
+</div>
+
+<p>
+
+سيتم إضافته قريبًا بإذن الله
+
+</p>
+
+</div>
+
+<div class="notice">
+
+⚠️ بعد التحويل يرجى إرسال صورة التحويل عبر واتساب لتأكيد الطلب وتجهيز الشحنة.
+
+</div>
+
+<a
+class="whatsapp-btn"
+target="_blank"
+href="https://wa.me/201150402031?text=السلام%20عليكم%20قمت%20بتحويل%20المبلغ%20وسأرسل%20صورة%20التحويل">
+
+📲 إرسال إثبات الدفع عبر واتساب
+
+</a>
+
+</div>
+
+</main>
+
+<footer class="main-footer">
+
+© Future Tank — نقاء الماء هو هدفنا
+
+</footer>
+
+<script>
+
+function copyText(id){
+
+const text =
+document.getElementById(id).innerText;
+
+navigator.clipboard.writeText(text);
+
+alert("✅ تم نسخ الرقم");
+
+}
+
+</script>
+
+</body>
+</html>
