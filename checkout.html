@@ -117,6 +117,19 @@ font-weight:bold;
 
 }
 
+.success-box{
+
+background:#e8fff1;
+padding:15px;
+border-radius:12px;
+margin-top:20px;
+display:none;
+color:#198754;
+font-weight:bold;
+text-align:center;
+
+}
+
 </style>
 
 </head>
@@ -242,11 +255,17 @@ href="payment.html">
 
 </div>
 
+<div class="success-box" id="success-box">
+
+✅ تم إرسال الطلب بنجاح
+
+</div>
+
 <button
 class="complete-btn"
 onclick="sendOrder()">
 
-📲 تأكيد الطلب عبر واتساب
+📲 تأكيد الطلب
 
 </button>
 
@@ -261,6 +280,9 @@ onclick="sendOrder()">
 </footer>
 
 <script>
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
 let cart =
 JSON.parse(localStorage.getItem("cart")) || [];
@@ -313,7 +335,19 @@ ${cleanPrice} جنيه
 
 totalPrice.innerText = total;
 
+/* =========================
+SEND ORDER
+========================= */
+
 function sendOrder(){
+
+if(cart.length===0){
+
+alert("🛒 السلة فارغة");
+
+return;
+
+}
 
 const name =
 document.getElementById("customer-name").value;
@@ -339,6 +373,52 @@ alert("⚠️ برجاء استكمال البيانات");
 return;
 
 }
+
+/* تجهيز المنتجات */
+
+let itemsText = "";
+
+cart.forEach(item=>{
+
+itemsText +=
+item.name +
+" - " +
+item.price +
+" | ";
+
+});
+
+/* حفظ داخل الشيت */
+
+fetch(API_URL,{
+
+method:"POST",
+
+body:JSON.stringify({
+
+action:"saveOrder",
+
+name:name,
+
+phone:phone,
+
+address:address,
+
+payment:payment,
+
+items:itemsText,
+
+total:total
+
+})
+
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+/* رسالة واتساب */
 
 let message =
 "السلام عليكم%0A%0A";
@@ -377,10 +457,32 @@ message +=
 total +
 " جنيه";
 
+/* فتح واتساب */
+
 window.open(
 "https://wa.me/201150402031?text=" + message,
 "_blank"
 );
+
+/* تنظيف السلة */
+
+localStorage.removeItem("cart");
+
+/* رسالة نجاح */
+
+document.getElementById(
+"success-box"
+).style.display="block";
+
+/* إعادة تحميل بعد ثواني */
+
+setTimeout(()=>{
+
+window.location.href="shop.html";
+
+},3000);
+
+});
 
 }
 
