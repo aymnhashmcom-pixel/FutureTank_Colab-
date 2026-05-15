@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+Future Tank | تتبع الطلب
+</title>
+
+<link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+.track-box{
+
+max-width:850px;
+margin:auto;
+background:#fff;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+
+}
+
+.search-box{
+
+display:flex;
+gap:10px;
+margin-top:20px;
+flex-wrap:wrap;
+
+}
+
+.search-box input{
+
+flex:1;
+padding:15px;
+border-radius:12px;
+border:1px solid #ddd;
+font-size:16px;
+
+}
+
+.search-btn{
+
+background:#0b6fc2;
+color:#fff;
+border:none;
+padding:15px 25px;
+border-radius:12px;
+cursor:pointer;
+font-size:16px;
+font-weight:bold;
+
+}
+
+.search-btn:hover{
+
+opacity:.9;
+
+}
+
+.order-card{
+
+margin-top:25px;
+background:#f7fbff;
+padding:20px;
+border-radius:18px;
+border:1px solid #dbefff;
+
+}
+
+.order-title{
+
+font-size:20px;
+font-weight:bold;
+margin-bottom:15px;
+color:#0b6fc2;
+
+}
+
+.order-item{
+
+margin-top:10px;
+line-height:2;
+
+}
+
+.status{
+
+display:inline-block;
+padding:8px 15px;
+border-radius:20px;
+color:#fff;
+font-weight:bold;
+margin-top:10px;
+
+}
+
+.new{
+background:#ff9800;
+}
+
+.prepare{
+background:#2196f3;
+}
+
+.shipped{
+background:#673ab7;
+}
+
+.done{
+background:#28a745;
+}
+
+.cancel{
+background:#dc3545;
+}
+
+.empty{
+
+text-align:center;
+margin-top:30px;
+font-size:18px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="main-header">
+
+<h1>
+📦 Future Tank
+</h1>
+
+<p>
+تتبع الطلبات
+</p>
+
+</header>
+
+<main class="container">
+
+<div class="track-box">
+
+<h2>
+ابحث برقم الهاتف
+</h2>
+
+<div class="search-box">
+
+<input
+type="tel"
+id="phone"
+placeholder="01xxxxxxxxx">
+
+<button
+class="search-btn"
+onclick="trackOrder()">
+
+🔎 تتبع الطلب
+
+</button>
+
+</div>
+
+<div id="orders-result">
+
+<div class="empty">
+
+📦 أدخل رقم الهاتف لعرض الطلبات
+
+</div>
+
+</div>
+
+</div>
+
+</main>
+
+<footer class="main-footer">
+
+© Future Tank — نقاء الماء هو هدفنا
+
+</footer>
+
+<script>
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
+
+function trackOrder(){
+
+const phone =
+document.getElementById("phone").value;
+
+const result =
+document.getElementById("orders-result");
+
+if(phone===""){
+
+alert("⚠️ اكتب رقم الهاتف");
+
+return;
+
+}
+
+result.innerHTML =
+"<p style='text-align:center'>⏳ جاري البحث...</p>";
+
+fetch(
+API_URL +
+"?type=trackOrder&phone=" +
+encodeURIComponent(phone)
+)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+result.innerHTML="";
+
+if(data.length===0){
+
+result.innerHTML = `
+
+<div class="empty">
+
+❌ لا توجد طلبات بهذا الرقم
+
+</div>
+
+`;
+
+return;
+
+}
+
+data.reverse();
+
+data.forEach(order=>{
+
+let statusClass = "";
+let statusText = "";
+
+if(order.status==="طلب جديد"){
+
+statusClass = "new";
+statusText = "🟠 طلب جديد";
+
+}
+
+else if(order.status==="جارى التجهيز"){
+
+statusClass = "prepare";
+statusText = "🔵 جاري التجهيز";
+
+}
+
+else if(order.status==="تم الشحن"){
+
+statusClass = "shipped";
+statusText = "🟣 تم الشحن";
+
+}
+
+else if(order.status==="تم التسليم"){
+
+statusClass = "done";
+statusText = "🟢 تم التسليم";
+
+}
+
+else if(order.status==="ملغي"){
+
+statusClass = "cancel";
+statusText = "🔴 ملغي";
+
+}
+
+result.innerHTML += `
+
+<div class="order-card">
+
+<div class="order-title">
+
+طلب رقم #${order.id}
+
+</div>
+
+<div class="order-item">
+
+👤 الاسم:
+${order.name}
+
+</div>
+
+<div class="order-item">
+
+📞 الهاتف:
+${order.phone}
+
+</div>
+
+<div class="order-item">
+
+📍 العنوان:
+${order.address}
+
+</div>
+
+<div class="order-item">
+
+💳 طريقة الدفع:
+${order.payment}
+
+</div>
+
+<div class="order-item">
+
+📦 المنتجات:
+<br><br>
+
+${order.items.replaceAll(",", "<br>")}
+
+</div>
+
+<div class="order-item">
+
+💰 الإجمالي:
+${order.total} جنيه
+
+</div>
+
+<div class="order-item">
+
+📅 التاريخ:
+${new Date(order.date).toLocaleString("ar-EG")}
+
+</div>
+
+<div class="status ${statusClass}">
+
+${statusText}
+
+</div>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
