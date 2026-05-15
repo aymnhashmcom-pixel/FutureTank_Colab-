@@ -2,18 +2,39 @@
 <html lang="ar" dir="rtl">
 
 <head>
-<meta charset="UTF-8">
-<title>Future Tank</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+
+<title>
+Future Tank
+</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<!-- PWA -->
+
+<meta name="theme-color"
+content="#4fc3f7">
+
+<link rel="manifest"
+href="manifest.json">
+
+<link rel="apple-touch-icon"
+href="icon-192.png">
+
+<link rel="stylesheet"
+href="style.css">
 
 <!-- Font Awesome -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
 
 #ft-float-btn{
+
 position:fixed;
 bottom:20px;
 right:20px;
@@ -30,13 +51,17 @@ cursor:pointer;
 box-shadow:0 8px 25px rgba(0,0,0,.3);
 z-index:9999;
 transition:.3s;
+
 }
 
 #ft-float-btn:hover{
+
 transform:scale(1.1);
+
 }
 
 #ft-social-menu{
+
 position:fixed;
 bottom:95px;
 right:20px;
@@ -44,9 +69,11 @@ display:none;
 flex-direction:column;
 gap:12px;
 z-index:9999;
+
 }
 
 .ft-icon{
+
 width:50px;
 height:50px;
 border-radius:50%;
@@ -59,12 +86,36 @@ color:#4fc3f7;
 text-decoration:none;
 box-shadow:0 6px 18px rgba(0,0,0,.15);
 transition:.3s;
+
 }
 
 .ft-icon:hover{
+
 background:#4fc3f7;
 color:#ffffff;
 transform:scale(1.1);
+
+}
+
+.install-btn{
+
+margin-top:25px;
+background:#25D366;
+color:#fff;
+padding:15px 20px;
+border-radius:14px;
+text-decoration:none;
+display:none;
+font-weight:bold;
+text-align:center;
+font-size:17px;
+
+}
+
+.install-btn:hover{
+
+opacity:.9;
+
 }
 
 </style>
@@ -74,101 +125,226 @@ transform:scale(1.1);
 <body>
 
 <header class="main-header">
-<h1>💧 Future Tank</h1>
-<p>نقاء الماء هو هدفنا</p>
+
+<h1>
+💧 Future Tank
+</h1>
+
+<p>
+نقاء الماء هو هدفنا
+</p>
+
 </header>
 
 <main class="container">
 
 <section class="cards">
 
-<a class="card link-card" href="portal.html">
-<h3>بوابة العملاء</h3>
-<p>عرض بيانات التعاقد وتجديده</p>
+<a class="card link-card"
+href="portal.html">
+
+<h3>
+بوابة العملاء
+</h3>
+
+<p>
+عرض بيانات التعاقد وتجديده
+</p>
+
 </a>
 
-<a class="card link-card" href="admin.html">
-<h3>لوحة التحكم</h3>
-<p>إدارة العملاء والخدمات</p>
+<a class="card link-card"
+href="admin.html">
+
+<h3>
+لوحة التحكم
+</h3>
+
+<p>
+إدارة العملاء والخدمات
+</p>
+
 </a>
 
-<a class="card link-card" href="new.html">
-<h3>عميل جديد</h3>
-<p>إضافة تعاقد جديد</p>
+<a class="card link-card"
+href="new.html">
+
+<h3>
+عميل جديد
+</h3>
+
+<p>
+إضافة تعاقد جديد
+</p>
+
 </a>
 
-<a class="card link-card" href="services.html">
-<h3>الخدمات</h3>
-<p>خدمات Future Tank</p>
+<a class="card link-card"
+href="services.html">
+
+<h3>
+الخدمات
+</h3>
+
+<p>
+خدمات Future Tank
+</p>
+
 </a>
 
-<!-- تم التعديل هنا -->
-<a class="card link-card" href="category.html?cat=خزانات المياه">
-<h3>منتجات نقاء الماء</h3>
-<p>خزانات ومنتجات معتمدة</p>
+<a class="card link-card"
+href="category.html?cat=خزانات المياه">
+
+<h3>
+منتجات نقاء الماء
+</h3>
+
+<p>
+خزانات ومنتجات معتمدة
+</p>
+
 </a>
 
-<a class="card link-card" href="shop.html">
-<h3>تسوق الآن</h3>
-<p>اطلب بسهولة</p>
+<a class="card link-card"
+href="shop.html">
+
+<h3>
+تسوق الآن
+</h3>
+
+<p>
+اطلب بسهولة
+</p>
+
 </a>
 
-<a class="card link-card" href="assistant.html">
-<h3>المساعد الذكي</h3>
-<p>اسأل واستفسر فورًا</p>
+<a class="card link-card"
+href="track-order.html">
+
+<h3>
+تتبع الطلبات
+</h3>
+
+<p>
+متابعة حالة الطلب لحظة بلحظة
+</p>
+
+</a>
+
+<a class="card link-card"
+href="assistant.html">
+
+<h3>
+المساعد الذكي
+</h3>
+
+<p>
+اسأل واستفسر فورًا
+</p>
+
 </a>
 
 </section>
 
+<!-- INSTALL APP -->
+
+<a
+href="#"
+id="installApp"
+class="install-btn">
+
+📲 تثبيت التطبيق على الهاتف
+
+</a>
+
 </main>
 
 <footer class="main-footer">
+
 © Future Tank — جميع الحقوق محفوظة
+
 </footer>
 
-<!-- Floating Social -->
+<!-- FLOATING SOCIAL -->
 
 <div id="ft-social-menu">
 
-<a class="ft-icon" href="https://wa.me/201150402031" target="_blank">
+<a class="ft-icon"
+href="https://wa.me/201150402031"
+target="_blank">
+
 <i class="fab fa-whatsapp"></i>
+
 </a>
 
-<a class="ft-icon" href="https://www.facebook.com/share/17pbzT4Hnm/" target="_blank">
+<a class="ft-icon"
+href="https://www.facebook.com/share/17pbzT4Hnm/"
+target="_blank">
+
 <i class="fab fa-facebook-f"></i>
+
 </a>
 
-<a class="ft-icon" href="https://www.instagram.com/aymn_hashm" target="_blank">
+<a class="ft-icon"
+href="https://www.instagram.com/aymn_hashm"
+target="_blank">
+
 <i class="fab fa-instagram"></i>
+
 </a>
 
-<a class="ft-icon" href="https://youtube.com/channel/UCyqPviD7dH7R7BkDxrodHfA" target="_blank">
+<a class="ft-icon"
+href="https://youtube.com/channel/UCyqPviD7dH7R7BkDxrodHfA"
+target="_blank">
+
 <i class="fab fa-youtube"></i>
+
 </a>
 
-<a class="ft-icon" href="https://www.tiktok.com/@user7817618680338" target="_blank">
+<a class="ft-icon"
+href="https://www.tiktok.com/@user7817618680338"
+target="_blank">
+
 <i class="fab fa-tiktok"></i>
+
 </a>
 
-<a class="ft-icon" href="https://www.threads.com/@aymn_hashm" target="_blank">
+<a class="ft-icon"
+href="https://www.threads.com/@aymn_hashm"
+target="_blank">
+
 <i class="fa-brands fa-threads"></i>
+
 </a>
 
-<a class="ft-icon" href="mailto:aymnhashm.com@gmail.com">
+<a class="ft-icon"
+href="mailto:aymnhashm.com@gmail.com">
+
 <i class="fas fa-envelope"></i>
+
 </a>
 
 </div>
 
 <div id="ft-float-btn">
+
 <i class="fas fa-share-alt"></i>
+
 </div>
 
 <script>
 
-const btn=document.getElementById("ft-float-btn");
+/* FLOAT BUTTON */
 
-const menu=document.getElementById("ft-social-menu");
+const btn =
+document.getElementById(
+"ft-float-btn"
+);
+
+const menu =
+document.getElementById(
+"ft-social-menu"
+);
 
 btn.onclick=()=>{
 
@@ -179,9 +355,11 @@ menu.style.display==="flex"
 :
 "flex";
 
-}
+};
 
-document.addEventListener("click",function(e){
+document.addEventListener(
+"click",
+function(e){
 
 if(
 !btn.contains(e.target)
@@ -193,7 +371,70 @@ menu.style.display="none";
 
 }
 
+}
+);
+
+/* PWA INSTALL */
+
+let deferredPrompt;
+
+const installBtn =
+document.getElementById(
+"installApp"
+);
+
+window.addEventListener(
+"beforeinstallprompt",
+(e)=>{
+
+e.preventDefault();
+
+deferredPrompt = e;
+
+installBtn.style.display =
+"block";
+
 });
+
+installBtn.addEventListener(
+"click",
+async()=>{
+
+if(!deferredPrompt){
+
+alert(
+"التطبيق مثبت بالفعل أو غير مدعوم"
+);
+
+return;
+
+}
+
+deferredPrompt.prompt();
+
+const choice =
+await deferredPrompt.userChoice;
+
+if(choice.outcome==="accepted"){
+
+installBtn.style.display =
+"none";
+
+}
+
+deferredPrompt = null;
+
+});
+
+/* SERVICE WORKER */
+
+if("serviceWorker" in navigator){
+
+navigator.serviceWorker.register(
+"./sw.js"
+);
+
+}
 
 </script>
 
