@@ -419,6 +419,12 @@ stars += "⭐";
 
 }
 
+/* إخفاء رقم الهاتف */
+
+let hiddenPhone =
+"••" +
+String(r.phone).slice(-3);
+
 box.innerHTML += `
 
 <div class="review-item">
@@ -427,7 +433,7 @@ box.innerHTML += `
 ${r.name}
 </strong>
 
-(••${r.phone})
+(${hiddenPhone})
 
 <div class="stars">
 ${stars}
