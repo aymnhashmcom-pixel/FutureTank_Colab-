@@ -1,80 +1,711 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
-<title>خدماتنا | Future Tank</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<title>
+خدماتنا | Future Tank
+</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet"
+href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+.badge{
+
+display:inline-block;
+padding:6px 12px;
+border-radius:20px;
+font-size:13px;
+margin-bottom:10px;
+color:#fff;
+font-weight:bold;
+
+}
+
+.badge.available{
+
+background:#28a745;
+
+}
+
+.badge.sold{
+
+background:#dc3545;
+
+}
+
+.badge.hot{
+
+background:#ff9800;
+
+}
+
+.add-cart-btn{
+
+background:#4fc3f7;
+border:none;
+padding:10px 15px;
+border-radius:8px;
+color:#fff;
+cursor:pointer;
+margin-top:10px;
+font-size:14px;
+transition:.3s;
+
+}
+
+.add-cart-btn:hover{
+
+background:#0b6fc2;
+
+}
+
+.order-link{
+
+display:block;
+margin-top:10px;
+color:#0b6fc2;
+text-decoration:none;
+font-weight:bold;
+
+}
+
+.review-box{
+
+margin-top:20px;
+padding-top:15px;
+border-top:1px solid #eee;
+text-align:right;
+
+}
+
+.review-input{
+
+width:100%;
+padding:10px;
+margin-top:8px;
+border-radius:8px;
+border:1px solid #ccc;
+
+}
+
+.review-btn{
+
+margin-top:10px;
+background:#0b6fc2;
+color:#fff;
+border:none;
+padding:10px 15px;
+border-radius:8px;
+cursor:pointer;
+
+}
+
+.review-item{
+
+background:#f7fbff;
+padding:10px;
+border-radius:10px;
+margin-top:10px;
+font-size:14px;
+
+}
+
+.stars{
+
+color:#ff9800;
+font-size:16px;
+margin-top:5px;
+
+}
+
+#ft-float-btn{
+
+position:fixed;
+bottom:20px;
+right:20px;
+background:#4fc3f7;
+color:#fff;
+width:60px;
+height:60px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+cursor:pointer;
+box-shadow:0 8px 25px rgba(0,0,0,.3);
+z-index:9999;
+
+}
+
+#ft-social-menu{
+
+position:fixed;
+bottom:95px;
+right:20px;
+display:none;
+flex-direction:column;
+gap:12px;
+z-index:9999;
+
+}
+
+.ft-icon{
+
+width:50px;
+height:50px;
+border-radius:50%;
+background:#ffffff;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:20px;
+color:#4fc3f7;
+text-decoration:none;
+box-shadow:0 6px 18px rgba(0,0,0,.15);
+
+}
+
+</style>
+
 </head>
 
 <body>
 
 <header class="main-header">
-<h1>💧 Future Tank</h1>
-<p>نقاء الماء هو هدفنا</p>
+
+<h1>
+💧 Future Tank
+</h1>
+
+<p>
+نقاء الماء هو هدفنا
+</p>
+
 </header>
 
 <main class="container">
-<h2>خدماتنا</h2>
-<div id="servicesList" class="cards"></div>
+
+<h2>
+خدماتنا
+</h2>
+
+<div id="servicesList"
+class="cards">
+
+</div>
+
 </main>
 
 <footer class="main-footer">
+
 © Future Tank — جميع الحقوق محفوظة
+
 </footer>
 
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
+
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
 fetch(API_URL+"?type=services")
+
 .then(res=>res.json())
+
 .then(data=>{
-const list=document.getElementById("servicesList");
+
+/* ترتيب الخدمات */
+
+data.sort((a,b)=>{
+
+const order={
+
+"الأكثر طلباً":1,
+"متوفر":2,
+"غير متوفر":3
+
+};
+
+return (order[a.badge]||99)
+-
+(order[b.badge]||99);
+
+});
+
+const list =
+document.getElementById(
+"servicesList"
+);
+
 list.innerHTML="";
+
 data.forEach(s=>{
-list.innerHTML+=`
+
+let badgeHTML="";
+
+if(s.badge==="متوفر"){
+
+badgeHTML=
+'<div class="badge available">✅ متوفر</div>';
+
+}
+
+else if(s.badge==="غير متوفر"){
+
+badgeHTML=
+'<div class="badge sold">❌ غير متوفر</div>';
+
+}
+
+else if(s.badge==="الأكثر طلباً"){
+
+badgeHTML=
+'<div class="badge hot">🔥 الأكثر طلباً</div>';
+
+}
+
+list.innerHTML += `
+
 <div class="card">
+
+${badgeHTML}
+
 <img src="${s.image}">
-<h3>${s.name}</h3>
-<p>${s.desc}</p>
-<strong>${s.price} ج</strong>
-<a href="https://wa.me/201150402031?text=أريد طلب خدمة ${s.name}" 
-   target="_blank" 
-   class="renew-btn">
-طلب الخدمة
+
+<h3>
+${s.name}
+</h3>
+
+<p>
+${s.desc}
+</p>
+
+<strong>
+${s.price} ج
+</strong>
+
+<br>
+
+<button
+class="add-cart-btn"
+onclick="addToCart(
+'${s.name}',
+'${s.price}',
+'${s.image}'
+)">
+
+🛒 أضف للسلة
+
+</button>
+
+<a
+href="https://wa.me/201150402031?text=أريد طلب خدمة ${s.name}"
+target="_blank"
+class="order-link">
+
+📲 طلب الخدمة
+
 </a>
-</div>`;
+
+<!-- REVIEWS -->
+
+<div class="review-box">
+
+<h4>
+⭐ التقييمات
+</h4>
+
+<div id="reviews-${s.id}">
+
+جاري تحميل التقييمات...
+
+</div>
+
+<input
+type="text"
+id="name-${s.id}"
+class="review-input"
+placeholder="الاسم">
+
+<input
+type="text"
+id="phone-${s.id}"
+class="review-input"
+placeholder="رقم الهاتف">
+
+<select
+id="rating-${s.id}"
+class="review-input">
+
+<option value="5">
+★★★★★ ممتاز
+</option>
+
+<option value="4">
+★★★★ جيد جدًا
+</option>
+
+<option value="3">
+★★★ جيد
+</option>
+
+<option value="2">
+★★ مقبول
+</option>
+
+<option value="1">
+★ ضعيف
+</option>
+
+</select>
+
+<textarea
+id="comment-${s.id}"
+class="review-input"
+placeholder="اكتب تعليقك">
+</textarea>
+
+<button
+class="review-btn"
+onclick="submitReview(
+'${s.name}',
+${s.id}
+)">
+
+إرسال التقييم
+
+</button>
+
+</div>
+
+</div>
+
+`;
+
+setTimeout(()=>{
+
+loadReviews(
+s.name,
+s.id
+);
+
+},300);
+
 });
+
 });
+
+/* ADD TO CART */
+
+function addToCart(name,price,image){
+
+let cart =
+JSON.parse(
+localStorage.getItem("cart")
+)
+|| [];
+
+cart.push({
+
+name:name,
+price:price,
+image:image
+
+});
+
+localStorage.setItem(
+"cart",
+JSON.stringify(cart)
+);
+
+alert(
+"✅ تم إضافة الخدمة إلى السلة"
+);
+
+}
+
+/* LOAD REVIEWS */
+
+function loadReviews(product,id){
+
+fetch(
+API_URL +
+"?type=reviews&product=" +
+encodeURIComponent(product)
+)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+const box =
+document.getElementById(
+"reviews-"+id
+);
+
+box.innerHTML="";
+
+if(data.length===0){
+
+box.innerHTML=
+"<p>لا توجد تقييمات بعد</p>";
+
+return;
+
+}
+
+data.forEach(r=>{
+
+let stars="";
+
+for(let i=0;i<r.rating;i++){
+
+stars+="⭐";
+
+}
+
+const phoneMasked =
+r.phone.slice(-3);
+
+box.innerHTML += `
+
+<div class="review-item">
+
+<strong>
+${r.name}
+</strong>
+
+(••${phoneMasked})
+
+<div class="stars">
+${stars}
+</div>
+
+<p>
+${r.comment}
+</p>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+/* ADD REVIEW */
+
+function submitReview(product,id){
+
+const name =
+document.getElementById(
+"name-"+id
+).value;
+
+const phone =
+document.getElementById(
+"phone-"+id
+).value;
+
+const rating =
+document.getElementById(
+"rating-"+id
+).value;
+
+const comment =
+document.getElementById(
+"comment-"+id
+).value;
+
+if(
+name==="" ||
+phone==="" ||
+comment===""
+
+){
+
+alert(
+"يرجى استكمال البيانات"
+);
+
+return;
+
+}
+
+fetch(API_URL,{
+
+method:"POST",
+
+body:JSON.stringify({
+
+action:"addReview",
+
+product:product,
+
+name:name,
+
+phone:phone,
+
+rating:rating,
+
+comment:comment
+
+})
+
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+if(data.success){
+
+alert(
+"✅ تم إرسال التقييم"
+);
+
+document.getElementById(
+"name-"+id
+).value="";
+
+document.getElementById(
+"phone-"+id
+).value="";
+
+document.getElementById(
+"comment-"+id
+).value="";
+
+loadReviews(product,id);
+
+}
+
+});
+
+}
+
 </script>
 
-<!-- Floating Social -->
+<!-- FLOATING SOCIAL -->
+
 <div id="ft-social-menu">
-<a class="ft-icon" href="https://wa.me/201150402031" target="_blank"><i class="fab fa-whatsapp"></i></a>
-<a class="ft-icon" href="https://www.facebook.com/share/17pbzT4Hnm/" target="_blank"><i class="fab fa-facebook-f"></i></a>
-<a class="ft-icon" href="https://www.instagram.com/aymn_hashm" target="_blank"><i class="fab fa-instagram"></i></a>
-<a class="ft-icon" href="https://youtube.com/channel/UCyqPviD7dH7R7BkDxrodHfA" target="_blank"><i class="fab fa-youtube"></i></a>
-<a class="ft-icon" href="https://www.tiktok.com/@user7817618680338" target="_blank"><i class="fab fa-tiktok"></i></a>
-<a class="ft-icon" href="https://www.threads.com/@aymn_hashm" target="_blank"><i class="fa-brands fa-threads"></i></a>
-<a class="ft-icon" href="mailto:aymnhashm.com@gmail.com"><i class="fas fa-envelope"></i></a>
+
+<a class="ft-icon"
+href="https://wa.me/201150402031"
+target="_blank">
+
+<i class="fab fa-whatsapp"></i>
+
+</a>
+
+<a class="ft-icon"
+href="https://www.facebook.com/share/17pbzT4Hnm/"
+target="_blank">
+
+<i class="fab fa-facebook-f"></i>
+
+</a>
+
+<a class="ft-icon"
+href="https://www.instagram.com/aymn_hashm"
+target="_blank">
+
+<i class="fab fa-instagram"></i>
+
+</a>
+
+<a class="ft-icon"
+href="https://youtube.com/channel/UCyqPviD7dH7R7BkDxrodHfA"
+target="_blank">
+
+<i class="fab fa-youtube"></i>
+
+</a>
+
+<a class="ft-icon"
+href="https://www.tiktok.com/@user7817618680338"
+target="_blank">
+
+<i class="fab fa-tiktok"></i>
+
+</a>
+
+<a class="ft-icon"
+href="https://www.threads.com/@aymn_hashm"
+target="_blank">
+
+<i class="fa-brands fa-threads"></i>
+
+</a>
+
+<a class="ft-icon"
+href="mailto:aymnhashm.com@gmail.com">
+
+<i class="fas fa-envelope"></i>
+
+</a>
+
 </div>
 
 <div id="ft-float-btn">
+
 <i class="fas fa-share-alt"></i>
+
 </div>
 
 <script>
-const btn=document.getElementById("ft-float-btn");
-const menu=document.getElementById("ft-social-menu");
 
-btn.onclick=()=>{menu.style.display=menu.style.display==="flex"?"none":"flex";}
+const btn =
+document.getElementById(
+"ft-float-btn"
+);
 
-document.addEventListener("click",function(e){
-if(!btn.contains(e.target)&&!menu.contains(e.target)){
-menu.style.display="none";
+const menu =
+document.getElementById(
+"ft-social-menu"
+);
+
+btn.onclick=()=>{
+
+menu.style.display=
+menu.style.display==="flex"
+?
+"none"
+:
+"flex";
+
 }
-});
+
+document.addEventListener(
+"click",
+function(e){
+
+if(
+!btn.contains(e.target)
+&&
+!menu.contains(e.target)
+){
+
+menu.style.display="none";
+
+}
+
+}
+);
+
 </script>
 
 </body>
