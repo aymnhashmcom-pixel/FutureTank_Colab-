@@ -22,10 +22,10 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 
 .badge{
 display:inline-block;
-padding:6px 12px;
+padding:7px 14px;
 border-radius:20px;
 font-size:13px;
-margin-bottom:10px;
+margin-bottom:12px;
 color:#fff;
 font-weight:bold;
 }
@@ -45,14 +45,15 @@ background:#ff9800;
 .add-cart-btn{
 background:#4fc3f7;
 border:none;
-padding:10px 15px;
-border-radius:8px;
+padding:12px;
+border-radius:10px;
 color:#fff;
 cursor:pointer;
 margin-top:10px;
-font-size:14px;
+font-size:15px;
 transition:.3s;
 width:100%;
+font-weight:bold;
 }
 
 .add-cart-btn:hover{
@@ -64,8 +65,8 @@ display:block;
 margin-top:10px;
 color:#fff;
 background:#25D366;
-padding:10px;
-border-radius:8px;
+padding:12px;
+border-radius:10px;
 text-decoration:none;
 font-weight:bold;
 text-align:center;
@@ -80,11 +81,12 @@ text-align:right;
 
 .review-input{
 width:100%;
-padding:10px;
+padding:12px;
 margin-top:8px;
-border-radius:8px;
+border-radius:10px;
 border:1px solid #ccc;
 box-sizing:border-box;
+font-family:inherit;
 }
 
 .review-btn{
@@ -92,23 +94,24 @@ margin-top:10px;
 background:#0b6fc2;
 color:#fff;
 border:none;
-padding:10px 15px;
-border-radius:8px;
+padding:12px;
+border-radius:10px;
 cursor:pointer;
 width:100%;
+font-weight:bold;
 }
 
 .review-item{
 background:#f7fbff;
-padding:10px;
-border-radius:10px;
+padding:12px;
+border-radius:12px;
 margin-top:10px;
 font-size:14px;
 }
 
 .stars{
 color:#ff9800;
-font-size:16px;
+font-size:17px;
 margin-top:5px;
 }
 
@@ -158,8 +161,12 @@ box-shadow:0 6px 18px rgba(0,0,0,.15);
 width:100%;
 height:220px;
 object-fit:cover;
-border-radius:12px;
-margin-bottom:10px;
+border-radius:14px;
+margin-bottom:12px;
+}
+
+.card{
+overflow:hidden;
 }
 
 </style>
@@ -204,6 +211,10 @@ class="cards">
 const API_URL =
 "https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
+/* =========================
+LOAD SERVICES
+========================= */
+
 fetch(API_URL+"?type=services")
 
 .then(res=>res.json())
@@ -214,17 +225,39 @@ fetch(API_URL+"?type=services")
 
 data.sort((a,b)=>{
 
-const order={
+const getOrder=(badge)=>{
 
-"الأكثر طلباً":1,
-"متوفر":2,
-"غير متوفر":3
+badge = String(badge || "")
+.trim()
+.replace("أ", "ا");
+
+if(
+badge.includes("الاكثر طلب")
+){
+return 1;
+}
+
+if(
+badge.includes("متوفر")
+&&
+!badge.includes("غير")
+){
+return 2;
+}
+
+if(
+badge.includes("غير متوفر")
+){
+return 3;
+}
+
+return 99;
 
 };
 
-return (order[a.badge]||99)
+return getOrder(a.badge)
 -
-(order[b.badge]||99);
+getOrder(b.badge);
 
 });
 
@@ -246,26 +279,45 @@ return;
 
 data.forEach(s=>{
 
+const badge =
+String(s.badge || "")
+.trim();
+
 let badgeHTML="";
 
-if(s.badge==="متوفر"){
+/* الأكثر طلباً */
+
+if(
+badge.includes("الأكثر طلب") ||
+badge.includes("الاكثر طلب")
+){
+
+badgeHTML=
+'<div class="badge hot">🔥 الأكثر طلباً</div>';
+
+}
+
+/* متوفر */
+
+else if(
+badge.includes("متوفر")
+&&
+!badge.includes("غير")
+){
 
 badgeHTML=
 '<div class="badge available">✅ متوفر</div>';
 
 }
 
-else if(s.badge==="غير متوفر"){
+/* غير متوفر */
+
+else if(
+badge.includes("غير متوفر")
+){
 
 badgeHTML=
 '<div class="badge sold">❌ غير متوفر</div>';
-
-}
-
-else if(s.badge==="الأكثر طلباً"){
-
-badgeHTML=
-'<div class="badge hot">🔥 الأكثر طلباً</div>';
 
 }
 
@@ -412,7 +464,9 @@ console.log(error);
 
 });
 
-/* ADD TO CART */
+/* =========================
+ADD TO CART
+========================= */
 
 function addToCart(name,price,image){
 
@@ -441,7 +495,9 @@ alert(
 
 }
 
-/* LOAD REVIEWS */
+/* =========================
+LOAD REVIEWS
+========================= */
 
 function loadReviews(product,id){
 
@@ -481,9 +537,6 @@ stars+="⭐";
 
 }
 
-const phoneMasked =
-String(r.phone).slice(-3);
-
 box.innerHTML += `
 
 <div class="review-item">
@@ -492,7 +545,7 @@ box.innerHTML += `
 ${r.name}
 </strong>
 
-(••${phoneMasked})
+(••${r.phone})
 
 <div class="stars">
 ${stars}
@@ -512,7 +565,9 @@ ${r.comment}
 
 }
 
-/* ADD REVIEW */
+/* =========================
+ADD REVIEW
+========================= */
 
 function submitReview(product,id){
 
