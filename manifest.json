@@ -1,8 +1,7 @@
 {
   "name": "Future Tank",
-  "short_name": "Future Tank",
-  "description": "نقاء الماء هو هدفنا",
-  "start_url": "/FutureTank_Colab-/index.html",
+  "short_name": "FutureTank",
+  "start_url": "index.html",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#4fc3f7",
