@@ -18,10 +18,19 @@ content="width=device-width, initial-scale=1.0">
 content="#4fc3f7">
 
 <link rel="manifest"
-href="manifest.json">
+href="./manifest.json">
 
 <link rel="apple-touch-icon"
-href="icon-192.png">
+href="./icon-192.png">
+
+<meta name="apple-mobile-web-app-capable"
+content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style"
+content="default">
+
+<meta name="apple-mobile-web-app-title"
+content="Future Tank">
 
 <link rel="stylesheet"
 href="style.css">
@@ -430,9 +439,26 @@ deferredPrompt = null;
 
 if("serviceWorker" in navigator){
 
-navigator.serviceWorker.register(
-"./sw.js"
+window.addEventListener(
+"load",
+()=>{
+
+navigator.serviceWorker
+.register("./sw.js")
+.then(()=>{
+
+console.log(
+"Service Worker Registered"
 );
+
+})
+.catch(err=>{
+
+console.log(err);
+
+});
+
+});
 
 }
 
