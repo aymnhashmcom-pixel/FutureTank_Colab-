@@ -32,10 +32,28 @@ content="default">
 <meta name="apple-mobile-web-app-title"
 content="Future Tank">
 
+<!-- SHARE PREVIEW -->
+
+<meta property="og:title"
+content="💧 Future Tank">
+
+<meta property="og:description"
+content="نقاء الماء هو هدفنا">
+
+<meta property="og:image"
+content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/icon-512.png">
+
+<meta property="og:url"
+content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/">
+
+<meta property="og:type"
+content="website">
+
+<meta name="twitter:card"
+content="summary_large_image">
+
 <link rel="stylesheet"
 href="style.css">
-
-<!-- Font Awesome -->
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
@@ -46,6 +64,8 @@ body{
 margin:0;
 padding:0;
 overflow-x:hidden;
+background:#f5f9ff;
+font-family:Tahoma;
 }
 
 /* FLOAT BUTTON */
@@ -67,13 +87,6 @@ font-size:24px;
 cursor:pointer;
 box-shadow:0 8px 25px rgba(0,0,0,.3);
 z-index:9999;
-transition:.3s;
-
-}
-
-#ft-float-btn:hover{
-
-transform:scale(1.1);
 
 }
 
@@ -102,15 +115,6 @@ font-size:20px;
 color:#4fc3f7;
 text-decoration:none;
 box-shadow:0 6px 18px rgba(0,0,0,.15);
-transition:.3s;
-
-}
-
-.ft-icon:hover{
-
-background:#4fc3f7;
-color:#ffffff;
-transform:scale(1.1);
 
 }
 
@@ -118,12 +122,11 @@ transform:scale(1.1);
 
 .install-btn{
 
-margin-top:20px;
+margin-top:15px;
 background:#25D366;
 color:#fff;
-padding:15px 20px;
+padding:15px;
 border-radius:14px;
-text-decoration:none;
 display:none;
 font-weight:bold;
 text-align:center;
@@ -135,31 +138,37 @@ box-sizing:border-box;
 
 }
 
-.install-btn:hover{
-
-opacity:.9;
-
-}
-
 .share-btn{
-
 background:#0b6fc2;
-
 }
 
 .market-btn{
-
 background:#ff9800;
-
+display:block;
 }
 
 .rate-btn{
-
 background:#9c27b0;
+}
+
+.review-item{
+
+background:#fff;
+padding:12px;
+border-radius:12px;
+margin-top:10px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
 
 }
 
-/* RATE POPUP */
+.stars{
+
+color:#ff9800;
+margin-top:5px;
+
+}
+
+/* POPUP */
 
 #ratePopup{
 
@@ -185,18 +194,6 @@ width:100%;
 max-width:420px;
 padding:25px;
 border-radius:20px;
-text-align:right;
-max-height:90vh;
-overflow:auto;
-
-}
-
-.rate-title{
-
-font-size:22px;
-margin-bottom:15px;
-color:#0b6fc2;
-font-weight:bold;
 
 }
 
@@ -208,7 +205,6 @@ margin-top:10px;
 border-radius:10px;
 border:1px solid #ccc;
 box-sizing:border-box;
-font-size:15px;
 
 }
 
@@ -223,7 +219,6 @@ width:100%;
 border-radius:10px;
 font-size:16px;
 cursor:pointer;
-font-weight:bold;
 
 }
 
@@ -235,18 +230,6 @@ border:none;
 padding:10px;
 width:100%;
 border-radius:10px;
-cursor:pointer;
-
-}
-
-@media(max-width:600px){
-
-.install-btn{
-
-font-size:15px;
-padding:14px;
-
-}
 
 }
 
@@ -377,7 +360,7 @@ href="assistant.html">
 </a>
 
 <a class="card link-card"
-href="market.html">
+href="./market.html">
 
 <h3>
 ماركت هرم سيتي
@@ -391,17 +374,15 @@ href="market.html">
 
 </section>
 
-<!-- INSTALL -->
+<!-- BUTTONS -->
 
 <button
 id="installApp"
 class="install-btn">
 
-📲 تثبيت التطبيق على الهاتف
+📲 تثبيت التطبيق
 
 </button>
-
-<!-- RATE -->
 
 <button
 id="rateAppBtn"
@@ -411,26 +392,42 @@ class="install-btn rate-btn">
 
 </button>
 
-<!-- SHARE -->
-
 <button
 id="shareAppBtn"
-class="install-btn share-btn">
+class="install-btn share-btn"
+style="display:block;">
 
 📤 مشاركة التطبيق
 
 </button>
 
-<!-- MARKET -->
-
 <button
-onclick="window.location.href='market.html'"
-class="install-btn market-btn"
-style="display:block;">
+onclick="window.location.href='./market.html'"
+class="install-btn market-btn">
 
 🛒 ماركت هرم سيتي
 
 </button>
+
+<!-- REVIEWS -->
+
+<section class="cards">
+
+<div class="card">
+
+<h3>
+⭐ تقييمات التطبيق
+</h3>
+
+<div id="appReviews">
+
+جاري تحميل التقييمات...
+
+</div>
+
+</div>
+
+</section>
 
 </main>
 
@@ -446,11 +443,9 @@ style="display:block;">
 
 <div class="rate-box">
 
-<div class="rate-title">
-
+<h2>
 ⭐ تقييم التطبيق
-
-</div>
+</h2>
 
 <input
 type="text"
@@ -516,7 +511,7 @@ onclick="closeRatePopup()">
 
 </div>
 
-<!-- FLOATING SOCIAL -->
+<!-- FLOATING -->
 
 <div id="ft-social-menu">
 
@@ -525,53 +520,6 @@ href="https://wa.me/201150402031"
 target="_blank">
 
 <i class="fab fa-whatsapp"></i>
-
-</a>
-
-<a class="ft-icon"
-href="https://www.facebook.com/share/17pbzT4Hnm/"
-target="_blank">
-
-<i class="fab fa-facebook-f"></i>
-
-</a>
-
-<a class="ft-icon"
-href="https://www.instagram.com/aymn_hashm"
-target="_blank">
-
-<i class="fab fa-instagram"></i>
-
-</a>
-
-<a class="ft-icon"
-href="https://youtube.com/channel/UCyqPviD7dH7R7BkDxrodHfA"
-target="_blank">
-
-<i class="fab fa-youtube"></i>
-
-</a>
-
-<a class="ft-icon"
-href="https://www.tiktok.com/@user7817618680338"
-target="_blank">
-
-<i class="fab fa-tiktok"></i>
-
-</a>
-
-<a class="ft-icon"
-href="https://www.threads.com/@aymn_hashm"
-target="_blank">
-
-<i class="fa-brands fa-threads"></i>
-
-</a>
-
-<a class="ft-icon"
-href="mailto:aymnhashm.com@gmail.com">
-
-<i class="fas fa-envelope"></i>
 
 </a>
 
@@ -585,19 +533,16 @@ href="mailto:aymnhashm.com@gmail.com">
 
 <script>
 
-/* =========================
-FLOAT BUTTON
-========================= */
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
+
+/* FLOAT */
 
 const btn =
-document.getElementById(
-"ft-float-btn"
-);
+document.getElementById("ft-float-btn");
 
 const menu =
-document.getElementById(
-"ft-social-menu"
-);
+document.getElementById("ft-social-menu");
 
 btn.onclick=()=>{
 
@@ -610,74 +555,15 @@ menu.style.display==="flex"
 
 };
 
-document.addEventListener(
-"click",
-function(e){
-
-if(
-!btn.contains(e.target)
-&&
-!menu.contains(e.target)
-){
-
-menu.style.display="none";
-
-}
-
-}
-);
-
-/* =========================
-PWA INSTALL
-========================= */
+/* INSTALL */
 
 let deferredPrompt;
 
 const installBtn =
-document.getElementById(
-"installApp"
-);
+document.getElementById("installApp");
 
 const rateBtn =
-document.getElementById(
-"rateAppBtn"
-);
-
-const shareBtn =
-document.getElementById(
-"shareAppBtn"
-);
-
-function isInstalled(){
-
-return window.matchMedia(
-"(display-mode: standalone)"
-).matches
-||
-window.navigator.standalone
-||
-localStorage.getItem(
-"ft_installed"
-)==="yes";
-
-}
-
-/* لو التطبيق مثبت */
-
-if(isInstalled()){
-
-installBtn.style.display =
-"none";
-
-rateBtn.style.display =
-"block";
-
-shareBtn.style.display =
-"block";
-
-}
-
-/* لو غير مثبت */
+document.getElementById("rateAppBtn");
 
 window.addEventListener(
 "beforeinstallprompt",
@@ -685,46 +571,33 @@ window.addEventListener(
 
 e.preventDefault();
 
-deferredPrompt = e;
+deferredPrompt=e;
 
-if(!isInstalled()){
+if(
+!window.matchMedia(
+"(display-mode: standalone)"
+).matches
+){
 
-installBtn.style.display =
-"block";
-
-rateBtn.style.display =
-"none";
-
-shareBtn.style.display =
-"block";
+installBtn.style.display="block";
 
 }
 
-});
+}
+);
 
-installBtn.addEventListener(
-"click",
-async()=>{
+installBtn.onclick=async()=>{
 
 if(!deferredPrompt){
-
-alert(
-"التطبيق مثبت بالفعل أو غير مدعوم"
-);
 
 localStorage.setItem(
 "ft_installed",
 "yes"
 );
 
-installBtn.style.display =
-"none";
+installBtn.style.display="none";
 
-rateBtn.style.display =
-"block";
-
-shareBtn.style.display =
-"block";
+rateBtn.style.display="block";
 
 return;
 
@@ -742,24 +615,33 @@ localStorage.setItem(
 "yes"
 );
 
-installBtn.style.display =
-"none";
+installBtn.style.display="none";
 
-rateBtn.style.display =
-"block";
-
-shareBtn.style.display =
-"block";
+rateBtn.style.display="block";
 
 }
 
-deferredPrompt = null;
+};
 
-});
+/* إذا التطبيق مثبت */
 
-/* =========================
-RATE POPUP
-========================= */
+if(
+window.matchMedia(
+"(display-mode: standalone)"
+).matches
+||
+localStorage.getItem(
+"ft_installed"
+)==="yes"
+){
+
+installBtn.style.display="none";
+
+rateBtn.style.display="block";
+
+}
+
+/* RATE POPUP */
 
 const ratePopup =
 document.getElementById(
@@ -768,21 +650,17 @@ document.getElementById(
 
 rateBtn.onclick=()=>{
 
-ratePopup.style.display=
-"flex";
+ratePopup.style.display="flex";
 
 };
 
 function closeRatePopup(){
 
-ratePopup.style.display=
-"none";
+ratePopup.style.display="none";
 
 }
 
-/* =========================
-SUBMIT APP RATE
-========================= */
+/* SUBMIT RATE */
 
 function submitAppRate(){
 
@@ -806,24 +684,7 @@ document.getElementById(
 "appRateComment"
 ).value.trim();
 
-if(
-name==="" ||
-phone==="" ||
-comment===""
-
-){
-
-alert(
-"يرجى استكمال البيانات"
-);
-
-return;
-
-}
-
-fetch(
-"https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec",
-{
+fetch(API_URL,{
 
 method:"POST",
 
@@ -841,9 +702,7 @@ comment:comment
 
 })
 
-}
-
-)
+})
 
 .then(res=>res.json())
 
@@ -851,23 +710,11 @@ comment:comment
 
 if(data.success){
 
-alert(
-"⭐ شكراً لتقييمك"
-);
+alert("⭐ شكراً لتقييمك");
 
 closeRatePopup();
 
-document.getElementById(
-"appRateName"
-).value="";
-
-document.getElementById(
-"appRatePhone"
-).value="";
-
-document.getElementById(
-"appRateComment"
-).value="";
+loadAppReviews();
 
 }
 
@@ -875,54 +722,114 @@ document.getElementById(
 
 }
 
-/* =========================
-SHARE APP
-========================= */
+/* LOAD REVIEWS */
 
-shareBtn.onclick=async()=>{
+function loadAppReviews(){
 
-const shareData = {
+fetch(
+API_URL +
+"?type=appReviews"
+)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+const box =
+document.getElementById(
+"appReviews"
+);
+
+box.innerHTML="";
+
+if(data.length===0){
+
+box.innerHTML=
+"<p>لا توجد تقييمات بعد</p>";
+
+return;
+
+}
+
+data.forEach(r=>{
+
+let stars="";
+
+for(
+let i=0;
+i<Number(r.rating);
+i++
+){
+
+stars+="⭐";
+
+}
+
+box.innerHTML += `
+
+<div class="review-item">
+
+<strong>
+${r.name}
+</strong>
+
+<div class="stars">
+${stars}
+</div>
+
+<p>
+${r.comment}
+</p>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+loadAppReviews();
+
+/* SHARE */
+
+document.getElementById(
+"shareAppBtn"
+).onclick=async()=>{
+
+const shareData={
 
 title:"Future Tank",
 
-text:
-"💧 حمّل تطبيق Future Tank للخدمات وتتبع الطلبات والتسوق بسهولة",
+text:"💧 حمّل تطبيق Future Tank",
 
-url:window.location.href
+url:"https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/"
 
 };
 
 if(navigator.share){
 
-try{
-
 await navigator.share(
 shareData
 );
 
-}catch(err){
-
-console.log(err);
-
-}
-
 }else{
 
 navigator.clipboard.writeText(
-window.location.href
+shareData.url
 );
 
 alert(
-"تم نسخ رابط التطبيق"
+"تم نسخ الرابط"
 );
 
 }
 
 };
 
-/* =========================
-SERVICE WORKER
-========================= */
+/* SERVICE WORKER */
 
 if("serviceWorker" in navigator){
 
@@ -931,19 +838,7 @@ window.addEventListener(
 ()=>{
 
 navigator.serviceWorker
-.register("./sw.js")
-.then(()=>{
-
-console.log(
-"Service Worker Registered"
-);
-
-})
-.catch(err=>{
-
-console.log(err);
-
-});
+.register("./sw.js");
 
 });
 
