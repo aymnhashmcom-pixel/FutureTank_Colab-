@@ -42,6 +42,14 @@ href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
 
 <style>
 
+body{
+margin:0;
+padding:0;
+overflow-x:hidden;
+}
+
+/* FLOAT BUTTON */
+
 #ft-float-btn{
 
 position:fixed;
@@ -106,9 +114,11 @@ transform:scale(1.1);
 
 }
 
+/* BUTTONS */
+
 .install-btn{
 
-margin-top:25px;
+margin-top:20px;
 background:#25D366;
 color:#fff;
 padding:15px 20px;
@@ -121,12 +131,31 @@ font-size:17px;
 border:none;
 width:100%;
 cursor:pointer;
+box-sizing:border-box;
 
 }
 
 .install-btn:hover{
 
 opacity:.9;
+
+}
+
+.share-btn{
+
+background:#0b6fc2;
+
+}
+
+.market-btn{
+
+background:#ff9800;
+
+}
+
+.rate-btn{
+
+background:#9c27b0;
 
 }
 
@@ -144,17 +173,21 @@ display:none;
 align-items:center;
 justify-content:center;
 z-index:99999;
+padding:15px;
+box-sizing:border-box;
 
 }
 
 .rate-box{
 
 background:#fff;
-width:90%;
+width:100%;
 max-width:420px;
 padding:25px;
 border-radius:20px;
 text-align:right;
+max-height:90vh;
+overflow:auto;
 
 }
 
@@ -175,6 +208,7 @@ margin-top:10px;
 border-radius:10px;
 border:1px solid #ccc;
 box-sizing:border-box;
+font-size:15px;
 
 }
 
@@ -202,6 +236,17 @@ padding:10px;
 width:100%;
 border-radius:10px;
 cursor:pointer;
+
+}
+
+@media(max-width:600px){
+
+.install-btn{
+
+font-size:15px;
+padding:14px;
+
+}
 
 }
 
@@ -331,9 +376,22 @@ href="assistant.html">
 
 </a>
 
+<a class="card link-card"
+href="market.html">
+
+<h3>
+ماركت هرم سيتي
+</h3>
+
+<p>
+متاجر وعروض وخدمات المنطقة
+</p>
+
+</a>
+
 </section>
 
-<!-- INSTALL APP -->
+<!-- INSTALL -->
 
 <button
 id="installApp"
@@ -343,14 +401,34 @@ class="install-btn">
 
 </button>
 
-<!-- RATE APP -->
+<!-- RATE -->
 
 <button
 id="rateAppBtn"
-class="install-btn"
-style="background:#ff9800;">
+class="install-btn rate-btn">
 
 ⭐ تقييم التطبيق
+
+</button>
+
+<!-- SHARE -->
+
+<button
+id="shareAppBtn"
+class="install-btn share-btn">
+
+📤 مشاركة التطبيق
+
+</button>
+
+<!-- MARKET -->
+
+<button
+onclick="window.location.href='market.html'"
+class="install-btn market-btn"
+style="display:block;">
+
+🛒 ماركت هرم سيتي
 
 </button>
 
@@ -507,7 +585,9 @@ href="mailto:aymnhashm.com@gmail.com">
 
 <script>
 
-/* FLOAT BUTTON */
+/* =========================
+FLOAT BUTTON
+========================= */
 
 const btn =
 document.getElementById(
@@ -547,7 +627,9 @@ menu.style.display="none";
 }
 );
 
-/* PWA INSTALL */
+/* =========================
+PWA INSTALL
+========================= */
 
 let deferredPrompt;
 
@@ -561,6 +643,42 @@ document.getElementById(
 "rateAppBtn"
 );
 
+const shareBtn =
+document.getElementById(
+"shareAppBtn"
+);
+
+function isInstalled(){
+
+return window.matchMedia(
+"(display-mode: standalone)"
+).matches
+||
+window.navigator.standalone
+||
+localStorage.getItem(
+"ft_installed"
+)==="yes";
+
+}
+
+/* لو التطبيق مثبت */
+
+if(isInstalled()){
+
+installBtn.style.display =
+"none";
+
+rateBtn.style.display =
+"block";
+
+shareBtn.style.display =
+"block";
+
+}
+
+/* لو غير مثبت */
+
 window.addEventListener(
 "beforeinstallprompt",
 (e)=>{
@@ -569,13 +687,15 @@ e.preventDefault();
 
 deferredPrompt = e;
 
-if(
-!window.matchMedia(
-'(display-mode: standalone)'
-).matches
-){
+if(!isInstalled()){
 
 installBtn.style.display =
+"block";
+
+rateBtn.style.display =
+"none";
+
+shareBtn.style.display =
 "block";
 
 }
@@ -592,6 +712,20 @@ alert(
 "التطبيق مثبت بالفعل أو غير مدعوم"
 );
 
+localStorage.setItem(
+"ft_installed",
+"yes"
+);
+
+installBtn.style.display =
+"none";
+
+rateBtn.style.display =
+"block";
+
+shareBtn.style.display =
+"block";
+
 return;
 
 }
@@ -603,10 +737,18 @@ await deferredPrompt.userChoice;
 
 if(choice.outcome==="accepted"){
 
+localStorage.setItem(
+"ft_installed",
+"yes"
+);
+
 installBtn.style.display =
 "none";
 
 rateBtn.style.display =
+"block";
+
+shareBtn.style.display =
 "block";
 
 }
@@ -615,23 +757,9 @@ deferredPrompt = null;
 
 });
 
-/* بعد تثبيت التطبيق */
-
-if(
-window.matchMedia(
-'(display-mode: standalone)'
-).matches
-){
-
-installBtn.style.display =
-"none";
-
-rateBtn.style.display =
-"block";
-
-}
-
-/* RATE POPUP */
+/* =========================
+RATE POPUP
+========================= */
 
 const ratePopup =
 document.getElementById(
@@ -651,6 +779,10 @@ ratePopup.style.display=
 "none";
 
 }
+
+/* =========================
+SUBMIT APP RATE
+========================= */
 
 function submitAppRate(){
 
@@ -678,6 +810,7 @@ if(
 name==="" ||
 phone==="" ||
 comment===""
+
 ){
 
 alert(
@@ -719,7 +852,7 @@ comment:comment
 if(data.success){
 
 alert(
-"⭐ شكراً لتقييمك للتطبيق"
+"⭐ شكراً لتقييمك"
 );
 
 closeRatePopup();
@@ -742,7 +875,54 @@ document.getElementById(
 
 }
 
-/* SERVICE WORKER */
+/* =========================
+SHARE APP
+========================= */
+
+shareBtn.onclick=async()=>{
+
+const shareData = {
+
+title:"Future Tank",
+
+text:
+"💧 حمّل تطبيق Future Tank للخدمات وتتبع الطلبات والتسوق بسهولة",
+
+url:window.location.href
+
+};
+
+if(navigator.share){
+
+try{
+
+await navigator.share(
+shareData
+);
+
+}catch(err){
+
+console.log(err);
+
+}
+
+}else{
+
+navigator.clipboard.writeText(
+window.location.href
+);
+
+alert(
+"تم نسخ رابط التطبيق"
+);
+
+}
+
+};
+
+/* =========================
+SERVICE WORKER
+========================= */
 
 if("serviceWorker" in navigator){
 
@@ -772,4 +952,4 @@ console.log(err);
 </script>
 
 </body>
-</html>
+  </html>
