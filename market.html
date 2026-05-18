@@ -37,16 +37,12 @@ background:linear-gradient(135deg,#ff9800,#ffb74d);
 padding:25px;
 text-align:center;
 color:#fff;
-box-shadow:0 5px 18px rgba(0,0,0,.15);
+box-shadow:0 5px 20px rgba(0,0,0,.15);
 }
 
 header h1{
-font-size:28px;
 margin-bottom:10px;
-}
-
-header p{
-font-size:15px;
+font-size:28px;
 }
 
 .container{
@@ -60,12 +56,6 @@ border-radius:18px;
 margin-bottom:20px;
 animation:pulse 2s infinite;
 border-right:6px solid #ff9800;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-}
-
-.offer h3{
-margin-bottom:10px;
-color:#ff9800;
 }
 
 @keyframes pulse{
@@ -94,7 +84,6 @@ transition:.3s;
 
 .cat:hover{
 transform:translateY(-3px);
-background:#fff8f0;
 }
 
 .order-box{
@@ -120,12 +109,12 @@ font-size:15px;
 
 .order-btn{
 width:100%;
-padding:14px;
+padding:15px;
 border:none;
-border-radius:12px;
+border-radius:14px;
 background:#ff9800;
 color:#fff;
-font-size:16px;
+font-size:17px;
 font-weight:bold;
 margin-top:15px;
 cursor:pointer;
@@ -140,42 +129,22 @@ opacity:.9;
 background:#25D366;
 }
 
-.note-box{
-background:#e3f2fd;
-padding:14px;
-border-radius:14px;
-margin-bottom:18px;
-font-size:14px;
-line-height:1.8;
-color:#0b4f7a;
-}
-
 footer{
 margin-top:40px;
 text-align:center;
 padding:20px;
 color:#777;
-font-size:14px;
 }
 
-.loading{
+.success-box{
 display:none;
 margin-top:15px;
-text-align:center;
+background:#e8f5e9;
+padding:15px;
+border-radius:14px;
+color:#2e7d32;
 font-weight:bold;
-color:#ff9800;
-}
-
-@media(max-width:600px){
-
-.categories{
-grid-template-columns:1fr 1fr;
-}
-
-header h1{
-font-size:24px;
-}
-
+text-align:center;
 }
 
 </style>
@@ -234,12 +203,6 @@ font-size:24px;
 
 </div>
 
-<div class="note-box">
-
-💡 يمكنك كتابة جميع المنتجات المطلوبة بالتفصيل داخل الأوردر وسيتم التواصل معك لتأكيد الأسعار والتوصيل.
-
-</div>
-
 <div class="order-box">
 
 <h2>
@@ -268,45 +231,15 @@ placeholder="العنوان">
 id="marketCategory"
 class="order-input">
 
-<option>
-🛒 سوبر ماركت
-</option>
-
-<option>
-💊 صيدلية
-</option>
-
-<option>
-🥦 خضروات وفاكهة
-</option>
-
-<option>
-🥩 لحوم وأسماك
-</option>
-
-<option>
-🍞 مخبوزات
-</option>
-
-<option>
-🧃 مشروبات
-</option>
-
-<option>
-🧴 منظفات
-</option>
-
-<option>
-🐦 مستلزمات حيوانات
-</option>
-
-<option>
-👶 مستلزمات أطفال
-</option>
-
-<option>
-💄 تجميل وعناية
-</option>
+<option>🛒 سوبر ماركت</option>
+<option>💊 صيدلية</option>
+<option>🥦 خضروات وفاكهة</option>
+<option>🥩 لحوم وأسماك</option>
+<option>🍞 مخبوزات</option>
+<option>🧃 مشروبات</option>
+<option>🧴 منظفات</option>
+<option>👶 مستلزمات أطفال</option>
+<option>💄 تجميل وعناية</option>
 
 </select>
 
@@ -321,17 +254,9 @@ placeholder="اكتب المنتجات المطلوبة بالتفصيل">
 id="paymentMethod"
 class="order-input">
 
-<option>
-الدفع عند الاستلام
-</option>
-
-<option>
-فودافون كاش
-</option>
-
-<option>
-إنستا باي
-</option>
+<option>الدفع عند الاستلام</option>
+<option>فودافون كاش</option>
+<option>إنستا باي</option>
 
 </select>
 
@@ -343,10 +268,11 @@ onclick="submitOrder()">
 
 </button>
 
-<div class="loading"
-id="loadingBox">
+<div
+class="success-box"
+id="successBox">
 
-جاري إرسال الأوردر...
+✅ تم إرسال الأوردر بنجاح
 
 </div>
 
@@ -365,17 +291,13 @@ id="loadingBox">
 const API_URL =
 "https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
-/* عروض متحركة */
-
 const offers = [
 
 "🔥 خصومات على السوبر ماركت والصيدلية والخضروات",
 "🚚 توصيل سريع داخل هرم سيتي وحدائق أكتوبر",
 "💧 عروض خاصة على خزانات المياه والفلاتر",
 "🥩 عروض اللحوم والأسماك اليوم",
-"💊 خصومات على مستلزمات الصيدلية",
-"🧴 عروض المنظفات والعناية المنزلية",
-"👶 خصومات مستلزمات الأطفال"
+"💊 خصومات على مستلزمات الصيدلية"
 
 ];
 
@@ -385,20 +307,17 @@ setInterval(()=>{
 
 currentOffer++;
 
-if(currentOffer>=offers.length){
+if(currentOffer >= offers.length){
 
-currentOffer=0;
+currentOffer = 0;
 
 }
 
 document.getElementById(
 "offersText"
-).innerText =
-offers[currentOffer];
+).innerText = offers[currentOffer];
 
 },3000);
-
-/* إرسال الأوردر */
 
 function submitOrder(){
 
@@ -433,10 +352,10 @@ document.getElementById(
 ).value;
 
 if(
-name==="" ||
-phone==="" ||
-address==="" ||
-items===""
+name === "" ||
+phone === "" ||
+address === "" ||
+items === ""
 ){
 
 alert("يرجى استكمال البيانات");
@@ -445,9 +364,21 @@ return;
 
 }
 
-document.getElementById(
-"loadingBox"
-).style.display="block";
+const orderText =
+
+"🛒 أوردر جديد" + "\n\n" +
+
+"👤 الاسم: " + name + "\n" +
+
+"📞 الهاتف: " + phone + "\n" +
+
+"📍 العنوان: " + address + "\n\n" +
+
+"📦 الطلب:" + "\n" +
+
+category + " : " + items + "\n\n" +
+
+"💳 طريقة الدفع: " + payment;
 
 fetch(API_URL,{
 
@@ -463,8 +394,7 @@ phone:phone,
 
 address:address,
 
-items:
-category + " : " + items,
+items:category + " : " + items,
 
 total:"يحدد لاحقاً",
 
@@ -478,38 +408,21 @@ payment:payment
 
 .then(data=>{
 
-document.getElementById(
-"loadingBox"
-).style.display="none";
-
 if(data.success){
 
-const message = `
-🛒 أوردر جديد
-
-👤 الاسم: ${name}
-
-📞 الهاتف: ${phone}
-
-📍 العنوان: ${address}
-
-📦 الطلب:
-${category} : ${items}
-
-💳 طريقة الدفع:
-${payment}
-`;
-
-const whatsappUrl =
-"https://wa.me/201150402031?text=" +
-encodeURIComponent(message);
+document.getElementById(
+"successBox"
+).style.display = "block";
 
 window.open(
-whatsappUrl,
-"_blank"
-);
 
-alert("✅ تم إرسال الأوردر بنجاح");
+"https://wa.me/201150402031?text=" +
+
+encodeURIComponent(orderText),
+
+"_blank"
+
+);
 
 document.getElementById(
 "customerName"
@@ -528,18 +441,6 @@ document.getElementById(
 ).value="";
 
 }
-
-})
-
-.catch(err=>{
-
-document.getElementById(
-"loadingBox"
-).style.display="none";
-
-alert("حدث خطأ أثناء إرسال الأوردر");
-
-console.log(err);
 
 });
 
