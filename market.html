@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 
 <title>
-ماركت هرم سيتي
+ماركت هرم سيتي وحدائق أكتوبر
 </title>
 
 <meta name="viewport"
@@ -28,187 +28,178 @@ font-family:Tahoma,sans-serif;
 }
 
 body{
-
 background:#f4f7fb;
 color:#222;
-padding-bottom:100px;
-
+padding-bottom:120px;
 }
 
 header{
-
 background:linear-gradient(135deg,#ff9800,#ffb74d);
-padding:30px 20px;
+padding:25px 15px;
 text-align:center;
 color:#fff;
-box-shadow:0 4px 15px rgba(0,0,0,.15);
-
+box-shadow:0 5px 18px rgba(0,0,0,.15);
 }
 
 header h1{
-
-font-size:32px;
-margin-bottom:10px;
-
+font-size:28px;
+margin-bottom:8px;
 }
 
 header p{
-
-font-size:16px;
-opacity:.95;
-
+font-size:15px;
 }
 
 .container{
-
-padding:20px;
-
+padding:18px;
 }
 
-.top-actions{
-
+.top-buttons{
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:12px;
-margin-bottom:20px;
-
+margin-bottom:18px;
 }
 
-.action-btn{
-
+.btn{
 background:#fff;
+padding:14px;
 border:none;
-padding:15px;
 border-radius:16px;
 font-size:15px;
 font-weight:bold;
 cursor:pointer;
 box-shadow:0 5px 18px rgba(0,0,0,.08);
-transition:.3s;
 text-decoration:none;
-color:#333;
 text-align:center;
-
+color:#333;
 }
 
-.action-btn:hover{
-
+.btn:hover{
 transform:translateY(-2px);
+}
 
+.offer{
+background:#fff3e0;
+padding:18px;
+border-radius:18px;
+margin-bottom:18px;
+border-right:6px solid #ff9800;
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.02);}
+100%{transform:scale(1);}
+}
+
+.offer h3{
+color:#ff9800;
+margin-bottom:10px;
 }
 
 .search-box{
-
 margin-bottom:20px;
-
 }
 
 .search-box input{
-
 width:100%;
 padding:15px;
 border:none;
 border-radius:14px;
 font-size:16px;
 box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
 
+.categories{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+margin-bottom:20px;
+}
+
+.cat{
+background:#fff;
+padding:16px;
+border-radius:16px;
+text-align:center;
+font-weight:bold;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
 }
 
 .section-title{
-
 font-size:24px;
-margin:25px 0 18px;
+margin:20px 0;
 color:#ff9800;
 font-weight:bold;
-
 }
 
 .products{
-
 display:grid;
 grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:18px;
-
 }
 
 .card{
-
 background:#fff;
 border-radius:20px;
 overflow:hidden;
 box-shadow:0 8px 24px rgba(0,0,0,.08);
 transition:.3s;
-
 }
 
 .card:hover{
-
 transform:translateY(-4px);
-
 }
 
 .card img{
-
 width:100%;
 height:220px;
 object-fit:cover;
-
 }
 
 .card-body{
-
 padding:16px;
-
 }
 
 .badge{
-
 display:inline-block;
 background:#4caf50;
 color:#fff;
 padding:6px 12px;
 border-radius:30px;
 font-size:12px;
-margin-bottom:12px;
-
+margin-bottom:10px;
 }
 
 .card-title{
-
 font-size:20px;
 font-weight:bold;
 margin-bottom:10px;
-
 }
 
 .card-desc{
-
 font-size:14px;
 line-height:1.7;
 color:#666;
 margin-bottom:15px;
-
 }
 
 .price{
-
 font-size:22px;
 font-weight:bold;
 color:#ff9800;
 margin-bottom:15px;
-
 }
 
 .card-buttons{
-
 display:grid;
 grid-template-columns:1fr 1fr;
 gap:10px;
-
 }
 
 .buy-btn{
-
 background:#25D366;
 color:#fff;
 border:none;
@@ -219,11 +210,9 @@ font-weight:bold;
 cursor:pointer;
 text-decoration:none;
 text-align:center;
-
 }
 
 .cart-btn{
-
 background:#0b6fc2;
 color:#fff;
 border:none;
@@ -232,36 +221,16 @@ border-radius:12px;
 font-size:14px;
 font-weight:bold;
 cursor:pointer;
-
-}
-
-.offer{
-
-background:#fff3e0;
-padding:18px;
-border-radius:18px;
-margin-bottom:20px;
-border-right:6px solid #ff9800;
-box-shadow:0 5px 18px rgba(0,0,0,.05);
-
-}
-
-.offer h3{
-
-margin-bottom:10px;
-color:#ff9800;
-
 }
 
 .cart-counter{
-
 position:fixed;
 bottom:20px;
 left:20px;
 background:#ff9800;
 color:#fff;
-width:65px;
-height:65px;
+width:70px;
+height:70px;
 border-radius:50%;
 display:flex;
 align-items:center;
@@ -271,47 +240,90 @@ font-weight:bold;
 box-shadow:0 8px 24px rgba(0,0,0,.25);
 z-index:9999;
 cursor:pointer;
-
 }
 
 .cart-counter span{
-
 position:absolute;
 top:-5px;
 right:-5px;
 background:#f44336;
-width:28px;
-height:28px;
+width:30px;
+height:30px;
 border-radius:50%;
 display:flex;
 align-items:center;
 justify-content:center;
 font-size:13px;
+}
 
+.order-popup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+padding:15px;
+}
+
+.order-box{
+background:#fff;
+width:100%;
+max-width:450px;
+padding:20px;
+border-radius:20px;
+max-height:90vh;
+overflow:auto;
+}
+
+.order-box h2{
+margin-bottom:15px;
+color:#ff9800;
+}
+
+.order-input{
+width:100%;
+padding:14px;
+margin-top:10px;
+border-radius:12px;
+border:1px solid #ddd;
+font-size:15px;
+}
+
+.order-btn{
+margin-top:15px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:#ff9800;
+color:#fff;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.close-btn{
+background:#eee;
+color:#222;
 }
 
 footer{
-
 margin-top:40px;
 text-align:center;
 padding:20px;
 color:#777;
 font-size:14px;
-
 }
 
 @media(max-width:600px){
 
-header h1{
-
-font-size:26px;
-
-}
-
 .products{
-
 grid-template-columns:1fr;
-
 }
 
 }
@@ -325,7 +337,7 @@ grid-template-columns:1fr;
 <header>
 
 <h1>
-🛒 ماركت هرم سيتي
+🛒 ماركت هرم سيتي وحدائق أكتوبر
 </h1>
 
 <p>
@@ -336,22 +348,14 @@ grid-template-columns:1fr;
 
 <div class="container">
 
-<div class="top-actions">
+<div class="top-buttons">
 
-<a
-href="index.html"
-class="action-btn">
-
+<a href="index.html" class="btn">
 🏠 الصفحة الرئيسية
-
 </a>
 
-<button
-class="action-btn"
-onclick="shareMarket()">
-
+<button onclick="shareMarket()" class="btn">
 📤 مشاركة الماركت
-
 </button>
 
 </div>
@@ -363,8 +367,17 @@ onclick="shareMarket()">
 </h3>
 
 <p>
-خصومات خاصة على منتجات المياه والخزانات وخدمات الصيانة داخل هرم سيتي
+خصومات على السوبر ماركت والصيدلية والخضروات واللحوم والأسماك وخدمات المياه
 </p>
+
+</div>
+
+<div class="categories">
+
+<div class="cat">🛒 سوبر ماركت</div>
+<div class="cat">💊 صيدلية</div>
+<div class="cat">🥦 خضروات وفاكهة</div>
+<div class="cat">🥩 لحوم وأسماك</div>
 
 </div>
 
@@ -385,169 +398,83 @@ onkeyup="searchProducts()">
 <div class="products"
 id="productsContainer">
 
-<!-- PRODUCT -->
-
-<div class="card product-item">
-
-<img
-src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?q=80&w=1200&auto=format&fit=crop">
-
-<div class="card-body">
-
-<div class="badge">
-متوفر
-</div>
-
-<div class="card-title">
-خزان مياه 1000 لتر
-</div>
-
-<div class="card-desc">
-خزان مياه عالي الجودة مع ضمان واعتماد كامل
-</div>
-
-<div class="price">
-4500 ج
-</div>
-
-<div class="card-buttons">
-
-<button
-class="cart-btn"
-onclick="addToCart()">
-
-🛒 أضف للسلة
-
-</button>
-
-<a
-class="buy-btn"
-target="_blank"
-href="https://wa.me/201150402031?text=أريد%20طلب%20خزان%201000%20لتر">
-
-📲 اطلب الآن
-
-</a>
-
 </div>
 
 </div>
 
-</div>
-
-<!-- PRODUCT -->
-
-<div class="card product-item">
-
-<img
-src="https://images.unsplash.com/photo-1622030411594-c282a63aa1bc?q=80&w=1200&auto=format&fit=crop">
-
-<div class="card-body">
-
-<div class="badge">
-الأكثر طلبًا
-</div>
-
-<div class="card-title">
-فلتر مياه منزلي
-</div>
-
-<div class="card-desc">
-فلتر مياه متعدد المراحل لتنقية مياه الشرب
-</div>
-
-<div class="price">
-1200 ج
-</div>
-
-<div class="card-buttons">
-
-<button
-class="cart-btn"
-onclick="addToCart()">
-
-🛒 أضف للسلة
-
-</button>
-
-<a
-class="buy-btn"
-target="_blank"
-href="https://wa.me/201150402031?text=أريد%20طلب%20فلتر%20مياه">
-
-📲 اطلب الآن
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- PRODUCT -->
-
-<div class="card product-item">
-
-<img
-src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=1200&auto=format&fit=crop">
-
-<div class="card-body">
-
-<div class="badge">
-جديد
-</div>
-
-<div class="card-title">
-خدمة تطهير الخزانات
-</div>
-
-<div class="card-desc">
-تطهير وتعقيم خزانات المياه بمواد آمنة ومعتمدة
-</div>
-
-<div class="price">
-1500 ج
-</div>
-
-<div class="card-buttons">
-
-<button
-class="cart-btn"
-onclick="addToCart()">
-
-🛒 أضف للسلة
-
-</button>
-
-<a
-class="buy-btn"
-target="_blank"
-href="https://wa.me/201150402031?text=أريد%20طلب%20خدمة%20تطهير%20الخزانات">
-
-📲 اطلب الآن
-
-</a>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-</div>
-
-<div
-class="cart-counter"
-onclick="openCart()">
+<div class="cart-counter"
+onclick="openOrderPopup()">
 
 🛒
 
 <span id="cartCount">
 0
 </span>
+
+</div>
+
+<div class="order-popup"
+id="orderPopup">
+
+<div class="order-box">
+
+<h2>
+🧾 أوردر الماركت
+</h2>
+
+<input
+type="text"
+id="customerName"
+class="order-input"
+placeholder="الاسم">
+
+<input
+type="text"
+id="customerPhone"
+class="order-input"
+placeholder="رقم الهاتف">
+
+<textarea
+id="customerAddress"
+class="order-input"
+placeholder="العنوان"
+rows="3"></textarea>
+
+<select
+id="paymentMethod"
+class="order-input">
+
+<option>
+الدفع عند الاستلام
+</option>
+
+<option>
+فودافون كاش
+</option>
+
+<option>
+إنستا باي
+</option>
+
+</select>
+
+<button
+class="order-btn"
+onclick="submitOrder()">
+
+✅ إرسال الأوردر
+
+</button>
+
+<button
+class="order-btn close-btn"
+onclick="closeOrderPopup()">
+
+إغلاق
+
+</button>
+
+</div>
 
 </div>
 
@@ -559,27 +486,233 @@ onclick="openCart()">
 
 <script>
 
-let cart = 0;
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
-function addToCart(){
+let cart = [];
 
-cart++;
+async function loadProducts(){
 
-document.getElementById(
-"cartCount"
-).innerText = cart;
+try{
 
-alert(
-"✅ تم إضافة المنتج إلى السلة"
+const res =
+await fetch(
+API_URL + "?type=marketProducts"
 );
+
+const data =
+await res.json();
+
+const container =
+document.getElementById(
+"productsContainer"
+);
+
+container.innerHTML = "";
+
+if(data.length===0){
+
+container.innerHTML = `
+<div style="
+background:#fff;
+padding:25px;
+border-radius:20px;
+text-align:center;
+font-size:18px;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+">
+لا توجد منتجات حالياً
+</div>
+`;
+
+return;
 
 }
 
-function openCart(){
+data.forEach(product=>{
 
-alert(
-"🛒 عدد المنتجات داخل السلة: " + cart
-);
+container.innerHTML += `
+
+<div class="card product-item">
+
+<img src="${product.image}">
+
+<div class="card-body">
+
+<div class="badge">
+${product.status}
+</div>
+
+<div class="card-title">
+${product.name}
+</div>
+
+<div class="card-desc">
+${product.desc}
+</div>
+
+<div class="price">
+${product.price} ج
+</div>
+
+<div class="card-buttons">
+
+<button
+class="cart-btn"
+onclick='addToCart(${JSON.stringify(product)})'>
+
+🛒 أضف للسلة
+
+</button>
+
+<a
+class="buy-btn"
+target="_blank"
+href="https://wa.me/201150402031?text=أريد طلب ${encodeURIComponent(product.name)}">
+
+📲 اطلب الآن
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}catch(err){
+
+console.log(err);
+
+}
+
+}
+
+function addToCart(product){
+
+cart.push(product);
+
+document.getElementById(
+"cartCount"
+).innerText = cart.length;
+
+alert("✅ تم إضافة المنتج للسلة");
+
+}
+
+function openOrderPopup(){
+
+document.getElementById(
+"orderPopup"
+).style.display = "flex";
+
+}
+
+function closeOrderPopup(){
+
+document.getElementById(
+"orderPopup"
+).style.display = "none";
+
+}
+
+async function submitOrder(){
+
+if(cart.length===0){
+
+alert("🛒 السلة فارغة");
+
+return;
+
+}
+
+const name =
+document.getElementById(
+"customerName"
+).value.trim();
+
+const phone =
+document.getElementById(
+"customerPhone"
+).value.trim();
+
+const address =
+document.getElementById(
+"customerAddress"
+).value.trim();
+
+const payment =
+document.getElementById(
+"paymentMethod"
+).value;
+
+if(
+name==="" ||
+phone==="" ||
+address===""
+){
+
+alert("يرجى استكمال البيانات");
+
+return;
+
+}
+
+const items =
+cart.map(item=>item.name).join(" | ");
+
+const total =
+cart.reduce((sum,item)=>
+sum + Number(item.price)
+,0);
+
+fetch(API_URL,{
+
+method:"POST",
+
+body:JSON.stringify({
+
+action:"saveMarketOrder",
+
+name:name,
+
+phone:phone,
+
+address:address,
+
+items:items,
+
+total:total,
+
+payment:payment
+
+})
+
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+if(data.success){
+
+alert("✅ تم إرسال الأوردر بنجاح");
+
+cart = [];
+
+document.getElementById(
+"cartCount"
+).innerText = 0;
+
+closeOrderPopup();
+
+}
+
+});
 
 }
 
@@ -616,10 +749,10 @@ async function shareMarket(){
 const shareData = {
 
 title:
-"ماركت هرم سيتي",
+"ماركت هرم سيتي وحدائق أكتوبر",
 
 text:
-"🛒 تسوق الآن داخل ماركت هرم سيتي",
+"🛒 تسوق الآن داخل ماركت هرم سيتي وحدائق أكتوبر",
 
 url:
 window.location.href
@@ -646,13 +779,13 @@ navigator.clipboard.writeText(
 window.location.href
 );
 
-alert(
-"✅ تم نسخ رابط الماركت"
-);
+alert("✅ تم نسخ رابط الماركت");
 
 }
 
 }
+
+loadProducts();
 
 </script>
 
