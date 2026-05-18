@@ -37,6 +37,16 @@ background:linear-gradient(135deg,#ff9800,#ffb74d);
 padding:25px;
 text-align:center;
 color:#fff;
+box-shadow:0 5px 18px rgba(0,0,0,.15);
+}
+
+header h1{
+font-size:28px;
+margin-bottom:10px;
+}
+
+header p{
+font-size:15px;
 }
 
 .container{
@@ -49,6 +59,13 @@ padding:18px;
 border-radius:18px;
 margin-bottom:20px;
 animation:pulse 2s infinite;
+border-right:6px solid #ff9800;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.offer h3{
+margin-bottom:10px;
+color:#ff9800;
 }
 
 @keyframes pulse{
@@ -72,6 +89,12 @@ text-align:center;
 font-weight:bold;
 box-shadow:0 5px 18px rgba(0,0,0,.08);
 cursor:pointer;
+transition:.3s;
+}
+
+.cat:hover{
+transform:translateY(-3px);
+background:#fff8f0;
 }
 
 .order-box{
@@ -81,12 +104,18 @@ border-radius:20px;
 box-shadow:0 5px 18px rgba(0,0,0,.08);
 }
 
+.order-box h2{
+margin-bottom:15px;
+color:#ff9800;
+}
+
 .order-input{
 width:100%;
 padding:14px;
 margin-top:10px;
 border-radius:12px;
 border:1px solid #ddd;
+font-size:15px;
 }
 
 .order-btn{
@@ -100,6 +129,25 @@ font-size:16px;
 font-weight:bold;
 margin-top:15px;
 cursor:pointer;
+transition:.3s;
+}
+
+.order-btn:hover{
+opacity:.9;
+}
+
+.whatsapp-btn{
+background:#25D366;
+}
+
+.note-box{
+background:#e3f2fd;
+padding:14px;
+border-radius:14px;
+margin-bottom:18px;
+font-size:14px;
+line-height:1.8;
+color:#0b4f7a;
 }
 
 footer{
@@ -107,6 +155,27 @@ margin-top:40px;
 text-align:center;
 padding:20px;
 color:#777;
+font-size:14px;
+}
+
+.loading{
+display:none;
+margin-top:15px;
+text-align:center;
+font-weight:bold;
+color:#ff9800;
+}
+
+@media(max-width:600px){
+
+.categories{
+grid-template-columns:1fr 1fr;
+}
+
+header h1{
+font-size:24px;
+}
+
 }
 
 </style>
@@ -162,6 +231,12 @@ color:#777;
 <div class="cat">👶 مستلزمات أطفال</div>
 
 <div class="cat">💄 تجميل وعناية</div>
+
+</div>
+
+<div class="note-box">
+
+💡 يمكنك كتابة جميع المنتجات المطلوبة بالتفصيل داخل الأوردر وسيتم التواصل معك لتأكيد الأسعار والتوصيل.
 
 </div>
 
@@ -222,6 +297,10 @@ class="order-input">
 </option>
 
 <option>
+🐦 مستلزمات حيوانات
+</option>
+
+<option>
 👶 مستلزمات أطفال
 </option>
 
@@ -264,6 +343,13 @@ onclick="submitOrder()">
 
 </button>
 
+<div class="loading"
+id="loadingBox">
+
+جاري إرسال الأوردر...
+
+</div>
+
 </div>
 
 </div>
@@ -279,13 +365,17 @@ onclick="submitOrder()">
 const API_URL =
 "https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
+/* عروض متحركة */
+
 const offers = [
 
 "🔥 خصومات على السوبر ماركت والصيدلية والخضروات",
 "🚚 توصيل سريع داخل هرم سيتي وحدائق أكتوبر",
 "💧 عروض خاصة على خزانات المياه والفلاتر",
 "🥩 عروض اللحوم والأسماك اليوم",
-"💊 خصومات على مستلزمات الصيدلية"
+"💊 خصومات على مستلزمات الصيدلية",
+"🧴 عروض المنظفات والعناية المنزلية",
+"👶 خصومات مستلزمات الأطفال"
 
 ];
 
@@ -307,6 +397,8 @@ document.getElementById(
 offers[currentOffer];
 
 },3000);
+
+/* إرسال الأوردر */
 
 function submitOrder(){
 
@@ -345,7 +437,6 @@ name==="" ||
 phone==="" ||
 address==="" ||
 items===""
-
 ){
 
 alert("يرجى استكمال البيانات");
@@ -353,6 +444,10 @@ alert("يرجى استكمال البيانات");
 return;
 
 }
+
+document.getElementById(
+"loadingBox"
+).style.display="block";
 
 fetch(API_URL,{
 
@@ -383,7 +478,36 @@ payment:payment
 
 .then(data=>{
 
+document.getElementById(
+"loadingBox"
+).style.display="none";
+
 if(data.success){
+
+const message = `
+🛒 أوردر جديد
+
+👤 الاسم: ${name}
+
+📞 الهاتف: ${phone}
+
+📍 العنوان: ${address}
+
+📦 الطلب:
+${category} : ${items}
+
+💳 طريقة الدفع:
+${payment}
+`;
+
+const whatsappUrl =
+"https://wa.me/201150402031?text=" +
+encodeURIComponent(message);
+
+window.open(
+whatsappUrl,
+"_blank"
+);
 
 alert("✅ تم إرسال الأوردر بنجاح");
 
@@ -404,6 +528,18 @@ document.getElementById(
 ).value="";
 
 }
+
+})
+
+.catch(err=>{
+
+document.getElementById(
+"loadingBox"
+).style.display="none";
+
+alert("حدث خطأ أثناء إرسال الأوردر");
+
+console.log(err);
 
 });
 
