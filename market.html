@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
+ماركت هرم سيتي
+</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color"
+content="#ff9800">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Tahoma,sans-serif;
+}
+
+body{
+
+background:#f4f7fb;
+color:#222;
+padding-bottom:100px;
+
+}
+
+header{
+
+background:linear-gradient(135deg,#ff9800,#ffb74d);
+padding:30px 20px;
+text-align:center;
+color:#fff;
+box-shadow:0 4px 15px rgba(0,0,0,.15);
+
+}
+
+header h1{
+
+font-size:32px;
+margin-bottom:10px;
+
+}
+
+header p{
+
+font-size:16px;
+opacity:.95;
+
+}
+
+.container{
+
+padding:20px;
+
+}
+
+.top-actions{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:12px;
+margin-bottom:20px;
+
+}
+
+.action-btn{
+
+background:#fff;
+border:none;
+padding:15px;
+border-radius:16px;
+font-size:15px;
+font-weight:bold;
+cursor:pointer;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+transition:.3s;
+text-decoration:none;
+color:#333;
+text-align:center;
+
+}
+
+.action-btn:hover{
+
+transform:translateY(-2px);
+
+}
+
+.search-box{
+
+margin-bottom:20px;
+
+}
+
+.search-box input{
+
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+font-size:16px;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+
+}
+
+.section-title{
+
+font-size:24px;
+margin:25px 0 18px;
+color:#ff9800;
+font-weight:bold;
+
+}
+
+.products{
+
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+gap:18px;
+
+}
+
+.card{
+
+background:#fff;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 8px 24px rgba(0,0,0,.08);
+transition:.3s;
+
+}
+
+.card:hover{
+
+transform:translateY(-4px);
+
+}
+
+.card img{
+
+width:100%;
+height:220px;
+object-fit:cover;
+
+}
+
+.card-body{
+
+padding:16px;
+
+}
+
+.badge{
+
+display:inline-block;
+background:#4caf50;
+color:#fff;
+padding:6px 12px;
+border-radius:30px;
+font-size:12px;
+margin-bottom:12px;
+
+}
+
+.card-title{
+
+font-size:20px;
+font-weight:bold;
+margin-bottom:10px;
+
+}
+
+.card-desc{
+
+font-size:14px;
+line-height:1.7;
+color:#666;
+margin-bottom:15px;
+
+}
+
+.price{
+
+font-size:22px;
+font-weight:bold;
+color:#ff9800;
+margin-bottom:15px;
+
+}
+
+.card-buttons{
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+
+}
+
+.buy-btn{
+
+background:#25D366;
+color:#fff;
+border:none;
+padding:12px;
+border-radius:12px;
+font-size:14px;
+font-weight:bold;
+cursor:pointer;
+text-decoration:none;
+text-align:center;
+
+}
+
+.cart-btn{
+
+background:#0b6fc2;
+color:#fff;
+border:none;
+padding:12px;
+border-radius:12px;
+font-size:14px;
+font-weight:bold;
+cursor:pointer;
+
+}
+
+.offer{
+
+background:#fff3e0;
+padding:18px;
+border-radius:18px;
+margin-bottom:20px;
+border-right:6px solid #ff9800;
+box-shadow:0 5px 18px rgba(0,0,0,.05);
+
+}
+
+.offer h3{
+
+margin-bottom:10px;
+color:#ff9800;
+
+}
+
+.cart-counter{
+
+position:fixed;
+bottom:20px;
+left:20px;
+background:#ff9800;
+color:#fff;
+width:65px;
+height:65px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+font-weight:bold;
+box-shadow:0 8px 24px rgba(0,0,0,.25);
+z-index:9999;
+cursor:pointer;
+
+}
+
+.cart-counter span{
+
+position:absolute;
+top:-5px;
+right:-5px;
+background:#f44336;
+width:28px;
+height:28px;
+border-radius:50%;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:13px;
+
+}
+
+footer{
+
+margin-top:40px;
+text-align:center;
+padding:20px;
+color:#777;
+font-size:14px;
+
+}
+
+@media(max-width:600px){
+
+header h1{
+
+font-size:26px;
+
+}
+
+.products{
+
+grid-template-columns:1fr;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>
+🛒 ماركت هرم سيتي
+</h1>
+
+<p>
+متاجر وعروض وخدمات المنطقة
+</p>
+
+</header>
+
+<div class="container">
+
+<div class="top-actions">
+
+<a
+href="index.html"
+class="action-btn">
+
+🏠 الصفحة الرئيسية
+
+</a>
+
+<button
+class="action-btn"
+onclick="shareMarket()">
+
+📤 مشاركة الماركت
+
+</button>
+
+</div>
+
+<div class="offer">
+
+<h3>
+🔥 عروض اليوم
+</h3>
+
+<p>
+خصومات خاصة على منتجات المياه والخزانات وخدمات الصيانة داخل هرم سيتي
+</p>
+
+</div>
+
+<div class="search-box">
+
+<input
+type="text"
+id="searchInput"
+placeholder="ابحث داخل الماركت..."
+onkeyup="searchProducts()">
+
+</div>
+
+<h2 class="section-title">
+⭐ المنتجات والخدمات
+</h2>
+
+<div class="products"
+id="productsContainer">
+
+<!-- PRODUCT -->
+
+<div class="card product-item">
+
+<img
+src="https://images.unsplash.com/photo-1560185007-cde436f6a4d0?q=80&w=1200&auto=format&fit=crop">
+
+<div class="card-body">
+
+<div class="badge">
+متوفر
+</div>
+
+<div class="card-title">
+خزان مياه 1000 لتر
+</div>
+
+<div class="card-desc">
+خزان مياه عالي الجودة مع ضمان واعتماد كامل
+</div>
+
+<div class="price">
+4500 ج
+</div>
+
+<div class="card-buttons">
+
+<button
+class="cart-btn"
+onclick="addToCart()">
+
+🛒 أضف للسلة
+
+</button>
+
+<a
+class="buy-btn"
+target="_blank"
+href="https://wa.me/201150402031?text=أريد%20طلب%20خزان%201000%20لتر">
+
+📲 اطلب الآن
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- PRODUCT -->
+
+<div class="card product-item">
+
+<img
+src="https://images.unsplash.com/photo-1622030411594-c282a63aa1bc?q=80&w=1200&auto=format&fit=crop">
+
+<div class="card-body">
+
+<div class="badge">
+الأكثر طلبًا
+</div>
+
+<div class="card-title">
+فلتر مياه منزلي
+</div>
+
+<div class="card-desc">
+فلتر مياه متعدد المراحل لتنقية مياه الشرب
+</div>
+
+<div class="price">
+1200 ج
+</div>
+
+<div class="card-buttons">
+
+<button
+class="cart-btn"
+onclick="addToCart()">
+
+🛒 أضف للسلة
+
+</button>
+
+<a
+class="buy-btn"
+target="_blank"
+href="https://wa.me/201150402031?text=أريد%20طلب%20فلتر%20مياه">
+
+📲 اطلب الآن
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- PRODUCT -->
+
+<div class="card product-item">
+
+<img
+src="https://images.unsplash.com/photo-1581093458791-9f3c3900df4b?q=80&w=1200&auto=format&fit=crop">
+
+<div class="card-body">
+
+<div class="badge">
+جديد
+</div>
+
+<div class="card-title">
+خدمة تطهير الخزانات
+</div>
+
+<div class="card-desc">
+تطهير وتعقيم خزانات المياه بمواد آمنة ومعتمدة
+</div>
+
+<div class="price">
+1500 ج
+</div>
+
+<div class="card-buttons">
+
+<button
+class="cart-btn"
+onclick="addToCart()">
+
+🛒 أضف للسلة
+
+</button>
+
+<a
+class="buy-btn"
+target="_blank"
+href="https://wa.me/201150402031?text=أريد%20طلب%20خدمة%20تطهير%20الخزانات">
+
+📲 اطلب الآن
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div
+class="cart-counter"
+onclick="openCart()">
+
+🛒
+
+<span id="cartCount">
+0
+</span>
+
+</div>
+
+<footer>
+
+© Future Tank — جميع الحقوق محفوظة
+
+</footer>
+
+<script>
+
+let cart = 0;
+
+function addToCart(){
+
+cart++;
+
+document.getElementById(
+"cartCount"
+).innerText = cart;
+
+alert(
+"✅ تم إضافة المنتج إلى السلة"
+);
+
+}
+
+function openCart(){
+
+alert(
+"🛒 عدد المنتجات داخل السلة: " + cart
+);
+
+}
+
+function searchProducts(){
+
+const input =
+document.getElementById(
+"searchInput"
+).value.toLowerCase();
+
+const products =
+document.querySelectorAll(
+".product-item"
+);
+
+products.forEach(product=>{
+
+const text =
+product.innerText.toLowerCase();
+
+product.style.display =
+text.includes(input)
+?
+"block"
+:
+"none";
+
+});
+
+}
+
+async function shareMarket(){
+
+const shareData = {
+
+title:
+"ماركت هرم سيتي",
+
+text:
+"🛒 تسوق الآن داخل ماركت هرم سيتي",
+
+url:
+window.location.href
+
+};
+
+if(navigator.share){
+
+try{
+
+await navigator.share(
+shareData
+);
+
+}catch(err){
+
+console.log(err);
+
+}
+
+}else{
+
+navigator.clipboard.writeText(
+window.location.href
+);
+
+alert(
+"✅ تم نسخ رابط الماركت"
+);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
