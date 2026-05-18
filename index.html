@@ -30,24 +30,6 @@ content="default">
 <meta name="apple-mobile-web-app-title"
 content="Future Tank">
 
-<meta property="og:title"
-content="💧 Future Tank">
-
-<meta property="og:description"
-content="نقاء الماء هو هدفنا">
-
-<meta property="og:image"
-content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/icon-512.png">
-
-<meta property="og:url"
-content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/">
-
-<meta property="og:type"
-content="website">
-
-<meta name="twitter:card"
-content="summary_large_image">
-
 <link rel="stylesheet"
 href="style.css">
 
@@ -64,18 +46,11 @@ background:#f5f9ff;
 font-family:Tahoma;
 }
 
-.market-btn{
-background:#ff9800;
-display:block;
-}
-
 .install-btn{
 margin-top:15px;
-background:#25D366;
 color:#fff;
 padding:15px;
 border-radius:14px;
-display:none;
 font-weight:bold;
 text-align:center;
 font-size:17px;
@@ -83,11 +58,15 @@ border:none;
 width:100%;
 cursor:pointer;
 box-sizing:border-box;
+display:block;
 }
 
 .share-btn{
 background:#0b6fc2;
-display:block;
+}
+
+.market-btn{
+background:#ff9800;
 }
 
 .rate-btn{
@@ -303,7 +282,8 @@ href="./market.html">
 
 <button
 id="installApp"
-class="install-btn">
+class="install-btn"
+style="background:#25D366;">
 
 📲 تثبيت التطبيق
 
@@ -437,9 +417,43 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
 const ratePopup =
+document.getElementById("ratePopup");
+
+/* إظهار زر التقييم دائمًا */
+
 document.getElementById(
-"ratePopup"
+"rateAppBtn"
+).style.display="block";
+
+/* تثبيت التطبيق */
+
+let deferredPrompt;
+
+window.addEventListener(
+"beforeinstallprompt",
+(e)=>{
+
+e.preventDefault();
+
+deferredPrompt=e;
+
+}
+
 );
+
+document.getElementById(
+"installApp"
+).onclick=async()=>{
+
+if(deferredPrompt){
+
+deferredPrompt.prompt();
+
+}
+
+};
+
+/* فتح التقييم */
 
 document.getElementById(
 "rateAppBtn"
@@ -454,6 +468,8 @@ function closeRatePopup(){
 ratePopup.style.display="none";
 
 }
+
+/* إرسال تقييم */
 
 function submitAppRate(){
 
@@ -514,6 +530,8 @@ loadAppReviews();
 });
 
 }
+
+/* تحميل التقييمات */
 
 function loadAppReviews(){
 
@@ -583,6 +601,8 @@ ${r.comment}
 }
 
 loadAppReviews();
+
+/* مشاركة التطبيق */
 
 document.getElementById(
 "shareAppBtn"
