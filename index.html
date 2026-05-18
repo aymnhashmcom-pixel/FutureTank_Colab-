@@ -71,6 +71,7 @@ background:#ff9800;
 
 .rate-btn{
 background:#9c27b0;
+display:block;
 }
 
 .review-item{
@@ -283,7 +284,7 @@ href="./market.html">
 <button
 id="installApp"
 class="install-btn"
-style="background:#25D366;">
+style="background:#25D366;display:none;">
 
 📲 تثبيت التطبيق
 
@@ -417,17 +418,53 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
 const ratePopup =
-document.getElementById("ratePopup");
+document.getElementById(
+"ratePopup"
+);
 
-/* إظهار زر التقييم دائمًا */
+const installBtn =
+document.getElementById(
+"installApp"
+);
 
+const rateBtn =
 document.getElementById(
 "rateAppBtn"
-).style.display="block";
+);
 
-/* تثبيت التطبيق */
+/* ===================================
+   INSTALL APP FIX
+=================================== */
 
 let deferredPrompt;
+
+function isAppInstalled(){
+
+return window.matchMedia(
+"(display-mode: standalone)"
+).matches
+||
+window.navigator.standalone === true
+||
+localStorage.getItem(
+"ft_installed"
+)==="yes";
+
+}
+
+/* SHOW / HIDE INSTALL BUTTON */
+
+if(isAppInstalled()){
+
+installBtn.style.display="none";
+
+}else{
+
+installBtn.style.display="block";
+
+}
+
+/* BEFORE INSTALL */
 
 window.addEventListener(
 "beforeinstallprompt",
@@ -435,29 +472,73 @@ window.addEventListener(
 
 e.preventDefault();
 
-deferredPrompt=e;
+deferredPrompt = e;
+
+if(!isAppInstalled()){
+
+installBtn.style.display="block";
 
 }
 
+}
 );
 
-document.getElementById(
-"installApp"
-).onclick=async()=>{
+/* INSTALL CLICK */
+
+installBtn.onclick = async()=>{
 
 if(deferredPrompt){
 
 deferredPrompt.prompt();
 
+const choice =
+await deferredPrompt.userChoice;
+
+if(choice.outcome==="accepted"){
+
+localStorage.setItem(
+"ft_installed",
+"yes"
+);
+
+installBtn.style.display="none";
+
+}
+
+}else{
+
+localStorage.setItem(
+"ft_installed",
+"yes"
+);
+
+installBtn.style.display="none";
+
 }
 
 };
 
-/* فتح التقييم */
+/* AFTER INSTALL */
 
-document.getElementById(
-"rateAppBtn"
-).onclick=()=>{
+window.addEventListener(
+"appinstalled",
+()=>{
+
+localStorage.setItem(
+"ft_installed",
+"yes"
+);
+
+installBtn.style.display="none";
+
+}
+);
+
+/* ===================================
+   RATE POPUP
+=================================== */
+
+rateBtn.onclick=()=>{
 
 ratePopup.style.display="flex";
 
@@ -469,7 +550,9 @@ ratePopup.style.display="none";
 
 }
 
-/* إرسال تقييم */
+/* ===================================
+   SUBMIT RATE
+=================================== */
 
 function submitAppRate(){
 
@@ -531,7 +614,9 @@ loadAppReviews();
 
 }
 
-/* تحميل التقييمات */
+/* ===================================
+   LOAD REVIEWS
+=================================== */
 
 function loadAppReviews(){
 
@@ -602,7 +687,9 @@ ${r.comment}
 
 loadAppReviews();
 
-/* مشاركة التطبيق */
+/* ===================================
+   SHARE APP
+=================================== */
 
 document.getElementById(
 "shareAppBtn"
@@ -637,6 +724,25 @@ alert(
 }
 
 };
+
+/* ===================================
+   SERVICE WORKER
+=================================== */
+
+if("serviceWorker" in navigator){
+
+window.addEventListener(
+"load",
+()=>{
+
+navigator.serviceWorker.register(
+"./sw.js"
+);
+
+}
+);
+
+}
 
 </script>
 
