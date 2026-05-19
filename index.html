@@ -59,6 +59,11 @@ width:100%;
 cursor:pointer;
 box-sizing:border-box;
 display:block;
+transition:.3s;
+}
+
+.install-btn:hover{
+opacity:.92;
 }
 
 .share-btn{
@@ -72,6 +77,10 @@ background:#ff9800;
 .rate-btn{
 background:#9c27b0;
 display:block;
+}
+
+.notify-btn{
+background:#28a745;
 }
 
 .review-item{
@@ -140,6 +149,17 @@ width:100%;
 border-radius:10px;
 }
 
+.notice-box{
+background:#fff3cd;
+border:1px solid #ffe69c;
+padding:15px;
+border-radius:15px;
+margin-bottom:20px;
+color:#856404;
+font-weight:bold;
+line-height:1.9;
+}
+
 </style>
 
 </head>
@@ -159,6 +179,12 @@ border-radius:10px;
 </header>
 
 <main class="container">
+
+<div class="notice-box">
+
+📢 يمكنك الآن تتبع جميع الطلبات الخاصة بالمنتجات والخدمات والماركت لحظة بلحظة من خلال صفحة تتبع الطلبات.
+
+</div>
 
 <section class="cards">
 
@@ -287,6 +313,14 @@ class="install-btn"
 style="background:#25D366;display:none;">
 
 📲 تثبيت التطبيق
+
+</button>
+
+<button
+id="enableNotify"
+class="install-btn notify-btn">
+
+🔔 تفعيل الإشعارات
 
 </button>
 
@@ -433,7 +467,7 @@ document.getElementById(
 );
 
 /* ===================================
-   INSTALL APP FIX
+INSTALL APP
 =================================== */
 
 let deferredPrompt;
@@ -452,8 +486,6 @@ localStorage.getItem(
 
 }
 
-/* SHOW / HIDE INSTALL BUTTON */
-
 if(isAppInstalled()){
 
 installBtn.style.display="none";
@@ -463,8 +495,6 @@ installBtn.style.display="none";
 installBtn.style.display="block";
 
 }
-
-/* BEFORE INSTALL */
 
 window.addEventListener(
 "beforeinstallprompt",
@@ -482,8 +512,6 @@ installBtn.style.display="block";
 
 }
 );
-
-/* INSTALL CLICK */
 
 installBtn.onclick = async()=>{
 
@@ -518,8 +546,6 @@ installBtn.style.display="none";
 
 };
 
-/* AFTER INSTALL */
-
 window.addEventListener(
 "appinstalled",
 ()=>{
@@ -535,7 +561,44 @@ installBtn.style.display="none";
 );
 
 /* ===================================
-   RATE POPUP
+NOTIFICATIONS
+=================================== */
+
+document.getElementById(
+"enableNotify"
+).onclick = async()=>{
+
+if(!("Notification" in window)){
+
+alert("المتصفح لا يدعم الإشعارات");
+
+return;
+
+}
+
+const permission =
+await Notification.requestPermission();
+
+if(permission==="granted"){
+
+alert("✅ تم تفعيل الإشعارات بنجاح");
+
+new Notification(
+"Future Tank",{
+body:"🔔 تم تفعيل إشعارات التطبيق بنجاح"
+}
+);
+
+}else{
+
+alert("❌ تم رفض الإشعارات");
+
+}
+
+};
+
+/* ===================================
+RATE POPUP
 =================================== */
 
 rateBtn.onclick=()=>{
@@ -551,7 +614,7 @@ ratePopup.style.display="none";
 }
 
 /* ===================================
-   SUBMIT RATE
+SUBMIT RATE
 =================================== */
 
 function submitAppRate(){
@@ -615,7 +678,7 @@ loadAppReviews();
 }
 
 /* ===================================
-   LOAD REVIEWS
+LOAD REVIEWS
 =================================== */
 
 function loadAppReviews(){
@@ -644,6 +707,8 @@ box.innerHTML=
 return;
 
 }
+
+data.reverse();
 
 data.forEach(r=>{
 
@@ -688,7 +753,7 @@ ${r.comment}
 loadAppReviews();
 
 /* ===================================
-   SHARE APP
+SHARE APP
 =================================== */
 
 document.getElementById(
@@ -726,7 +791,7 @@ alert(
 };
 
 /* ===================================
-   SERVICE WORKER
+SERVICE WORKER
 =================================== */
 
 if("serviceWorker" in navigator){
@@ -737,7 +802,21 @@ window.addEventListener(
 
 navigator.serviceWorker.register(
 "./sw.js"
+)
+
+.then(()=>{
+
+console.log(
+"Service Worker Registered"
 );
+
+})
+
+.catch((err)=>{
+
+console.log(err);
+
+});
 
 }
 );
