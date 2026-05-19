@@ -12,108 +12,76 @@ content="width=device-width, initial-scale=1.0">
 ⚙️ لوحة التحكم | Future Tank
 </title>
 
-<link rel="stylesheet" href="style.css">
-
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+href="style.css">
 
 <style>
 
-body{
-background:#f5f9ff;
-font-family:Tahoma;
-}
-
-.admin-box{
+.orders-box{
+margin-top:40px;
 background:#fff;
-padding:25px;
+padding:20px;
 border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-margin-top:20px;
-}
-
-.admin-input{
-width:100%;
-padding:14px;
-margin-top:10px;
-border-radius:12px;
-border:1px solid #ddd;
-box-sizing:border-box;
-}
-
-.admin-btn{
-background:#0b6fc2;
-color:#fff;
-border:none;
-padding:14px;
-border-radius:12px;
-cursor:pointer;
-margin-top:15px;
-font-size:16px;
-font-weight:bold;
-width:100%;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
 .order-card{
 background:#f7fbff;
-padding:20px;
-border-radius:18px;
-margin-top:20px;
+padding:15px;
+border-radius:15px;
+margin-top:15px;
 border:1px solid #dbefff;
 }
 
-.order-title{
-font-size:20px;
-font-weight:bold;
-margin-bottom:10px;
+.order-card h4{
+margin:0 0 10px;
 color:#0b6fc2;
 }
 
 .order-item{
 margin-top:8px;
-line-height:2;
+line-height:1.8;
 }
 
 .status-select{
 width:100%;
 padding:12px;
 border-radius:10px;
-border:1px solid #ccc;
 margin-top:15px;
+border:1px solid #ccc;
 }
 
-.update-btn{
+.save-btn{
+margin-top:10px;
 background:#28a745;
 color:#fff;
 border:none;
 padding:12px;
 border-radius:10px;
 cursor:pointer;
-margin-top:10px;
 width:100%;
 font-size:15px;
 font-weight:bold;
 }
 
-.market-badge{
-display:inline-block;
-padding:6px 12px;
-background:#ff9800;
-color:#fff;
-border-radius:20px;
-font-size:13px;
-margin-bottom:10px;
-font-weight:bold;
+.save-btn:hover{
+opacity:.9;
 }
 
-.shop-badge{
-display:inline-block;
-padding:6px 12px;
-background:#0b6fc2;
-color:#fff;
-border-radius:20px;
-font-size:13px;
-margin-bottom:10px;
+input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
+border:1px solid #ccc;
+box-sizing:border-box;
+}
+
+button{
+padding:12px 20px;
+border:none;
+border-radius:10px;
+cursor:pointer;
 font-weight:bold;
 }
 
@@ -137,11 +105,8 @@ font-weight:bold;
 
 <main class="container">
 
-<!-- LOGIN -->
-
-<div
-id="loginBox"
-class="admin-box">
+<div id="loginBox"
+style="text-align:center;">
 
 <h3>
 🔐 تسجيل الدخول
@@ -150,87 +115,63 @@ class="admin-box">
 <input
 type="password"
 id="password"
-class="admin-input"
 placeholder="كلمة السر">
 
+<br><br>
+
 <button
-class="admin-btn"
 onclick="login()">
 
 دخول
 
 </button>
 
-<p
-id="loginMsg"
-style="color:red;text-align:center;margin-top:10px;">
+<p id="loginMsg"
+style="color:red;">
 </p>
 
 </div>
 
-<!-- PANEL -->
-
-<div
-id="adminPanel"
+<div id="adminPanel"
 style="display:none;">
-
-<!-- ADD PRODUCT -->
-
-<div class="admin-box">
 
 <h3>
 ➕ إضافة منتج جديد
 </h3>
 
-<input
-id="name"
-class="admin-input"
+<input id="name"
 placeholder="اسم المنتج">
 
-<input
-id="desc"
-class="admin-input"
+<input id="desc"
 placeholder="وصف المنتج">
 
-<input
-id="category"
-class="admin-input"
+<input id="category"
 placeholder="القسم">
 
-<input
-id="price"
-class="admin-input"
+<input id="price"
 placeholder="السعر">
 
-<input
-id="image"
-class="admin-input"
+<input id="image"
 placeholder="رابط الصورة">
 
+<br><br>
+
 <button
-class="admin-btn"
 onclick="addProduct()">
 
 💾 حفظ المنتج
 
 </button>
 
-<p
-id="status"
-style="margin-top:10px;">
-</p>
+<p id="status"></p>
 
-</div>
+<div class="orders-box">
 
-<!-- ORDERS -->
-
-<div class="admin-box">
-
-<h3>
+<h2>
 📦 إدارة الطلبات
-</h3>
+</h2>
 
-<div id="ordersBox">
+<div id="ordersList">
 
 ⏳ جاري تحميل الطلبات...
 
@@ -253,14 +194,16 @@ style="margin-top:10px;">
 const API_URL =
 "https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
-let adminPassword = "";
+let adminPassword="";
 
 /* LOGIN */
 
 function login(){
 
 const pass =
-document.getElementById("password").value.trim();
+document.getElementById(
+"password"
+).value.trim();
 
 fetch(
 API_URL +
@@ -303,7 +246,7 @@ document.getElementById(
 
 function addProduct(){
 
-const product = {
+const product={
 
 admin:true,
 
@@ -364,24 +307,23 @@ document.getElementById(
 
 function loadOrders(){
 
-fetch(
-API_URL +
-"?type=allOrders"
-)
+fetch(API_URL+"?type=allOrders")
 
 .then(res=>res.json())
 
 .then(data=>{
 
 const box =
-document.getElementById("ordersBox");
+document.getElementById(
+"ordersList"
+);
 
 box.innerHTML="";
 
 if(data.length===0){
 
-box.innerHTML =
-"لا توجد طلبات";
+box.innerHTML=
+"<p>لا توجد طلبات حالياً</p>";
 
 return;
 
@@ -391,58 +333,51 @@ data.reverse();
 
 data.forEach(order=>{
 
-let badge = "";
-
-if(order.type==="market"){
-
-badge =
-'<div class="market-badge">🛒 طلب ماركت</div>';
-
-}else{
-
-badge =
-'<div class="shop-badge">💧 طلب منتجات / خدمات</div>';
-
-}
-
 box.innerHTML += `
 
 <div class="order-card">
 
-${badge}
+<h4>
 
-<div class="order-title">
+📦 طلب #${order.id}
 
-طلب رقم #${order.id}
-
-</div>
+</h4>
 
 <div class="order-item">
+
 👤 ${order.name}
+
 </div>
 
 <div class="order-item">
+
 📞 ${order.phone}
+
 </div>
 
 <div class="order-item">
+
 📍 ${order.address || "—"}
+
 </div>
 
 <div class="order-item">
+
+💰 ${order.total} جنيه
+
+</div>
+
+<div class="order-item">
+
 📦 ${order.items}
+
 </div>
 
 <div class="order-item">
-💳 ${order.payment || "—"}
-</div>
 
-<div class="order-item">
-💰 ${order.total || "يحدد لاحقاً"}
-</div>
+📅 ${new Date(order.date)
+.toLocaleString("ar-EG")}
 
-<div class="order-item">
-📅 ${new Date(order.date).toLocaleString("ar-EG")}
 </div>
 
 <select
@@ -463,10 +398,10 @@ ${order.status==="جارى التجهيز"?"selected":""}>
 
 </option>
 
-<option value="تم الشحن"
-${order.status==="تم الشحن"?"selected":""}>
+<option value="في الطريق"
+${order.status==="في الطريق"?"selected":""}>
 
-🟣 تم الشحن
+🟣 في الطريق
 
 </option>
 
@@ -487,13 +422,13 @@ ${order.status==="ملغي"?"selected":""}>
 </select>
 
 <button
-class="update-btn"
-onclick="updateStatus(
+class="save-btn"
+onclick="updateOrderStatus(
 '${order.type}',
-'${order.id}'
+${order.id}
 )">
 
-✅ تحديث الحالة
+💾 حفظ الحالة
 
 </button>
 
@@ -509,7 +444,7 @@ onclick="updateStatus(
 
 /* UPDATE STATUS */
 
-function updateStatus(type,id){
+function updateOrderStatus(type,id){
 
 const status =
 document.getElementById(
@@ -522,11 +457,11 @@ method:"POST",
 
 body:JSON.stringify({
 
-admin:true,
+action:"updateOrderStatus",
 
 password:adminPassword,
 
-action:"updateOrderStatus",
+admin:true,
 
 type:type,
 
@@ -550,7 +485,7 @@ loadOrders();
 
 }else{
 
-alert("❌ حدث خطأ");
+alert("❌ فشل التحديث");
 
 }
 
