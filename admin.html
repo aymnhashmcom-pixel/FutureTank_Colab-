@@ -1,99 +1,564 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⚙️ لوحة التحكم | Future Tank</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+⚙️ لوحة التحكم | Future Tank
+</title>
+
 <link rel="stylesheet" href="style.css">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+body{
+background:#f5f9ff;
+font-family:Tahoma;
+}
+
+.admin-box{
+background:#fff;
+padding:25px;
+border-radius:20px;
+box-shadow:0 10px 30px rgba(0,0,0,.08);
+margin-top:20px;
+}
+
+.admin-input{
+width:100%;
+padding:14px;
+margin-top:10px;
+border-radius:12px;
+border:1px solid #ddd;
+box-sizing:border-box;
+}
+
+.admin-btn{
+background:#0b6fc2;
+color:#fff;
+border:none;
+padding:14px;
+border-radius:12px;
+cursor:pointer;
+margin-top:15px;
+font-size:16px;
+font-weight:bold;
+width:100%;
+}
+
+.order-card{
+background:#f7fbff;
+padding:20px;
+border-radius:18px;
+margin-top:20px;
+border:1px solid #dbefff;
+}
+
+.order-title{
+font-size:20px;
+font-weight:bold;
+margin-bottom:10px;
+color:#0b6fc2;
+}
+
+.order-item{
+margin-top:8px;
+line-height:2;
+}
+
+.status-select{
+width:100%;
+padding:12px;
+border-radius:10px;
+border:1px solid #ccc;
+margin-top:15px;
+}
+
+.update-btn{
+background:#28a745;
+color:#fff;
+border:none;
+padding:12px;
+border-radius:10px;
+cursor:pointer;
+margin-top:10px;
+width:100%;
+font-size:15px;
+font-weight:bold;
+}
+
+.market-badge{
+display:inline-block;
+padding:6px 12px;
+background:#ff9800;
+color:#fff;
+border-radius:20px;
+font-size:13px;
+margin-bottom:10px;
+font-weight:bold;
+}
+
+.shop-badge{
+display:inline-block;
+padding:6px 12px;
+background:#0b6fc2;
+color:#fff;
+border-radius:20px;
+font-size:13px;
+margin-bottom:10px;
+font-weight:bold;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <header class="main-header">
-<h1>⚙️ لوحة التحكم</h1>
+
+<h1>
+⚙️ لوحة التحكم
+</h1>
+
+<p>
+إدارة الطلبات والمنتجات
+</p>
+
 </header>
 
 <main class="container">
 
-<div id="loginBox" style="text-align:center;">
-<h3>🔐 تسجيل الدخول</h3>
-<input type="password" id="password" placeholder="كلمة السر">
-<br><br>
-<button onclick="login()">دخول</button>
-<p id="loginMsg" style="color:red;"></p>
+<!-- LOGIN -->
+
+<div
+id="loginBox"
+class="admin-box">
+
+<h3>
+🔐 تسجيل الدخول
+</h3>
+
+<input
+type="password"
+id="password"
+class="admin-input"
+placeholder="كلمة السر">
+
+<button
+class="admin-btn"
+onclick="login()">
+
+دخول
+
+</button>
+
+<p
+id="loginMsg"
+style="color:red;text-align:center;margin-top:10px;">
+</p>
+
 </div>
 
-<div id="adminPanel" style="display:none;text-align:center;">
-<h3>➕ إضافة منتج جديد</h3>
+<!-- PANEL -->
 
-<input id="name" placeholder="اسم المنتج"><br>
-<input id="desc" placeholder="وصف المنتج"><br>
-<input id="category" placeholder="القسم (مثال: خزانات المياه)"><br>
-<input id="price" placeholder="السعر"><br>
-<input id="image" placeholder="رابط الصورة"><br><br>
+<div
+id="adminPanel"
+style="display:none;">
 
-<button onclick="addProduct()">💾 حفظ المنتج</button>
+<!-- ADD PRODUCT -->
 
-<p id="status"></p>
+<div class="admin-box">
+
+<h3>
+➕ إضافة منتج جديد
+</h3>
+
+<input
+id="name"
+class="admin-input"
+placeholder="اسم المنتج">
+
+<input
+id="desc"
+class="admin-input"
+placeholder="وصف المنتج">
+
+<input
+id="category"
+class="admin-input"
+placeholder="القسم">
+
+<input
+id="price"
+class="admin-input"
+placeholder="السعر">
+
+<input
+id="image"
+class="admin-input"
+placeholder="رابط الصورة">
+
+<button
+class="admin-btn"
+onclick="addProduct()">
+
+💾 حفظ المنتج
+
+</button>
+
+<p
+id="status"
+style="margin-top:10px;">
+</p>
+
+</div>
+
+<!-- ORDERS -->
+
+<div class="admin-box">
+
+<h3>
+📦 إدارة الطلبات
+</h3>
+
+<div id="ordersBox">
+
+⏳ جاري تحميل الطلبات...
+
+</div>
+
+</div>
+
 </div>
 
 </main>
 
 <footer class="main-footer">
+
 © Future Tank — لوحة التحكم
+
 </footer>
 
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
-let adminPassword="";
+const API_URL =
+"https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
-/* ================= LOGIN ================= */
+let adminPassword = "";
+
+/* LOGIN */
+
 function login(){
 
-const pass=document.getElementById("password").value.trim();
+const pass =
+document.getElementById("password").value.trim();
 
-fetch(API_URL+"?admin=true&check=1&password="+encodeURIComponent(pass))
+fetch(
+API_URL +
+"?admin=true&check=1&password=" +
+encodeURIComponent(pass)
+)
+
 .then(res=>res.json())
+
 .then(data=>{
+
 if(data.success){
-adminPassword=pass;
-document.getElementById("loginBox").style.display="none";
-document.getElementById("adminPanel").style.display="block";
+
+adminPassword = pass;
+
+document.getElementById(
+"loginBox"
+).style.display="none";
+
+document.getElementById(
+"adminPanel"
+).style.display="block";
+
+loadOrders();
+
 }else{
-document.getElementById("loginMsg").innerText="❌ كلمة السر غير صحيحة";
-}
-});
+
+document.getElementById(
+"loginMsg"
+).innerText =
+"❌ كلمة السر غير صحيحة";
+
 }
 
-/* ================= ADD PRODUCT ================= */
+});
+
+}
+
+/* ADD PRODUCT */
+
 function addProduct(){
 
-const product={
+const product = {
+
 admin:true,
+
 action:"addProduct",
+
 password:adminPassword,
-name:document.getElementById("name").value,
-description:document.getElementById("desc").value,
-category:document.getElementById("category").value,
-price:document.getElementById("price").value,
-image:document.getElementById("image").value
+
+name:
+document.getElementById("name").value,
+
+description:
+document.getElementById("desc").value,
+
+category:
+document.getElementById("category").value,
+
+price:
+document.getElementById("price").value,
+
+image:
+document.getElementById("image").value
+
 };
 
 fetch(API_URL,{
+
 method:"POST",
+
 body:JSON.stringify(product)
+
 })
+
 .then(res=>res.json())
+
 .then(data=>{
+
 if(data.success){
-document.getElementById("status").innerHTML="✅ تم إضافة المنتج بنجاح";
+
+document.getElementById(
+"status"
+).innerHTML =
+"✅ تم إضافة المنتج بنجاح";
+
 }else{
-document.getElementById("status").innerHTML="❌ حدث خطأ";
+
+document.getElementById(
+"status"
+).innerHTML =
+"❌ حدث خطأ";
+
 }
+
 });
+
 }
+
+/* LOAD ORDERS */
+
+function loadOrders(){
+
+fetch(
+API_URL +
+"?type=allOrders"
+)
+
+.then(res=>res.json())
+
+.then(data=>{
+
+const box =
+document.getElementById("ordersBox");
+
+box.innerHTML="";
+
+if(data.length===0){
+
+box.innerHTML =
+"لا توجد طلبات";
+
+return;
+
+}
+
+data.reverse();
+
+data.forEach(order=>{
+
+let badge = "";
+
+if(order.type==="market"){
+
+badge =
+'<div class="market-badge">🛒 طلب ماركت</div>';
+
+}else{
+
+badge =
+'<div class="shop-badge">💧 طلب منتجات / خدمات</div>';
+
+}
+
+box.innerHTML += `
+
+<div class="order-card">
+
+${badge}
+
+<div class="order-title">
+
+طلب رقم #${order.id}
+
+</div>
+
+<div class="order-item">
+👤 ${order.name}
+</div>
+
+<div class="order-item">
+📞 ${order.phone}
+</div>
+
+<div class="order-item">
+📍 ${order.address || "—"}
+</div>
+
+<div class="order-item">
+📦 ${order.items}
+</div>
+
+<div class="order-item">
+💳 ${order.payment || "—"}
+</div>
+
+<div class="order-item">
+💰 ${order.total || "يحدد لاحقاً"}
+</div>
+
+<div class="order-item">
+📅 ${new Date(order.date).toLocaleString("ar-EG")}
+</div>
+
+<select
+class="status-select"
+id="status-${order.type}-${order.id}">
+
+<option value="طلب جديد"
+${order.status==="طلب جديد"?"selected":""}>
+
+🟠 طلب جديد
+
+</option>
+
+<option value="جارى التجهيز"
+${order.status==="جارى التجهيز"?"selected":""}>
+
+🔵 جاري التجهيز
+
+</option>
+
+<option value="تم الشحن"
+${order.status==="تم الشحن"?"selected":""}>
+
+🟣 تم الشحن
+
+</option>
+
+<option value="تم التسليم"
+${order.status==="تم التسليم"?"selected":""}>
+
+🟢 تم التسليم
+
+</option>
+
+<option value="ملغي"
+${order.status==="ملغي"?"selected":""}>
+
+🔴 ملغي
+
+</option>
+
+</select>
+
+<button
+class="update-btn"
+onclick="updateStatus(
+'${order.type}',
+'${order.id}'
+)">
+
+✅ تحديث الحالة
+
+</button>
+
+</div>
+
+`;
+
+});
+
+});
+
+}
+
+/* UPDATE STATUS */
+
+function updateStatus(type,id){
+
+const status =
+document.getElementById(
+`status-${type}-${id}`
+).value;
+
+fetch(API_URL,{
+
+method:"POST",
+
+body:JSON.stringify({
+
+admin:true,
+
+password:adminPassword,
+
+action:"updateOrderStatus",
+
+type:type,
+
+id:id,
+
+status:status
+
+})
+
+})
+
+.then(res=>res.json())
+
+.then(data=>{
+
+if(data.success){
+
+alert("✅ تم تحديث الحالة");
+
+loadOrders();
+
+}else{
+
+alert("❌ حدث خطأ");
+
+}
+
+});
+
+}
+
 </script>
 
 </body>
-  </html>
+</html>
