@@ -59,11 +59,6 @@ width:100%;
 cursor:pointer;
 box-sizing:border-box;
 display:block;
-transition:.3s;
-}
-
-.install-btn:hover{
-opacity:.92;
 }
 
 .share-btn{
@@ -77,10 +72,6 @@ background:#ff9800;
 .rate-btn{
 background:#9c27b0;
 display:block;
-}
-
-.notify-btn{
-background:#28a745;
 }
 
 .review-item{
@@ -149,15 +140,45 @@ width:100%;
 border-radius:10px;
 }
 
+.rating-summary{
+background:#fff;
+padding:18px;
+border-radius:16px;
+margin-top:20px;
+text-align:center;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.rating-summary h2{
+margin:0;
+font-size:38px;
+color:#ff9800;
+}
+
+.rating-summary p{
+margin:8px 0 0;
+font-size:18px;
+}
+
+.show-more-btn{
+margin-top:15px;
+background:#0b6fc2;
+color:#fff;
+border:none;
+padding:12px;
+width:100%;
+border-radius:12px;
+font-size:16px;
+cursor:pointer;
+}
+
 .notice-box{
-background:#fff3cd;
-border:1px solid #ffe69c;
+background:#e8f7ff;
 padding:15px;
 border-radius:15px;
-margin-bottom:20px;
-color:#856404;
-font-weight:bold;
-line-height:1.9;
+margin-top:20px;
+line-height:2;
+border:1px solid #bde7ff;
 }
 
 </style>
@@ -318,7 +339,8 @@ style="background:#25D366;display:none;">
 
 <button
 id="enableNotify"
-class="install-btn notify-btn">
+class="install-btn"
+style="background:#ff5722;">
 
 🔔 تفعيل الإشعارات
 
@@ -348,6 +370,18 @@ class="install-btn market-btn">
 
 </button>
 
+<div class="rating-summary">
+
+<h2 id="ratingAverage">
+5 ⭐
+</h2>
+
+<p id="ratingCount">
+0 تقييم
+</p>
+
+</div>
+
 <section class="cards">
 
 <div class="card">
@@ -361,6 +395,14 @@ class="install-btn market-btn">
 جاري تحميل التقييمات...
 
 </div>
+
+<button
+id="toggleReviewsBtn"
+class="show-more-btn">
+
+عرض كل التقييمات
+
+</button>
 
 </div>
 
@@ -452,37 +494,26 @@ const API_URL =
 "https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
 
 const ratePopup =
-document.getElementById(
-"ratePopup"
-);
+document.getElementById("ratePopup");
 
 const installBtn =
-document.getElementById(
-"installApp"
-);
-
-const rateBtn =
-document.getElementById(
-"rateAppBtn"
-);
-
-/* ===================================
-INSTALL APP
-=================================== */
+document.getElementById("installApp");
 
 let deferredPrompt;
 
+let allReviews = [];
+
+let showAll = false;
+
+/* INSTALL */
+
 function isAppInstalled(){
 
-return window.matchMedia(
-"(display-mode: standalone)"
-).matches
+return window.matchMedia("(display-mode: standalone)").matches
 ||
 window.navigator.standalone === true
 ||
-localStorage.getItem(
-"ft_installed"
-)==="yes";
+localStorage.getItem("ft_installed")==="yes";
 
 }
 
@@ -502,7 +533,7 @@ window.addEventListener(
 
 e.preventDefault();
 
-deferredPrompt = e;
+deferredPrompt=e;
 
 if(!isAppInstalled()){
 
@@ -513,13 +544,13 @@ installBtn.style.display="block";
 }
 );
 
-installBtn.onclick = async()=>{
+installBtn.onclick=async()=>{
 
 if(deferredPrompt){
 
 deferredPrompt.prompt();
 
-const choice =
+const choice=
 await deferredPrompt.userChoice;
 
 if(choice.outcome==="accepted"){
@@ -532,15 +563,6 @@ localStorage.setItem(
 installBtn.style.display="none";
 
 }
-
-}else{
-
-localStorage.setItem(
-"ft_installed",
-"yes"
-);
-
-installBtn.style.display="none";
 
 }
 
@@ -560,48 +582,11 @@ installBtn.style.display="none";
 }
 );
 
-/* ===================================
-NOTIFICATIONS
-=================================== */
+/* RATE */
 
 document.getElementById(
-"enableNotify"
-).onclick = async()=>{
-
-if(!("Notification" in window)){
-
-alert("المتصفح لا يدعم الإشعارات");
-
-return;
-
-}
-
-const permission =
-await Notification.requestPermission();
-
-if(permission==="granted"){
-
-alert("✅ تم تفعيل الإشعارات بنجاح");
-
-new Notification(
-"Future Tank",{
-body:"🔔 تم تفعيل إشعارات التطبيق بنجاح"
-}
-);
-
-}else{
-
-alert("❌ تم رفض الإشعارات");
-
-}
-
-};
-
-/* ===================================
-RATE POPUP
-=================================== */
-
-rateBtn.onclick=()=>{
+"rateAppBtn"
+).onclick=()=>{
 
 ratePopup.style.display="flex";
 
@@ -613,31 +598,19 @@ ratePopup.style.display="none";
 
 }
 
-/* ===================================
-SUBMIT RATE
-=================================== */
-
 function submitAppRate(){
 
 const name =
-document.getElementById(
-"appRateName"
-).value.trim();
+document.getElementById("appRateName").value.trim();
 
 const phone =
-document.getElementById(
-"appRatePhone"
-).value.trim();
+document.getElementById("appRatePhone").value.trim();
 
 const rating =
-document.getElementById(
-"appRateValue"
-).value;
+document.getElementById("appRateValue").value;
 
 const comment =
-document.getElementById(
-"appRateComment"
-).value.trim();
+document.getElementById("appRateComment").value.trim();
 
 fetch(API_URL,{
 
@@ -677,20 +650,50 @@ loadAppReviews();
 
 }
 
-/* ===================================
-LOAD REVIEWS
-=================================== */
+/* REVIEWS */
 
 function loadAppReviews(){
 
-fetch(
-API_URL +
-"?type=appReviews"
-)
+fetch(API_URL+"?type=appReviews")
 
 .then(res=>res.json())
 
 .then(data=>{
+
+allReviews = data.reverse();
+
+renderReviews();
+
+let total = 0;
+
+allReviews.forEach(r=>{
+
+total += Number(r.rating);
+
+});
+
+const avg =
+allReviews.length
+?
+(total/allReviews.length).toFixed(1)
+:
+5;
+
+document.getElementById(
+"ratingAverage"
+).innerHTML =
+avg + " ⭐";
+
+document.getElementById(
+"ratingCount"
+).innerHTML =
+allReviews.length + " تقييم";
+
+});
+
+}
+
+function renderReviews(){
 
 const box =
 document.getElementById(
@@ -699,7 +702,14 @@ document.getElementById(
 
 box.innerHTML="";
 
-if(data.length===0){
+const reviews =
+showAll
+?
+allReviews
+:
+allReviews.slice(0,3);
+
+if(reviews.length===0){
 
 box.innerHTML=
 "<p>لا توجد تقييمات بعد</p>";
@@ -708,17 +718,11 @@ return;
 
 }
 
-data.reverse();
-
-data.forEach(r=>{
+reviews.forEach(r=>{
 
 let stars="";
 
-for(
-let i=0;
-i<Number(r.rating);
-i++
-){
+for(let i=0;i<Number(r.rating);i++){
 
 stars+="⭐";
 
@@ -746,15 +750,30 @@ ${r.comment}
 
 });
 
-});
+document.getElementById(
+"toggleReviewsBtn"
+).innerText =
+showAll
+?
+"عرض أقل"
+:
+"عرض كل التقييمات";
 
 }
 
+document.getElementById(
+"toggleReviewsBtn"
+).onclick=()=>{
+
+showAll = !showAll;
+
+renderReviews();
+
+};
+
 loadAppReviews();
 
-/* ===================================
-SHARE APP
-=================================== */
+/* SHARE */
 
 document.getElementById(
 "shareAppBtn"
@@ -782,17 +801,43 @@ navigator.clipboard.writeText(
 shareData.url
 );
 
-alert(
-"تم نسخ الرابط"
-);
+alert("تم نسخ الرابط");
 
 }
 
 };
 
-/* ===================================
-SERVICE WORKER
-=================================== */
+/* NOTIFICATIONS */
+
+document.getElementById(
+"enableNotify"
+).onclick=()=>{
+
+Notification.requestPermission()
+.then(permission=>{
+
+if(permission==="granted"){
+
+alert("✅ تم تفعيل الإشعارات");
+
+new Notification(
+"Future Tank",
+{
+body:"🔔 الإشعارات أصبحت مفعلة"
+}
+);
+
+}else{
+
+alert("❌ تم رفض الإشعارات");
+
+}
+
+});
+
+};
+
+/* SERVICE WORKER */
 
 if("serviceWorker" in navigator){
 
@@ -802,21 +847,7 @@ window.addEventListener(
 
 navigator.serviceWorker.register(
 "./sw.js"
-)
-
-.then(()=>{
-
-console.log(
-"Service Worker Registered"
 );
-
-})
-
-.catch((err)=>{
-
-console.log(err);
-
-});
 
 }
 );
