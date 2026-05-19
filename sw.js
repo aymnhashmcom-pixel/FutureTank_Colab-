@@ -1,30 +1,30 @@
-const CACHE_NAME = "futuretank-v5";
+const CACHE_NAME = "futuretank-cache-v3";
 
 const urlsToCache = [
 
 "./",
 "./index.html",
 "./style.css",
+"./script.js",
 "./manifest.json",
 "./icon-192.png",
 "./icon-512.png",
-"./services.html",
 "./shop.html",
-"./assistant.html",
-"./portal.html",
+"./market.html",
 "./track-order.html"
 
 ];
 
-/* INSTALL */
+/* ===============================
+INSTALL
+================================ */
 
-self.addEventListener(
-"install",
-event=>{
+self.addEventListener("install",event=>{
 
 event.waitUntil(
 
 caches.open(CACHE_NAME)
+
 .then(cache=>{
 
 return cache.addAll(urlsToCache);
@@ -33,22 +33,20 @@ return cache.addAll(urlsToCache);
 
 );
 
-/* تفعيل مباشر */
-
 self.skipWaiting();
 
-}
-);
+});
 
-/* ACTIVATE */
+/* ===============================
+ACTIVATE
+================================ */
 
-self.addEventListener(
-"activate",
-event=>{
+self.addEventListener("activate",event=>{
 
 event.waitUntil(
 
 caches.keys()
+
 .then(keys=>{
 
 return Promise.all(
@@ -69,49 +67,100 @@ return caches.delete(key);
 
 );
 
-/* تحديث مباشر */
-
 self.clients.claim();
 
-}
-);
+});
 
-/* FETCH */
+/* ===============================
+FETCH
+================================ */
 
-self.addEventListener(
-"fetch",
-event=>{
+self.addEventListener("fetch",event=>{
 
 event.respondWith(
 
-fetch(event.request)
+caches.match(event.request)
+
 .then(response=>{
 
-const clone =
-response.clone();
+return response || fetch(event.request);
 
-caches.open(CACHE_NAME)
-.then(cache=>{
+})
 
-cache.put(
-event.request,
-clone
 );
 
 });
 
-return response;
+/* ===============================
+PUSH NOTIFICATIONS
+================================ */
 
-})
-.catch(()=>{
+self.addEventListener("push",function(event){
 
-return caches.match(
-event.request
+let data = {
+
+notification:{
+
+title:"Future Tank",
+
+body:"📦 يوجد تحديث جديد",
+
+icon:"./icon-192.png"
+
+}
+
+};
+
+if(event.data){
+
+data = event.data.json();
+
+}
+
+self.registration.showNotification(
+
+data.notification.title,
+
+{
+
+body:data.notification.body,
+
+icon:data.notification.icon,
+
+badge:"./icon-192.png",
+
+vibrate:[200,100,200],
+
+data:{
+
+url:"./index.html"
+
+}
+
+}
+
 );
 
-})
+});
+
+/* ===============================
+NOTIFICATION CLICK
+================================ */
+
+self.addEventListener(
+
+"notificationclick",
+
+function(event){
+
+event.notification.close();
+
+event.waitUntil(
+
+clients.openWindow("./index.html")
 
 );
 
 }
+
 );
