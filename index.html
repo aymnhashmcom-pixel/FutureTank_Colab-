@@ -527,7 +527,7 @@ const messaging =
 firebase.messaging();
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbz9o1qnc3lMqNjlml5Hotsmzt6NHbS01XneR1wkf_u4W1sNnXphql5VyxDNdCiz8l4T/exec";
+"https://script.google.com/macros/s/AKfycbz3rSyNddy-TiOwCseRYm8suJ09IgXdcnpZY-pZGxqru-uCdGYwyuKeQVTkbInOXyjP/exec";
 
 const ratePopup =
 document.getElementById("ratePopup");
@@ -540,8 +540,6 @@ let deferredPrompt;
 let allReviews = [];
 
 let showAll = false;
-
-/* INSTALL */
 
 function isAppInstalled(){
 
@@ -618,8 +616,6 @@ installBtn.style.display="none";
 }
 );
 
-/* RATE */
-
 document.getElementById(
 "rateAppBtn"
 ).onclick=()=>{
@@ -685,8 +681,6 @@ loadAppReviews();
 });
 
 }
-
-/* REVIEWS */
 
 function loadAppReviews(){
 
@@ -809,8 +803,6 @@ renderReviews();
 
 loadAppReviews();
 
-/* SHARE */
-
 document.getElementById(
 "shareAppBtn"
 ).onclick=async()=>{
@@ -842,8 +834,6 @@ alert("تم نسخ الرابط");
 }
 
 };
-
-/* FIREBASE NOTIFICATIONS */
 
 document.getElementById(
 "enableNotify"
@@ -913,8 +903,6 @@ alert(
 
 };
 
-/* FOREGROUND MESSAGE */
-
 messaging.onMessage(
 (payload)=>{
 
@@ -936,8 +924,6 @@ icon:
 
 }
 );
-
-/* SERVICE WORKER */
 
 if("serviceWorker" in navigator){
 
