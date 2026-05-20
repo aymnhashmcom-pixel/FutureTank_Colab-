@@ -196,14 +196,10 @@ const API_URL =
 
 let adminPassword="";
 
-/* LOGIN */
-
 function login(){
 
 const pass =
-document.getElementById(
-"password"
-).value.trim();
+document.getElementById("password").value.trim();
 
 fetch(
 API_URL +
@@ -241,8 +237,6 @@ document.getElementById(
 });
 
 }
-
-/* ADD PRODUCT */
 
 function addProduct(){
 
@@ -303,11 +297,12 @@ document.getElementById(
 
 }
 
-/* LOAD ORDERS */
-
 function loadOrders(){
 
-fetch(API_URL+"?type=allOrders")
+fetch(
+API_URL +
+"?admin=true&type=allOrders"
+)
 
 .then(res=>res.json())
 
@@ -328,8 +323,6 @@ box.innerHTML=
 return;
 
 }
-
-data.reverse();
 
 data.forEach(order=>{
 
@@ -386,37 +379,27 @@ id="status-${order.type}-${order.id}">
 
 <option value="طلب جديد"
 ${order.status==="طلب جديد"?"selected":""}>
-
 🟠 طلب جديد
-
 </option>
 
 <option value="جارى التجهيز"
 ${order.status==="جارى التجهيز"?"selected":""}>
-
 🔵 جاري التجهيز
-
 </option>
 
-<option value="في الطريق"
-${order.status==="في الطريق"?"selected":""}>
-
-🟣 في الطريق
-
+<option value="تم الشحن"
+${order.status==="تم الشحن"?"selected":""}>
+🟣 تم الشحن
 </option>
 
 <option value="تم التسليم"
 ${order.status==="تم التسليم"?"selected":""}>
-
 🟢 تم التسليم
-
 </option>
 
 <option value="ملغي"
 ${order.status==="ملغي"?"selected":""}>
-
 🔴 ملغي
-
 </option>
 
 </select>
@@ -438,11 +421,20 @@ ${order.id}
 
 });
 
+})
+
+.catch(err=>{
+
+document.getElementById(
+"ordersList"
+).innerHTML =
+"❌ فشل تحميل الطلبات";
+
+console.log(err);
+
 });
 
 }
-
-/* UPDATE STATUS */
 
 function updateOrderStatus(type,id){
 
@@ -463,7 +455,7 @@ password:adminPassword,
 
 admin:true,
 
-type:type,
+orderType:type,
 
 id:id,
 
