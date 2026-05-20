@@ -54,10 +54,6 @@ font-size:16px;
 font-weight:bold;
 }
 
-.search-btn:hover{
-opacity:.9;
-}
-
 .order-card{
 margin-top:25px;
 background:#f7fbff;
@@ -255,7 +251,7 @@ encodeURIComponent(phone)
 
 result.innerHTML="";
 
-if(data.length===0){
+if(!data || data.length===0){
 
 result.innerHTML = `
 
@@ -358,36 +354,96 @@ result.innerHTML += `
 <div class="order-title">
 
 <div>
-
 طلب رقم #${order.id}
-
 </div>
 
 <div class="order-type ${orderTypeClass}">
-
 ${orderType}
-
 </div>
 
 </div>
 
 <div class="order-item">
-
 👤 الاسم:
 ${order.name}
-
 </div>
 
 <div class="order-item">
-
 📞 الهاتف:
 ${order.phone}
-
 </div>
 
 <div class="order-item">
-
 📍 العنوان:
 ${order.address || "—"}
+</div>
 
-</div
+<div class="order-item">
+💰 الإجمالي:
+${order.total} جنيه
+</div>
+
+<div class="order-item">
+📦 الطلب:
+${order.items}
+</div>
+
+<div class="order-item">
+📅 التاريخ:
+${new Date(order.date).toLocaleString("ar-EG")}
+</div>
+
+<div class="status ${statusClass}">
+${statusText}
+</div>
+
+<div class="timeline">
+
+<div class="timeline-step ${step1}">
+1️⃣ تم استلام الطلب
+</div>
+
+<div class="timeline-step ${step2}">
+2️⃣ جاري التجهيز
+</div>
+
+<div class="timeline-step ${step3}">
+3️⃣ الطلب في الطريق
+</div>
+
+<div class="timeline-step ${step4}">
+4️⃣ تم التسليم
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+})
+
+.catch(err=>{
+
+result.innerHTML = `
+
+<div class="empty">
+
+❌ حدث خطأ أثناء تحميل الطلبات
+
+</div>
+
+`;
+
+console.log(err);
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
