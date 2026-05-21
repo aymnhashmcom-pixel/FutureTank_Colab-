@@ -541,6 +541,8 @@ let allReviews = [];
 
 let showAll = false;
 
+/* INSTALL */
+
 function isAppInstalled(){
 
 return window.matchMedia("(display-mode: standalone)").matches
@@ -616,6 +618,8 @@ installBtn.style.display="none";
 }
 );
 
+/* RATE */
+
 document.getElementById(
 "rateAppBtn"
 ).onclick=()=>{
@@ -681,6 +685,8 @@ loadAppReviews();
 });
 
 }
+
+/* REVIEWS */
 
 function loadAppReviews(){
 
@@ -803,6 +809,8 @@ renderReviews();
 
 loadAppReviews();
 
+/* SHARE */
+
 document.getElementById(
 "shareAppBtn"
 ).onclick=async()=>{
@@ -835,6 +843,8 @@ alert("تم نسخ الرابط");
 
 };
 
+/* FIREBASE NOTIFICATIONS */
+
 document.getElementById(
 "enableNotify"
 ).onclick = async()=>{
@@ -859,6 +869,8 @@ await navigator.serviceWorker.register(
 "./firebase-messaging-sw.js"
 );
 
+await navigator.serviceWorker.ready;
+
 const token =
 await messaging.getToken({
 
@@ -873,6 +885,36 @@ console.log(
 "FCM TOKEN:",
 token
 );
+
+/* حفظ التوكن داخل Google Sheets */
+
+const saveTokenResponse =
+await fetch(API_URL,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+
+action:"saveToken",
+
+token:token
+
+})
+
+});
+
+const saveTokenData =
+await saveTokenResponse.json();
+
+if(!saveTokenData.success){
+
+throw new Error("TOKEN SAVE FAILED");
+
+}
 
 localStorage.setItem(
 "ft_fcm_token",
@@ -893,7 +935,10 @@ icon:"./icon-192.png"
 
 }catch(err){
 
-console.log(err);
+console.log(
+"NOTIFICATION ERROR:",
+err
+);
 
 alert(
 "❌ حدث خطأ أثناء التفعيل"
@@ -902,6 +947,8 @@ alert(
 }
 
 };
+
+/* FOREGROUND MESSAGE */
 
 messaging.onMessage(
 (payload)=>{
@@ -924,6 +971,8 @@ icon:
 
 }
 );
+
+/* SERVICE WORKER */
 
 if("serviceWorker" in navigator){
 
