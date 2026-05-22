@@ -1,291 +1,3 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
-<head>
-
-<meta charset="UTF-8">
-
-<title>
-ماركت هرم سيتي وحدائق أكتوبر
-</title>
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color"
-content="#ff9800">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-<style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Tahoma,sans-serif;
-}
-
-body{
-background:#f4f7fb;
-padding-bottom:120px;
-}
-
-header{
-background:linear-gradient(135deg,#ff9800,#ffb74d);
-padding:25px;
-text-align:center;
-color:#fff;
-box-shadow:0 5px 20px rgba(0,0,0,.15);
-}
-
-header h1{
-margin-bottom:10px;
-font-size:28px;
-}
-
-.container{
-padding:18px;
-}
-
-.offer{
-background:#fff3e0;
-padding:18px;
-border-radius:18px;
-margin-bottom:20px;
-animation:pulse 2s infinite;
-border-right:6px solid #ff9800;
-}
-
-@keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.02);}
-100%{transform:scale(1);}
-}
-
-.categories{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-margin-bottom:20px;
-}
-
-.cat{
-background:#fff;
-padding:16px;
-border-radius:16px;
-text-align:center;
-font-weight:bold;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-cursor:pointer;
-transition:.3s;
-}
-
-.cat:hover{
-transform:translateY(-3px);
-}
-
-.order-box{
-background:#fff;
-padding:20px;
-border-radius:20px;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-}
-
-.order-box h2{
-margin-bottom:15px;
-color:#ff9800;
-}
-
-.order-input{
-width:100%;
-padding:14px;
-margin-top:10px;
-border-radius:12px;
-border:1px solid #ddd;
-font-size:15px;
-}
-
-.order-btn{
-width:100%;
-padding:15px;
-border:none;
-border-radius:14px;
-background:#ff9800;
-color:#fff;
-font-size:17px;
-font-weight:bold;
-margin-top:15px;
-cursor:pointer;
-transition:.3s;
-}
-
-.order-btn:hover{
-opacity:.9;
-}
-
-.whatsapp-btn{
-background:#25D366;
-}
-
-footer{
-margin-top:40px;
-text-align:center;
-padding:20px;
-color:#777;
-}
-
-.success-box{
-display:none;
-margin-top:15px;
-background:#e8f5e9;
-padding:15px;
-border-radius:14px;
-color:#2e7d32;
-font-weight:bold;
-text-align:center;
-}
-
-</style>
-
-</head>
-
-<body>
-
-<header>
-
-<h1>
-🛒 ماركت هرم سيتي وحدائق أكتوبر
-</h1>
-
-<p>
-كل احتياجات البيت في أوردر واحد
-</p>
-
-</header>
-
-<div class="container">
-
-<div class="offer">
-
-<h3>
-🔥 عروض اليوم
-</h3>
-
-<p id="offersText">
-خصومات على السوبر ماركت والصيدلية والخضروات واللحوم والأسماك
-</p>
-
-</div>
-
-<div class="categories">
-
-<div class="cat">🛒 سوبر ماركت</div>
-
-<div class="cat">💊 صيدلية</div>
-
-<div class="cat">🥦 خضروات وفاكهة</div>
-
-<div class="cat">🥩 لحوم وأسماك</div>
-
-<div class="cat">🍞 مخبوزات</div>
-
-<div class="cat">🧃 مشروبات</div>
-
-<div class="cat">🧴 منظفات</div>
-
-<div class="cat">🐦 مستلزمات حيوانات</div>
-
-<div class="cat">👶 مستلزمات أطفال</div>
-
-<div class="cat">💄 تجميل وعناية</div>
-
-</div>
-
-<div class="order-box">
-
-<h2>
-🧾 أوردر شامل
-</h2>
-
-<input
-type="text"
-id="customerName"
-class="order-input"
-placeholder="الاسم">
-
-<input
-type="text"
-id="customerPhone"
-class="order-input"
-placeholder="رقم الهاتف">
-
-<input
-type="text"
-id="customerAddress"
-class="order-input"
-placeholder="العنوان">
-
-<select
-id="marketCategory"
-class="order-input">
-
-<option>🛒 سوبر ماركت</option>
-<option>💊 صيدلية</option>
-<option>🥦 خضروات وفاكهة</option>
-<option>🥩 لحوم وأسماك</option>
-<option>🍞 مخبوزات</option>
-<option>🧃 مشروبات</option>
-<option>🧴 منظفات</option>
-<option>👶 مستلزمات أطفال</option>
-<option>💄 تجميل وعناية</option>
-
-</select>
-
-<textarea
-id="marketItems"
-class="order-input"
-rows="6"
-placeholder="اكتب المنتجات المطلوبة بالتفصيل">
-</textarea>
-
-<select
-id="paymentMethod"
-class="order-input">
-
-<option>الدفع عند الاستلام</option>
-<option>فودافون كاش</option>
-<option>إنستا باي</option>
-
-</select>
-
-<button
-class="order-btn"
-onclick="submitOrder()">
-
-✅ إرسال الأوردر
-
-</button>
-
-<div
-class="success-box"
-id="successBox">
-
-✅ تم إرسال الأوردر بنجاح
-
-</div>
-
-</div>
-
-</div>
-
-<footer>
-
-© Future Tank — جميع الحقوق محفوظة
-
-</footer>
-
 <script>
 
 const API_URL =
@@ -319,6 +31,24 @@ document.getElementById(
 
 },3000);
 
+function normalizePhone(phone){
+
+phone = phone.trim();
+
+phone = phone.replace(/\s+/g,"");
+
+phone = phone.replace(/[^0-9]/g,"");
+
+if(!phone.startsWith("0")){
+
+phone = "0" + phone;
+
+}
+
+return phone;
+
+}
+
 function submitOrder(){
 
 const name =
@@ -326,7 +56,7 @@ document.getElementById(
 "customerName"
 ).value.trim();
 
-const phone =
+let phone =
 document.getElementById(
 "customerPhone"
 ).value.trim();
@@ -364,6 +94,8 @@ return;
 
 }
 
+phone = normalizePhone(phone);
+
 const orderText =
 
 "🛒 أوردر جديد" + "\n\n" +
@@ -390,7 +122,7 @@ action:"saveMarketOrder",
 
 name:name,
 
-phone:phone,
+phone:"'" + phone,
 
 address:address,
 
@@ -447,6 +179,3 @@ document.getElementById(
 }
 
 </script>
-
-</body>
-</html>
