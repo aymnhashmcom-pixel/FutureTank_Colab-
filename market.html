@@ -143,6 +143,22 @@ font-weight:bold;
 text-align:center;
 }
 
+.error-box{
+display:none;
+margin-top:15px;
+background:#ffebee;
+padding:15px;
+border-radius:14px;
+color:#c62828;
+font-weight:bold;
+text-align:center;
+}
+
+.loading{
+opacity:.7;
+pointer-events:none;
+}
+
 </style>
 
 </head>
@@ -178,14 +194,23 @@ text-align:center;
 <div class="categories">
 
 <div class="cat">🛒 سوبر ماركت</div>
+
 <div class="cat">💊 صيدلية</div>
+
 <div class="cat">🥦 خضروات وفاكهة</div>
+
 <div class="cat">🥩 لحوم وأسماك</div>
+
 <div class="cat">🍞 مخبوزات</div>
+
 <div class="cat">🧃 مشروبات</div>
+
 <div class="cat">🧴 منظفات</div>
+
 <div class="cat">🐦 مستلزمات حيوانات</div>
+
 <div class="cat">👶 مستلزمات أطفال</div>
+
 <div class="cat">💄 تجميل وعناية</div>
 
 </div>
@@ -234,7 +259,8 @@ class="order-input">
 id="marketItems"
 class="order-input"
 rows="6"
-placeholder="اكتب المنتجات المطلوبة بالتفصيل"></textarea>
+placeholder="اكتب المنتجات المطلوبة بالتفصيل">
+</textarea>
 
 <select
 id="paymentMethod"
@@ -248,6 +274,7 @@ class="order-input">
 
 <button
 class="order-btn"
+id="submitBtn"
 onclick="submitOrder()">
 
 ✅ إرسال الأوردر
@@ -259,6 +286,14 @@ class="success-box"
 id="successBox">
 
 ✅ تم إرسال الأوردر بنجاح
+
+</div>
+
+<div
+class="error-box"
+id="errorBox">
+
+❌ حدث خطأ أثناء إرسال الأوردر
 
 </div>
 
@@ -305,11 +340,9 @@ document.getElementById(
 
 },3000);
 
-function cleanPhone(phone){
+function normalizePhone(phone){
 
-phone = String(phone).trim();
-
-phone = phone.replace(/\s/g,"");
+phone = phone.replace(/\D/g,"");
 
 if(phone.startsWith("20")){
 
@@ -327,7 +360,19 @@ return phone;
 
 }
 
-function submitOrder(){
+async function submitOrder(){
+
+const btn =
+document.getElementById("submitBtn");
+
+const successBox =
+document.getElementById("successBox");
+
+const errorBox =
+document.getElementById("errorBox");
+
+successBox.style.display = "none";
+errorBox.style.display = "none";
 
 const name =
 document.getElementById(
@@ -372,11 +417,14 @@ return;
 
 }
 
-phone = cleanPhone(phone);
+phone = normalizePhone(phone);
+
+btn.classList.add("loading");
+btn.innerHTML = "⏳ جاري إرسال الأوردر...";
 
 const orderText =
 
-"🛒 أوردر جديد\n\n" +
+"🛒 أوردر جديد" + "\n\n" +
 
 "👤 الاسم: " + name + "\n" +
 
@@ -384,13 +432,15 @@ const orderText =
 
 "📍 العنوان: " + address + "\n\n" +
 
-"📦 الطلب:\n" +
+"📦 الطلب:" + "\n" +
 
 category + " : " + items + "\n\n" +
 
 "💳 طريقة الدفع: " + payment;
 
-fetch(API_URL,{
+try{
+
+const response = await fetch(API_URL,{
 
 method:"POST",
 
@@ -400,7 +450,7 @@ headers:{
 
 body:JSON.stringify({
 
-action:"saveOrder",
+action:"saveMarketOrder",
 
 type:"market",
 
@@ -416,19 +466,19 @@ total:"يحدد لاحقاً",
 
 payment:payment,
 
-status:"طلب جديد"
+status:"طلب جديد",
+
+date:new Date().toISOString()
 
 })
 
-})
+});
 
-.then(response=>response.text())
+const data = await response.json();
 
-.then(()=>{
+if(data.success){
 
-document.getElementById(
-"successBox"
-).style.display = "block";
+successBox.style.display = "block";
 
 window.open(
 
@@ -456,15 +506,25 @@ document.getElementById(
 "marketItems"
 ).value="";
 
-})
+}
+else{
 
-.catch(err=>{
+errorBox.style.display = "block";
 
-console.log(err);
+}
 
-alert("❌ حدث خطأ أثناء إرسال الأوردر");
+}
+catch(error){
 
-});
+console.log(error);
+
+errorBox.style.display = "block";
+
+}
+
+btn.classList.remove("loading");
+
+btn.innerHTML = "✅ إرسال الأوردر";
 
 }
 
