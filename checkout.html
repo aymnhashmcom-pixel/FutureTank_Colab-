@@ -295,6 +295,32 @@ document.getElementById("total-price");
 
 let total = 0;
 
+/* =========================
+FIX PHONE
+========================= */
+
+function normalizePhone(phone){
+
+phone = String(phone)
+.replace(/\s+/g,"")
+.replace(/[^0-9]/g,"");
+
+if(phone.startsWith("20")){
+
+phone = "0" + phone.substring(2);
+
+}
+
+if(!phone.startsWith("0")){
+
+phone = "0" + phone;
+
+}
+
+return phone;
+
+}
+
 if(cart.length === 0){
 
 orderItems.innerHTML =
@@ -350,16 +376,18 @@ return;
 }
 
 const name =
-document.getElementById("customer-name").value;
+document.getElementById("customer-name").value.trim();
 
-const phone =
-document.getElementById("customer-phone").value;
+let phone =
+document.getElementById("customer-phone").value.trim();
 
 const address =
-document.getElementById("customer-address").value;
+document.getElementById("customer-address").value.trim();
 
 const payment =
 document.getElementById("payment-method").value;
+
+phone = normalizePhone(phone);
 
 if(
 name === "" ||
@@ -369,6 +397,14 @@ payment === ""
 ){
 
 alert("⚠️ برجاء استكمال البيانات");
+
+return;
+
+}
+
+if(phone.length !== 11){
+
+alert("⚠️ رقم الهاتف غير صحيح");
 
 return;
 
@@ -394,13 +430,19 @@ fetch(API_URL,{
 
 method:"POST",
 
+headers:{
+"Content-Type":"application/json"
+},
+
 body:JSON.stringify({
 
 action:"saveOrder",
 
+type:"product",
+
 name:name,
 
-phone:phone,
+phone:"'" + phone,
 
 address:address,
 
@@ -481,6 +523,14 @@ setTimeout(()=>{
 window.location.href="shop.html";
 
 },3000);
+
+})
+
+.catch(err=>{
+
+console.log(err);
+
+alert("❌ حدث خطأ أثناء إرسال الطلب");
 
 });
 
