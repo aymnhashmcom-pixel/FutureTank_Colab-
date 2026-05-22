@@ -4,22 +4,32 @@
 <head>
 
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>ماركت هرم سيتي وحدائق أكتوبر</title>
+<title>
+ماركت هرم سيتي وحدائق أكتوبر
+</title>
 
-<meta name="theme-color" content="#ff9800">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
-<link rel="stylesheet" href="style.css">
+<meta name="theme-color"
+content="#ff9800">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
 
-/* حماية أساسية لو CSS الخارجي فشل */
-body{
-background:#f4f7fb;
-font-family:Tahoma;
+*{
 margin:0;
 padding:0;
+box-sizing:border-box;
+font-family:Tahoma,sans-serif;
+}
+
+body{
+background:#f4f7fb;
+padding-bottom:120px;
 }
 
 header{
@@ -27,6 +37,12 @@ background:linear-gradient(135deg,#ff9800,#ffb74d);
 padding:25px;
 text-align:center;
 color:#fff;
+box-shadow:0 5px 20px rgba(0,0,0,.15);
+}
+
+header h1{
+margin-bottom:10px;
+font-size:28px;
 }
 
 .container{
@@ -38,7 +54,14 @@ background:#fff3e0;
 padding:18px;
 border-radius:18px;
 margin-bottom:20px;
+animation:pulse 2s infinite;
 border-right:6px solid #ff9800;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.02);}
+100%{transform:scale(1);}
 }
 
 .categories{
@@ -55,12 +78,24 @@ border-radius:16px;
 text-align:center;
 font-weight:bold;
 box-shadow:0 5px 18px rgba(0,0,0,.08);
+cursor:pointer;
+transition:.3s;
+}
+
+.cat:hover{
+transform:translateY(-3px);
 }
 
 .order-box{
 background:#fff;
 padding:20px;
 border-radius:20px;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.order-box h2{
+margin-bottom:15px;
+color:#ff9800;
 }
 
 .order-input{
@@ -69,6 +104,7 @@ padding:14px;
 margin-top:10px;
 border-radius:12px;
 border:1px solid #ddd;
+font-size:15px;
 }
 
 .order-btn{
@@ -82,6 +118,18 @@ font-size:17px;
 font-weight:bold;
 margin-top:15px;
 cursor:pointer;
+transition:.3s;
+}
+
+.order-btn:hover{
+opacity:.9;
+}
+
+footer{
+margin-top:40px;
+text-align:center;
+padding:20px;
+color:#777;
 }
 
 .success-box{
@@ -102,15 +150,29 @@ text-align:center;
 <body>
 
 <header>
-<h1>🛒 ماركت هرم سيتي وحدائق أكتوبر</h1>
-<p>كل احتياجات البيت في أوردر واحد</p>
+
+<h1>
+🛒 ماركت هرم سيتي وحدائق أكتوبر
+</h1>
+
+<p>
+كل احتياجات البيت في أوردر واحد
+</p>
+
 </header>
 
 <div class="container">
 
 <div class="offer">
-<h3>🔥 عروض اليوم</h3>
-<p id="offersText">جاري تحميل العروض...</p>
+
+<h3>
+🔥 عروض اليوم
+</h3>
+
+<p id="offersText">
+خصومات على السوبر ماركت والصيدلية والخضروات واللحوم والأسماك
+</p>
+
 </div>
 
 <div class="categories">
@@ -122,6 +184,7 @@ text-align:center;
 <div class="cat">🍞 مخبوزات</div>
 <div class="cat">🧃 مشروبات</div>
 <div class="cat">🧴 منظفات</div>
+<div class="cat">🐦 مستلزمات حيوانات</div>
 <div class="cat">👶 مستلزمات أطفال</div>
 <div class="cat">💄 تجميل وعناية</div>
 
@@ -129,35 +192,84 @@ text-align:center;
 
 <div class="order-box">
 
-<h2>🧾 أوردر شامل</h2>
+<h2>
+🧾 أوردر شامل
+</h2>
 
-<input id="customerName" class="order-input" placeholder="الاسم">
-<input id="customerPhone" class="order-input" placeholder="رقم الهاتف">
-<input id="customerAddress" class="order-input" placeholder="العنوان">
+<input
+type="text"
+id="customerName"
+class="order-input"
+placeholder="الاسم">
 
-<select id="marketCategory" class="order-input">
+<input
+type="tel"
+id="customerPhone"
+class="order-input"
+placeholder="01xxxxxxxxx">
+
+<input
+type="text"
+id="customerAddress"
+class="order-input"
+placeholder="العنوان">
+
+<select
+id="marketCategory"
+class="order-input">
+
 <option>🛒 سوبر ماركت</option>
 <option>💊 صيدلية</option>
 <option>🥦 خضروات وفاكهة</option>
 <option>🥩 لحوم وأسماك</option>
+<option>🍞 مخبوزات</option>
+<option>🧃 مشروبات</option>
+<option>🧴 منظفات</option>
+<option>👶 مستلزمات أطفال</option>
+<option>💄 تجميل وعناية</option>
+
 </select>
 
-<textarea id="marketItems" class="order-input" rows="6" placeholder="اكتب الطلب"></textarea>
+<textarea
+id="marketItems"
+class="order-input"
+rows="6"
+placeholder="اكتب المنتجات المطلوبة بالتفصيل"></textarea>
 
-<button class="order-btn" onclick="submitOrder()">
-إرسال الأوردر
+<select
+id="paymentMethod"
+class="order-input">
+
+<option>الدفع عند الاستلام</option>
+<option>فودافون كاش</option>
+<option>إنستا باي</option>
+
+</select>
+
+<button
+class="order-btn"
+onclick="submitOrder()">
+
+✅ إرسال الأوردر
+
 </button>
 
-<div class="success-box" id="successBox">
-تم إرسال الأوردر بنجاح
-</div>
+<div
+class="success-box"
+id="successBox">
+
+✅ تم إرسال الأوردر بنجاح
 
 </div>
 
 </div>
 
-<footer style="text-align:center;padding:20px;color:#777;">
-© Future Tank
+</div>
+
+<footer>
+
+© Future Tank — جميع الحقوق محفوظة
+
 </footer>
 
 <script>
@@ -165,59 +277,194 @@ text-align:center;
 const API_URL =
 "https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
 
-/* حماية من كسر JS */
-window.onerror = function(){
-console.log("JS Error handled");
-return true;
-};
-
 const offers = [
-"🔥 خصومات اليوم",
-"🚚 توصيل سريع",
-"💧 عروض خاصة",
-"🥩 لحوم طازة"
+
+"🔥 خصومات على السوبر ماركت والصيدلية والخضروات",
+"🚚 توصيل سريع داخل هرم سيتي وحدائق أكتوبر",
+"💧 عروض خاصة على خزانات المياه والفلاتر",
+"🥩 عروض اللحوم والأسماك اليوم",
+"💊 خصومات على مستلزمات الصيدلية"
+
 ];
 
-let i = 0;
+let currentOffer = 0;
 
 setInterval(()=>{
-i = (i + 1) % offers.length;
-document.getElementById("offersText").innerText = offers[i];
+
+currentOffer++;
+
+if(currentOffer >= offers.length){
+
+currentOffer = 0;
+
+}
+
+document.getElementById(
+"offersText"
+).innerText = offers[currentOffer];
+
 },3000);
+
+function cleanPhone(phone){
+
+phone = String(phone).trim();
+
+phone = phone.replace(/\s/g,"");
+
+if(phone.startsWith("20")){
+
+phone = "0" + phone.substring(2);
+
+}
+
+if(!phone.startsWith("0")){
+
+phone = "0" + phone;
+
+}
+
+return phone;
+
+}
 
 function submitOrder(){
 
-try{
+const name =
+document.getElementById(
+"customerName"
+).value.trim();
 
-const name = document.getElementById("customerName").value.trim();
-const phone = document.getElementById("customerPhone").value.trim();
-const address = document.getElementById("customerAddress").value.trim();
-const category = document.getElementById("marketCategory").value;
-const items = document.getElementById("marketItems").value.trim();
+let phone =
+document.getElementById(
+"customerPhone"
+).value.trim();
 
-if(!name || !phone || !address || !items){
+const address =
+document.getElementById(
+"customerAddress"
+).value.trim();
+
+const category =
+document.getElementById(
+"marketCategory"
+).value;
+
+const items =
+document.getElementById(
+"marketItems"
+).value.trim();
+
+const payment =
+document.getElementById(
+"paymentMethod"
+).value;
+
+if(
+name === "" ||
+phone === "" ||
+address === "" ||
+items === ""
+){
+
 alert("يرجى استكمال البيانات");
+
 return;
+
 }
 
+phone = cleanPhone(phone);
+
+const orderText =
+
+"🛒 أوردر جديد\n\n" +
+
+"👤 الاسم: " + name + "\n" +
+
+"📞 الهاتف: " + phone + "\n" +
+
+"📍 العنوان: " + address + "\n\n" +
+
+"📦 الطلب:\n" +
+
+category + " : " + items + "\n\n" +
+
+"💳 طريقة الدفع: " + payment;
+
 fetch(API_URL,{
+
 method:"POST",
+
 headers:{
 "Content-Type":"application/json"
 },
+
 body:JSON.stringify({
 
 action:"saveOrder",
-type:"market",   // 🔥 مهم جدًا
+
+type:"market",
+
 name:name,
+
 phone:phone,
+
 address:address,
+
 items:category + " : " + items,
+
 total:"يحدد لاحقاً",
-payment:payment
+
+payment:payment,
+
+status:"طلب جديد"
 
 })
+
 })
+
+.then(response=>response.text())
+
+.then(()=>{
+
+document.getElementById(
+"successBox"
+).style.display = "block";
+
+window.open(
+
+"https://wa.me/201150402031?text=" +
+
+encodeURIComponent(orderText),
+
+"_blank"
+
+);
+
+document.getElementById(
+"customerName"
+).value="";
+
+document.getElementById(
+"customerPhone"
+).value="";
+
+document.getElementById(
+"customerAddress"
+).value="";
+
+document.getElementById(
+"marketItems"
+).value="";
+
+})
+
+.catch(err=>{
+
+console.log(err);
+
+alert("❌ حدث خطأ أثناء إرسال الأوردر");
+
+});
 
 }
 
