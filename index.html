@@ -849,6 +849,21 @@ document.getElementById(
 
 try{
 
+const savedToken =
+localStorage.getItem(
+"ft_fcm_token"
+);
+
+if(savedToken){
+
+alert(
+"✅ الإشعارات مفعلة بالفعل"
+);
+
+return;
+
+}
+
 const permission =
 await Notification.requestPermission();
 
@@ -879,12 +894,18 @@ registration
 
 });
 
+if(!token){
+
+throw new Error(
+"NO TOKEN"
+);
+
+}
+
 console.log(
 "FCM TOKEN:",
 token
 );
-
-/* SAVE TOKEN */
 
 await fetch(API_URL,{
 
