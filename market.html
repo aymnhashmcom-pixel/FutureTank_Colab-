@@ -202,19 +202,22 @@ return;
 
 fetch(API_URL,{
 method:"POST",
+headers:{
+"Content-Type":"application/json"
+},
 body:JSON.stringify({
-action:"saveMarketOrder",
-name,phone,address,
+
+action:"saveOrder",
+type:"market",   // 🔥 مهم جدًا
+name:name,
+phone:phone,
+address:address,
 items:category + " : " + items,
-total:"يحدد لاحقاً"
+total:"يحدد لاحقاً",
+payment:payment
+
 })
-});
-
-document.getElementById("successBox").style.display="block";
-
-}catch(e){
-alert("حدث خطأ، حاول مرة أخرى");
-}
+})
 
 }
 
