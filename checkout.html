@@ -5,142 +5,153 @@
 
 <meta charset="UTF-8">
 
+<title>
+ماركت هرم سيتي وحدائق أكتوبر
+</title>
+
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
-<title>
-Future Tank | إتمام الطلب
-</title>
-
-<link rel="stylesheet" href="style.css">
+<meta name="theme-color"
+content="#ff9800">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
 
-.checkout-box{
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Tahoma,sans-serif;
+}
 
-max-width:800px;
-margin:auto;
-background:#fff;
+body{
+background:#f4f7fb;
+padding-bottom:120px;
+}
+
+header{
+background:linear-gradient(135deg,#ff9800,#ffb74d);
 padding:25px;
-border-radius:20px;
-box-shadow:0 10px 30px rgba(0,0,0,.08);
-
+text-align:center;
+color:#fff;
+box-shadow:0 5px 20px rgba(0,0,0,.15);
 }
 
-.form-group{
-
-margin-top:18px;
-
+header h1{
+margin-bottom:10px;
+font-size:28px;
 }
 
-.form-group label{
+.container{
+padding:18px;
+}
 
-display:block;
-margin-bottom:8px;
+.offer{
+background:#fff3e0;
+padding:18px;
+border-radius:18px;
+margin-bottom:20px;
+animation:pulse 2s infinite;
+border-right:6px solid #ff9800;
+}
+
+@keyframes pulse{
+0%{transform:scale(1);}
+50%{transform:scale(1.02);}
+100%{transform:scale(1);}
+}
+
+.categories{
+display:grid;
+grid-template-columns:repeat(2,1fr);
+gap:12px;
+margin-bottom:20px;
+}
+
+.cat{
+background:#fff;
+padding:16px;
+border-radius:16px;
+text-align:center;
 font-weight:bold;
-
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+cursor:pointer;
+transition:.3s;
 }
 
-.form-group input,
-.form-group textarea,
-.form-group select{
+.cat:hover{
+transform:translateY(-3px);
+}
 
+.order-box{
+background:#fff;
+padding:20px;
+border-radius:20px;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.order-box h2{
+margin-bottom:15px;
+color:#ff9800;
+}
+
+.order-input{
 width:100%;
 padding:14px;
+margin-top:10px;
 border-radius:12px;
 border:1px solid #ddd;
 font-size:15px;
-box-sizing:border-box;
-
 }
 
-.order-summary{
-
-margin-top:25px;
-background:#f7fbff;
-padding:20px;
-border-radius:18px;
-
-}
-
-.order-item{
-
-padding:10px 0;
-border-bottom:1px solid #e5eef7;
-
-}
-
-.total{
-
-font-size:22px;
-font-weight:bold;
-margin-top:20px;
-color:#0b6fc2;
-
-}
-
-.complete-btn{
-
-margin-top:25px;
+.order-btn{
 width:100%;
-background:#25D366;
-color:#fff;
-border:none;
-padding:16px;
-border-radius:14px;
-font-size:18px;
-cursor:pointer;
-font-weight:bold;
-
-}
-
-.complete-btn:hover{
-
-opacity:.9;
-
-}
-
-.payment-link{
-
-display:block;
-margin-top:20px;
-text-align:center;
-background:#4fc3f7;
 padding:15px;
+border:none;
 border-radius:14px;
+background:#ff9800;
 color:#fff;
-text-decoration:none;
+font-size:17px;
 font-weight:bold;
+margin-top:15px;
+cursor:pointer;
+transition:.3s;
+}
 
+.order-btn:hover{
+opacity:.9;
+}
+
+footer{
+margin-top:40px;
+text-align:center;
+padding:20px;
+color:#777;
 }
 
 .success-box{
-
-background:#e8fff1;
-padding:15px;
-border-radius:12px;
-margin-top:20px;
 display:none;
-color:#198754;
+margin-top:15px;
+background:#e8f5e9;
+padding:15px;
+border-radius:14px;
+color:#2e7d32;
 font-weight:bold;
 text-align:center;
-
 }
 
 .error-box{
-
+display:none;
+margin-top:15px;
 background:#ffebee;
 padding:15px;
-border-radius:12px;
-margin-top:20px;
-display:none;
+border-radius:14px;
 color:#c62828;
 font-weight:bold;
 text-align:center;
-
 }
 
 </style>
@@ -149,150 +160,133 @@ text-align:center;
 
 <body>
 
-<header class="main-header">
+<header>
 
 <h1>
-🧾 Future Tank
+🛒 ماركت هرم سيتي وحدائق أكتوبر
 </h1>
 
 <p>
-إتمام الطلب
+كل احتياجات البيت في أوردر واحد
 </p>
 
 </header>
 
-<main class="container">
+<div class="container">
 
-<div class="checkout-box">
+<div class="offer">
+
+<h3>
+🔥 عروض اليوم
+</h3>
+
+<p id="offersText">
+خصومات على السوبر ماركت والصيدلية والخضروات واللحوم والأسماك
+</p>
+
+</div>
+
+<div class="categories">
+
+<div class="cat">🛒 سوبر ماركت</div>
+<div class="cat">💊 صيدلية</div>
+<div class="cat">🥦 خضروات وفاكهة</div>
+<div class="cat">🥩 لحوم وأسماك</div>
+<div class="cat">🍞 مخبوزات</div>
+<div class="cat">🧃 مشروبات</div>
+<div class="cat">🧴 منظفات</div>
+<div class="cat">🐦 مستلزمات حيوانات</div>
+<div class="cat">👶 مستلزمات أطفال</div>
+<div class="cat">💄 تجميل وعناية</div>
+
+</div>
+
+<div class="order-box">
 
 <h2>
-بيانات العميل
+🧾 أوردر شامل
 </h2>
-
-<div class="form-group">
-
-<label>
-الاسم بالكامل
-</label>
 
 <input
 type="text"
-id="customer-name"
-placeholder="اكتب الاسم">
-
-</div>
-
-<div class="form-group">
-
-<label>
-رقم الهاتف
-</label>
+id="customerName"
+class="order-input"
+placeholder="الاسم">
 
 <input
 type="tel"
-id="customer-phone"
+id="customerPhone"
+class="order-input"
 placeholder="01xxxxxxxxx">
 
-</div>
+<input
+type="text"
+id="customerAddress"
+class="order-input"
+placeholder="العنوان">
 
-<div class="form-group">
+<select
+id="marketCategory"
+class="order-input">
 
-<label>
-العنوان
-</label>
-
-<textarea
-id="customer-address"
-rows="3"
-placeholder="اكتب العنوان بالتفصيل"></textarea>
-
-</div>
-
-<div class="form-group">
-
-<label>
-طريقة الدفع
-</label>
-
-<select id="payment-method">
-
-<option value="">
-اختر طريقة الدفع
-</option>
-
-<option value="InstaPay">
-InstaPay
-</option>
-
-<option value="اتصالات كاش">
-اتصالات كاش
-</option>
-
-<option value="تحويل بنكي">
-تحويل بنكي
-</option>
-
-<option value="الدفع عند الاستلام">
-الدفع عند الاستلام
-</option>
+<option>🛒 سوبر ماركت</option>
+<option>💊 صيدلية</option>
+<option>🥦 خضروات وفاكهة</option>
+<option>🥩 لحوم وأسماك</option>
+<option>🍞 مخبوزات</option>
+<option>🧃 مشروبات</option>
+<option>🧴 منظفات</option>
+<option>👶 مستلزمات أطفال</option>
+<option>💄 تجميل وعناية</option>
 
 </select>
 
-</div>
+<textarea
+id="marketItems"
+class="order-input"
+rows="6"
+placeholder="اكتب المنتجات المطلوبة بالتفصيل">
+</textarea>
 
-<a
-class="payment-link"
-href="payment.html">
+<select
+id="paymentMethod"
+class="order-input">
 
-💳 عرض طرق الدفع
+<option>الدفع عند الاستلام</option>
+<option>فودافون كاش</option>
+<option>إنستا باي</option>
 
-</a>
-
-<div class="order-summary">
-
-<h3>
-🛒 ملخص الطلب
-</h3>
-
-<div id="order-items"></div>
-
-<div class="total">
-
-الإجمالي:
-<span id="total-price">
-0
-</span>
-جنيه
-
-</div>
-
-</div>
-
-<div class="success-box" id="success-box">
-
-✅ تم إرسال الطلب بنجاح
-
-</div>
-
-<div class="error-box" id="error-box">
-
-❌ حدث خطأ أثناء إرسال الطلب
-
-</div>
+</select>
 
 <button
-class="complete-btn"
-onclick="sendOrder()">
+class="order-btn"
+onclick="submitOrder()">
 
-📲 تأكيد الطلب
+✅ إرسال الأوردر
 
 </button>
 
+<div
+class="success-box"
+id="successBox">
+
+✅ تم إرسال الأوردر بنجاح
+
 </div>
 
-</main>
+<div
+class="error-box"
+id="errorBox">
 
-<footer class="main-footer">
+❌ حدث خطأ أثناء إرسال الأوردر
+
+</div>
+
+</div>
+
+</div>
+
+<footer>
 
 © Future Tank — نقاء الماء هو هدفنا
 
@@ -303,16 +297,33 @@ onclick="sendOrder()">
 const API_URL =
 "https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
 
-let cart =
-JSON.parse(localStorage.getItem("cart")) || [];
+const offers = [
 
-const orderItems =
-document.getElementById("order-items");
+"🔥 خصومات على السوبر ماركت والصيدلية والخضروات",
+"🚚 توصيل سريع داخل هرم سيتي وحدائق أكتوبر",
+"💧 عروض خاصة على خزانات المياه والفلاتر",
+"🥩 عروض اللحوم والأسماك اليوم",
+"💊 خصومات على مستلزمات الصيدلية"
 
-const totalPrice =
-document.getElementById("total-price");
+];
 
-let total = 0;
+let currentOffer = 0;
+
+setInterval(()=>{
+
+currentOffer++;
+
+if(currentOffer >= offers.length){
+
+currentOffer = 0;
+
+}
+
+document.getElementById(
+"offersText"
+).innerText = offers[currentOffer];
+
+},3000);
 
 function normalizePhone(phone){
 
@@ -336,90 +347,60 @@ return phone;
 
 }
 
-if(cart.length === 0){
-
-orderItems.innerHTML =
-"<p>🛒 لا توجد منتجات داخل السلة</p>";
-
-}
-
-else{
-
-cart.forEach(item=>{
-
-const cleanPrice =
-parseFloat(
-String(item.price)
-.replace("جنيه","")
-.replace("ج","")
-.replace(/,/g,"")
-.trim()
-) || 0;
-
-total += cleanPrice;
-
-orderItems.innerHTML += `
-
-<div class="order-item">
-
-${item.name}
--
-${cleanPrice} جنيه
-
-</div>
-
-`;
-
-});
-
-}
-
-totalPrice.innerText = total;
-
-function sendOrder(){
+function submitOrder(){
 
 document.getElementById(
-"success-box"
+"successBox"
 ).style.display = "none";
 
 document.getElementById(
-"error-box"
+"errorBox"
 ).style.display = "none";
-
-if(cart.length===0){
-
-alert("🛒 السلة فارغة");
-
-return;
-
-}
 
 const name =
-document.getElementById("customer-name").value.trim();
+document.getElementById(
+"customerName"
+).value.trim();
 
 let phone =
-document.getElementById("customer-phone").value.trim();
+document.getElementById(
+"customerPhone"
+).value.trim();
 
 const address =
-document.getElementById("customer-address").value.trim();
+document.getElementById(
+"customerAddress"
+).value.trim();
+
+const category =
+document.getElementById(
+"marketCategory"
+).value;
+
+const items =
+document.getElementById(
+"marketItems"
+).value.trim();
 
 const payment =
-document.getElementById("payment-method").value;
-
-phone = normalizePhone(phone);
+document.getElementById(
+"paymentMethod"
+).value;
 
 if(
 name === "" ||
 phone === "" ||
 address === "" ||
-payment === ""
+items === ""
 ){
 
-alert("⚠️ برجاء استكمال البيانات");
+alert("يرجى استكمال البيانات");
 
 return;
 
 }
+
+phone = normalizePhone(phone);
 
 if(phone.length !== 11){
 
@@ -429,17 +410,21 @@ return;
 
 }
 
-let itemsText = "";
+const orderText =
 
-cart.forEach(item=>{
+"🛒 أوردر جديد" + "\n\n" +
 
-itemsText +=
-item.name +
-" - " +
-item.price +
-" | ";
+"👤 الاسم: " + name + "\n" +
 
-});
+"📞 الهاتف: " + phone + "\n" +
+
+"📍 العنوان: " + address + "\n\n" +
+
+"📦 الطلب:" + "\n" +
+
+category + " : " + items + "\n\n" +
+
+"💳 طريقة الدفع: " + payment;
 
 fetch(API_URL,{
 
@@ -451,9 +436,9 @@ headers:{
 
 body:JSON.stringify({
 
-action:"saveOrder",
+action:"saveMarketOrder",
 
-type:"product",
+type:"market",
 
 name:name,
 
@@ -461,83 +446,61 @@ phone:phone,
 
 address:address,
 
+items:category + " : " + items,
+
 payment:payment,
 
-items:itemsText,
-
-total:total
+total:"يحدد لاحقاً"
 
 })
 
 })
 
-.then(res=>res.text())
+.then(response => response.text())
 
-.then(data=>{
+.then(result=>{
 
-let message =
-"السلام عليكم%0A%0A";
+console.log(result);
 
-message +=
-"🛒 طلب جديد من موقع Future Tank%0A%0A";
-
-message +=
-"👤 الاسم: " + name + "%0A";
-
-message +=
-"📞 الهاتف: " + phone + "%0A";
-
-message +=
-"📍 العنوان: " + address + "%0A";
-
-message +=
-"💳 طريقة الدفع: " + payment + "%0A%0A";
-
-message +=
-"📦 المنتجات:%0A";
-
-cart.forEach(item=>{
-
-message +=
-"🔹 " +
-item.name +
-" - " +
-item.price +
-" جنيه%0A";
-
-});
-
-message +=
-"%0A💰 الإجمالي: " +
-total +
-" جنيه";
+document.getElementById(
+"successBox"
+).style.display = "block";
 
 window.open(
-"https://wa.me/201150402031?text=" + message,
+
+"https://wa.me/201150402031?text=" +
+
+encodeURIComponent(orderText),
+
 "_blank"
+
 );
 
-localStorage.removeItem("cart");
+document.getElementById(
+"customerName"
+).value = "";
 
 document.getElementById(
-"success-box"
-).style.display="block";
+"customerPhone"
+).value = "";
 
-setTimeout(()=>{
+document.getElementById(
+"customerAddress"
+).value = "";
 
-window.location.href="shop.html";
-
-},3000);
+document.getElementById(
+"marketItems"
+).value = "";
 
 })
 
-.catch(err=>{
+.catch(error=>{
 
-console.log(err);
+console.log(error);
 
 document.getElementById(
-"error-box"
-).style.display="block";
+"errorBox"
+).style.display = "block";
 
 });
 
