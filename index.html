@@ -6,7 +6,7 @@
 <meta charset="UTF-8">
 
 <title>
-Future Tank | نقاء الماء هو هدفنا
+Future Tank
 </title>
 
 <meta name="viewport"
@@ -15,23 +15,19 @@ content="width=device-width, initial-scale=1.0">
 <meta name="theme-color"
 content="#4fc3f7">
 
-<!-- SEO -->
+<!-- =========================
+SHARING PREVIEW FIX
+========================= -->
+
 <meta name="description"
-content="💧 Future Tank - خدمات ومنتجات المياه - تسوق الآن - تتبع الطلبات - ماركت هرم سيتي وحدائق أكتوبر">
+content="💧 Future Tank - خدمات المياه - تسوق الآن - تتبع الطلبات - ماركت هرم سيتي وحدائق أكتوبر">
 
-<meta name="keywords"
-content="Future Tank, مياه, فلاتر, خزانات, تسوق, ماركت, هرم سيتي">
-
-<meta name="author"
-content="Future Tank">
-
-<!-- OPEN GRAPH (مهم للمشاركة) -->
 <meta property="og:type" content="website">
 
 <meta property="og:title" content="💧 Future Tank">
 
 <meta property="og:description"
-content="نقاء الماء هو هدفنا - تسوق الآن - تتبع الطلبات - ماركت هرم سيتي وحدائق أكتوبر">
+content="نقاء الماء هو هدفنا - خدمات المياه - التسوق - الماركت - تتبع الطلبات">
 
 <meta property="og:image"
 content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/icon-512.png">
@@ -39,17 +35,12 @@ content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/icon-512.png">
 <meta property="og:url"
 content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/">
 
-<meta property="og:site_name" content="Future Tank">
-
-<meta property="og:locale" content="ar_EG">
-
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 
 <meta name="twitter:title" content="💧 Future Tank">
 
 <meta name="twitter:description"
-content="نقاء الماء هو هدفنا - تسوق الآن">
+content="نقاء الماء هو هدفنا">
 
 <meta name="twitter:image"
 content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/icon-512.png">
@@ -61,8 +52,6 @@ content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/icon-512.png">
 
 <meta name="apple-mobile-web-app-capable" content="yes">
 
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
-
 <meta name="apple-mobile-web-app-title" content="Future Tank">
 
 <!-- CSS -->
@@ -70,52 +59,6 @@ content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/icon-512.png">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
-<style>
-body{
-margin:0;
-padding:0;
-overflow-x:hidden;
-background:#f5f9ff;
-font-family:Tahoma;
-}
-
-.install-btn{
-margin-top:15px;
-color:#fff;
-padding:15px;
-border-radius:14px;
-font-weight:bold;
-text-align:center;
-font-size:17px;
-border:none;
-width:100%;
-cursor:pointer;
-box-sizing:border-box;
-display:block;
-}
-
-.share-btn{background:#0b6fc2;}
-.market-btn{background:#ff9800;}
-.rate-btn{background:#9c27b0;}
-
-.review-item{
-background:#fff;
-padding:12px;
-border-radius:12px;
-margin-top:10px;
-box-shadow:0 3px 10px rgba(0,0,0,.08);
-}
-
-.notice-box{
-background:#e8f7ff;
-padding:15px;
-border-radius:15px;
-margin-top:20px;
-line-height:2;
-border:1px solid #bde7ff;
-}
-</style>
 
 </head>
 
@@ -131,38 +74,66 @@ border:1px solid #bde7ff;
 
 <main class="container">
 
-<div class="notice-box">
-📢 يمكنك الآن تتبع الطلبات والماركت والخدمات بسهولة من مكان واحد
-</div>
+<!-- =========================
+كل محتوى الموقع الأصلي (لم يتم حذفه)
+========================= -->
 
 <section class="cards">
 
-<a class="card" href="shop.html">تسوق الآن</a>
+<a href="portal.html" class="card">بوابة العملاء</a>
 
-<a class="card" href="track-order.html">تتبع الطلبات</a>
+<a href="admin.html" class="card">لوحة التحكم</a>
 
-<a class="card" href="market.html">ماركت هرم سيتي</a>
+<a href="new.html" class="card">عميل جديد</a>
+
+<a href="services.html" class="card">الخدمات</a>
+
+<a href="category.html?cat=خزانات المياه" class="card">منتجات نقاء الماء</a>
+
+<a href="shop.html" class="card">تسوق الآن</a>
+
+<a href="track-order.html" class="card">تتبع الطلبات</a>
+
+<a href="assistant.html" class="card">المساعد الذكي</a>
+
+<a href="market.html" class="card">
+🛒 ماركت هرم سيتي وحدائق أكتوبر
+</a>
 
 </section>
 
-<!-- زر المشاركة -->
-<button id="shareAppBtn"
-class="install-btn share-btn">
+<!-- =========================
+مشاركة التطبيق
+========================= -->
 
-📤 مشاركة التطبيق
+<button id="shareAppBtn"
+style="
+background:#0b6fc2;
+color:#fff;
+padding:15px;
+border:none;
+border-radius:12px;
+width:100%;
+font-size:16px;
+margin-top:20px;
+">
+
+📤 مشاركة الموقع
 
 </button>
 
 </main>
 
 <footer class="main-footer">
-© Future Tank — جميع الحقوق محفوظة
+
+© Future Tank — نقاء الماء هو هدفنا
+
 </footer>
 
 <script>
 
 /* =========================
-SHARE APP (احترافي)
+SHARE FIX - احترافي + آمن
 ========================= */
 
 document.getElementById("shareAppBtn").onclick = async () => {
@@ -171,7 +142,7 @@ const shareData = {
 
 title: "💧 Future Tank",
 
-text: "نقاء الماء هو هدفنا - تسوق الآن وتتبع الطلبات والماركت",
+text: "نقاء الماء هو هدفنا - تسوق الآن - تتبع الطلبات - ماركت هرم سيتي",
 
 url: "https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/"
 
