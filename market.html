@@ -245,7 +245,8 @@ class="order-input">
 id="marketItems"
 class="order-input"
 rows="6"
-placeholder="اكتب المنتجات المطلوبة بالتفصيل"></textarea>
+placeholder="اكتب المنتجات المطلوبة بالتفصيل">
+</textarea>
 
 <select
 id="paymentMethod"
@@ -287,7 +288,7 @@ id="errorBox">
 
 <footer>
 
-© Future Tank — جميع الحقوق محفوظة
+© Future Tank — نقاء الماء هو هدفنا
 
 </footer>
 
@@ -327,7 +328,8 @@ document.getElementById(
 function normalizePhone(phone){
 
 phone = String(phone)
-.replace(/\D/g,"");
+.replace(/\s+/g,"")
+.replace(/[^0-9]/g,"");
 
 if(phone.startsWith("20")){
 
@@ -400,17 +402,43 @@ return;
 
 phone = normalizePhone(phone);
 
+if(phone.length !== 11){
+
+alert("⚠️ رقم الهاتف غير صحيح");
+
+return;
+
+}
+
+const orderText =
+
+"🛒 أوردر جديد\n\n" +
+
+"👤 الاسم: " + name + "\n" +
+
+"📞 الهاتف: " + phone + "\n" +
+
+"📍 العنوان: " + address + "\n\n" +
+
+"📦 الطلب:\n" +
+
+category + " : " + items + "\n\n" +
+
+"💳 طريقة الدفع: " + payment;
+
 fetch(API_URL,{
 
 method:"POST",
 
 headers:{
-"Content-Type":"application/json"
+"Content-Type":"text/plain;charset=utf-8"
 },
 
 body:JSON.stringify({
 
 action:"saveMarketOrder",
+
+type:"market",
 
 name:name,
 
@@ -428,31 +456,15 @@ total:"يحدد لاحقاً"
 
 })
 
-.then(response=>response.json())
+.then(response => response.text())
 
-.then(data=>{
+.then(result=>{
 
-if(data.success){
+console.log(result);
 
 document.getElementById(
 "successBox"
 ).style.display = "block";
-
-const orderText =
-
-"🛒 أوردر جديد\n\n" +
-
-"👤 الاسم: " + name + "\n" +
-
-"📞 الهاتف: " + phone + "\n" +
-
-"📍 العنوان: " + address + "\n\n" +
-
-"📦 الطلب:\n" +
-
-category + " : " + items + "\n\n" +
-
-"💳 طريقة الدفع: " + payment;
 
 window.open(
 
@@ -479,14 +491,6 @@ document.getElementById(
 document.getElementById(
 "marketItems"
 ).value = "";
-
-}else{
-
-document.getElementById(
-"errorBox"
-).style.display = "block";
-
-}
 
 })
 
