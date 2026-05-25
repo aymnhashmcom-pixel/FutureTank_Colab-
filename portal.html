@@ -1,169 +1,120 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>بوابة العملاء | Future Tank</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="client-portal.css">
-
-<style>
-.hidden{display:none}
-
-input{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border-radius:10px;
-  border:1px solid #ccc;
-}
-
-button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  border-radius:10px;
-  background:#4aa3df;
-  color:#fff;
-  font-size:16px;
-  cursor:pointer;
-}
-
-.client-data{
-  margin-top:20px;
-}
-
-.data-row{
-  display:flex;
-  justify-content:space-between;
-  background:#fff;
-  padding:10px;
-  margin-top:8px;
-  border-radius:10px;
-  box-shadow:0 2px 8px rgba(0,0,0,.05);
-}
-
-.renew-btn{
-  display:block;
-  margin-top:15px;
-  padding:12px;
-  background:#25d366;
-  color:#fff;
-  text-align:center;
-  border-radius:10px;
-  text-decoration:none;
-}
-</style>
-
+  <meta charset="UTF-8">
+  <title>بوابة العملاء | Future Tank</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
 <header class="main-header">
-<h1>💧 Future Tank</h1>
-<p>نقاء المياه يبدأ من هنا</p>
+  <h1>💧 Future Tank</h1>
+  <p>نقاء المياه يبدأ من هنا</p>
 </header>
 
-<section style="max-width:600px;margin:20px auto;padding:15px;">
+<section class="portal-container">
 
-<h2>🔍 عرض التعاقد</h2>
+  <h2>🔍 عرض التعاقد</h2>
 
-<input type="text" id="phone" placeholder="اكتب رقم الهاتف">
+  <input
+    type="text"
+    id="phone"
+    placeholder="اكتب رقم الهاتف"
+    inputmode="numeric"
+  >
 
-<button onclick="searchClient()">بحث</button>
+  <button onclick="searchClient()">بحث</button>
 
-<div id="result" class="client-data hidden"></div>
+  <div id="result" class="client-data hidden"></div>
 
 </section>
 
 <footer class="main-footer">
-© Future Tank — جميع الحقوق محفوظة
+  © Future Tank — جميع الحقوق محفوظة
 </footer>
 
 <script>
-
+/* ===============================
+   API CONFIG
+================================ */
 const API_URL =
-"https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
+  "https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
 
 const WHATSAPP = "201150402031";
 
-/* =========================
-   FETCH CLIENT
-========================= */
+/* ===============================
+   SEARCH CLIENT
+================================ */
+function searchClient() {
 
-async function searchClient() {
+  const phoneInput = document.getElementById("phone");
+  const phone = phoneInput.value.trim();
+  const result = document.getElementById("result");
 
-const phone = document.getElementById("phone").value.trim();
-const result = document.getElementById("result");
+  if (!phone) {
+    alert("من فضلك أدخل رقم الهاتف");
+    return;
+  }
 
-if(!phone){
-alert("اكتب رقم الهاتف");
-return;
-}
+  result.classList.remove("hidden");
+  result.innerHTML = "🔍 جاري البحث...";
 
-result.classList.remove("hidden");
-result.innerHTML = "⏳ جاري البحث...";
+  fetch(API_URL + "?phone=" + encodeURIComponent(phone))
+    .then(res => res.json())
+    .then(data => {
 
-try{
+      if (!data || data.error) {
+        result.innerHTML = "❌ لا يوجد تعاقد بهذا الرقم";
+        return;
+      }
 
-const res = await fetch(API_URL + "?phone=" + phone);
-const data = await res.json();
-
-/* 🔥 حل المشكلة الأساسية */
-const row = Array.isArray(data) ? data[0] : data;
-
-if(!row || Object.keys(row).length === 0){
-result.innerHTML = "❌ لا يوجد بيانات لهذا الرقم";
-return;
-}
-
-/* 🧠 حماية من undefined */
-const name = row.name || row["اسم العميل"] || "";
-const phoneNum = row.phone || row["رقم الهاتف"] || phone;
-const address = row.address || row["العنوان"] || "";
-const service = row.service || row["الخدمة"] || "";
-const months = row.contract_months || row["مدة التعاقد"] || "";
-const visits = row.visits || row["عدد الزيارات"] || "";
-const cost = row.cost || row["التكلفة"] || "";
-const start = row.contract_date || row["تاريخ التعاقد"] || "";
-const end = row.end_date || row["تاريخ إنتهاء العقد"] || "";
-const last = row.last_visit || row["آخر زيارة"] || "";
-const next = row.next_visit || row["الزيارة القادمة"] || "";
-
-let msg = `السلام عليكم
+      const msg = `
+السلام عليكم
 أرغب في تجديد التعاقد
-الاسم: ${name}
-الهاتف: ${phoneNum}
-الخدمة: ${service}`;
+الاسم: ${data.name}
+الهاتف: ${data.phone}
+الخدمة: ${data.service}
+      `;
 
-result.innerHTML = `
-<div class="data-row"><span>اسم العميل</span><span>${name}</span></div>
-<div class="data-row"><span>الهاتف</span><span>${phoneNum}</span></div>
-<div class="data-row"><span>العنوان</span><span>${address}</span></div>
-<div class="data-row"><span>الخدمة</span><span>${service}</span></div>
-<div class="data-row"><span>مدة التعاقد</span><span>${months} شهر</span></div>
-<div class="data-row"><span>عدد الزيارات</span><span>${visits}</span></div>
-<div class="data-row"><span>التكلفة</span><span>${cost} جنيه</span></div>
-<div class="data-row"><span>تاريخ التعاقد</span><span>${start}</span></div>
-<div class="data-row"><span>تاريخ الانتهاء</span><span>${end}</span></div>
-<div class="data-row"><span>آخر زيارة</span><span>${last}</span></div>
-<div class="data-row"><span>الزيارة القادمة</span><span>${next}</span></div>
+      result.innerHTML = `
+        <div class="data-row"><span>الاسم</span><span>${safe(data.name)}</span></div>
+        <div class="data-row"><span>رقم الهاتف</span><span>${safe(data.phone)}</span></div>
+        <div class="data-row"><span>العنوان</span><span>${safe(data.address)}</span></div>
+        <div class="data-row"><span>الخدمة</span><span>${safe(data.service)}</span></div>
+        <div class="data-row"><span>مدة التعاقد</span><span>${safe(data.contract_months)} شهر</span></div>
+        <div class="data-row"><span>عدد الزيارات</span><span>${safe(data.visits)}</span></div>
+        <div class="data-row"><span>التكلفة</span><span>${safe(data.cost)} جنيه</span></div>
+        <div class="data-row"><span>تاريخ التعاقد</span><span>${format(data.contract_date)}</span></div>
+        <div class="data-row"><span>تاريخ الانتهاء</span><span>${format(data.end_date)}</span></div>
+        <div class="data-row"><span>آخر زيارة</span><span>${format(data.last_visit)}</span></div>
+        <div class="data-row"><span>الزيارة القادمة</span><span>${format(data.next_visit)}</span></div>
+        <div class="data-row"><span>⏳ المتبقي</span><span>${safe(data.remaining_days)} يوم</span></div>
 
-<a class="renew-btn"
-target="_blank"
-href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">
-🔁 تجديد التعاقد عبر واتساب
-</a>
-`;
-
-}catch(e){
-console.log(e);
-result.innerHTML = "⚠️ خطأ في جلب البيانات";
+        <a class="renew-btn"
+           target="_blank"
+           href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">
+           🔁 تجديد التعاقد عبر واتساب
+        </a>
+      `;
+    })
+    .catch(() => {
+      result.innerHTML = "⚠️ حدث خطأ في الاتصال";
+    });
 }
 
+/* ===============================
+   HELPERS
+================================ */
+function format(d) {
+  if (!d) return "—";
+  return new Date(d).toLocaleDateString("ar-EG");
 }
 
+function safe(v) {
+  return v ? v : "—";
+}
 </script>
 
 </body>
