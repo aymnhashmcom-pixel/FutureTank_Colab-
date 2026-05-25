@@ -1,209 +1,709 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>المساعد الذكي | FutureTank</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+المساعد الذكي | Future Tank
+</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 
 <style>
+
 body{
-  margin:0;
-  font-family:"Segoe UI",Tahoma;
-  background:#eef3f9;
+margin:0;
+font-family:"Segoe UI",Tahoma;
+background:#eef3f9;
+overflow-x:hidden;
 }
+
 header{
-  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
-  color:#fff;
-  padding:20px;
-  text-align:center;
+background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+color:#fff;
+padding:20px;
+text-align:center;
+box-shadow:0 10px 30px rgba(0,0,0,.15);
 }
+
+header h2{
+margin:0;
+font-size:28px;
+}
+
+header p{
+margin-top:10px;
+font-size:15px;
+opacity:.95;
+}
+
 .chat-box{
-  max-width:700px;
-  margin:30px auto;
-  background:#fff;
-  border-radius:20px;
-  box-shadow:0 30px 60px rgba(0,0,0,.2);
-  overflow:hidden;
+max-width:850px;
+margin:25px auto;
+background:#fff;
+border-radius:25px;
+box-shadow:0 20px 50px rgba(0,0,0,.15);
+overflow:hidden;
 }
+
 .messages{
-  padding:20px;
-  height:380px;
-  overflow-y:auto;
+padding:20px;
+height:420px;
+overflow-y:auto;
+background:#f8fbff;
 }
+
 .msg{
-  margin-bottom:15px;
-  line-height:1.6;
+margin-bottom:15px;
+line-height:1.9;
+animation:fade .3s ease;
 }
+
+@keyframes fade{
+from{
+opacity:0;
+transform:translateY(10px);
+}
+to{
+opacity:1;
+transform:translateY(0);
+}
+}
+
 .bot{
-  background:#f1f5fb;
-  padding:12px;
-  border-radius:15px;
+background:#ffffff;
+padding:14px;
+border-radius:18px;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+color:#222;
 }
+
 .user{
-  background:#0a74c9;
-  color:#fff;
-  padding:12px;
-  border-radius:15px;
-  text-align:left;
+background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+color:#fff;
+padding:14px;
+border-radius:18px;
+text-align:left;
 }
+
 .controls{
-  display:grid;
-  grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
-  gap:10px;
-  padding:15px;
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(160px,1fr));
+gap:10px;
+padding:18px;
+background:#fff;
 }
+
 button{
-  padding:12px;
-  border:none;
-  border-radius:12px;
-  background:linear-gradient(135deg,#0a74c9,#4fc3f7);
-  color:#fff;
-  cursor:pointer;
-  font-size:15px;
+padding:14px;
+border:none;
+border-radius:14px;
+background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+color:#fff;
+cursor:pointer;
+font-size:15px;
+font-weight:bold;
+transition:.2s;
 }
+
+button:hover{
+transform:scale(1.03);
+opacity:.95;
+}
+
 .input-box{
-  display:flex;
-  gap:10px;
-  padding:15px;
-  border-top:1px solid #eee;
+display:flex;
+gap:10px;
+padding:18px;
+background:#fff;
+border-top:1px solid #eee;
 }
+
 input{
-  flex:1;
-  padding:12px;
-  border-radius:10px;
-  border:1px solid #ccc;
+flex:1;
+padding:14px;
+border-radius:14px;
+border:1px solid #ccc;
+font-size:15px;
+outline:none;
 }
+
 footer{
-  text-align:center;
-  padding:15px;
-  color:#777;
+text-align:center;
+padding:18px;
+color:#777;
+font-size:14px;
 }
+
+.quick-links{
+display:flex;
+flex-wrap:wrap;
+gap:8px;
+margin-top:10px;
+}
+
+.quick-links a{
+background:#eef6ff;
+padding:8px 12px;
+border-radius:10px;
+text-decoration:none;
+color:#0a74c9;
+font-size:14px;
+font-weight:bold;
+}
+
 </style>
+
 </head>
 
 <body>
 
 <header>
-  <h2>🤖 المساعد الذكي – FutureTank</h2>
-  <p>أهلاً بك، كيف أستطيع مساعدتك؟</p>
+
+<h2>
+🤖 المساعد الذكي – Future Tank
+</h2>
+
+<p>
+مساعد ذكي لخدمات المياه والتسوق وتتبع الطلبات
+</p>
+
 </header>
 
 <div class="chat-box">
-  <div class="messages" id="chat">
-    <div class="msg bot">
-      👋 مرحباً بك في <b>FutureTank</b><br>
-      يسعدني مساعدتك في أي وقت 🌿
-    </div>
-  </div>
 
-  <div class="controls">
-    <button onclick="services()">🛠️ الخدمات</button>
-    <button onclick="client()">👤 بوابة العملاء</button>
-    <button onclick="newClient()">📝 عميل جديد</button>
-    <button onclick="shop()">🛒 تسوق الآن</button>
-    <button onclick="whatsapp()">📲 واتساب</button>
-  </div>
+<div class="messages" id="chat">
 
-  <div class="input-box">
-    <input id="userInput" placeholder="اكتب سؤالك هنا…" onkeydown="if(event.key==='Enter') sendText()">
-    <button onclick="sendText()">إرسال</button>
-  </div>
+<div class="msg bot">
+
+👋 أهلاً بحضرتك في <b>Future Tank</b>
+
+<br><br>
+
+أنا المساعد الذكي الخاص بالموقع 💙
+
+<br><br>
+
+أقدر أساعدك في:
+
+<br>
+
+✔️ الخدمات  
+✔️ منتجات نقاء الماء  
+✔️ التسوق  
+✔️ تتبع الطلبات  
+✔️ ماركت هرم سيتي وحدائق أكتوبر  
+✔️ بوابة العملاء  
+✔️ العقود والتجديد  
+✔️ التطهير والتعقيم  
+✔️ الصيانة والتركيب
+
+<br><br>
+
+اكتب أي سؤال وأنا هساعدك 🤝
+
+</div>
+
+</div>
+
+<div class="controls">
+
+<button onclick="services()">
+🛠️ الخدمات
+</button>
+
+<button onclick="products()">
+💧 المنتجات
+</button>
+
+<button onclick="market()">
+🛒 الماركت
+</button>
+
+<button onclick="trackOrders()">
+📦 تتبع الطلبات
+</button>
+
+<button onclick="clientPortal()">
+👤 بوابة العملاء
+</button>
+
+<button onclick="shopNow()">
+🛍️ تسوق الآن
+</button>
+
+<button onclick="newContract()">
+📝 تعاقد جديد
+</button>
+
+<button onclick="contactWhatsapp()">
+📲 واتساب
+</button>
+
+</div>
+
+<div class="input-box">
+
+<input
+id="userInput"
+placeholder="اكتب سؤالك هنا..."
+onkeydown="if(event.key==='Enter') sendText()">
+
+<button onclick="sendText()">
+
+إرسال
+
+</button>
+
+</div>
+
 </div>
 
 <footer>
-© FutureTank – نقاء الماء هو هدفنا
+
+© Future Tank — نقاء الماء هو هدفنا 💧
+
 </footer>
 
 <script>
-const chat = document.getElementById("chat");
+
+const chat =
+document.getElementById("chat");
 
 function addBot(text){
-  chat.innerHTML += `<div class="msg bot">${text}</div>`;
-  chat.scrollTop = chat.scrollHeight;
+
+chat.innerHTML += `
+
+<div class="msg bot">
+
+${text}
+
+</div>
+
+`;
+
+chat.scrollTop =
+chat.scrollHeight;
+
 }
+
 function addUser(text){
-  chat.innerHTML += `<div class="msg user">${text}</div>`;
-  chat.scrollTop = chat.scrollHeight;
+
+chat.innerHTML += `
+
+<div class="msg user">
+
+${text}
+
+</div>
+
+`;
+
+chat.scrollTop =
+chat.scrollHeight;
+
 }
 
 function sendText(){
-  const input=document.getElementById("userInput");
-  const text=input.value.trim();
-  if(!text) return;
-  addUser(text);
-  input.value="";
-  understand(text);
+
+const input =
+document.getElementById("userInput");
+
+const text =
+input.value.trim();
+
+if(!text) return;
+
+addUser(text);
+
+input.value="";
+
+understand(text);
+
 }
 
-function understand(t){
-  const text=t.toLowerCase();
+function understand(message){
 
-  // تحية
-  if(/سلام|اهلا|أهلا|مرحبا/.test(text)){
-    addBot("أهلاً وسهلاً بحضرتك 🌿 كيف أقدر أساعدك؟");
-    return;
-  }
+const text =
+message.toLowerCase();
 
-  // صيانة وإصلاح
-  if(/صيانة|اصلاح|إصلاح|مكسور|كسر|تسريب/.test(text)){
-    addBot(
-      "🛠️ تمام، بنقدّم خدمات صيانة وإصلاح خزانات المياه، ومعالجة الكسور والتسريبات بأعلى جودة."
-    );
-    whatsapp("صيانة خزانات");
-    return;
-  }
+/* ترحيب */
 
-  // توريد وتركيب
-  if(/توريد|تركيب/.test(text)){
-    addBot(
-      "🚚 بنوفر توريد وتركيب خزانات المياه والفلاتر المعتمدة حسب احتياجك."
-    );
-    whatsapp("توريد وتركيب خزانات");
-    return;
-  }
+if(
+/سلام|اهلا|أهلا|مرحبا|هاي|hi|hello/.test(text)
+){
 
-  // خزانات وفلاتر
-  if(/خزان|خزانات|فلتر|فلاتر/.test(text)){
-    addBot("💧 لدينا خزانات وفلاتر مياه معتمدة بنقاء عالي وخدمة تركيب مميزة.");
-    shop();
-    return;
-  }
+addBot(
 
-  // تعاقد
-  if(/تجديد|تعاقد|عقد|بيانات/.test(text)){
-    client();
-    return;
-  }
+"🌿 أهلاً وسهلاً بحضرتك في Future Tank<br><br>كيف أقدر أساعدك اليوم؟"
 
-  addBot("فهمتك جزئياً 🤝 تحب أساعدك في الصيانة، التوريد، التعاقد، أو التواصل؟");
+);
+
+return;
+
 }
 
-// الأزرار
+/* خدمات */
+
+if(
+/خدمة|الخدمات|صيانة|اصلاح|إصلاح|تسريب|تعقيم|تطهير|غسيل|تنظيف/.test(text)
+){
+
+services();
+
+return;
+
+}
+
+/* منتجات */
+
+if(
+/خزان|خزانات|فلتر|فلاتر|طلمبة|مياه|منتجات/.test(text)
+){
+
+products();
+
+return;
+
+}
+
+/* تتبع الطلب */
+
+if(
+/تتبع|اوردر|أوردر|طلب|الطلب|الشحنة/.test(text)
+){
+
+trackOrders();
+
+return;
+
+}
+
+/* ماركت */
+
+if(
+/ماركت|سوبر ماركت|صيدلية|خضار|لحوم|هرم سيتي|حدائق اكتوبر/.test(text)
+){
+
+market();
+
+return;
+
+}
+
+/* بوابة العملاء */
+
+if(
+/بوابة|عميل|تعاقد|تجديد|العقد|بياناتي/.test(text)
+){
+
+clientPortal();
+
+return;
+
+}
+
+/* تسوق */
+
+if(
+/تسوق|شراء|اشتري|عايز اطلب|عايز منتج/.test(text)
+){
+
+shopNow();
+
+return;
+
+}
+
+/* اسعار */
+
+if(
+/سعر|الاسعار|بكام|تكلفة/.test(text)
+){
+
+addBot(
+
+"💰 الأسعار تختلف حسب الخدمة أو المنتج المطلوب.<br><br>اكتب اسم الخدمة أو المنتج وسأساعدك فوراً 🤝"
+
+);
+
+return;
+
+}
+
+/* واتساب */
+
+if(
+/واتساب|رقم|تواصل|اتصال/.test(text)
+){
+
+contactWhatsapp();
+
+return;
+
+}
+
+/* شكرا */
+
+if(
+/شكرا|متشكر|تسلم|thanks/.test(text)
+){
+
+addBot(
+
+"💙 تحت أمرك في أي وقت يا صديقي العزيز"
+
+);
+
+return;
+
+}
+
+/* افتراضي */
+
+addBot(
+
+`🤝 فهمت إنك تستفسر عن:
+<b>${message}</b>
+
+<br><br>
+
+يمكنني مساعدتك في:
+
+<div class="quick-links">
+
+<a href="services.html" target="_blank">
+الخدمات
+</a>
+
+<a href="shop.html" target="_blank">
+تسوق الآن
+</a>
+
+<a href="track-order.html" target="_blank">
+تتبع الطلبات
+</a>
+
+<a href="market.html" target="_blank">
+الماركت
+</a>
+
+</div>
+
+<br>
+
+أو اكتب سؤالك بشكل أوضح وسأساعدك فوراً 💧`
+
+);
+
+}
+
+/* الخدمات */
+
 function services(){
-  addBot(
-    "🛠️ خدماتنا تشمل:\n<br>• صيانة وإصلاح خزانات\n• تطهير وتعقيم\n• توريد وتركيب خزانات وفلاتر"
-  );
+
+addBot(
+
+`🛠️ خدمات Future Tank
+
+<br><br>
+
+✔️ تطهير وتعقيم خزانات مياه الشرب  
+✔️ صيانة جميع أنواع الخزانات  
+✔️ معالجة التسريبات والكسور  
+✔️ توريد وتركيب خزانات  
+✔️ توريد وتركيب فلاتر المياه  
+✔️ عقود دورية للمنازل والشركات
+
+<br><br>
+
+🚚 الخدمة متاحة داخل الجيزة والقاهرة`
+
+);
+
 }
-function client(){
-  addBot("👤 تقدر تدخل بوابة العملاء لمراجعة أو تجديد التعاقد.");
-  window.open("portal.html","_blank");
+
+/* المنتجات */
+
+function products(){
+
+addBot(
+
+`💧 منتجات نقاء الماء
+
+<br><br>
+
+✔️ خزانات مياه  
+✔️ فلاتر مياه  
+✔️ طلمبات  
+✔️ مستلزمات المياه  
+✔️ منتجات معتمدة بجودة عالية
+
+<br><br>
+
+🛒 يمكنك الطلب بسهولة من قسم تسوق الآن`
+
+);
+
+window.open(
+"shop.html",
+"_blank"
+);
+
 }
-function newClient(){
-  addBot("📝 يسعدنا بدء تعاقد جديد معك.");
-  window.open("admin.html","_blank");
+
+/* الماركت */
+
+function market(){
+
+addBot(
+
+`🛒 ماركت هرم سيتي وحدائق أكتوبر
+
+<br><br>
+
+نوفر:
+
+<br>
+
+✔️ سوبر ماركت  
+✔️ خضروات وفاكهة  
+✔️ لحوم ودواجن  
+✔️ صيدليات  
+✔️ عروض وخدمات المنطقة
+
+<br><br>
+
+🚚 توصيل سريع داخل المنطقة`
+
+);
+
+window.open(
+"market.html",
+"_blank"
+);
+
 }
-function shop(){
-  addBot("🛒 تقدر تطلب الخزانات أو الفلاتر بسهولة عبر واتساب.");
-  whatsapp("طلب منتجات");
+
+/* تتبع الطلبات */
+
+function trackOrders(){
+
+addBot(
+
+`📦 يمكنك متابعة حالة الطلب لحظة بلحظة بسهولة من صفحة تتبع الطلبات.`
+
+);
+
+window.open(
+"track-order.html",
+"_blank"
+);
+
 }
-function whatsapp(reason="استفسار"){
-  const msg=`مرحباً، أحتاج مساعدة بخصوص ${reason} من FutureTank.`;
-  window.open(
-    "https://wa.me/201150402031?text="+encodeURIComponent(msg),
-    "_blank"
-  );
+
+/* بوابة العملاء */
+
+function clientPortal(){
+
+addBot(
+
+`👤 بوابة العملاء
+
+<br><br>
+
+يمكنك من خلالها:
+
+<br>
+
+✔️ مراجعة بيانات التعاقد  
+✔️ تجديد التعاقد  
+✔️ متابعة الخدمات  
+✔️ مراجعة البيانات`
+
+);
+
+window.open(
+"portal.html",
+"_blank"
+);
+
 }
+
+/* تسوق */
+
+function shopNow(){
+
+addBot(
+
+`🛍️ أهلاً بك في قسم تسوق الآن
+
+<br><br>
+
+يمكنك طلب المنتجات بسهولة ومتابعة الطلب حتى الاستلام 🚚`
+
+);
+
+window.open(
+"shop.html",
+"_blank"
+);
+
+}
+
+/* تعاقد جديد */
+
+function newContract(){
+
+addBot(
+
+`📝 يسعدنا بدء تعاقد جديد معك
+
+<br><br>
+
+يمكنك تسجيل بياناتك الآن وسيتواصل معك فريق Future Tank 🤝`
+
+);
+
+window.open(
+"new.html",
+"_blank"
+);
+
+}
+
+/* واتساب */
+
+function contactWhatsapp(){
+
+addBot(
+
+`📲 يمكنك التواصل مباشرة عبر واتساب مع فريق Future Tank`
+
+);
+
+const msg =
+"السلام عليكم، أحتاج استفسار من Future Tank";
+
+window.open(
+
+"https://wa.me/201150402031?text=" +
+encodeURIComponent(msg),
+
+"_blank"
+
+);
+
+}
+
 </script>
 
 </body>
+
 </html>
