@@ -31,18 +31,11 @@ background:linear-gradient(135deg,#0b6fc2,#4fc3f7);
 color:#fff;
 padding:30px 20px;
 text-align:center;
-box-shadow:0 5px 20px rgba(0,0,0,.15);
 }
 
 .main-header h1{
 margin:0;
 font-size:32px;
-}
-
-.main-header p{
-margin-top:10px;
-font-size:16px;
-opacity:.95;
 }
 
 .portal-container{
@@ -58,13 +51,6 @@ border-radius:20px;
 box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
-.search-title{
-font-size:24px;
-margin-bottom:15px;
-color:#0b6fc2;
-font-weight:bold;
-}
-
 .portal-input{
 width:100%;
 padding:15px;
@@ -72,7 +58,6 @@ border-radius:14px;
 border:1px solid #d6dce5;
 font-size:16px;
 box-sizing:border-box;
-outline:none;
 margin-top:10px;
 }
 
@@ -89,10 +74,6 @@ font-weight:bold;
 cursor:pointer;
 }
 
-.portal-btn:hover{
-opacity:.92;
-}
-
 .client-card{
 background:#fff;
 border-radius:20px;
@@ -104,10 +85,8 @@ box-shadow:0 5px 20px rgba(0,0,0,.08);
 .data-row{
 display:flex;
 justify-content:space-between;
-gap:10px;
 padding:12px 0;
 border-bottom:1px solid #edf2f7;
-font-size:15px;
 }
 
 .data-row span:first-child{
@@ -135,14 +114,10 @@ background:linear-gradient(135deg,#f39c12,#e67e22);
 background:linear-gradient(135deg,#e74c3c,#c0392b);
 }
 
-.remaining-box .title{
-font-size:18px;
-margin-bottom:10px;
-}
-
-.remaining-box .days{
+.days{
 font-size:42px;
 font-weight:bold;
+margin:10px 0;
 }
 
 .progress-bar{
@@ -189,7 +164,6 @@ background:#f1f8ff;
 padding:16px;
 border-radius:14px;
 line-height:2;
-border:1px solid #dceeff;
 }
 
 .renew-btn{
@@ -218,18 +192,6 @@ color:#777;
 display:none;
 }
 
-@media(max-width:600px){
-
-.data-row{
-flex-direction:column;
-}
-
-.remaining-box .days{
-font-size:34px;
-}
-
-}
-
 </style>
 
 </head>
@@ -252,9 +214,9 @@ font-size:34px;
 
 <div class="search-box">
 
-<div class="search-title">
+<h2>
 🔍 عرض بيانات التعاقد
-</div>
+</h2>
 
 <input
 type="text"
@@ -272,10 +234,7 @@ onclick="searchClient()">
 
 </div>
 
-<div
-id="result"
-class="hidden">
-</div>
+<div id="result"></div>
 
 </section>
 
@@ -309,8 +268,6 @@ return;
 
 }
 
-result.classList.remove("hidden");
-
 result.innerHTML =
 "<div class='client-card'>🔍 جاري البحث...</div>";
 
@@ -326,24 +283,7 @@ result.innerHTML=`
 
 <div class="client-card">
 
-<h3>
 ❌ لا يوجد تعاقد بهذا الرقم
-</h3>
-
-<div class="notice-box">
-
-تأكد من كتابة رقم الهاتف بشكل صحيح أو تواصل معنا عبر واتساب 🤝
-
-</div>
-
-<a
-class="renew-btn"
-target="_blank"
-href="https://wa.me/${WHATSAPP}">
-
-📲 التواصل عبر واتساب
-
-</a>
 
 </div>
 
@@ -353,129 +293,150 @@ return;
 
 }
 
+const name =
+data.name || data.client || data["اسم العميل"] || "—";
+
+const clientPhone =
+data.phone || data.mobile || data["رقم الهاتف"] || "—";
+
+const address =
+data.address || data["العنوان"] || "—";
+
+const service =
+data.service || data["الخدمة"] || "—";
+
+const months =
+data.contract_months || data.months || data["مدة التعاقد"] || "—";
+
+const visits =
+data.visits || data["عدد الزيارات"] || "—";
+
+const cost =
+data.cost || data["التكلفة"] || "—";
+
+const contractDate =
+data.contract_date || data["تاريخ التعاقد"];
+
+const endDate =
+data.end_date || data["تاريخ إنتهاء العقد"];
+
+const lastVisit =
+data.last_visit || data["آخر زيارة"];
+
+const nextVisit =
+data.next_visit || data["الزيارة القادمة"];
+
 const today =
 new Date();
 
-const endDate =
-new Date(data.end_date);
+const end =
+new Date(endDate);
 
-const contractDate =
-new Date(data.contract_date);
+const start =
+new Date(contractDate);
 
 const totalDays =
-Math.ceil(
-(endDate - contractDate) / (1000*60*60*24)
-);
+Math.ceil((end - start)/(1000*60*60*24));
 
 const remainingDays =
-Math.ceil(
-(endDate - today) / (1000*60*60*24)
-);
+Math.ceil((end - today)/(1000*60*60*24));
 
+let remainClass="";
 let statusClass="";
 let statusText="";
-let remainClass="";
 
 if(remainingDays > 30){
 
+remainClass="remaining-green";
 statusClass="status-active";
 statusText="✅ التعاقد نشط";
 
-remainClass="remaining-green";
-
 }else if(remainingDays > 0){
 
+remainClass="remaining-orange";
 statusClass="status-warning";
 statusText="⚠️ التعاقد قرب على الانتهاء";
 
-remainClass="remaining-orange";
-
 }else{
 
+remainClass="remaining-red";
 statusClass="status-danger";
 statusText="❌ التعاقد منتهي";
 
-remainClass="remaining-red";
-
 }
 
-let progress =
-(totalDays > 0)
-?
+const progress =
 Math.max(0,
 Math.min(100,
 (remainingDays / totalDays) * 100
-))
-:
-0;
+));
 
 const renewMessage = `
 السلام عليكم
 أرغب في تجديد التعاقد
 
-الاسم: ${data.name}
-الهاتف: ${data.phone}
-الخدمة: ${data.service}
-
+الاسم: ${name}
+الهاتف: ${clientPhone}
+الخدمة: ${service}
 `;
 
-result.innerHTML=`
+result.innerHTML = `
 
 <div class="client-card">
 
 <div class="data-row">
 <span>👤 اسم العميل</span>
-<span>${safe(data.name)}</span>
+<span>${name}</span>
 </div>
 
 <div class="data-row">
 <span>📞 رقم الهاتف</span>
-<span>${safe(data.phone)}</span>
+<span>${clientPhone}</span>
 </div>
 
 <div class="data-row">
 <span>📍 العنوان</span>
-<span>${safe(data.address)}</span>
+<span>${address}</span>
 </div>
 
 <div class="data-row">
 <span>🛠️ الخدمة</span>
-<span>${safe(data.service)}</span>
+<span>${service}</span>
 </div>
 
 <div class="data-row">
 <span>📅 مدة التعاقد</span>
-<span>${safe(data.contract_months)} شهر</span>
+<span>${months} شهر</span>
 </div>
 
 <div class="data-row">
 <span>🔁 عدد الزيارات</span>
-<span>${safe(data.visits)}</span>
+<span>${visits}</span>
 </div>
 
 <div class="data-row">
 <span>💰 التكلفة</span>
-<span>${safe(data.cost)} جنيه</span>
+<span>${cost} جنيه</span>
 </div>
 
 <div class="data-row">
 <span>📆 تاريخ التعاقد</span>
-<span>${format(data.contract_date)}</span>
+<span>${format(contractDate)}</span>
 </div>
 
 <div class="data-row">
 <span>⏳ تاريخ انتهاء العقد</span>
-<span>${format(data.end_date)}</span>
+<span>${format(endDate)}</span>
 </div>
 
 <div class="data-row">
 <span>✅ آخر زيارة</span>
-<span>${format(data.last_visit)}</span>
+<span>${format(lastVisit)}</span>
 </div>
 
 <div class="data-row">
 <span>🚚 الزيارة القادمة</span>
-<span>${format(data.next_visit)}</span>
+<span>${format(nextVisit)}</span>
 </div>
 
 <div class="status-box ${statusClass}">
@@ -484,7 +445,7 @@ ${statusText}
 
 <div class="remaining-box ${remainClass}">
 
-<div class="title">
+<div>
 الأيام المتبقية على انتهاء التعاقد
 </div>
 
@@ -504,7 +465,7 @@ ${remainingDays > 0 ? remainingDays : 0}
 
 <div class="notice-box">
 
-🔔 سيتم إرسال إشعارات تلقائية قبل الزيارة وقبل انتهاء التعاقد لضمان استمرار الخدمة بأفضل جودة.
+🔔 سيتم إرسال إشعارات تلقائية قبل الزيارة وقبل انتهاء التعاقد.
 
 </div>
 
@@ -544,12 +505,6 @@ function format(d){
 if(!d) return "—";
 
 return new Date(d).toLocaleDateString("ar-EG");
-
-}
-
-function safe(v){
-
-return v ? v : "—";
 
 }
 
