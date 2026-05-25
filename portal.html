@@ -1,120 +1,588 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-  <meta charset="UTF-8">
-  <title>بوابة العملاء | Future Tank</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+
+<title>
+بوابة العملاء | Future Tank
+</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<link rel="stylesheet"
+href="style.css">
+
+<link rel="stylesheet"
+href="client-portal.css">
+
+<style>
+
+body{
+margin:0;
+padding:0;
+background:#f3f8fd;
+font-family:"Segoe UI",Tahoma;
+}
+
+.portal-container{
+max-width:900px;
+margin:20px auto;
+padding:15px;
+}
+
+.portal-title{
+text-align:center;
+margin-bottom:20px;
+}
+
+.portal-title h2{
+margin:0;
+font-size:30px;
+color:#0a74c9;
+}
+
+.portal-title p{
+margin-top:8px;
+color:#666;
+}
+
+.search-box{
+background:#fff;
+padding:18px;
+border-radius:18px;
+box-shadow:0 6px 20px rgba(0,0,0,.08);
+margin-bottom:20px;
+}
+
+.search-box input{
+width:100%;
+padding:15px;
+border-radius:12px;
+border:1px solid #ccc;
+font-size:16px;
+box-sizing:border-box;
+margin-bottom:12px;
+}
+
+.search-box button{
+width:100%;
+padding:14px;
+border:none;
+border-radius:12px;
+background:linear-gradient(135deg,#0a74c9,#4fc3f7);
+color:#fff;
+font-size:17px;
+cursor:pointer;
+font-weight:bold;
+}
+
+.client-data{
+display:grid;
+gap:15px;
+}
+
+.info-card{
+background:#fff;
+padding:18px;
+border-radius:18px;
+box-shadow:0 6px 20px rgba(0,0,0,.08);
+}
+
+.data-row{
+display:flex;
+justify-content:space-between;
+gap:15px;
+padding:12px 0;
+border-bottom:1px solid #eee;
+font-size:15px;
+}
+
+.data-row:last-child{
+border-bottom:none;
+}
+
+.data-row span:first-child{
+font-weight:bold;
+color:#0a74c9;
+}
+
+.remaining-box{
+padding:25px;
+border-radius:18px;
+text-align:center;
+color:#fff;
+}
+
+.remaining-green{
+background:linear-gradient(135deg,#27ae60,#2ecc71);
+}
+
+.remaining-orange{
+background:linear-gradient(135deg,#f39c12,#ffb347);
+}
+
+.remaining-red{
+background:linear-gradient(135deg,#e74c3c,#ff6b6b);
+}
+
+.remaining-box .days{
+font-size:50px;
+font-weight:bold;
+margin:15px 0;
+}
+
+.progress-bar{
+width:100%;
+height:10px;
+background:rgba(255,255,255,.3);
+border-radius:20px;
+overflow:hidden;
+margin-top:15px;
+}
+
+.progress-bar span{
+display:block;
+height:100%;
+background:#fff;
+}
+
+.notice{
+margin-top:15px;
+background:#eef8ff;
+padding:15px;
+border-radius:14px;
+line-height:1.9;
+border:1px solid #cce8ff;
+}
+
+.renew-btn{
+display:block;
+margin-top:18px;
+padding:15px;
+text-align:center;
+background:#25D366;
+color:#fff;
+text-decoration:none;
+border-radius:14px;
+font-size:17px;
+font-weight:bold;
+}
+
+.hidden{
+display:none;
+}
+
+.loading{
+text-align:center;
+padding:20px;
+font-size:18px;
+}
+
+.error{
+background:#fff3f3;
+color:#d63031;
+padding:15px;
+border-radius:14px;
+text-align:center;
+}
+
+</style>
+
 </head>
 
 <body>
 
 <header class="main-header">
-  <h1>💧 Future Tank</h1>
-  <p>نقاء المياه يبدأ من هنا</p>
+
+<h1>
+💧 Future Tank
+</h1>
+
+<p>
+بوابة العملاء الذكية — إدارة التعاقدات والخدمات
+</p>
+
 </header>
 
-<section class="portal-container">
+<div class="portal-container">
 
-  <h2>🔍 عرض التعاقد</h2>
+<div class="portal-title">
 
-  <input
-    type="text"
-    id="phone"
-    placeholder="اكتب رقم الهاتف"
-    inputmode="numeric"
-  >
+<h2>
+🔍 عرض بيانات التعاقد
+</h2>
 
-  <button onclick="searchClient()">بحث</button>
+<p>
+اكتب رقم الهاتف لعرض تفاصيل التعاقد
+</p>
 
-  <div id="result" class="client-data hidden"></div>
+</div>
 
-</section>
+<div class="search-box">
+
+<input
+type="text"
+id="phone"
+placeholder="📞 اكتب رقم الهاتف"
+inputmode="numeric">
+
+<button onclick="searchClient()">
+بحث الآن
+</button>
+
+</div>
+
+<div id="result"
+class="client-data hidden">
+</div>
+
+</div>
 
 <footer class="main-footer">
-  © Future Tank — جميع الحقوق محفوظة
+© Future Tank — نقاء الماء هو هدفنا 💧
 </footer>
 
 <script>
-/* ===============================
-   API CONFIG
-================================ */
+
+/* =========================
+   API
+========================= */
+
 const API_URL =
-  "https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
+"https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
 
-const WHATSAPP = "201150402031";
+const WHATSAPP =
+"201150402031";
 
-/* ===============================
-   SEARCH CLIENT
-================================ */
-function searchClient() {
+/* =========================
+   SEARCH
+========================= */
 
-  const phoneInput = document.getElementById("phone");
-  const phone = phoneInput.value.trim();
-  const result = document.getElementById("result");
+function searchClient(){
 
-  if (!phone) {
-    alert("من فضلك أدخل رقم الهاتف");
-    return;
-  }
+const phone =
+document.getElementById("phone").value.trim();
 
-  result.classList.remove("hidden");
-  result.innerHTML = "🔍 جاري البحث...";
+const result =
+document.getElementById("result");
 
-  fetch(API_URL + "?phone=" + encodeURIComponent(phone))
-    .then(res => res.json())
-    .then(data => {
+if(!phone){
 
-      if (!data || data.error) {
-        result.innerHTML = "❌ لا يوجد تعاقد بهذا الرقم";
-        return;
-      }
+alert("من فضلك اكتب رقم الهاتف");
 
-      const msg = `
+return;
+
+}
+
+result.classList.remove("hidden");
+
+result.innerHTML =
+'<div class="loading">🔍 جاري البحث...</div>';
+
+fetch(API_URL + "?phone=" + encodeURIComponent(phone))
+
+.then(res => res.json())
+
+.then(data => {
+
+console.log("CLIENT DATA:", data);
+
+if(!data || data.error){
+
+result.innerHTML =
+'<div class="error">❌ لا يوجد تعاقد بهذا الرقم</div>';
+
+return;
+
+}
+
+/* =========================
+   قراءة البيانات بأكثر من اسم
+========================= */
+
+const name =
+data.name ||
+data.client_name ||
+data["اسم العميل"] ||
+"—";
+
+const mobile =
+data.phone ||
+data.mobile ||
+data["رقم الهاتف"] ||
+"—";
+
+const address =
+data.address ||
+data["العنوان"] ||
+"—";
+
+const service =
+data.service ||
+data["الخدمة"] ||
+"—";
+
+const contractMonths =
+data.contract_months ||
+data.duration ||
+data["مدة التعاقد"] ||
+"—";
+
+const visits =
+data.visits ||
+data["عدد الزيارات"] ||
+"—";
+
+const cost =
+data.cost ||
+data.price ||
+data["التكلفة"] ||
+"—";
+
+const contractDate =
+data.contract_date ||
+data["تاريخ التعاقد"] ||
+"";
+
+const endDate =
+data.end_date ||
+data["تاريخ الانتهاء"] ||
+data["تاريخ إنتهاء العقد"] ||
+"";
+
+const lastVisit =
+data.last_visit ||
+data["آخر زيارة"] ||
+"";
+
+const nextVisit =
+data.next_visit ||
+data["الزيارة القادمة"] ||
+"";
+
+/* =========================
+   حساب الأيام المتبقية
+========================= */
+
+let remainingDays = 0;
+
+if(endDate){
+
+const end =
+new Date(endDate);
+
+const today =
+new Date();
+
+remainingDays =
+Math.ceil(
+(end - today) / (1000 * 60 * 60 * 24)
+);
+
+if(remainingDays < 0){
+remainingDays = 0;
+}
+
+}
+
+let statusClass =
+"remaining-green";
+
+let statusText =
+"✅ التعاقد ساري";
+
+if(remainingDays <= 30){
+statusClass = "remaining-orange";
+statusText = "⚠️ التعاقد يقترب من الانتهاء";
+}
+
+if(remainingDays <= 7){
+statusClass = "remaining-red";
+statusText = "❌ التعاقد أوشك على الانتهاء";
+}
+
+if(remainingDays <= 0){
+statusClass = "remaining-red";
+statusText = "❌ التعاقد منتهي";
+}
+
+/* =========================
+   progress
+========================= */
+
+let progress = 100;
+
+if(contractMonths && remainingDays){
+
+const totalDays =
+parseInt(contractMonths) * 30;
+
+progress =
+Math.min(
+100,
+Math.max(
+0,
+(remainingDays / totalDays) * 100
+)
+);
+
+}
+
+/* =========================
+   whatsapp msg
+========================= */
+
+const msg = `
 السلام عليكم
 أرغب في تجديد التعاقد
-الاسم: ${data.name}
-الهاتف: ${data.phone}
-الخدمة: ${data.service}
-      `;
 
-      result.innerHTML = `
-        <div class="data-row"><span>الاسم</span><span>${safe(data.name)}</span></div>
-        <div class="data-row"><span>رقم الهاتف</span><span>${safe(data.phone)}</span></div>
-        <div class="data-row"><span>العنوان</span><span>${safe(data.address)}</span></div>
-        <div class="data-row"><span>الخدمة</span><span>${safe(data.service)}</span></div>
-        <div class="data-row"><span>مدة التعاقد</span><span>${safe(data.contract_months)} شهر</span></div>
-        <div class="data-row"><span>عدد الزيارات</span><span>${safe(data.visits)}</span></div>
-        <div class="data-row"><span>التكلفة</span><span>${safe(data.cost)} جنيه</span></div>
-        <div class="data-row"><span>تاريخ التعاقد</span><span>${format(data.contract_date)}</span></div>
-        <div class="data-row"><span>تاريخ الانتهاء</span><span>${format(data.end_date)}</span></div>
-        <div class="data-row"><span>آخر زيارة</span><span>${format(data.last_visit)}</span></div>
-        <div class="data-row"><span>الزيارة القادمة</span><span>${format(data.next_visit)}</span></div>
-        <div class="data-row"><span>⏳ المتبقي</span><span>${safe(data.remaining_days)} يوم</span></div>
+الاسم: ${name}
+الهاتف: ${mobile}
+الخدمة: ${service}
+`;
 
-        <a class="renew-btn"
-           target="_blank"
-           href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">
-           🔁 تجديد التعاقد عبر واتساب
-        </a>
-      `;
-    })
-    .catch(() => {
-      result.innerHTML = "⚠️ حدث خطأ في الاتصال";
-    });
+/* =========================
+   render
+========================= */
+
+result.innerHTML = `
+
+<div class="info-card">
+
+<div class="data-row">
+<span>👤 اسم العميل</span>
+<span>${name}</span>
+</div>
+
+<div class="data-row">
+<span>📞 رقم الهاتف</span>
+<span>${mobile}</span>
+</div>
+
+<div class="data-row">
+<span>📍 العنوان</span>
+<span>${address}</span>
+</div>
+
+<div class="data-row">
+<span>🛠️ الخدمة</span>
+<span>${service}</span>
+</div>
+
+<div class="data-row">
+<span>📅 مدة التعاقد</span>
+<span>${contractMonths} شهر</span>
+</div>
+
+<div class="data-row">
+<span>🔁 عدد الزيارات</span>
+<span>${visits}</span>
+</div>
+
+<div class="data-row">
+<span>💰 التكلفة</span>
+<span>${cost} جنيه</span>
+</div>
+
+<div class="data-row">
+<span>📆 تاريخ التعاقد</span>
+<span>${formatDate(contractDate)}</span>
+</div>
+
+<div class="data-row">
+<span>⏳ تاريخ انتهاء العقد</span>
+<span>${formatDate(endDate)}</span>
+</div>
+
+<div class="data-row">
+<span>✅ آخر زيارة</span>
+<span>${formatDate(lastVisit)}</span>
+</div>
+
+<div class="data-row">
+<span>🚚 الزيارة القادمة</span>
+<span>${formatDate(nextVisit)}</span>
+</div>
+
+</div>
+
+<div class="remaining-box ${statusClass}">
+
+<div>
+${statusText}
+</div>
+
+<div style="margin-top:15px;font-size:18px;">
+الأيام المتبقية على انتهاء التعاقد
+</div>
+
+<div class="days">
+${remainingDays}
+</div>
+
+<div>
+يوم
+</div>
+
+<div class="progress-bar">
+<span style="width:${progress}%"></span>
+</div>
+
+</div>
+
+<div class="notice">
+
+🔔 سيتم إرسال إشعارات تلقائية قبل الزيارة وقبل انتهاء التعاقد لضمان استمرار الخدمة بأفضل جودة.
+
+</div>
+
+<a
+class="renew-btn"
+target="_blank"
+href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">
+
+🔁 تجديد التعاقد عبر واتساب
+
+</a>
+
+`;
+
+})
+
+.catch(err => {
+
+console.log(err);
+
+result.innerHTML =
+'<div class="error">⚠️ حدث خطأ أثناء الاتصال</div>';
+
+});
+
 }
 
-/* ===============================
-   HELPERS
-================================ */
-function format(d) {
-  if (!d) return "—";
-  return new Date(d).toLocaleDateString("ar-EG");
+/* =========================
+   DATE FORMAT
+========================= */
+
+function formatDate(date){
+
+if(!date || date === "—"){
+return "—";
 }
 
-function safe(v) {
-  return v ? v : "—";
+const d =
+new Date(date);
+
+if(isNaN(d)){
+return date;
 }
+
+return d.toLocaleDateString("ar-EG");
+
+}
+
 </script>
 
 </body>
