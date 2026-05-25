@@ -2,627 +2,262 @@
 <html lang="ar" dir="rtl">
 
 <head>
-
 <meta charset="UTF-8">
+<title>بوابة العملاء | Future Tank</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>
-بوابة العملاء | Future Tank
-</title>
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet"
-href="style.css">
-
-<link rel="stylesheet"
-href="client-portal.css">
+<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="client-portal.css">
 
 <style>
-
 body{
 margin:0;
-padding:0;
 background:#f4f9ff;
 font-family:Tahoma;
 }
 
 .portal-header{
 background:linear-gradient(135deg,#0b6fc2,#4fc3f7);
-padding:30px 20px;
+padding:25px;
 text-align:center;
 color:#fff;
-border-bottom-left-radius:30px;
-border-bottom-right-radius:30px;
-box-shadow:0 5px 20px rgba(0,0,0,.1);
-}
-
-.portal-header h1{
-margin:0;
-font-size:32px;
-}
-
-.portal-header p{
-margin-top:10px;
-font-size:16px;
-opacity:.95;
 }
 
 .portal-container{
 max-width:900px;
-margin:25px auto;
+margin:20px auto;
 padding:15px;
 }
 
 .search-box{
 background:#fff;
 padding:20px;
-border-radius:20px;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
-margin-bottom:20px;
-}
-
-.search-box h2{
-margin-top:0;
-color:#0b6fc2;
+border-radius:18px;
 }
 
 .search-input{
 width:100%;
-padding:15px;
-border-radius:14px;
+padding:14px;
 border:1px solid #ccc;
-font-size:16px;
-box-sizing:border-box;
-margin-top:10px;
+border-radius:12px;
 }
 
 .search-btn{
 width:100%;
-padding:15px;
-margin-top:15px;
+margin-top:10px;
+padding:14px;
 border:none;
-border-radius:14px;
-background:linear-gradient(135deg,#0b6fc2,#4fc3f7);
+background:#0b6fc2;
 color:#fff;
-font-size:17px;
+border-radius:12px;
 font-weight:bold;
 cursor:pointer;
 }
 
 .client-card{
 background:#fff;
-padding:20px;
-border-radius:20px;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
+padding:18px;
 margin-top:20px;
+border-radius:16px;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:15px;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:12px;
 margin-top:15px;
 }
 
-.data-box{
+.box{
 background:#f7fbff;
-padding:15px;
-border-radius:14px;
+padding:12px;
+border-radius:12px;
 border:1px solid #dbeeff;
 }
 
-.data-box .label{
+.label{
 font-size:13px;
 color:#666;
-margin-bottom:8px;
 }
 
-.data-box .value{
-font-size:16px;
+.value{
 font-weight:bold;
-color:#222;
-word-break:break-word;
+margin-top:5px;
 }
 
-.remaining-box{
+.remaining{
 margin-top:20px;
-padding:25px;
-border-radius:20px;
 text-align:center;
+padding:20px;
+border-radius:16px;
 color:#fff;
-}
-
-.remaining-green{
 background:linear-gradient(135deg,#16a34a,#22c55e);
-}
-
-.remaining-orange{
-background:linear-gradient(135deg,#ea580c,#f59e0b);
-}
-
-.remaining-red{
-background:linear-gradient(135deg,#dc2626,#ef4444);
-}
-
-.remaining-title{
-font-size:18px;
-margin-bottom:10px;
-}
-
-.remaining-days{
-font-size:55px;
-font-weight:bold;
-margin:15px 0;
-}
-
-.progress{
-height:10px;
-background:rgba(255,255,255,.3);
-border-radius:50px;
-overflow:hidden;
-margin-top:15px;
-}
-
-.progress span{
-display:block;
-height:100%;
-background:#fff;
-border-radius:50px;
+font-size:22px;
 }
 
 .notice{
-margin-top:20px;
+margin-top:15px;
+padding:12px;
 background:#e0f2fe;
-padding:18px;
-border-radius:16px;
-line-height:2;
-border:1px solid #b9e6ff;
+border-radius:12px;
 }
 
-.pay-box{
-margin-top:20px;
-background:#ffffff;
-padding:20px;
-border-radius:20px;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
+.pay{
+margin-top:15px;
+padding:15px;
+background:#fff;
+border-radius:12px;
 }
-
-.pay-box h3{
-margin-top:0;
-color:#0b6fc2;
-}
-
-.pay-item{
-background:#f7fbff;
-padding:14px;
-border-radius:14px;
-margin-top:12px;
-border:1px solid #dbeeff;
-}
-
-.pay-item strong{
-display:block;
-margin-bottom:6px;
-font-size:15px;
-}
-
-.pay-number{
-font-size:20px;
-font-weight:bold;
-color:#16a34a;
-direction:ltr;
-text-align:left;
-}
-
-.renew-btn{
-display:block;
-margin-top:20px;
-padding:16px;
-border-radius:16px;
-background:#25D366;
-color:#fff;
-font-size:18px;
-font-weight:bold;
-text-align:center;
-text-decoration:none;
-}
-
-.footer{
-text-align:center;
-padding:25px;
-color:#777;
-font-size:14px;
-}
-
-.hidden{
-display:none;
-}
-
 </style>
-
 </head>
 
 <body>
 
-<header class="portal-header">
-
-<h1>
-💧 Future Tank
-</h1>
-
-<p>
-بوابة العملاء الذكية — إدارة التعاقدات والخدمات
-</p>
-
-</header>
+<div class="portal-header">
+<h1>💧 Future Tank</h1>
+<p>بوابة العملاء الذكية</p>
+</div>
 
 <div class="portal-container">
 
 <div class="search-box">
-
-<h2>
-🔍 عرض بيانات التعاقد
-</h2>
-
-<p>
-اكتب رقم الهاتف لعرض تفاصيل التعاقد
-</p>
-
-<input
-type="text"
-id="phone"
-class="search-input"
-placeholder="مثال: 01123456789"
-inputmode="numeric"
->
-
-<button
-class="search-btn"
-onclick="searchClient()">
-
-بحث الآن
-
-</button>
-
+<input id="phone" class="search-input" placeholder="اكتب رقم الهاتف">
+<button class="search-btn" onclick="searchClient()">بحث</button>
 </div>
 
-<div
-id="result"
-class="hidden">
-
-</div>
-
-</div>
-
-<div class="footer">
-
-© Future Tank — نقاء الماء هو هدفنا 💧
+<div id="result"></div>
 
 </div>
 
 <script>
 
-const API_URL =
-"https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
+const API_URL = "https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
+const WHATSAPP = "201150402031";
 
-const WHATSAPP =
-"201150402031";
+function safe(v){
+return (v === undefined || v === null || v === "") ? "—" : v;
+}
+
+function formatDate(d){
+if(!d) return "—";
+const x = new Date(d);
+return isNaN(x) ? d : x.toLocaleDateString("ar-EG");
+}
 
 function searchClient(){
 
-const phone =
-document.getElementById("phone")
-.value.trim();
-
-const result =
-document.getElementById("result");
+let phone = document.getElementById("phone").value.trim();
+let result = document.getElementById("result");
 
 if(!phone){
-
-alert("من فضلك اكتب رقم الهاتف");
-
+alert("اكتب رقم الهاتف");
 return;
-
 }
 
-result.classList.remove("hidden");
+result.innerHTML = "🔍 جاري البحث...";
 
-result.innerHTML =
-"<div class='client-card'>🔍 جاري البحث...</div>";
-
-fetch(
-API_URL + "?phone=" + encodeURIComponent(phone)
-)
-
-.then(res => res.json())
-
-.then(data => {
+fetch(API_URL + "?phone=" + phone)
+.then(r=>r.json())
+.then(data=>{
 
 if(!data || data.error){
-
-result.innerHTML = `
-
-<div class="client-card">
-
-❌ لا يوجد تعاقد بهذا الرقم
-
-</div>
-
-`;
-
+result.innerHTML = "❌ لا يوجد بيانات";
 return;
-
 }
 
-const remaining =
-Number(data.remaining_days || 0);
+let nextVisit =
+data.next_visit && data.next_visit !== "—"
+? formatDate(data.next_visit)
+: "سيتم تحديدها قريبًا";
 
-let statusText =
-"✅ التعاقد ساري";
-
-let colorClass =
-"remaining-green";
-
-if(remaining <= 30){
-
-statusText =
-"⚠️ التعاقد يقترب من الانتهاء";
-
-colorClass =
-"remaining-orange";
-
-}
-
-if(remaining <= 0){
-
-statusText =
-"❌ التعاقد منتهي";
-
-colorClass =
-"remaining-red";
-
-}
-
-let progress =
-Math.min(
-100,
-Math.max(
-0,
-(remaining / 365) * 100
-)
-);
-
-const nextVisit =
-data.next_visit &&
-data.next_visit !== "—"
-?
-formatDate(data.next_visit)
-:
-"سيتم تحديدها قريباً";
-
-const whatsappMessage = `
-السلام عليكم
-أرغب في تجديد التعاقد
-
-الاسم: ${safe(data.name)}
-الهاتف: ${safe(data.phone)}
-الخدمة: ${safe(data.service)}
-`;
+let remaining = Number(data.remaining_days || 0);
 
 result.innerHTML = `
-
 <div class="client-card">
 
 <div class="grid">
 
-<div class="data-box">
-<div class="label">👤 اسم العميل</div>
+<div class="box">
+<div class="label">👤 الاسم</div>
 <div class="value">${safe(data.name)}</div>
 </div>
 
-<div class="data-box">
-<div class="label">📞 رقم الهاتف</div>
+<div class="box">
+<div class="label">📞 الهاتف</div>
 <div class="value">${safe(data.phone)}</div>
 </div>
 
-<div class="data-box">
+<div class="box">
 <div class="label">📍 العنوان</div>
 <div class="value">${safe(data.address)}</div>
 </div>
 
-<div class="data-box">
+<div class="box">
 <div class="label">🛠️ الخدمة</div>
 <div class="value">${safe(data.service)}</div>
 </div>
 
-<div class="data-box">
+<div class="box">
 <div class="label">📅 مدة التعاقد</div>
 <div class="value">${safe(data.contract_months)} شهر</div>
 </div>
 
-<div class="data-box">
-<div class="label">🔁 عدد الزيارات</div>
+<div class="box">
+<div class="label">🔁 الزيارات</div>
 <div class="value">${safe(data.visits)}</div>
 </div>
 
-<div class="data-box">
+<div class="box">
 <div class="label">💰 التكلفة</div>
 <div class="value">${safe(data.cost)} جنيه</div>
 </div>
 
-<div class="data-box">
+<div class="box">
 <div class="label">📆 تاريخ التعاقد</div>
 <div class="value">${formatDate(data.contract_date)}</div>
 </div>
 
-<div class="data-box">
-<div class="label">⏳ تاريخ انتهاء العقد</div>
+<div class="box">
+<div class="label">⏳ الانتهاء</div>
 <div class="value">${formatDate(data.end_date)}</div>
 </div>
 
-<div class="data-box">
-<div class="label">✅ آخر زيارة</div>
-<div class="value">${formatDate(data.last_visit)}</div>
-</div>
-
-<div class="data-box">
+<div class="box">
 <div class="label">🚚 الزيارة القادمة</div>
 <div class="value">${nextVisit}</div>
 </div>
 
 </div>
 
-<div class="remaining-box ${colorClass}">
-
-<div class="remaining-title">
-
-${statusText}
-
-</div>
-
-<div style="font-size:18px">
-
-الأيام المتبقية على انتهاء التعاقد
-
-</div>
-
-<div class="remaining-days">
-
-${remaining}
-
-</div>
-
-<div style="font-size:18px">
-
-يوم
-
-</div>
-
-<div class="progress">
-
-<span style="width:${progress}%"></span>
-
-</div>
-
+<div class="remaining">
+⏳ المتبقي: ${remaining} يوم
 </div>
 
 <div class="notice">
-
-🔔 سيتم إرسال إشعارات تلقائية قبل الزيارة وقبل انتهاء التعاقد لضمان استمرار الخدمة بأفضل جودة.
-
+🔔 سيتم إرسال إشعارات قبل الزيارة وقبل انتهاء التعاقد
 </div>
 
-<div class="pay-box">
-
-<h3>
-💳 وسائل الدفع
-</h3>
-
-<div class="pay-item">
-
-<strong>
-📱 إنستا باي
-</strong>
-
-<div class="pay-number">
-
-01150402031
-
+<div class="pay">
+📱 إنستا باي: 01150402031<br>
+💰 اتصالات كاش: 01150402031
 </div>
 
-</div>
+<a target="_blank"
+href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent("السلام عليكم - تجديد تعاقد")}">
 
-<div class="pay-item">
-
-<strong>
-💰 اتصالات كاش
-</strong>
-
-<div class="pay-number">
-
-01150402031
-
-</div>
-
-</div>
-
-</div>
-
-<a
-class="renew-btn"
-target="_blank"
-href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(whatsappMessage)}">
-
-🔁 تجديد التعاقد عبر واتساب
+🔁 تجديد عبر واتساب
 
 </a>
 
 </div>
-
-`;
-
-})
-
-.catch(err => {
-
-console.log(err);
-
-result.innerHTML = `
-
-<div class="client-card">
-
-⚠️ حدث خطأ أثناء الاتصال
-
-</div>
-
 `;
 
 });
 
 }
 
-function safe(value){
-
-if(
-value === undefined ||
-value === null ||
-value === ""
-){
-
-return "—";
-
-}
-
-return value;
-
-}
-
-function formatDate(date){
-
-if(
-!date ||
-date === "—"
-){
-
-return "—";
-
-}
-
-const d = new Date(date);
-
-if(isNaN(d.getTime())){
-
-return date;
-
-}
-
-return d.toLocaleDateString("ar-EG");
-
-}
-
 </script>
 
 </body>
-
 </html>
