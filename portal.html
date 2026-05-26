@@ -2,14 +2,15 @@
 <html lang="ar" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
-<title>بوابة العملاء | Future Tank</title>
+
+<title>
+بوابة العملاء | Future Tank
+</title>
 
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="client-portal.css">
 
 <style>
 
@@ -38,11 +39,10 @@ font-size:32px;
 .portal-header p{
 margin-top:10px;
 font-size:16px;
-opacity:.95;
 }
 
 .portal-container{
-max-width:1100px;
+max-width:1000px;
 margin:25px auto;
 padding:15px;
 }
@@ -93,7 +93,7 @@ margin-top:20px;
 
 .grid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:15px;
 margin-top:15px;
 }
@@ -105,13 +105,13 @@ border-radius:14px;
 border:1px solid #dbeeff;
 }
 
-.data-box .label{
+.label{
 font-size:13px;
 color:#666;
 margin-bottom:8px;
 }
 
-.data-box .value{
+.value{
 font-size:16px;
 font-weight:bold;
 color:#222;
@@ -138,14 +138,8 @@ background:linear-gradient(135deg,#ea580c,#f59e0b);
 background:linear-gradient(135deg,#dc2626,#ef4444);
 }
 
-.remaining-title{
-font-size:22px;
-margin-bottom:10px;
-font-weight:bold;
-}
-
 .remaining-days{
-font-size:60px;
+font-size:55px;
 font-weight:bold;
 margin:15px 0;
 }
@@ -157,6 +151,30 @@ padding:18px;
 border-radius:16px;
 line-height:2;
 border:1px solid #b9e6ff;
+}
+
+.pay-box{
+margin-top:20px;
+background:#fff;
+padding:20px;
+border-radius:20px;
+box-shadow:0 5px 20px rgba(0,0,0,.08);
+}
+
+.pay-item{
+background:#f7fbff;
+padding:14px;
+border-radius:14px;
+margin-top:12px;
+border:1px solid #dbeeff;
+}
+
+.pay-number{
+font-size:20px;
+font-weight:bold;
+color:#16a34a;
+direction:ltr;
+text-align:left;
 }
 
 .renew-btn{
@@ -181,11 +199,6 @@ font-size:14px;
 
 .hidden{
 display:none;
-}
-
-.vip{
-color:#d97706;
-font-weight:bold;
 }
 
 </style>
@@ -218,7 +231,8 @@ font-weight:bold;
 type="text"
 id="phone"
 class="search-input"
-placeholder="اكتب رقم الهاتف">
+placeholder="اكتب رقم الهاتف"
+>
 
 <button
 class="search-btn"
@@ -230,12 +244,18 @@ onclick="searchClient()">
 
 </div>
 
-<div id="result" class="hidden"></div>
+<div
+id="result"
+class="hidden">
+
+</div>
 
 </div>
 
 <div class="footer">
+
 © Future Tank — نقاء الماء هو هدفنا 💧
+
 </div>
 
 <script>
@@ -243,13 +263,13 @@ onclick="searchClient()">
 const API_URL =
 "https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
 
-const WHATSAPP = "201150402031";
+const WHATSAPP =
+"201150402031";
 
 function searchClient(){
 
 const phone =
-document.getElementById("phone")
-.value.trim();
+document.getElementById("phone").value.trim();
 
 const result =
 document.getElementById("result");
@@ -267,9 +287,7 @@ result.classList.remove("hidden");
 result.innerHTML =
 "<div class='client-card'>🔍 جاري البحث...</div>";
 
-fetch(
-API_URL + "?phone=" + encodeURIComponent(phone)
-)
+fetch(API_URL + "?phone=" + encodeURIComponent(phone))
 
 .then(res => res.json())
 
@@ -321,7 +339,7 @@ formatDate(data.next_visit)
 :
 "سيتم تحديدها قريبًا";
 
-const whatsappMessage = `
+const msg = `
 السلام عليكم
 أرغب في تجديد التعاقد
 
@@ -336,119 +354,70 @@ result.innerHTML = `
 
 <div class="grid">
 
-<div class="data-box">
-<div class="label">👤 اسم العميل</div>
-<div class="value">${safe(data.name)}</div>
-</div>
+${box("👤 اسم العميل", data.name)}
 
-<div class="data-box">
-<div class="label">📞 رقم الهاتف</div>
-<div class="value">${safe(data.phone)}</div>
-</div>
+${box("📞 رقم الهاتف", data.phone)}
 
-<div class="data-box">
-<div class="label">📍 العنوان</div>
-<div class="value">${safe(data.address)}</div>
-</div>
+${box("📍 العنوان", data.address)}
 
-<div class="data-box">
-<div class="label">🛠️ الخدمة</div>
-<div class="value">${safe(data.service)}</div>
-</div>
+${box("🛠️ الخدمة", data.service)}
 
-<div class="data-box">
-<div class="label">📅 مدة التعاقد</div>
-<div class="value">${safe(data.contract_months)} شهر</div>
-</div>
+${box("📅 مدة التعاقد", safe(data.contract_months) + " شهر")}
 
-<div class="data-box">
-<div class="label">💳 نوع الاشتراك</div>
-<div class="value">${safe(data.subscription_type)}</div>
-</div>
+${box("💳 نوع الاشتراك", data.subscription_type)}
 
-<div class="data-box">
-<div class="label">🔁 عدد الزيارات</div>
-<div class="value">${safe(data.visits)}</div>
-</div>
+${box("🔁 عدد الزيارات", data.visits)}
 
-<div class="data-box">
-<div class="label">💰 التكلفة</div>
-<div class="value">${safe(data.cost)} جنيه</div>
-</div>
+${box("💰 التكلفة", safe(data.cost) + " جنيه")}
 
-<div class="data-box">
-<div class="label">🧾 رقم التعاقد</div>
-<div class="value">${safe(data.contract_id)}</div>
-</div>
+${box("🧾 رقم التعاقد", data.contract_number)}
 
-<div class="data-box">
-<div class="label">💰 حالة الدفع</div>
-<div class="value">${safe(data.payment_status)}</div>
-</div>
+${box("💰 حالة الدفع", data.payment_status)}
 
-<div class="data-box">
-<div class="label">💳 طريقة الدفع</div>
-<div class="value">${safe(data.payment_method)}</div>
-</div>
+${box("💳 طريقة الدفع", data.payment_method)}
 
-<div class="data-box">
-<div class="label">💵 قيمة القسط</div>
-<div class="value">${safe(data.installment_amount)} جنيه</div>
-</div>
+${box("💵 قيمة القسط", data.installment_amount ? data.installment_amount + " جنيه" : "—")}
 
-<div class="data-box">
-<div class="label">📅 تاريخ القسط القادم</div>
-<div class="value">${formatDate(data.next_installment_date)}</div>
-</div>
+${box("📅 تاريخ القسط القادم", formatDate(data.next_installment_date))}
 
-<div class="data-box">
-<div class="label">⭐ حالة العميل</div>
-<div class="value vip">${safe(data.client_status)}</div>
-</div>
+${box("⭐ حالة العميل", data.client_status)}
 
-<div class="data-box">
-<div class="label">📝 ملاحظات</div>
-<div class="value">${safe(data.notes)}</div>
-</div>
+${box("📝 ملاحظات", data.notes)}
 
-<div class="data-box">
-<div class="label">📆 تاريخ التعاقد</div>
-<div class="value">${formatDate(data.contract_date)}</div>
-</div>
+${box("📆 تاريخ التعاقد", formatDate(data.contract_date))}
 
-<div class="data-box">
-<div class="label">⏳ تاريخ انتهاء العقد</div>
-<div class="value">${formatDate(data.end_date)}</div>
-</div>
+${box("⏳ تاريخ انتهاء العقد", formatDate(data.end_date))}
 
-<div class="data-box">
-<div class="label">✅ آخر زيارة</div>
-<div class="value">${formatDate(data.last_visit)}</div>
-</div>
+${box("✅ آخر زيارة", formatDate(data.last_visit))}
 
-<div class="data-box">
-<div class="label">🚚 الزيارة القادمة</div>
-<div class="value">${nextVisit}</div>
-</div>
+${box("🚚 الزيارة القادمة", nextVisit)}
 
 </div>
 
 <div class="remaining-box ${color}">
 
-<div class="remaining-title">
+<div style="font-size:22px;font-weight:bold">
+
 ${status}
+
 </div>
 
-<div>
+<div style="margin-top:10px">
+
 الأيام المتبقية
+
 </div>
 
 <div class="remaining-days">
+
 ${remaining}
+
 </div>
 
 <div>
+
 يوم
+
 </div>
 
 </div>
@@ -459,10 +428,46 @@ ${remaining}
 
 </div>
 
+<div class="pay-box">
+
+<h3>
+💳 وسائل الدفع
+</h3>
+
+<div class="pay-item">
+
+<strong>
+📱 إنستا باي
+</strong>
+
+<div class="pay-number">
+
+01150402031
+
+</div>
+
+</div>
+
+<div class="pay-item">
+
+<strong>
+💰 اتصالات كاش
+</strong>
+
+<div class="pay-number">
+
+01150402031
+
+</div>
+
+</div>
+
+</div>
+
 <a
 class="renew-btn"
 target="_blank"
-href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(whatsappMessage)}">
+href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">
 
 🔁 تجديد التعاقد عبر واتساب
 
@@ -474,50 +479,75 @@ href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(whatsappMessage)}">
 
 })
 
-.catch(err => {
+.catch(err=>{
 
 console.log(err);
 
 result.innerHTML =
-"<div class='client-card'>⚠️ خطأ في الاتصال</div>";
+"<div class='client-card'>⚠️ حدث خطأ أثناء الاتصال</div>";
 
 });
 
 }
 
-function safe(value){
+function box(label,value){
+
+return `
+
+<div class="data-box">
+
+<div class="label">
+
+${label}
+
+</div>
+
+<div class="value">
+
+${safe(value)}
+
+</div>
+
+</div>
+
+`;
+
+}
+
+function safe(v){
 
 if(
-value === undefined ||
-value === null ||
-value === ""
+v === undefined ||
+v === null ||
+v === ""
 ){
 
 return "—";
 
 }
 
-return value;
+return v;
 
 }
 
-function formatDate(date){
+function formatDate(d){
 
-if(!date || date === "—"){
+if(!d || d === "—"){
 
 return "—";
 
 }
 
-const d = new Date(date);
+const date =
+new Date(d);
 
-if(isNaN(d.getTime())){
+if(isNaN(date.getTime())){
 
-return date;
+return d;
 
 }
 
-return d.toLocaleDateString("ar-EG");
+return date.toLocaleDateString("ar-EG");
 
 }
 
