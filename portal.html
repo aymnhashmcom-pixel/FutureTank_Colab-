@@ -42,7 +42,7 @@ font-size:16px;
 }
 
 .portal-container{
-max-width:1000px;
+max-width:1100px;
 margin:25px auto;
 padding:15px;
 }
@@ -53,11 +53,6 @@ padding:20px;
 border-radius:20px;
 box-shadow:0 5px 20px rgba(0,0,0,.08);
 margin-bottom:20px;
-}
-
-.search-box h2{
-margin-top:0;
-color:#0b6fc2;
 }
 
 .search-input{
@@ -161,20 +156,30 @@ border-radius:20px;
 box-shadow:0 5px 20px rgba(0,0,0,.08);
 }
 
-.pay-item{
-background:#f7fbff;
-padding:14px;
-border-radius:14px;
-margin-top:12px;
-border:1px solid #dbeeff;
+.pay-buttons{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:15px;
+margin-top:15px;
 }
 
-.pay-number{
-font-size:20px;
+.pay-btn{
+display:block;
+padding:18px;
+border-radius:16px;
+text-align:center;
+text-decoration:none;
+font-size:18px;
 font-weight:bold;
-color:#16a34a;
-direction:ltr;
-text-align:left;
+color:#fff;
+}
+
+.insta{
+background:linear-gradient(135deg,#6d28d9,#9333ea);
+}
+
+.cash{
+background:linear-gradient(135deg,#16a34a,#22c55e);
 }
 
 .renew-btn{
@@ -396,7 +401,7 @@ ${box("🚚 الزيارة القادمة", nextVisit)}
 
 <div class="remaining-box ${color}">
 
-<div style="font-size:22px;font-weight:bold">
+<div style="font-size:24px;font-weight:bold">
 
 ${status}
 
@@ -434,31 +439,29 @@ ${remaining}
 💳 وسائل الدفع
 </h3>
 
-<div class="pay-item">
+<div class="pay-buttons">
 
-<strong>
+<a
+class="pay-btn insta"
+target="_blank"
+href="https://instapay.bank/">
+
 📱 إنستا باي
-</strong>
-
-<div class="pay-number">
-
+<br>
 01150402031
 
-</div>
+</a>
 
-</div>
+<a
+class="pay-btn cash"
+target="_blank"
+href="tel:01150402031">
 
-<div class="pay-item">
-
-<strong>
 💰 اتصالات كاش
-</strong>
-
-<div class="pay-number">
-
+<br>
 01150402031
 
-</div>
+</a>
 
 </div>
 
