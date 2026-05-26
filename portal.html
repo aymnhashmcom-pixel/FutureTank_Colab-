@@ -31,71 +31,115 @@
 
 </div>
 
-<div class="footer">© Future Tank — نقاء الماء هو هدفنا 💧</div>
+<div class="footer">
+© Future Tank — نقاء الماء هو هدفنا 💧
+</div>
 
 <script>
 
-const API_URL = "https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
+const API_URL =
+"https://script.google.com/macros/s/AKfycbwn8jsRUgSI5MiiRCDxr-1zYiZynGtZzzlfmxevUZqSnWwchKl1o82hS_iJ6uJPxHSS/exec";
 
 const WHATSAPP = "201150402031";
 
 function searchClient(){
 
-const phone = document.getElementById("phone").value.trim();
-const result = document.getElementById("result");
+const phone =
+document.getElementById("phone")
+.value.trim();
+
+const result =
+document.getElementById("result");
 
 if(!phone){
+
 alert("اكتب رقم الهاتف");
+
 return;
+
 }
 
 result.classList.remove("hidden");
-result.innerHTML = "🔍 جاري البحث...";
 
-fetch(API_URL + "?phone=" + encodeURIComponent(phone))
+result.innerHTML =
+"🔍 جاري البحث...";
+
+fetch(
+API_URL + "?phone=" + encodeURIComponent(phone)
+)
+
 .then(res => res.json())
+
 .then(data => {
 
 if(!data || data.error){
-result.innerHTML = "<div class='client-card'>❌ لا يوجد تعاقد بهذا الرقم</div>";
+
+result.innerHTML =
+"<div class='client-card'>❌ لا يوجد تعاقد بهذا الرقم</div>";
+
 return;
+
 }
 
 /* ===============================
 الحسابات الذكية
 ================================ */
 
-const remaining = Number(data.remaining_days || 0);
+const remaining =
+Number(data.remaining_days || 0);
 
-let status = "✅ التعاقد ساري";
-let color = "remaining-green";
+let status =
+"✅ التعاقد ساري";
+
+let color =
+"remaining-green";
 
 if(remaining <= 30){
-status = "⚠️ التعاقد يقترب من الانتهاء";
-color = "remaining-orange";
+
+status =
+"⚠️ التعاقد يقترب من الانتهاء";
+
+color =
+"remaining-orange";
+
 }
 
 if(remaining <= 0){
-status = "❌ التعاقد منتهي";
-color = "remaining-red";
+
+status =
+"❌ التعاقد منتهي";
+
+color =
+"remaining-red";
+
 }
 
 let nextVisit =
-data.next_visit && data.next_visit !== "—"
-? formatDate(data.next_visit)
-: "سيتم تحديدها قريبًا";
+
+data.next_visit &&
+data.next_visit !== "—"
+
+?
+
+formatDate(data.next_visit)
+
+:
+
+"سيتم تحديدها قريبًا";
 
 /* ===============================
 رسالة واتساب
 ================================ */
 
 const msg = `
+
 السلام عليكم
 أرغب في تجديد التعاقد
 
 الاسم: ${safe(data.name)}
 الهاتف: ${safe(data.phone)}
 الخدمة: ${safe(data.service)}
+
 `;
 
 /* ===============================
@@ -135,7 +179,7 @@ result.innerHTML = `
 
 <div class="data-box">
 <div class="label">💳 نوع الاشتراك</div>
-<div class="value">${safe(data.subscription_type || "سنوي")}</div>
+<div class="value">${safe(data.subscription_type)}</div>
 </div>
 
 <div class="data-box">
@@ -150,52 +194,118 @@ result.innerHTML = `
 
 <div class="data-box">
 <div class="label">🧾 رقم التعاقد</div>
-<div class="value">${safe(data.contract_id || "—")}</div>
+<div class="value">${safe(data.contract_number)}</div>
 </div>
 
 <div class="data-box">
 <div class="label">💰 حالة الدفع</div>
-<div class="value">${safe(data.payment_status || "غير محدد")}</div>
+<div class="value">${safe(data.payment_status)}</div>
+</div>
+
+<div class="data-box">
+<div class="label">💳 طريقة الدفع</div>
+<div class="value">${safe(data.payment_method)}</div>
+</div>
+
+<div class="data-box">
+<div class="label">💵 قيمة القسط</div>
+<div class="value">
+${safe(data.installment_amount)} جنيه
+</div>
+</div>
+
+<div class="data-box">
+<div class="label">📅 تاريخ القسط القادم</div>
+<div class="value">
+${formatDate(data.next_installment_date)}
+</div>
+</div>
+
+<div class="data-box">
+<div class="label">⭐ حالة العميل</div>
+<div class="value">
+${safe(data.client_status)}
+</div>
+</div>
+
+<div class="data-box">
+<div class="label">📝 ملاحظات</div>
+<div class="value">
+${safe(data.notes)}
+</div>
 </div>
 
 <div class="data-box">
 <div class="label">📆 تاريخ التعاقد</div>
-<div class="value">${formatDate(data.contract_date)}</div>
+<div class="value">
+${formatDate(data.contract_date)}
+</div>
 </div>
 
 <div class="data-box">
 <div class="label">⏳ تاريخ انتهاء العقد</div>
-<div class="value">${formatDate(data.end_date)}</div>
+<div class="value">
+${formatDate(data.end_date)}
+</div>
 </div>
 
 <div class="data-box">
 <div class="label">✅ آخر زيارة</div>
-<div class="value">${formatDate(data.last_visit)}</div>
+<div class="value">
+${formatDate(data.last_visit)}
+</div>
 </div>
 
 <div class="data-box">
 <div class="label">🚚 الزيارة القادمة</div>
-<div class="value">${nextVisit}</div>
+<div class="value">
+${nextVisit}
+</div>
 </div>
 
 </div>
 
 <div class="remaining-box ${color}">
-<div class="remaining-title">${status}</div>
 
-<div>الأيام المتبقية</div>
-<div class="remaining-days">${remaining}</div>
-<div>يوم</div>
+<div class="remaining-title">
+
+${status}
+
+</div>
+
+<div>
+
+الأيام المتبقية
+
+</div>
+
+<div class="remaining-days">
+
+${remaining}
+
+</div>
+
+<div>
+
+يوم
+
+</div>
+
 </div>
 
 <div class="notice">
+
 🔔 إشعارات تلقائية قبل الزيارة وقبل انتهاء التعاقد
+
 </div>
 
-<a class="renew-btn"
+<a
+class="renew-btn"
 target="_blank"
 href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">
+
 🔁 تجديد التعاقد عبر واتساب
+
 </a>
 
 </div>
@@ -203,9 +313,14 @@ href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">
 `;
 
 })
+
 .catch(err=>{
+
 console.log(err);
-result.innerHTML = "<div class='client-card'>⚠️ خطأ في الاتصال</div>";
+
+result.innerHTML =
+"<div class='client-card'>⚠️ خطأ في الاتصال</div>";
+
 });
 
 }
@@ -215,13 +330,40 @@ HELPERS
 ================================ */
 
 function safe(v){
-return (v === undefined || v === null || v === "") ? "—" : v;
+
+return (
+v === undefined ||
+v === null ||
+v === ""
+)
+
+?
+
+"—"
+
+:
+
+v;
+
 }
 
 function formatDate(d){
+
 if(!d) return "—";
-const date = new Date(d);
-return isNaN(date.getTime()) ? d : date.toLocaleDateString("ar-EG");
+
+const date =
+new Date(d);
+
+return isNaN(date.getTime())
+
+?
+
+d
+
+:
+
+date.toLocaleDateString("ar-EG");
+
 }
 
 </script>
