@@ -266,7 +266,7 @@ class="hidden">
 <script>
 
 const API_URL =
-"https://script.google.com/macros/s/AKfycbzfVDO9Fmy5sqvIkIjHRBTyZuIFzuo_cr0nUZ2u0QD0RSQMPmSd35KVIiq94UAARbC2/exec";
+"https://script.google.com/macros/s/ضع_رابط_الويب_آب_الجديد_هنا/exec";
 
 const WHATSAPP =
 "201150402031";
@@ -336,14 +336,6 @@ color =
 
 }
 
-const nextVisit =
-data.next_visit &&
-data.next_visit !== "—"
-?
-formatDate(data.next_visit)
-:
-"سيتم تحديدها قريبًا";
-
 const msg = `
 السلام عليكم
 أرغب في تجديد التعاقد
@@ -385,17 +377,9 @@ ${box("💵 قيمة القسط", data.installment_amount ? data.installment_amo
 
 ${box("📅 تاريخ القسط القادم", formatDate(data.next_installment_date))}
 
-${box("⭐ حالة العميل", data.client_status)}
+${box("⭐ حالة العميل", data.client_status || "عميل مميز")}
 
 ${box("📝 ملاحظات", data.notes)}
-
-${box("📆 تاريخ التعاقد", formatDate(data.contract_date))}
-
-${box("⏳ تاريخ انتهاء العقد", formatDate(data.end_date))}
-
-${box("✅ آخر زيارة", formatDate(data.last_visit))}
-
-${box("🚚 الزيارة القادمة", nextVisit)}
 
 </div>
 
@@ -407,29 +391,13 @@ ${status}
 
 </div>
 
-<div style="margin-top:10px">
-
-الأيام المتبقية
-
-</div>
-
 <div class="remaining-days">
 
 ${remaining}
 
 </div>
 
-<div>
-
 يوم
-
-</div>
-
-</div>
-
-<div class="notice">
-
-🔔 إشعارات تلقائية قبل الزيارة وقبل انتهاء التعاقد
 
 </div>
 
@@ -444,7 +412,7 @@ ${remaining}
 <a
 class="pay-btn insta"
 target="_blank"
-href="https://instapay.bank/">
+href="https://wa.me/201150402031?text=السلام عليكم أريد الدفع عبر إنستا باي">
 
 📱 إنستا باي
 <br>
@@ -455,7 +423,7 @@ href="https://instapay.bank/">
 <a
 class="pay-btn cash"
 target="_blank"
-href="tel:01150402031">
+href="https://wa.me/201150402031?text=السلام عليكم أريد الدفع عبر اتصالات كاش">
 
 💰 اتصالات كاش
 <br>
@@ -470,7 +438,7 @@ href="tel:01150402031">
 <a
 class="renew-btn"
 target="_blank"
-href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">
+href="https://api.whatsapp.com/send?phone=${WHATSAPP}&text=${encodeURIComponent(msg)}">
 
 🔁 تجديد التعاقد عبر واتساب
 
@@ -480,15 +448,6 @@ href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">
 
 `;
 
-})
-
-.catch(err=>{
-
-console.log(err);
-
-result.innerHTML =
-"<div class='client-card'>⚠️ حدث خطأ أثناء الاتصال</div>";
-
 });
 
 }
@@ -496,38 +455,17 @@ result.innerHTML =
 function box(label,value){
 
 return `
-
 <div class="data-box">
-
-<div class="label">
-
-${label}
-
+<div class="label">${label}</div>
+<div class="value">${safe(value)}</div>
 </div>
-
-<div class="value">
-
-${safe(value)}
-
-</div>
-
-</div>
-
 `;
 
 }
 
 function safe(v){
 
-if(
-v === undefined ||
-v === null ||
-v === ""
-){
-
-return "—";
-
-}
+if(!v || v==="—") return "—";
 
 return v;
 
@@ -535,20 +473,11 @@ return v;
 
 function formatDate(d){
 
-if(!d || d === "—"){
+if(!d || d==="—") return "—";
 
-return "—";
+const date = new Date(d);
 
-}
-
-const date =
-new Date(d);
-
-if(isNaN(date.getTime())){
-
-return d;
-
-}
+if(isNaN(date.getTime())) return d;
 
 return date.toLocaleDateString("ar-EG");
 
