@@ -4,109 +4,115 @@
 <head>
 
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>
 رجال الأعمال | Future Tank
 </title>
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<link rel="stylesheet"
-href="style.css">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
 <style>
 
 body{
-background:#f5f9ff;
-font-family:Tahoma;
 margin:0;
 padding:0;
+font-family:Tahoma;
+background:#f4f9ff;
+color:#222;
 }
 
-.hero{
-background:linear-gradient(135deg,#111,#333);
+header{
+background:#0b6fc2;
 color:#fff;
-padding:40px 20px;
+padding:25px;
 text-align:center;
 }
 
-.hero h1{
-margin:0;
-font-size:32px;
+.container{
+padding:20px;
+max-width:700px;
+margin:auto;
 }
 
-.hero p{
-margin-top:15px;
-line-height:2;
-font-size:17px;
-opacity:.95;
-}
-
-.business-box{
+.box{
 background:#fff;
-padding:22px;
-border-radius:22px;
-box-shadow:0 8px 20px rgba(0,0,0,.08);
+padding:20px;
+border-radius:20px;
 margin-bottom:20px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-.business-box h2{
+h2{
 margin-top:0;
 color:#0b6fc2;
 }
 
-.business-box p{
-line-height:2;
-color:#555;
-}
+input,textarea,select{
 
-.form-input{
 width:100%;
 padding:14px;
-margin-top:12px;
+margin-top:10px;
 border-radius:12px;
-border:1px solid #ddd;
-font-size:15px;
+border:1px solid #ccc;
+box-sizing:border-box;
+font-size:16px;
+
 }
 
-.send-btn{
+button{
+
 width:100%;
 padding:15px;
-margin-top:15px;
-background:linear-gradient(135deg,#0b6fc2,#4fc3f7);
 border:none;
 border-radius:14px;
-color:#fff;
+margin-top:15px;
 font-size:17px;
-font-weight:bold;
 cursor:pointer;
+font-weight:bold;
+
+}
+
+.main-btn{
+background:#0b6fc2;
+color:#fff;
 }
 
 .whatsapp-btn{
-display:block;
-margin-top:15px;
 background:#25D366;
+color:#fff;
+}
+
+.insta-btn{
+background:#6a1b9a;
+color:#fff;
+}
+
+.cash-btn{
+background:#ff9800;
+color:#fff;
+}
+
+.notice{
+background:#e8f7ff;
+padding:15px;
+border-radius:15px;
+line-height:2;
+margin-bottom:20px;
+}
+
+.plan{
+background:#f8fbff;
 padding:15px;
 border-radius:14px;
-text-align:center;
-text-decoration:none;
-color:#fff;
-font-weight:bold;
+margin-top:15px;
+border:1px solid #d8ebff;
 }
 
 .success{
-display:none;
-margin-top:15px;
+background:#e8fff1;
 padding:15px;
-border-radius:12px;
-background:#e8f5e9;
-color:#2e7d32;
-font-weight:bold;
-text-align:center;
+border-radius:15px;
+margin-top:15px;
+display:none;
 }
 
 </style>
@@ -115,200 +121,200 @@ text-align:center;
 
 <body>
 
-<header class="hero">
+<header>
 
 <h1>
-💼 قسم رجال الأعمال
+💼 رجال الأعمال
 </h1>
 
 <p>
-
-حلول احترافية للشركات والمستثمرين والمشروعات الكبرى  
-وخدمات توريدات وخزانات وصيانة وأنظمة مياه متكاملة
-
+لوحة خدمات التجار والشركات
 </p>
 
 </header>
 
-<main class="container">
+<div class="container">
 
-<div class="business-box">
+<div class="notice">
 
-<h2>
-🏢 خدمات الشركات
-</h2>
-
-<p>
-
-✅ توريد خزانات المياه للمشروعات  
-✅ أنظمة معالجة المياه  
-✅ عقود صيانة دورية  
-✅ خدمات VIP  
-✅ تجهيزات كمباوندات ومولات ومصانع  
-✅ حلول احترافية للمستثمرين
-
-</p>
+✅ أول معاملة مجانية بالكامل للتجربة  
+✅ بعد ذلك يتم تفعيل الاشتراك  
+✅ يتم التواصل مباشرة مع الإدارة والتاجر عبر واتساب
 
 </div>
 
-<div class="business-box">
+<div class="box">
 
 <h2>
-📩 طلب تواصل رجال الأعمال
+بيانات التاجر
 </h2>
 
 <input
 type="text"
-id="bizName"
-class="form-input"
-placeholder="اسم الشركة أو الاسم">
+id="merchantName"
+placeholder="اسم التاجر أو الشركة">
 
 <input
 type="text"
-id="bizPhone"
-class="form-input"
+id="merchantPhone"
 placeholder="رقم الهاتف">
 
-<input
-type="text"
-id="bizActivity"
-class="form-input"
-placeholder="نوع النشاط">
-
 <textarea
-id="bizDetails"
-class="form-input"
-rows="6"
-placeholder="تفاصيل الطلب أو المشروع">
+id="merchantDetails"
+placeholder="اكتب تفاصيل النشاط أو الطلب">
 </textarea>
 
 <button
-class="send-btn"
+class="main-btn"
 onclick="sendBusinessRequest()">
 
-🚀 إرسال الطلب
+🚀 إرسال الطلب المجاني
 
 </button>
 
-<a
-class="whatsapp-btn"
-target="_blank"
-href="https://wa.me/201150402031">
+<div
+class="success"
+id="successBox">
 
-📲 التواصل المباشر واتساب
+✅ تم إرسال الطلب بنجاح
+
+</div>
+
+</div>
+
+<div class="box">
+
+<h2>
+الاشتراكات
+</h2>
+
+<div class="plan">
+
+<h3>
+الخطة الأساسية
+</h3>
+
+<p>
+30 يوم — دعم واتساب — ظهور داخل التطبيق
+</p>
+
+<p>
+💰 300 جنيه
+</p>
+
+<a
+href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K"
+target="_blank">
+
+<button class="insta-btn">
+
+💳 الدفع عبر InstaPay
+
+</button>
 
 </a>
 
-<div
-id="successMsg"
-class="success">
+<a
+href="https://flous.page.link/bT9z"
+target="_blank">
 
-✅ تم إرسال طلبك بنجاح وسيتم التواصل معك قريباً
+<button class="cash-btn">
+
+📲 الدفع عبر Etisalat Cash
+
+</button>
+
+</a>
 
 </div>
 
 </div>
 
-</main>
+<div class="box">
 
-<footer class="main-footer">
+<h2>
+التواصل المباشر
+</h2>
 
-© Future Tank — Business Solutions
+<button
+class="whatsapp-btn"
+onclick="openWhatsapp()">
 
-</footer>
+📞 تواصل واتساب مباشر
+
+</button>
+
+</div>
+
+</div>
 
 <script>
 
 function sendBusinessRequest(){
 
 const name =
-document.getElementById(
-"bizName"
-).value.trim();
+document.getElementById("merchantName").value.trim();
 
 const phone =
-document.getElementById(
-"bizPhone"
-).value.trim();
-
-const activity =
-document.getElementById(
-"bizActivity"
-).value.trim();
+document.getElementById("merchantPhone").value.trim();
 
 const details =
-document.getElementById(
-"bizDetails"
-).value.trim();
+document.getElementById("merchantDetails").value.trim();
 
-if(
-name === "" ||
-phone === "" ||
-activity === "" ||
-details === ""
-){
+if(name==="" || phone==="" || details===""){
 
-alert(
-"يرجى استكمال البيانات"
-);
+alert("⚠️ برجاء استكمال البيانات");
 
 return;
 
 }
 
-const message =
+const adminNumber =
+"201150402031";
 
-"💼 طلب جديد من قسم رجال الأعمال \n\n"
+const text =
 
-+
-
-"🏢 الاسم / الشركة: "
-+ name + "\n"
+"💼 طلب جديد من رجال الأعمال%0A%0A"
 
 +
 
-"📞 الهاتف: "
-+ phone + "\n"
+"👤 الاسم: " + name + "%0A"
 
 +
 
-"🧾 النشاط: "
-+ activity + "\n\n"
+"📞 الهاتف: " + phone + "%0A"
 
 +
 
-"📋 التفاصيل:\n"
-+ details;
+"📝 التفاصيل: " + details;
 
 window.open(
 
-"https://wa.me/201150402031?text=" +
-
-encodeURIComponent(message),
+"https://wa.me/" + adminNumber + "?text=" + text,
 
 "_blank"
 
 );
 
 document.getElementById(
-"successMsg"
+"successBox"
 ).style.display="block";
 
-document.getElementById(
-"bizName"
-).value="";
+}
 
-document.getElementById(
-"bizPhone"
-).value="";
+function openWhatsapp(){
 
-document.getElementById(
-"bizActivity"
-).value="";
+const msg =
 
-document.getElementById(
-"bizDetails"
-).value="";
+"السلام عليكم، أريد الاشتراك في نظام رجال الأعمال داخل تطبيق Future Tank";
+
+window.open(
+
+"https://wa.me/201150402031?text=" + encodeURIComponent(msg),
+
+"_blank"
+
+);
 
 }
 
