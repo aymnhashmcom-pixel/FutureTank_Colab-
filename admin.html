@@ -315,7 +315,7 @@ document.getElementById(
 
 box.innerHTML="";
 
-if(data.length===0){
+if(!data || data.length===0){
 
 box.innerHTML=
 "<p>لا توجد طلبات حالياً</p>";
@@ -324,7 +324,12 @@ return;
 
 }
 
+data.reverse();
+
 data.forEach(order=>{
+
+const orderId =
+String(order.id);
 
 box.innerHTML += `
 
@@ -332,19 +337,19 @@ box.innerHTML += `
 
 <h4>
 
-📦 طلب #${order.id}
+📦 طلب #${orderId}
 
 </h4>
 
 <div class="order-item">
 
-👤 ${order.name}
+👤 ${order.name || "—"}
 
 </div>
 
 <div class="order-item">
 
-📞 ${order.phone}
+📞 ${order.phone || "—"}
 
 </div>
 
@@ -356,13 +361,13 @@ box.innerHTML += `
 
 <div class="order-item">
 
-💰 ${order.total} جنيه
+💰 ${order.total || "—"} جنيه
 
 </div>
 
 <div class="order-item">
 
-📦 ${order.items}
+📦 ${order.items || "—"}
 
 </div>
 
@@ -375,41 +380,38 @@ box.innerHTML += `
 
 <select
 class="status-select"
-id="status-${order.type}-${order.id}">
+id="status-${orderId}">
 
-<option value="طلب جديد"
-${order.status==="طلب جديد"?"selected":""}>
-🟠 طلب جديد
+<option value="تم استلام الطلب"
+${order.status==="تم استلام الطلب"?"selected":""}>
+🟠 تم استلام الطلب
 </option>
 
-<option value="جارى التجهيز"
-${order.status==="جارى التجهيز"?"selected":""}>
+<option value="جاري التجهيز"
+${order.status==="جاري التجهيز"?"selected":""}>
 🔵 جاري التجهيز
 </option>
 
-<option value="تم الشحن"
-${order.status==="تم الشحن"?"selected":""}>
-🟣 تم الشحن
+<option value="الطلب في الطريق"
+${order.status==="الطلب في الطريق"?"selected":""}>
+🟣 الطلب في الطريق
 </option>
 
-<option value="تم التسليم"
-${order.status==="تم التسليم"?"selected":""}>
-🟢 تم التسليم
+<option value="تم تسليم الطلب"
+${order.status==="تم تسليم الطلب"?"selected":""}>
+🟢 تم تسليم الطلب
 </option>
 
-<option value="ملغي"
-${order.status==="ملغي"?"selected":""}>
-🔴 ملغي
+<option value="تم إلغاء الطلب"
+${order.status==="تم إلغاء الطلب"?"selected":""}>
+🔴 تم إلغاء الطلب
 </option>
 
 </select>
 
 <button
 class="save-btn"
-onclick="updateOrderStatus(
-'${order.type}',
-${order.id}
-)">
+onclick="updateOrderStatus('${orderId}')">
 
 💾 حفظ الحالة
 
@@ -436,11 +438,11 @@ console.log(err);
 
 }
 
-function updateOrderStatus(type,id){
+function updateOrderStatus(id){
 
 const status =
 document.getElementById(
-`status-${type}-${id}`
+`status-${id}`
 ).value;
 
 fetch(API_URL,{
@@ -454,8 +456,6 @@ action:"updateOrderStatus",
 password:adminPassword,
 
 admin:true,
-
-orderType:type,
 
 id:id,
 
@@ -477,9 +477,17 @@ loadOrders();
 
 }else{
 
-alert("❌ فشل التحديث");
+alert("❌ فشل تحديث الحالة");
 
 }
+
+})
+
+.catch(err=>{
+
+alert("❌ حدث خطأ");
+
+console.log(err);
 
 });
 
