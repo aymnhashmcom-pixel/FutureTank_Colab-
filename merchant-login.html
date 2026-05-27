@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>
+تسجيل دخول التجار | Future Tank
+</title>
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+body{
+margin:0;
+padding:0;
+background:#f5f9ff;
+font-family:Tahoma;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+overflow:hidden;
+}
+
+.login-box{
+background:#fff;
+width:90%;
+max-width:420px;
+padding:30px;
+border-radius:25px;
+box-shadow:0 5px 20px rgba(0,0,0,.12);
+text-align:center;
+}
+
+.logo{
+width:120px;
+height:120px;
+border-radius:25px;
+object-fit:cover;
+margin-bottom:15px;
+}
+
+h1{
+color:#0b6fc2;
+margin:10px 0;
+}
+
+p{
+color:#666;
+line-height:1.8;
+font-size:15px;
+}
+
+.input-box{
+margin-top:15px;
+text-align:right;
+}
+
+.input-box label{
+display:block;
+margin-bottom:6px;
+font-weight:bold;
+color:#333;
+}
+
+.input-box input{
+width:100%;
+padding:14px;
+border-radius:12px;
+border:1px solid #ccc;
+font-size:16px;
+box-sizing:border-box;
+}
+
+.login-btn{
+margin-top:20px;
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+background:#0b6fc2;
+color:#fff;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+}
+
+.login-btn:hover{
+opacity:.9;
+}
+
+.note{
+margin-top:20px;
+background:#e8f7ff;
+padding:15px;
+border-radius:15px;
+font-size:14px;
+line-height:2;
+color:#444;
+}
+
+.footer{
+margin-top:20px;
+font-size:13px;
+color:#888;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="login-box">
+
+<img
+src="./icon-512.png"
+class="logo">
+
+<h1>
+💼 رجال الأعمال
+</h1>
+
+<p>
+تسجيل دخول التجار والشركات المشتركة
+</p>
+
+<div class="input-box">
+
+<label>
+رقم الهاتف
+</label>
+
+<input
+type="text"
+id="merchantPhone"
+placeholder="مثال 01150402031">
+
+</div>
+
+<div class="input-box">
+
+<label>
+كود الاشتراك
+</label>
+
+<input
+type="password"
+id="merchantCode"
+placeholder="كود الاشتراك">
+
+</div>
+
+<button
+class="login-btn"
+onclick="merchantLogin()">
+
+🚀 دخول لوحة التحكم
+
+</button>
+
+<div class="note">
+
+✅ بعد الاشتراك يتم إرسال كود التفعيل للتاجر  
+✅ يتم الدخول للوحة التحكم الخاصة بالتاجر  
+✅ يمكن إضافة المنتجات والخدمات وإدارة الطلبات
+
+</div>
+
+<div class="footer">
+
+Future Tank ©
+
+</div>
+
+</div>
+
+<script>
+
+function merchantLogin(){
+
+const phone =
+document.getElementById("merchantPhone").value.trim();
+
+const code =
+document.getElementById("merchantCode").value.trim();
+
+if(phone==="" || code===""){
+
+alert("⚠️ برجاء استكمال البيانات");
+
+return;
+
+}
+
+/*
+
+هنا مؤقتاً بيانات تجريبية
+حتى نربط Firebase / Google Sheet
+
+*/
+
+const demoPhone =
+"01150402031";
+
+const demoCode =
+"FT2026";
+
+if(phone===demoPhone && code===demoCode){
+
+localStorage.setItem(
+"merchant_logged",
+"yes"
+);
+
+localStorage.setItem(
+"merchant_phone",
+phone
+);
+
+window.location.href =
+"./merchant-dashboard.html";
+
+}else{
+
+alert(
+"❌ بيانات الدخول غير صحيحة"
+);
+
+}
+
+}
+
+</script>
+
+</body>
+</html>
