@@ -57,14 +57,6 @@ transition:.3s;
 background:#0b6fc2;
 }
 
-.order-link{
-display:block;
-margin-top:10px;
-color:#0b6fc2;
-text-decoration:none;
-font-weight:bold;
-}
-
 .review-box{
 margin-top:20px;
 padding-top:15px;
@@ -172,6 +164,15 @@ border-radius:10px;
 cursor:pointer;
 }
 
+.product-image{
+width:100%;
+height:220px;
+object-fit:cover;
+border-radius:15px;
+margin-bottom:10px;
+background:#fff;
+}
+
 </style>
 
 </head>
@@ -215,8 +216,6 @@ Future Tank
 <footer class="main-footer">
 © Future Tank — نقاء الماء هو هدفنا
 </footer>
-
-<!-- ORDER POPUP -->
 
 <div id="orderPopup" class="popup">
 
@@ -300,14 +299,22 @@ document.getElementById(
 let selectedProduct = null;
 
 fetch(
-API_URL +
-"?type=products&category=" +
-encodeURIComponent(category)
+API_URL + "?type=products"
 )
 
 .then(res=>res.json())
 
 .then(data=>{
+
+data = data.filter(p=>{
+
+return (
+String(p.category || "").trim()
+===
+String(category || "").trim()
+);
+
+});
 
 data.sort((a,b)=>{
 
@@ -370,13 +377,15 @@ list.innerHTML += `
 
 ${badgeHTML}
 
-<img src="${p.image}">
+<img
+src="${p.image || 'https://via.placeholder.com/400x250?text=Future+Tank'}"
+class="product-image">
 
-<h3>${p.name}</h3>
+<h3>${p.name || ""}</h3>
 
-<p>${p.desc}</p>
+<p>${p.description || ""}</p>
 
-<strong>${p.price} ج</strong>
+<strong>${p.price || 0} ج</strong>
 
 <br>
 
@@ -403,85 +412,9 @@ onclick="openOrderPopup(
 
 </button>
 
-<div class="review-box">
-
-<h4>
-⭐ التقييمات
-</h4>
-
-<div id="reviews-${p.id}">
-جاري التحميل...
-</div>
-
-<input
-type="text"
-id="name-${p.id}"
-class="review-input"
-placeholder="الاسم">
-
-<input
-type="text"
-id="phone-${p.id}"
-class="review-input"
-placeholder="رقم الهاتف">
-
-<select
-id="rating-${p.id}"
-class="review-input">
-
-<option value="5">
-★★★★★ ممتاز
-</option>
-
-<option value="4">
-★★★★ جيد جدًا
-</option>
-
-<option value="3">
-★★★ جيد
-</option>
-
-<option value="2">
-★★ مقبول
-</option>
-
-<option value="1">
-★ ضعيف
-</option>
-
-</select>
-
-<textarea
-id="comment-${p.id}"
-class="review-input"
-placeholder="اكتب تعليقك">
-</textarea>
-
-<button
-class="review-btn"
-onclick="submitReview(
-'${p.name}',
-${p.id}
-)">
-
-إرسال التقييم
-
-</button>
-
-</div>
-
 </div>
 
 `;
-
-setTimeout(()=>{
-
-loadReviews(
-p.name,
-p.id
-);
-
-},300);
 
 });
 
@@ -598,7 +531,8 @@ total:selectedProduct.price
 if(data.success){
 
 const whatsappURL =
-"https://wa.me/201150402031?text=" +
+"https://wa.me/201150402031?text="
++
 encodeURIComponent(orderText);
 
 window.open(
@@ -638,164 +572,6 @@ JSON.stringify(cart)
 );
 
 alert("✅ تم إضافة المنتج إلى السلة");
-
-}
-
-/* ========================= */
-
-function loadReviews(product,id){
-
-fetch(
-API_URL +
-"?type=reviews&product=" +
-encodeURIComponent(product)
-)
-
-.then(res=>res.json())
-
-.then(data=>{
-
-const box =
-document.getElementById(
-"reviews-"+id
-);
-
-box.innerHTML="";
-
-if(data.length===0){
-
-box.innerHTML =
-"<p>لا توجد تقييمات بعد</p>";
-
-return;
-
-}
-
-data.forEach(r=>{
-
-let stars="";
-
-for(let i=0;i<r.rating;i++){
-
-stars+="⭐";
-
-}
-
-let hiddenPhone =
-"••" +
-String(r.phone).slice(-3);
-
-box.innerHTML += `
-
-<div class="review-item">
-
-<strong>
-${r.name}
-</strong>
-
-(${hiddenPhone})
-
-<div class="stars">
-${stars}
-</div>
-
-<p>
-${r.comment}
-</p>
-
-</div>
-
-`;
-
-});
-
-});
-
-}
-
-/* ========================= */
-
-function submitReview(product,id){
-
-const name =
-document.getElementById(
-"name-"+id
-).value;
-
-const phone =
-document.getElementById(
-"phone-"+id
-).value;
-
-const rating =
-document.getElementById(
-"rating-"+id
-).value;
-
-const comment =
-document.getElementById(
-"comment-"+id
-).value;
-
-if(
-name==="" ||
-phone==="" ||
-comment===""
-){
-
-alert("يرجى استكمال البيانات");
-
-return;
-
-}
-
-fetch(API_URL,{
-
-method:"POST",
-
-body:JSON.stringify({
-
-action:"addReview",
-
-product:product,
-
-name:name,
-
-phone:phone,
-
-rating:rating,
-
-comment:comment
-
-})
-
-})
-
-.then(res=>res.json())
-
-.then(data=>{
-
-if(data.success){
-
-alert("✅ تم إرسال التقييم");
-
-document.getElementById(
-"name-"+id
-).value="";
-
-document.getElementById(
-"phone-"+id
-).value="";
-
-document.getElementById(
-"comment-"+id
-).value="";
-
-loadReviews(product,id);
-
-}
-
-});
 
 }
 
