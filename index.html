@@ -5,30 +5,13 @@
 
 <meta charset="UTF-8">
 
-<title>
-Future Tank
-</title>
+<title>Future Tank</title>
 
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
 <meta name="theme-color"
 content="#4fc3f7">
-
-<link rel="manifest"
-href="./manifest.json">
-
-<link rel="apple-touch-icon"
-href="./icon-192.png">
-
-<meta name="apple-mobile-web-app-capable"
-content="yes">
-
-<meta name="apple-mobile-web-app-status-bar-style"
-content="default">
-
-<meta name="apple-mobile-web-app-title"
-content="Future Tank">
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
@@ -45,15 +28,13 @@ font-family:Tahoma,sans-serif;
 body{
 background:#f5f9ff;
 overflow-x:hidden;
-color:#222;
 }
 
 .main-header{
-background:linear-gradient(135deg,#4fc3f7,#0b6fc2);
-padding:35px 20px;
+background:linear-gradient(135deg,#0b6fc2,#4fc3f7);
+padding:30px 20px;
 text-align:center;
 color:#fff;
-box-shadow:0 4px 18px rgba(0,0,0,.12);
 }
 
 .main-header h1{
@@ -61,55 +42,47 @@ font-size:34px;
 margin-bottom:10px;
 }
 
-.main-header p{
-font-size:18px;
-}
-
 .container{
-padding:20px;
+width:100%;
 max-width:1200px;
 margin:auto;
+padding:20px;
 }
 
 .brand-box{
 background:#fff;
 padding:25px;
-border-radius:24px;
-margin-top:20px;
+border-radius:22px;
 text-align:center;
-box-shadow:0 4px 15px rgba(0,0,0,.08);
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+margin-bottom:25px;
 }
 
 .brand-box img{
 width:120px;
 height:120px;
-border-radius:30px;
+border-radius:25px;
 object-fit:cover;
+margin-bottom:15px;
 }
 
 .brand-box h2{
-margin-top:15px;
 color:#0b6fc2;
-}
-
-.brand-box p{
-margin-top:10px;
-line-height:1.9;
-color:#666;
+margin-bottom:10px;
 }
 
 .notice-box{
 background:#e8f7ff;
 padding:18px;
 border-radius:18px;
-margin-top:20px;
-border:1px solid #bde7ff;
 line-height:2;
+margin-bottom:25px;
+border:1px solid #bde7ff;
 }
 
 .cards{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:18px;
 margin-top:25px;
 }
@@ -117,226 +90,199 @@ margin-top:25px;
 .card{
 background:#fff;
 padding:22px;
-border-radius:22px;
-box-shadow:0 4px 14px rgba(0,0,0,.08);
+border-radius:20px;
+text-align:center;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
 transition:.3s;
 }
 
 .card:hover{
-transform:translateY(-5px);
+transform:translateY(-4px);
+}
+
+.card h3{
+color:#0b6fc2;
+margin-bottom:10px;
+}
+
+.card p{
+color:#666;
+line-height:1.8;
 }
 
 .link-card{
 text-decoration:none;
-color:#222;
 }
 
-.card h3{
-margin-bottom:10px;
-color:#0b6fc2;
-font-size:22px;
-}
-
-.card p{
-line-height:1.8;
-color:#666;
-}
-
-.install-btn{
-width:100%;
-padding:16px;
-border:none;
-border-radius:16px;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-margin-top:18px;
-color:#fff;
-transition:.3s;
-}
-
-.install-btn:hover{
-opacity:.9;
-transform:scale(1.01);
-}
-
-.market-box{
-margin-top:35px;
+.market-section{
 background:#fff;
 padding:25px;
-border-radius:25px;
+border-radius:22px;
+margin-top:30px;
 box-shadow:0 5px 18px rgba(0,0,0,.08);
 text-align:center;
 }
 
-.market-box h2{
-font-size:30px;
-color:#ff9800;
-margin-bottom:15px;
-}
-
-.market-box p{
-line-height:2;
-color:#666;
-margin-bottom:20px;
-}
-
-.market-enter-btn{
+.market-btn{
 display:inline-block;
+margin-top:20px;
 background:linear-gradient(135deg,#ff9800,#ffb74d);
-padding:18px 35px;
-border-radius:18px;
-text-decoration:none;
 color:#fff;
+padding:18px 28px;
+border-radius:18px;
 font-size:20px;
 font-weight:bold;
+text-decoration:none;
 box-shadow:0 5px 18px rgba(0,0,0,.15);
-}
-
-.section-title{
-font-size:28px;
-margin-top:40px;
-margin-bottom:20px;
-color:#0b6fc2;
-font-weight:bold;
 }
 
 .products-slider{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:18px;
+margin-top:25px;
 }
 
 .product-box{
-background:#fff;
-border-radius:22px;
-padding:20px;
-box-shadow:0 4px 14px rgba(0,0,0,.08);
-text-align:center;
+background:#f9fbff;
+padding:18px;
+border-radius:18px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-.product-box h3{
+.product-box h4{
 color:#0b6fc2;
 margin-bottom:10px;
 }
 
 .product-box p{
-color:#666;
 line-height:1.8;
-margin-bottom:12px;
+color:#666;
 }
 
-.product-price{
-font-size:24px;
+.price{
+margin-top:12px;
+font-size:22px;
 font-weight:bold;
 color:#ff9800;
 }
 
 .best-merchants{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
 gap:18px;
-margin-top:20px;
+margin-top:25px;
 }
 
-.merchant-card{
+.merchant-box{
 background:#fff;
-padding:22px;
-border-radius:22px;
-text-align:center;
-box-shadow:0 4px 14px rgba(0,0,0,.08);
+padding:18px;
+border-radius:18px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-.merchant-card h3{
-margin:15px 0;
-color:#0b6fc2;
-}
-
-.merchant-card p{
-color:#666;
-line-height:1.8;
-}
-
-.stars{
-margin-top:10px;
-color:#ff9800;
-font-size:20px;
-}
-
-.offer-banner{
-margin-top:35px;
-background:linear-gradient(135deg,#ff9800,#ff5722);
-padding:25px;
-border-radius:24px;
-text-align:center;
-color:#fff;
-font-size:24px;
+.install-btn{
+margin-top:15px;
+width:100%;
+padding:15px;
+border:none;
+border-radius:14px;
+font-size:17px;
 font-weight:bold;
-box-shadow:0 5px 18px rgba(0,0,0,.15);
-animation:pulse 2s infinite;
-}
-
-@keyframes pulse{
-
-0%{
-transform:scale(1);
-}
-
-50%{
-transform:scale(1.02);
-}
-
-100%{
-transform:scale(1);
-}
-
+cursor:pointer;
+color:#fff;
 }
 
 .rating-summary{
 background:#fff;
-padding:22px;
-border-radius:22px;
-margin-top:30px;
+padding:20px;
+border-radius:20px;
+margin-top:25px;
 text-align:center;
-box-shadow:0 4px 14px rgba(0,0,0,.08);
-}
-
-.rating-summary h2{
-font-size:42px;
-color:#ff9800;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
 }
 
 .review-item{
 background:#fff;
 padding:15px;
-border-radius:16px;
-margin-top:15px;
-box-shadow:0 3px 10px rgba(0,0,0,.08);
+border-radius:15px;
+margin-top:12px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
-.main-footer{
-margin-top:50px;
+.stars{
+color:#ff9800;
+margin:8px 0;
+}
+
+.show-more-btn{
+margin-top:15px;
+background:#0b6fc2;
+color:#fff;
+border:none;
+padding:12px;
+width:100%;
+border-radius:12px;
+font-size:16px;
+cursor:pointer;
+}
+
+footer{
+margin-top:40px;
 padding:25px;
 text-align:center;
+color:#777;
+}
+
+#ratePopup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+padding:15px;
+}
+
+.rate-box{
 background:#fff;
-color:#666;
+width:100%;
+max-width:420px;
+padding:25px;
+border-radius:20px;
+}
+
+.rate-input{
+width:100%;
+padding:12px;
+margin-top:10px;
+border-radius:10px;
+border:1px solid #ccc;
+}
+
+.rate-submit{
+margin-top:15px;
+background:#ff9800;
+color:#fff;
+border:none;
+padding:12px;
+width:100%;
+border-radius:10px;
 font-size:16px;
+cursor:pointer;
 }
 
-@media(max-width:768px){
-
-.main-header h1{
-font-size:28px;
-}
-
-.market-box h2{
-font-size:25px;
-}
-
-.section-title{
-font-size:24px;
-}
-
+.close-rate{
+margin-top:10px;
+background:#eee;
+border:none;
+padding:10px;
+width:100%;
+border-radius:10px;
 }
 
 </style>
@@ -347,27 +293,19 @@ font-size:24px;
 
 <header class="main-header">
 
-<h1>
-💧 Future Tank
-</h1>
+<h1>💧 Future Tank</h1>
 
-<p>
-نقاء الماء هو هدفنا
-</p>
+<p>نقاء الماء هو هدفنا</p>
 
 </header>
 
-<main class="container">
+<div class="container">
 
 <div class="brand-box">
 
-<img
-src="./icon-512.png"
-alt="Future Tank">
+<img src="./icon-512.png">
 
-<h2>
-Future Tank
-</h2>
+<h2>Future Tank</h2>
 
 <p>
 💧 خدمات المياه والتسوق والماركت وتتبع الطلبات والخدمات الذكية
@@ -383,275 +321,130 @@ Future Tank
 
 <section class="cards">
 
-<a class="card link-card"
-href="portal.html">
-
-<h3>
-بوابة العملاء
-</h3>
-
-<p>
-عرض بيانات التعاقد وتجديده
-</p>
-
+<a class="card link-card" href="portal.html">
+<h3>بوابة العملاء</h3>
+<p>عرض بيانات التعاقد وتجديده</p>
 </a>
 
-<a class="card link-card"
-href="admin.html">
-
-<h3>
-لوحة التحكم
-</h3>
-
-<p>
-إدارة العملاء والخدمات
-</p>
-
+<a class="card link-card" href="admin.html">
+<h3>لوحة التحكم</h3>
+<p>إدارة العملاء والخدمات</p>
 </a>
 
-<a class="card link-card"
-href="new.html">
-
-<h3>
-عميل جديد
-</h3>
-
-<p>
-إضافة تعاقد جديد
-</p>
-
+<a class="card link-card" href="new.html">
+<h3>عميل جديد</h3>
+<p>إضافة تعاقد جديد</p>
 </a>
 
-<a class="card link-card"
-href="services.html">
-
-<h3>
-الخدمات
-</h3>
-
-<p>
-خدمات Future Tank
-</p>
-
+<a class="card link-card" href="services.html">
+<h3>الخدمات</h3>
+<p>خدمات Future Tank</p>
 </a>
 
-<a class="card link-card"
-href="shop.html">
-
-<h3>
-تسوق الآن
-</h3>
-
-<p>
-اطلب بسهولة
-</p>
-
+<a class="card link-card" href="shop.html">
+<h3>تسوق الآن</h3>
+<p>اطلب بسهولة</p>
 </a>
 
-<a class="card link-card"
-href="track-order.html">
-
-<h3>
-تتبع الطلبات
-</h3>
-
-<p>
-متابعة حالة الطلب لحظة بلحظة
-</p>
-
+<a class="card link-card" href="track-order.html">
+<h3>تتبع الطلبات</h3>
+<p>متابعة حالة الطلب لحظة بلحظة</p>
 </a>
 
-<a class="card link-card"
-href="assistant.html">
-
-<h3>
-المساعد الذكي
-</h3>
-
-<p>
-اسأل واستفسر فورًا
-</p>
-
+<a class="card link-card" href="assistant.html">
+<h3>المساعد الذكي</h3>
+<p>اسأل واستفسر فورًا</p>
 </a>
 
-<a class="card link-card"
-href="business.html">
-
-<h3>
-💼 رجال الأعمال
-</h3>
-
-<p>
-لوحة خدمات التجار والشركات
-</p>
-
+<a class="card link-card" href="business.html">
+<h3>💼 رجال الأعمال</h3>
+<p>لوحة خدمات التجار والشركات</p>
 </a>
 
 </section>
 
-<!-- =========================
-منتجات التجار والعروض
-========================= -->
-
-<div class="market-box">
+<div class="market-section">
 
 <h2>
 🛍️ منتجات التجار والعروض
 </h2>
 
-<p>
-
-تصفح منتجات التجار داخل هرم سيتي وحدائق أكتوبر  
-واحصل على أفضل العروض والتوصيل السريع 🚚
-
+<p style="margin-top:15px;color:#666;line-height:2;">
+تصفح منتجات التجار داخل هرم سيتي وحدائق أكتوبر واحصل على أفضل العروض والتوصيل السريع 🚚
 </p>
 
-<a href="./market.html"
-class="market-enter-btn">
+<a href="market.html"
+class="market-btn">
 
 🛒 دخول الماركت الآن
 
 </a>
 
-</div>
-
-<!-- =========================
-الأكثر مشاهدة
-========================= -->
-
-<div class="section-title">
-
-🔥 المنتجات الأكثر مشاهدة
-
-</div>
-
 <div class="products-slider">
 
 <div class="product-box">
-
-<h3>
-خزان مياه 3 طبقات
-</h3>
-
-<p>
-خزان عالي الجودة ضمان 10 سنوات
-</p>
-
-<div class="product-price">
-💰 4500 جنيه
-</div>
-
+<h4>خزان مياه 3 طبقات</h4>
+<p>خزان عالي الجودة ضمان 10 سنوات</p>
+<div class="price">💰 4500 جنيه</div>
 </div>
 
 <div class="product-box">
-
-<h3>
-فلتر مياه منزلي
-</h3>
-
-<p>
-تنقية عالية للمياه والشرب
-</p>
-
-<div class="product-price">
-💰 2200 جنيه
-</div>
-
+<h4>فلتر مياه منزلي</h4>
+<p>تنقية عالية للمياه والشرب</p>
+<div class="price">💰 2200 جنيه</div>
 </div>
 
 <div class="product-box">
-
-<h3>
-مضخة مياه أوتوماتيك
-</h3>
-
-<p>
-قوة ضخ ممتازة وضمان شامل
-</p>
-
-<div class="product-price">
-💰 3900 جنيه
+<h4>مضخة مياه أوتوماتيك</h4>
+<p>قوة ضخ ممتازة وضمان شامل</p>
+<div class="price">💰 3900 جنيه</div>
 </div>
 
 </div>
 
-</div>
-
-<!-- =========================
-أفضل التجار
-========================= -->
-
-<div class="section-title">
-
+<h2 style="margin-top:35px;">
 ⭐ أفضل التجار
-
-</div>
+</h2>
 
 <div class="best-merchants">
 
-<div class="merchant-card">
-
-<div style="font-size:50px;">
-🏆
+<div class="merchant-box">
+<h3>🏆 تاجر مميز</h3>
+<p>أفضل جودة وخدمة وسرعة تنفيذ</p>
+<div class="stars">⭐⭐⭐⭐⭐</div>
 </div>
 
-<h3>
-تاجر مميز
-</h3>
-
-<p>
-أفضل جودة وخدمة وسرعة تنفيذ
-</p>
-
-<div class="stars">
-⭐⭐⭐⭐⭐
+<div class="merchant-box">
+<h3>🚚 توصيل سريع</h3>
+<p>توصيل داخل هرم سيتي وحدائق أكتوبر</p>
+<div class="stars">⭐⭐⭐⭐⭐</div>
 </div>
 
 </div>
 
-<div class="merchant-card">
-
-<div style="font-size:50px;">
-🚚
-</div>
-
-<h3>
-توصيل سريع
-</h3>
-
-<p>
-توصيل داخل هرم سيتي وحدائق أكتوبر
-</p>
-
-<div class="stars">
-⭐⭐⭐⭐⭐
-</div>
-
-</div>
-
-</div>
-
-<!-- =========================
-عروض اليوم
-========================= -->
-
-<div class="offer-banner">
+<div style="
+margin-top:25px;
+font-size:20px;
+font-weight:bold;
+color:#ff5722;
+"
+id="offersText">
 
 🔥 عروض اليوم على الخزانات والفلاتر
 
 </div>
 
-<button
-id="installApp"
+</div>
+
+<button id="installApp"
 class="install-btn"
-style="background:#25D366;">
+style="background:#25D366;display:none;">
 
 📲 تثبيت التطبيق
 
 </button>
 
-<button
-id="enableNotify"
+<button id="enableNotify"
 class="install-btn"
 style="background:#ff5722;">
 
@@ -659,8 +452,7 @@ style="background:#ff5722;">
 
 </button>
 
-<button
-id="rateAppBtn"
+<button id="rateAppBtn"
 class="install-btn"
 style="background:#9c27b0;">
 
@@ -668,8 +460,7 @@ style="background:#9c27b0;">
 
 </button>
 
-<button
-id="shareAppBtn"
+<button id="shareAppBtn"
 class="install-btn"
 style="background:#0b6fc2;">
 
@@ -689,99 +480,206 @@ style="background:#0b6fc2;">
 
 </div>
 
-<section class="cards">
+<div style="margin-top:25px;">
 
-<div class="card">
-
-<h3>
+<h2 style="margin-bottom:15px;">
 ⭐ تقييمات التطبيق
-</h3>
+</h2>
 
-<div id="appReviews">
+<div id="appReviews"></div>
 
-جاري تحميل التقييمات...
+<button
+id="toggleReviewsBtn"
+class="show-more-btn">
+
+عرض كل التقييمات
+
+</button>
 
 </div>
 
 </div>
 
-</section>
-
-</main>
-
-<footer class="main-footer">
+<footer>
 
 © Future Tank — جميع الحقوق محفوظة
 
 </footer>
+
+<div id="ratePopup">
+
+<div class="rate-box">
+
+<h2>⭐ تقييم التطبيق</h2>
+
+<input type="text"
+id="appRateName"
+class="rate-input"
+placeholder="الاسم">
+
+<input type="text"
+id="appRatePhone"
+class="rate-input"
+placeholder="رقم الهاتف">
+
+<select id="appRateValue"
+class="rate-input">
+
+<option value="5">★★★★★ ممتاز</option>
+<option value="4">★★★★ جيد جدًا</option>
+<option value="3">★★★ جيد</option>
+<option value="2">★★ مقبول</option>
+<option value="1">★ ضعيف</option>
+
+</select>
+
+<textarea
+id="appRateComment"
+class="rate-input"
+placeholder="اكتب رأيك في التطبيق">
+</textarea>
+
+<button
+class="rate-submit"
+onclick="submitAppRate()">
+
+إرسال التقييم
+
+</button>
+
+<button
+class="close-rate"
+onclick="closeRatePopup()">
+
+إغلاق
+
+</button>
+
+</div>
+
+</div>
 
 <script>
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-/* تحميل التقييمات */
+const offers = [
+
+"🔥 عروض اليوم على الخزانات والفلاتر",
+
+"🚚 توصيل سريع داخل هرم سيتي وحدائق أكتوبر",
+
+"💧 خصومات على خدمات التعقيم والتطهير",
+
+"🛒 عروض السوبر ماركت والصيدلية",
+
+"⭐ أفضل عروض منتجات التجار اليوم"
+
+];
+
+let currentOffer = 0;
+
+setInterval(()=>{
+
+currentOffer++;
+
+if(currentOffer >= offers.length){
+
+currentOffer = 0;
+
+}
+
+document.getElementById(
+"offersText"
+).innerText = offers[currentOffer];
+
+},3000);
+
+const installBtn =
+document.getElementById("installApp");
+
+if(
+window.matchMedia("(display-mode: standalone)").matches
+){
+
+installBtn.style.display = "none";
+
+}else{
+
+window.addEventListener(
+"beforeinstallprompt",
+(e)=>{
+
+e.preventDefault();
+
+window.deferredPrompt = e;
+
+installBtn.style.display = "block";
+
+}
+);
+
+}
+
+installBtn.onclick = async()=>{
+
+if(window.deferredPrompt){
+
+window.deferredPrompt.prompt();
+
+}
+
+};
+
+document.getElementById(
+"rateAppBtn"
+).onclick=()=>{
+
+document.getElementById(
+"ratePopup"
+).style.display="flex";
+
+};
+
+function closeRatePopup(){
+
+document.getElementById(
+"ratePopup"
+).style.display="none";
+
+}
+
+let allReviews = [];
+
+let showAll = false;
 
 function loadAppReviews(){
 
-fetch(API_URL + "?type=appReviews")
+fetch(API_URL+"?type=appReviews")
 
 .then(res=>res.json())
 
 .then(data=>{
 
-const box =
-document.getElementById("appReviews");
+allReviews = data.reverse();
 
-if(!data.length){
-
-box.innerHTML =
-"<p>لا توجد تقييمات بعد</p>";
-
-return;
-
-}
-
-box.innerHTML = "";
+renderReviews();
 
 let total = 0;
 
-data.reverse().slice(0,5).forEach(r=>{
+allReviews.forEach(r=>{
 
-total += Number(r.rating || 5);
-
-let stars = "";
-
-for(let i=0;i<Number(r.rating || 5);i++){
-
-stars += "⭐";
-
-}
-
-box.innerHTML += `
-
-<div class="review-item">
-
-<strong>
-${r.name || "عميل"}
-</strong>
-
-<div class="stars">
-${stars}
-</div>
-
-<p>
-${r.comment || ""}
-</p>
-
-</div>
-
-`;
+total += Number(r.rating);
 
 });
 
 const avg =
-(total / data.length).toFixed(1);
+allReviews.length
+?
+(total/allReviews.length).toFixed(1)
+:
+5;
 
 document.getElementById(
 "ratingAverage"
@@ -791,54 +689,159 @@ avg + " ⭐";
 document.getElementById(
 "ratingCount"
 ).innerHTML =
-data.length + " تقييم";
-
-})
-
-.catch(()=>{
-
-document.getElementById(
-"appReviews"
-).innerHTML =
-"❌ حدث خطأ أثناء تحميل التقييمات";
+allReviews.length + " تقييم";
 
 });
 
 }
 
-loadAppReviews();
+function renderReviews(){
 
-/* مشاركة التطبيق */
+const box =
+document.getElementById(
+"appReviews"
+);
+
+box.innerHTML = "";
+
+const reviews =
+showAll
+?
+allReviews
+:
+allReviews.slice(0,5);
+
+reviews.forEach(r=>{
+
+let stars = "";
+
+for(let i=0;i<Number(r.rating);i++){
+
+stars += "⭐";
+
+}
+
+box.innerHTML += `
+
+<div class="review-item">
+
+<strong>${r.name}</strong>
+
+<div class="stars">
+${stars}
+</div>
+
+<p>${r.comment}</p>
+
+</div>
+
+`;
+
+});
 
 document.getElementById(
-"shareAppBtn"
-).onclick = async()=>{
+"toggleReviewsBtn"
+).innerText =
+showAll
+?
+"عرض أقل"
+:
+"عرض كل التقييمات";
 
-const shareData = {
+}
 
-title:"Future Tank",
+document.getElementById(
+"toggleReviewsBtn"
+).onclick=()=>{
 
-text:"💧 حمل تطبيق Future Tank الآن",
+showAll = !showAll;
 
-url:window.location.href
+renderReviews();
 
 };
 
-if(navigator.share){
+function submitAppRate(){
 
-navigator.share(shareData);
+const name =
+document.getElementById(
+"appRateName"
+).value.trim();
 
-}else{
+const phone =
+document.getElementById(
+"appRatePhone"
+).value.trim();
+
+const rating =
+document.getElementById(
+"appRateValue"
+).value;
+
+const comment =
+document.getElementById(
+"appRateComment"
+).value.trim();
+
+if(
+name==="" ||
+phone==="" ||
+comment===""){
+
+alert("يرجى استكمال البيانات");
+
+return;
+
+}
+
+fetch(API_URL,{
+
+method:"POST",
+
+headers:{
+"Content-Type":"text/plain;charset=utf-8"
+},
+
+body:JSON.stringify({
+
+action:"addAppReview",
+
+name:name,
+
+phone:phone,
+
+rating:rating,
+
+comment:comment
+
+})
+
+})
+
+.then(()=>{
+
+alert("⭐ شكراً لتقييمك");
+
+closeRatePopup();
+
+loadAppReviews();
+
+});
+
+}
+
+document.getElementById(
+"shareAppBtn"
+).onclick=()=>{
 
 navigator.clipboard.writeText(
 window.location.href
 );
 
-alert("تم نسخ الرابط");
-
-}
+alert("✅ تم نسخ رابط التطبيق");
 
 };
+
+loadAppReviews();
 
 </script>
 
