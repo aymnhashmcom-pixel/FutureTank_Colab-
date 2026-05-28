@@ -78,12 +78,78 @@ border-radius:16px;
 text-align:center;
 font-weight:bold;
 box-shadow:0 5px 18px rgba(0,0,0,.08);
-cursor:pointer;
+}
+
+.products-section{
+margin-top:25px;
+}
+
+.products-title{
+font-size:24px;
+margin-bottom:15px;
+color:#ff9800;
+font-weight:bold;
+}
+
+.products-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:18px;
+}
+
+.product-card{
+background:#fff;
+border-radius:20px;
+overflow:hidden;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
 transition:.3s;
 }
 
-.cat:hover{
-transform:translateY(-3px);
+.product-card:hover{
+transform:translateY(-4px);
+}
+
+.product-card img{
+width:100%;
+height:220px;
+object-fit:cover;
+}
+
+.product-content{
+padding:15px;
+}
+
+.product-content h3{
+margin-bottom:10px;
+color:#0b6fc2;
+}
+
+.price{
+font-size:20px;
+font-weight:bold;
+color:#ff9800;
+margin-bottom:10px;
+}
+
+.desc{
+color:#666;
+line-height:1.8;
+margin-bottom:15px;
+}
+
+.whatsapp-btn{
+display:block;
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#25D366;
+color:#fff;
+font-size:16px;
+font-weight:bold;
+cursor:pointer;
+text-decoration:none;
+text-align:center;
 }
 
 .order-box{
@@ -91,6 +157,7 @@ background:#fff;
 padding:20px;
 border-radius:20px;
 box-shadow:0 5px 18px rgba(0,0,0,.08);
+margin-top:30px;
 }
 
 .order-box h2{
@@ -118,11 +185,6 @@ font-size:17px;
 font-weight:bold;
 margin-top:15px;
 cursor:pointer;
-transition:.3s;
-}
-
-.order-btn:hover{
-opacity:.9;
 }
 
 footer{
@@ -201,6 +263,19 @@ text-align:center;
 
 </div>
 
+<div class="products-section">
+
+<div class="products-title">
+🛍️ منتجات التجار
+</div>
+
+<div class="products-grid"
+id="merchantProducts">
+
+</div>
+
+</div>
+
 <div class="order-box">
 
 <h2>
@@ -225,38 +300,12 @@ id="customerAddress"
 class="order-input"
 placeholder="العنوان">
 
-<select
-id="marketCategory"
-class="order-input">
-
-<option>🛒 سوبر ماركت</option>
-<option>💊 صيدلية</option>
-<option>🥦 خضروات وفاكهة</option>
-<option>🥩 لحوم وأسماك</option>
-<option>🍞 مخبوزات</option>
-<option>🧃 مشروبات</option>
-<option>🧴 منظفات</option>
-<option>👶 مستلزمات أطفال</option>
-<option>💄 تجميل وعناية</option>
-
-</select>
-
 <textarea
 id="marketItems"
 class="order-input"
 rows="6"
 placeholder="اكتب المنتجات المطلوبة بالتفصيل">
 </textarea>
-
-<select
-id="paymentMethod"
-class="order-input">
-
-<option>الدفع عند الاستلام</option>
-<option>فودافون كاش</option>
-<option>إنستا باي</option>
-
-</select>
 
 <button
 class="order-btn"
@@ -297,6 +346,8 @@ id="errorBox">
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
+/* عروض متحركة */
+
 const offers = [
 
 "🔥 خصومات على السوبر ماركت والصيدلية والخضروات",
@@ -325,27 +376,97 @@ document.getElementById(
 
 },3000);
 
-function normalizePhone(phone){
+/* تحميل منتجات التجار */
 
-phone = String(phone)
-.replace(/\s+/g,"")
-.replace(/[^0-9]/g,"");
+function loadMerchantProducts(){
 
-if(phone.startsWith("20")){
+const products = JSON.parse(
 
-phone = "0" + phone.substring(2);
+localStorage.getItem(
+"merchant_products"
+)
+
+|| "[]"
+
+);
+
+const box =
+document.getElementById(
+"merchantProducts"
+);
+
+if(products.length === 0){
+
+box.innerHTML = `
+
+<div class="product-card">
+
+<div class="product-content">
+
+<h3>
+لا توجد منتجات حالياً
+</h3>
+
+<p class="desc">
+سيتم إضافة منتجات التجار قريباً
+</p>
+
+</div>
+
+</div>
+
+`;
+
+return;
 
 }
 
-if(!phone.startsWith("0")){
+box.innerHTML = "";
 
-phone = "0" + phone;
+products.forEach(p=>{
+
+box.innerHTML += `
+
+<div class="product-card">
+
+<img src="${p.image}">
+
+<div class="product-content">
+
+<h3>
+${p.name}
+</h3>
+
+<div class="price">
+💰 ${p.price}
+</div>
+
+<div class="desc">
+${p.desc}
+</div>
+
+<a
+class="whatsapp-btn"
+target="_blank"
+href="https://wa.me/2${p.whatsapp}?text=${encodeURIComponent("مرحباً، أريد طلب المنتج: " + p.name)}">
+
+📞 طلب عبر واتساب
+
+</a>
+
+</div>
+
+</div>
+
+`;
+
+});
 
 }
 
-return phone;
+loadMerchantProducts();
 
-}
+/* إرسال الأوردر */
 
 function submitOrder(){
 
@@ -362,7 +483,7 @@ document.getElementById(
 "customerName"
 ).value.trim();
 
-let phone =
+const phone =
 document.getElementById(
 "customerPhone"
 ).value.trim();
@@ -372,20 +493,10 @@ document.getElementById(
 "customerAddress"
 ).value.trim();
 
-const category =
-document.getElementById(
-"marketCategory"
-).value;
-
 const items =
 document.getElementById(
 "marketItems"
 ).value.trim();
-
-const payment =
-document.getElementById(
-"paymentMethod"
-).value;
 
 if(
 name === "" ||
@@ -395,16 +506,6 @@ items === ""
 ){
 
 alert("يرجى استكمال البيانات");
-
-return;
-
-}
-
-phone = normalizePhone(phone);
-
-if(phone.length !== 11){
-
-alert("⚠️ رقم الهاتف غير صحيح");
 
 return;
 
@@ -422,9 +523,7 @@ const orderText =
 
 "📦 الطلب:\n" +
 
-category + " : " + items + "\n\n" +
-
-"💳 طريقة الدفع: " + payment;
+items;
 
 fetch(API_URL,{
 
@@ -446,9 +545,9 @@ phone:phone,
 
 address:address,
 
-items:category + " : " + items,
+items:items,
 
-payment:payment,
+payment:"يحدد لاحقاً",
 
 total:"يحدد لاحقاً"
 
