@@ -1,84 +1,513 @@
-<!-- =========================
-قسم منتجات التجار والعروض
-========================= -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
 
-<section style="
-padding:25px;
-margin-top:25px;
-">
+<head>
 
-<div style="
-background:linear-gradient(135deg,#ff9800,#ffb74d);
-padding:30px;
-border-radius:25px;
-box-shadow:0 8px 25px rgba(0,0,0,.15);
+<meta charset="UTF-8">
+
+<title>
+Future Tank
+</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color"
+content="#4fc3f7">
+
+<link rel="manifest"
+href="./manifest.json">
+
+<link rel="apple-touch-icon"
+href="./icon-192.png">
+
+<meta name="apple-mobile-web-app-capable"
+content="yes">
+
+<meta name="apple-mobile-web-app-status-bar-style"
+content="default">
+
+<meta name="apple-mobile-web-app-title"
+content="Future Tank">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Tahoma,sans-serif;
+}
+
+body{
+background:#f5f9ff;
+overflow-x:hidden;
+color:#222;
+}
+
+.main-header{
+background:linear-gradient(135deg,#4fc3f7,#0b6fc2);
+padding:35px 20px;
 text-align:center;
 color:#fff;
-position:relative;
-overflow:hidden;
-">
+box-shadow:0 4px 18px rgba(0,0,0,.12);
+}
 
-<div style="
-position:absolute;
-top:-40px;
-left:-40px;
-width:140px;
-height:140px;
-background:rgba(255,255,255,.12);
-border-radius:50%;
-"></div>
+.main-header h1{
+font-size:34px;
+margin-bottom:10px;
+}
 
-<div style="
-position:absolute;
-bottom:-50px;
-right:-50px;
-width:180px;
-height:180px;
-background:rgba(255,255,255,.08);
-border-radius:50%;
-"></div>
+.main-header p{
+font-size:18px;
+}
 
-<h2 style="
-margin:0;
+.container{
+padding:20px;
+max-width:1200px;
+margin:auto;
+}
+
+.brand-box{
+background:#fff;
+padding:25px;
+border-radius:24px;
+margin-top:20px;
+text-align:center;
+box-shadow:0 4px 15px rgba(0,0,0,.08);
+}
+
+.brand-box img{
+width:120px;
+height:120px;
+border-radius:30px;
+object-fit:cover;
+}
+
+.brand-box h2{
+margin-top:15px;
+color:#0b6fc2;
+}
+
+.brand-box p{
+margin-top:10px;
+line-height:1.9;
+color:#666;
+}
+
+.notice-box{
+background:#e8f7ff;
+padding:18px;
+border-radius:18px;
+margin-top:20px;
+border:1px solid #bde7ff;
+line-height:2;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:18px;
+margin-top:25px;
+}
+
+.card{
+background:#fff;
+padding:22px;
+border-radius:22px;
+box-shadow:0 4px 14px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.link-card{
+text-decoration:none;
+color:#222;
+}
+
+.card h3{
+margin-bottom:10px;
+color:#0b6fc2;
+font-size:22px;
+}
+
+.card p{
+line-height:1.8;
+color:#666;
+}
+
+.install-btn{
+width:100%;
+padding:16px;
+border:none;
+border-radius:16px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+margin-top:18px;
+color:#fff;
+transition:.3s;
+}
+
+.install-btn:hover{
+opacity:.9;
+transform:scale(1.01);
+}
+
+.market-box{
+margin-top:35px;
+background:#fff;
+padding:25px;
+border-radius:25px;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+text-align:center;
+}
+
+.market-box h2{
 font-size:30px;
-position:relative;
-z-index:2;
-">
+color:#ff9800;
+margin-bottom:15px;
+}
 
-🛍️ منتجات التجار والعروض
+.market-box p{
+line-height:2;
+color:#666;
+margin-bottom:20px;
+}
 
+.market-enter-btn{
+display:inline-block;
+background:linear-gradient(135deg,#ff9800,#ffb74d);
+padding:18px 35px;
+border-radius:18px;
+text-decoration:none;
+color:#fff;
+font-size:20px;
+font-weight:bold;
+box-shadow:0 5px 18px rgba(0,0,0,.15);
+}
+
+.section-title{
+font-size:28px;
+margin-top:40px;
+margin-bottom:20px;
+color:#0b6fc2;
+font-weight:bold;
+}
+
+.products-slider{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:18px;
+}
+
+.product-box{
+background:#fff;
+border-radius:22px;
+padding:20px;
+box-shadow:0 4px 14px rgba(0,0,0,.08);
+text-align:center;
+}
+
+.product-box h3{
+color:#0b6fc2;
+margin-bottom:10px;
+}
+
+.product-box p{
+color:#666;
+line-height:1.8;
+margin-bottom:12px;
+}
+
+.product-price{
+font-size:24px;
+font-weight:bold;
+color:#ff9800;
+}
+
+.best-merchants{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:18px;
+margin-top:20px;
+}
+
+.merchant-card{
+background:#fff;
+padding:22px;
+border-radius:22px;
+text-align:center;
+box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+
+.merchant-card h3{
+margin:15px 0;
+color:#0b6fc2;
+}
+
+.merchant-card p{
+color:#666;
+line-height:1.8;
+}
+
+.stars{
+margin-top:10px;
+color:#ff9800;
+font-size:20px;
+}
+
+.offer-banner{
+margin-top:35px;
+background:linear-gradient(135deg,#ff9800,#ff5722);
+padding:25px;
+border-radius:24px;
+text-align:center;
+color:#fff;
+font-size:24px;
+font-weight:bold;
+box-shadow:0 5px 18px rgba(0,0,0,.15);
+animation:pulse 2s infinite;
+}
+
+@keyframes pulse{
+
+0%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.02);
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+.rating-summary{
+background:#fff;
+padding:22px;
+border-radius:22px;
+margin-top:30px;
+text-align:center;
+box-shadow:0 4px 14px rgba(0,0,0,.08);
+}
+
+.rating-summary h2{
+font-size:42px;
+color:#ff9800;
+}
+
+.review-item{
+background:#fff;
+padding:15px;
+border-radius:16px;
+margin-top:15px;
+box-shadow:0 3px 10px rgba(0,0,0,.08);
+}
+
+.main-footer{
+margin-top:50px;
+padding:25px;
+text-align:center;
+background:#fff;
+color:#666;
+font-size:16px;
+}
+
+@media(max-width:768px){
+
+.main-header h1{
+font-size:28px;
+}
+
+.market-box h2{
+font-size:25px;
+}
+
+.section-title{
+font-size:24px;
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header class="main-header">
+
+<h1>
+💧 Future Tank
+</h1>
+
+<p>
+نقاء الماء هو هدفنا
+</p>
+
+</header>
+
+<main class="container">
+
+<div class="brand-box">
+
+<img
+src="./icon-512.png"
+alt="Future Tank">
+
+<h2>
+Future Tank
 </h2>
 
-<p style="
-margin-top:15px;
-font-size:17px;
-line-height:2;
-position:relative;
-z-index:2;
-">
+<p>
+💧 خدمات المياه والتسوق والماركت وتتبع الطلبات والخدمات الذكية
+</p>
+
+</div>
+
+<div class="notice-box">
+
+📢 يمكنك الآن تتبع جميع الطلبات الخاصة بالمنتجات والخدمات والماركت لحظة بلحظة من خلال صفحة تتبع الطلبات.
+
+</div>
+
+<section class="cards">
+
+<a class="card link-card"
+href="portal.html">
+
+<h3>
+بوابة العملاء
+</h3>
+
+<p>
+عرض بيانات التعاقد وتجديده
+</p>
+
+</a>
+
+<a class="card link-card"
+href="admin.html">
+
+<h3>
+لوحة التحكم
+</h3>
+
+<p>
+إدارة العملاء والخدمات
+</p>
+
+</a>
+
+<a class="card link-card"
+href="new.html">
+
+<h3>
+عميل جديد
+</h3>
+
+<p>
+إضافة تعاقد جديد
+</p>
+
+</a>
+
+<a class="card link-card"
+href="services.html">
+
+<h3>
+الخدمات
+</h3>
+
+<p>
+خدمات Future Tank
+</p>
+
+</a>
+
+<a class="card link-card"
+href="shop.html">
+
+<h3>
+تسوق الآن
+</h3>
+
+<p>
+اطلب بسهولة
+</p>
+
+</a>
+
+<a class="card link-card"
+href="track-order.html">
+
+<h3>
+تتبع الطلبات
+</h3>
+
+<p>
+متابعة حالة الطلب لحظة بلحظة
+</p>
+
+</a>
+
+<a class="card link-card"
+href="assistant.html">
+
+<h3>
+المساعد الذكي
+</h3>
+
+<p>
+اسأل واستفسر فورًا
+</p>
+
+</a>
+
+<a class="card link-card"
+href="business.html">
+
+<h3>
+💼 رجال الأعمال
+</h3>
+
+<p>
+لوحة خدمات التجار والشركات
+</p>
+
+</a>
+
+</section>
+
+<!-- =========================
+منتجات التجار والعروض
+========================= -->
+
+<div class="market-box">
+
+<h2>
+🛍️ منتجات التجار والعروض
+</h2>
+
+<p>
 
 تصفح منتجات التجار داخل هرم سيتي وحدائق أكتوبر  
 واحصل على أفضل العروض والتوصيل السريع 🚚
 
 </p>
 
-<a href="market.html"
-
-style="
-display:inline-block;
-margin-top:20px;
-background:#fff;
-color:#ff9800;
-padding:16px 28px;
-border-radius:18px;
-font-size:20px;
-font-weight:bold;
-text-decoration:none;
-box-shadow:0 5px 18px rgba(0,0,0,.15);
-transition:.3s;
-position:relative;
-z-index:2;
-">
+<a href="./market.html"
+class="market-enter-btn">
 
 🛒 دخول الماركت الآن
 
@@ -86,345 +515,332 @@ z-index:2;
 
 </div>
 
-</section>
-
 <!-- =========================
-منتجات مميزة
+الأكثر مشاهدة
 ========================= -->
 
-<section style="
-padding:20px;
-">
-
-<h2 style="
-color:#ff9800;
-margin-bottom:18px;
-font-size:26px;
-">
+<div class="section-title">
 
 🔥 المنتجات الأكثر مشاهدة
 
-</h2>
+</div>
 
-<div style="
-display:flex;
-gap:15px;
-overflow-x:auto;
-padding-bottom:10px;
-scrollbar-width:none;
-">
+<div class="products-slider">
 
-<div style="
-min-width:240px;
-background:#fff;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-">
+<div class="product-box">
 
-<img
-src='https://images.unsplash.com/photo-1563453392212-326f5e854473?q=80&w=1200'
-style='width:100%;height:180px;object-fit:cover;'>
-
-<div style='padding:15px;'>
-
-<h3 style='margin:0;color:#0b6fc2;'>
-
+<h3>
 خزان مياه 3 طبقات
-
 </h3>
 
-<p style='color:#666;line-height:1.8;'>
-
+<p>
 خزان عالي الجودة ضمان 10 سنوات
-
 </p>
 
-<div style='
-color:#ff9800;
-font-size:22px;
-font-weight:bold;
-margin-top:10px;
-'>
-
+<div class="product-price">
 💰 4500 جنيه
-
 </div>
 
 </div>
 
-</div>
+<div class="product-box">
 
-<div style="
-min-width:240px;
-background:#fff;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-">
-
-<img
-src='https://images.unsplash.com/photo-1581578731548-c64695cc6952?q=80&w=1200'
-style='width:100%;height:180px;object-fit:cover;'>
-
-<div style='padding:15px;'>
-
-<h3 style='margin:0;color:#0b6fc2;'>
-
+<h3>
 فلتر مياه منزلي
-
 </h3>
 
-<p style='color:#666;line-height:1.8;'>
-
+<p>
 تنقية عالية للمياه والشرب
-
 </p>
 
-<div style='
-color:#ff9800;
-font-size:22px;
-font-weight:bold;
-margin-top:10px;
-'>
-
+<div class="product-price">
 💰 2200 جنيه
-
 </div>
 
 </div>
 
-</div>
+<div class="product-box">
 
-<div style="
-min-width:240px;
-background:#fff;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-">
-
-<img
-src='https://images.unsplash.com/photo-1604335399105-a0c585fd81a1?q=80&w=1200'
-style='width:100%;height:180px;object-fit:cover;'>
-
-<div style='padding:15px;'>
-
-<h3 style='margin:0;color:#0b6fc2;'>
-
+<h3>
 مضخة مياه أوتوماتيك
-
 </h3>
 
-<p style='color:#666;line-height:1.8;'>
-
+<p>
 قوة ضخ ممتازة وضمان شامل
-
 </p>
 
-<div style='
-color:#ff9800;
-font-size:22px;
-font-weight:bold;
-margin-top:10px;
-'>
-
+<div class="product-price">
 💰 3900 جنيه
-
 </div>
 
 </div>
 
 </div>
-
-</div>
-
-</section>
 
 <!-- =========================
 أفضل التجار
 ========================= -->
 
-<section style="
-padding:20px;
-">
-
-<h2 style="
-color:#009688;
-margin-bottom:18px;
-font-size:26px;
-">
+<div class="section-title">
 
 ⭐ أفضل التجار
 
-</h2>
+</div>
 
-<div style="
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:18px;
-">
+<div class="best-merchants">
 
-<div style="
-background:#fff;
-padding:20px;
-border-radius:20px;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-text-align:center;
-">
+<div class="merchant-card">
 
-<div style="
-font-size:50px;
-">
-
+<div style="font-size:50px;">
 🏆
-
 </div>
 
-<h3 style="
-margin-top:10px;
-color:#0b6fc2;
-">
-
+<h3>
 تاجر مميز
-
 </h3>
 
-<p style="
-color:#666;
-line-height:1.8;
-">
-
+<p>
 أفضل جودة وخدمة وسرعة تنفيذ
-
 </p>
 
-<div style="
-margin-top:10px;
-color:#ff9800;
-font-size:20px;
-">
-
+<div class="stars">
 ⭐⭐⭐⭐⭐
-
 </div>
 
 </div>
 
-<div style="
-background:#fff;
-padding:20px;
-border-radius:20px;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-text-align:center;
-">
+<div class="merchant-card">
 
-<div style="
-font-size:50px;
-">
-
+<div style="font-size:50px;">
 🚚
-
 </div>
 
-<h3 style="
-margin-top:10px;
-color:#0b6fc2;
-">
-
+<h3>
 توصيل سريع
-
 </h3>
 
-<p style="
-color:#666;
-line-height:1.8;
-">
-
+<p>
 توصيل داخل هرم سيتي وحدائق أكتوبر
-
 </p>
 
-<div style="
-margin-top:10px;
-color:#ff9800;
-font-size:20px;
-">
-
+<div class="stars">
 ⭐⭐⭐⭐⭐
-
 </div>
 
 </div>
 
 </div>
-
-</section>
 
 <!-- =========================
-بانر عروض اليوم
+عروض اليوم
 ========================= -->
 
-<section style="
-padding:20px;
-">
-
-<div id="todayOffer"
-
-style="
-background:linear-gradient(135deg,#0b6fc2,#4fc3f7);
-padding:25px;
-border-radius:22px;
-color:#fff;
-font-size:22px;
-font-weight:bold;
-text-align:center;
-box-shadow:0 5px 18px rgba(0,0,0,.15);
-">
+<div class="offer-banner">
 
 🔥 عروض اليوم على الخزانات والفلاتر
 
 </div>
 
+<button
+id="installApp"
+class="install-btn"
+style="background:#25D366;">
+
+📲 تثبيت التطبيق
+
+</button>
+
+<button
+id="enableNotify"
+class="install-btn"
+style="background:#ff5722;">
+
+🔔 تفعيل الإشعارات
+
+</button>
+
+<button
+id="rateAppBtn"
+class="install-btn"
+style="background:#9c27b0;">
+
+⭐ تقييم التطبيق
+
+</button>
+
+<button
+id="shareAppBtn"
+class="install-btn"
+style="background:#0b6fc2;">
+
+📤 مشاركة التطبيق
+
+</button>
+
+<div class="rating-summary">
+
+<h2 id="ratingAverage">
+5 ⭐
+</h2>
+
+<p id="ratingCount">
+0 تقييم
+</p>
+
+</div>
+
+<section class="cards">
+
+<div class="card">
+
+<h3>
+⭐ تقييمات التطبيق
+</h3>
+
+<div id="appReviews">
+
+جاري تحميل التقييمات...
+
+</div>
+
+</div>
+
 </section>
+
+</main>
+
+<footer class="main-footer">
+
+© Future Tank — جميع الحقوق محفوظة
+
+</footer>
 
 <script>
 
-/* =========================
-عروض متحركة
-========================= */
+const API_URL =
+"https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-const homeOffers = [
+/* تحميل التقييمات */
 
-"🔥 عروض اليوم على الخزانات والفلاتر",
+function loadAppReviews(){
 
-"🚚 توصيل سريع داخل هرم سيتي وحدائق أكتوبر",
+fetch(API_URL + "?type=appReviews")
 
-"💧 خصومات خاصة على منتجات تنقية المياه",
+.then(res=>res.json())
 
-"⭐ أفضل التجار متاحين الآن داخل الماركت",
+.then(data=>{
 
-"🛒 اطلب كل احتياجاتك من مكان واحد"
+const box =
+document.getElementById("appReviews");
 
-];
+if(!data.length){
 
-let currentHomeOffer = 0;
+box.innerHTML =
+"<p>لا توجد تقييمات بعد</p>";
 
-setInterval(()=>{
-
-currentHomeOffer++;
-
-if(currentHomeOffer >= homeOffers.length){
-
-currentHomeOffer = 0;
+return;
 
 }
 
-document.getElementById(
-"todayOffer"
-).innerHTML =
-homeOffers[currentHomeOffer];
+box.innerHTML = "";
 
-},3000);
+let total = 0;
+
+data.reverse().slice(0,5).forEach(r=>{
+
+total += Number(r.rating || 5);
+
+let stars = "";
+
+for(let i=0;i<Number(r.rating || 5);i++){
+
+stars += "⭐";
+
+}
+
+box.innerHTML += `
+
+<div class="review-item">
+
+<strong>
+${r.name || "عميل"}
+</strong>
+
+<div class="stars">
+${stars}
+</div>
+
+<p>
+${r.comment || ""}
+</p>
+
+</div>
+
+`;
+
+});
+
+const avg =
+(total / data.length).toFixed(1);
+
+document.getElementById(
+"ratingAverage"
+).innerHTML =
+avg + " ⭐";
+
+document.getElementById(
+"ratingCount"
+).innerHTML =
+data.length + " تقييم";
+
+})
+
+.catch(()=>{
+
+document.getElementById(
+"appReviews"
+).innerHTML =
+"❌ حدث خطأ أثناء تحميل التقييمات";
+
+});
+
+}
+
+loadAppReviews();
+
+/* مشاركة التطبيق */
+
+document.getElementById(
+"shareAppBtn"
+).onclick = async()=>{
+
+const shareData = {
+
+title:"Future Tank",
+
+text:"💧 حمل تطبيق Future Tank الآن",
+
+url:window.location.href
+
+};
+
+if(navigator.share){
+
+navigator.share(shareData);
+
+}else{
+
+navigator.clipboard.writeText(
+window.location.href
+);
+
+alert("تم نسخ الرابط");
+
+}
+
+};
 
 </script>
+
+</body>
+</html>
