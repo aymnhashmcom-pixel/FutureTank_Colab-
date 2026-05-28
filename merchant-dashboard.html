@@ -50,7 +50,7 @@ margin-top:0;
 color:#0b6fc2;
 }
 
-input,textarea,select{
+input,textarea{
 
 width:100%;
 padding:14px;
@@ -60,6 +60,11 @@ border:1px solid #ccc;
 box-sizing:border-box;
 font-size:16px;
 
+}
+
+textarea{
+min-height:120px;
+resize:none;
 }
 
 button{
@@ -82,6 +87,16 @@ color:#fff;
 
 .whatsapp-btn{
 background:#25D366;
+color:#fff;
+}
+
+.edit-btn{
+background:#ff9800;
+color:#fff;
+}
+
+.delete-btn{
+background:#f44336;
 color:#fff;
 }
 
@@ -114,6 +129,18 @@ border-radius:15px;
 margin-bottom:10px;
 }
 
+.price{
+color:#0b6fc2;
+font-weight:bold;
+font-size:18px;
+margin-top:10px;
+}
+
+.desc{
+line-height:2;
+color:#444;
+}
+
 </style>
 
 </head>
@@ -138,7 +165,7 @@ Future Tank Business System
 
 ✅ يمكنك الآن إضافة المنتجات والخدمات الخاصة بك  
 ✅ المنتجات ستظهر داخل التطبيق والماركت  
-✅ يمكنك استقبال الطلبات عبر واتساب
+✅ يمكنك استقبال الطلبات عبر واتساب  
 
 </div>
 
@@ -281,7 +308,6 @@ price==="" ||
 whatsapp==="" ||
 image==="" ||
 desc===""
-
 ){
 
 alert("⚠️ برجاء استكمال البيانات");
@@ -304,6 +330,18 @@ desc:desc
 
 });
 
+saveProducts();
+
+alert("✅ تم إضافة المنتج");
+
+clearInputs();
+
+}
+
+/* حفظ المنتجات */
+
+function saveProducts(){
+
 localStorage.setItem(
 
 "merchant_products",
@@ -314,13 +352,64 @@ JSON.stringify(merchantProducts)
 
 renderProducts();
 
-alert("✅ تم إضافة المنتج");
+}
+
+/* تنظيف الحقول */
+
+function clearInputs(){
 
 document.getElementById("productName").value="";
 document.getElementById("productPrice").value="";
 document.getElementById("productWhatsapp").value="";
 document.getElementById("productImage").value="";
 document.getElementById("productDesc").value="";
+
+}
+
+/* حذف منتج */
+
+function deleteProduct(index){
+
+const confirmDelete =
+confirm("❌ هل تريد حذف المنتج؟");
+
+if(!confirmDelete) return;
+
+merchantProducts.splice(index,1);
+
+saveProducts();
+
+}
+
+/* تعديل منتج */
+
+function editProduct(index){
+
+const p = merchantProducts[index];
+
+document.getElementById("productName").value =
+p.name;
+
+document.getElementById("productPrice").value =
+p.price;
+
+document.getElementById("productWhatsapp").value =
+p.whatsapp;
+
+document.getElementById("productImage").value =
+p.image;
+
+document.getElementById("productDesc").value =
+p.desc;
+
+merchantProducts.splice(index,1);
+
+saveProducts();
+
+window.scrollTo({
+top:0,
+behavior:"smooth"
+});
 
 }
 
@@ -355,14 +444,12 @@ src="${p.image}">
 ${p.name}
 </h3>
 
-<p>
-💰 السعر:
-${p.price}
-</p>
+<div class="price">
+💰 ${p.price} جنيه
+</div>
 
-<p>
-📝
-${p.desc}
+<p class="desc">
+📝 ${p.desc}
 </p>
 
 <a
@@ -376,6 +463,22 @@ target="_blank">
 </button>
 
 </a>
+
+<button
+class="edit-btn"
+onclick="editProduct(${index})">
+
+✏️ تعديل المنتج
+
+</button>
+
+<button
+class="delete-btn"
+onclick="deleteProduct(${index})">
+
+🗑️ حذف المنتج
+
+</button>
 
 </div>
 
