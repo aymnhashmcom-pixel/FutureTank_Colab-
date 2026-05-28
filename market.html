@@ -1,13 +1,24 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<title>
 ماركت هرم سيتي وحدائق أكتوبر
-</title><meta name="viewport"
+</title>
+
+<meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
 <meta name="theme-color"
 content="#ff9800">
 
 <link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/><style>
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
 
 *{
 margin:0;
@@ -43,14 +54,7 @@ background:#fff3e0;
 padding:18px;
 border-radius:18px;
 margin-bottom:20px;
-animation:pulse 2s infinite;
 border-right:6px solid #ff9800;
-}
-
-@keyframes pulse{
-0%{transform:scale(1);}
-50%{transform:scale(1.02);}
-100%{transform:scale(1);}
 }
 
 .categories{
@@ -69,13 +73,9 @@ font-weight:bold;
 box-shadow:0 5px 18px rgba(0,0,0,.08);
 }
 
-.products-section{
-margin-top:25px;
-}
-
 .products-title{
 font-size:24px;
-margin-bottom:15px;
+margin:25px 0 15px;
 color:#ff9800;
 font-weight:bold;
 }
@@ -95,14 +95,13 @@ transition:.3s;
 }
 
 .product-card:hover{
-transform:translateY(-4px);
+transform:translateY(-5px);
 }
 
 .product-card img{
 width:100%;
 height:220px;
 object-fit:cover;
-background:#eee;
 }
 
 .product-content{
@@ -127,6 +126,18 @@ line-height:1.8;
 margin-bottom:15px;
 }
 
+.views{
+margin-top:10px;
+font-size:14px;
+color:#777;
+}
+
+.rating{
+margin-top:8px;
+color:#ffb400;
+font-size:18px;
+}
+
 .whatsapp-btn{
 display:block;
 width:100%;
@@ -140,11 +151,7 @@ font-weight:bold;
 cursor:pointer;
 text-decoration:none;
 text-align:center;
-transition:.3s;
-}
-
-.whatsapp-btn:hover{
-opacity:.9;
+margin-top:12px;
 }
 
 .order-box{
@@ -180,11 +187,6 @@ font-size:17px;
 font-weight:bold;
 margin-top:15px;
 cursor:pointer;
-transition:.3s;
-}
-
-.order-btn:hover{
-opacity:.9;
 }
 
 footer{
@@ -216,15 +218,56 @@ font-weight:bold;
 text-align:center;
 }
 
-</style></head><body><header><h1>
+.admin-contact{
+margin-top:25px;
+text-align:center;
+}
+
+.admin-contact a{
+display:inline-block;
+padding:14px 22px;
+background:#0b6fc2;
+color:#fff;
+border-radius:14px;
+text-decoration:none;
+font-weight:bold;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>
 🛒 ماركت هرم سيتي وحدائق أكتوبر
-</h1><p>
+</h1>
+
+<p>
 كل احتياجات البيت في أوردر واحد
-</p></header><div class="container"><div class="offer"><h3>
+</p>
+
+</header>
+
+<div class="container">
+
+<div class="offer">
+
+<h3>
 🔥 عروض اليوم
-</h3><p id="offersText">
+</h3>
+
+<p id="offersText">
 خصومات على السوبر ماركت والصيدلية والخضروات واللحوم والأسماك
-</p></div><div class="categories"><div class="cat">🛒 سوبر ماركت</div>
+</p>
+
+</div>
+
+<div class="categories">
+
+<div class="cat">🛒 سوبر ماركت</div>
 <div class="cat">💊 صيدلية</div>
 <div class="cat">🥦 خضروات وفاكهة</div>
 <div class="cat">🥩 لحوم وأسماك</div>
@@ -233,12 +276,26 @@ text-align:center;
 <div class="cat">🧴 منظفات</div>
 <div class="cat">🐦 مستلزمات حيوانات</div>
 <div class="cat">👶 مستلزمات أطفال</div>
-<div class="cat">💄 تجميل وعناية</div></div><div class="products-section"><div class="products-title">
+<div class="cat">💄 تجميل وعناية</div>
+
+</div>
+
+<div class="products-title">
 🛍️ منتجات التجار
-</div><div class="products-grid"
-id="merchantProducts"></div></div><div class="order-box"><h2>
+</div>
+
+<div class="products-grid"
+id="merchantProducts">
+
+</div>
+
+<div class="order-box">
+
+<h2>
 🧾 أوردر شامل
-</h2><input
+</h2>
+
+<input
 type="text"
 id="customerName"
 class="order-input"
@@ -261,41 +318,65 @@ id="marketItems"
 class="order-input"
 rows="6"
 placeholder="اكتب المنتجات المطلوبة بالتفصيل">
-</textarea><button
+</textarea>
+
+<button
 class="order-btn"
 onclick="submitOrder()">
 
 ✅ إرسال الأوردر
 
-</button><div
+</button>
+
+<div
 class="success-box"
-id="successBox">✅ تم إرسال الأوردر بنجاح
+id="successBox">
 
-</div><div
+✅ تم إرسال الأوردر بنجاح
+
+</div>
+
+<div
 class="error-box"
-id="errorBox">❌ حدث خطأ أثناء إرسال الأوردر
+id="errorBox">
 
-</div></div></div><footer>© Future Tank — نقاء الماء هو هدفنا 💧
+❌ حدث خطأ أثناء إرسال الأوردر
 
-</footer><script>
+</div>
+
+</div>
+
+<div class="admin-contact">
+
+<a
+target="_blank"
+href="https://wa.me/201150402031?text=السلام عليكم أريد التواصل مع إدارة Future Tank">
+
+📞 التواصل مع الإدارة
+
+</a>
+
+</div>
+
+</div>
+
+<footer>
+
+© Future Tank — نقاء الماء هو هدفنا 💧
+
+</footer>
+
+<script>
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-/* =====================================================
-العروض المتحركة
-===================================================== */
-
 const offers = [
 
 "🔥 خصومات على السوبر ماركت والصيدلية والخضروات",
-
 "🚚 توصيل سريع داخل هرم سيتي وحدائق أكتوبر",
-
 "💧 عروض خاصة على خزانات المياه والفلاتر",
-
 "🥩 عروض اللحوم والأسماك اليوم",
-
 "💊 خصومات على مستلزمات الصيدلية"
 
 ];
@@ -318,20 +399,15 @@ document.getElementById(
 
 },3000);
 
-/* =====================================================
-تحميل منتجات التجار
-===================================================== */
+/* ===============================
+تحميل المنتجات
+=============================== */
 
 function loadMerchantProducts(){
 
 const products = JSON.parse(
-
-localStorage.getItem(
-"merchant_products"
-)
-
+localStorage.getItem("merchant_products")
 || "[]"
-
 );
 
 const box =
@@ -342,23 +418,14 @@ document.getElementById(
 if(products.length === 0){
 
 box.innerHTML = `
-
 <div class="product-card">
-
 <div class="product-content">
-
-<h3>
-لا توجد منتجات حالياً
-</h3>
-
+<h3>لا توجد منتجات حالياً</h3>
 <p class="desc">
 سيتم إضافة منتجات التجار قريباً
 </p>
-
 </div>
-
 </div>
-
 `;
 
 return;
@@ -367,71 +434,57 @@ return;
 
 box.innerHTML = "";
 
-products.forEach(p=>{
+products.forEach((p,index)=>{
 
-const productName =
-p.name || "منتج";
-
-const productPrice =
-p.price || "غير محدد";
-
-const productDesc =
-p.desc || "";
-
-const productImage =
-p.image && p.image !== ""
-? p.image
-: "https://via.placeholder.com/500x300?text=Future+Tank";
-
-const whatsapp =
+let whatsapp =
 String(p.whatsapp || "")
 .replace(/\D/g,'');
 
-const message =
+if(
+whatsapp.startsWith("0")
+){
+whatsapp =
+"20" + whatsapp.substring(1);
+}
 
-`السلام عليكم 👋
-
-أرغب في طلب المنتج التالي:
-
-📦 المنتج:
-${productName}
-
-💰 السعر:
-${productPrice} جنيه
-
-📝 التفاصيل:
-${productDesc}
-
-تم الإرسال من ماركت Future Tank 💧`;
-
-const whatsappLink =
-
-`https://wa.me/2${whatsapp}?text=${encodeURIComponent(message)}`;
+const views =
+localStorage.getItem(
+"views_" + index
+) || 0;
 
 box.innerHTML += `
 
 <div class="product-card">
 
-<img src="${productImage}">
+<img src="${p.image}">
 
 <div class="product-content">
 
 <h3>
-${productName}
+${p.name}
 </h3>
 
 <div class="price">
-💰 ${productPrice}
+💰 ${p.price} جنيه
 </div>
 
 <div class="desc">
-${productDesc}
+${p.desc}
+</div>
+
+<div class="rating">
+⭐⭐⭐⭐⭐
+</div>
+
+<div class="views">
+👁️ ${views} مشاهدة
 </div>
 
 <a
 class="whatsapp-btn"
 target="_blank"
-href="${whatsappLink}">
+onclick="increaseViews(${index})"
+href="https://wa.me/${whatsapp}?text=${encodeURIComponent("مرحباً، أريد طلب المنتج: " + p.name)}">
 
 📞 طلب عبر واتساب
 
@@ -449,9 +502,31 @@ href="${whatsappLink}">
 
 loadMerchantProducts();
 
-/* =====================================================
-إرسال الأوردر الشامل
-===================================================== */
+/* ===============================
+عداد المشاهدات
+=============================== */
+
+function increaseViews(id){
+
+let views =
+parseInt(
+localStorage.getItem(
+"views_" + id
+) || 0
+);
+
+views++;
+
+localStorage.setItem(
+"views_" + id,
+views
+);
+
+}
+
+/* ===============================
+إرسال الأوردر
+=============================== */
 
 function submitOrder(){
 
@@ -544,8 +619,6 @@ total:"يحدد لاحقاً"
 
 .then(result=>{
 
-console.log(result);
-
 document.getElementById(
 "successBox"
 ).style.display = "block";
@@ -580,8 +653,6 @@ document.getElementById(
 
 .catch(error=>{
 
-console.log(error);
-
 document.getElementById(
 "errorBox"
 ).style.display = "block";
@@ -590,5 +661,7 @@ document.getElementById(
 
 }
 
-</script></body>
+</script>
+
+</body>
 </html>
