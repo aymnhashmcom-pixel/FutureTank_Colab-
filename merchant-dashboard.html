@@ -106,6 +106,14 @@ margin-top:15px;
 border:1px solid #d8ebff;
 }
 
+.product-item img{
+width:100%;
+max-height:220px;
+object-fit:cover;
+border-radius:15px;
+margin-bottom:10px;
+}
+
 </style>
 
 </head>
@@ -154,6 +162,11 @@ placeholder="السعر">
 type="text"
 id="productWhatsapp"
 placeholder="رقم واتساب التاجر">
+
+<input
+type="text"
+id="productImage"
+placeholder="رابط صورة المنتج">
 
 <textarea
 id="productDesc"
@@ -256,6 +269,9 @@ document.getElementById("productPrice").value.trim();
 const whatsapp =
 document.getElementById("productWhatsapp").value.trim();
 
+const image =
+document.getElementById("productImage").value.trim();
+
 const desc =
 document.getElementById("productDesc").value.trim();
 
@@ -263,7 +279,9 @@ if(
 name==="" ||
 price==="" ||
 whatsapp==="" ||
+image==="" ||
 desc===""
+
 ){
 
 alert("⚠️ برجاء استكمال البيانات");
@@ -279,6 +297,8 @@ name:name,
 price:price,
 
 whatsapp:whatsapp,
+
+image:image,
 
 desc:desc
 
@@ -299,6 +319,7 @@ alert("✅ تم إضافة المنتج");
 document.getElementById("productName").value="";
 document.getElementById("productPrice").value="";
 document.getElementById("productWhatsapp").value="";
+document.getElementById("productImage").value="";
 document.getElementById("productDesc").value="";
 
 }
@@ -326,6 +347,9 @@ merchantProducts.forEach((p,index)=>{
 box.innerHTML += `
 
 <div class="product-item">
+
+<img
+src="${p.image}">
 
 <h3>
 ${p.name}
