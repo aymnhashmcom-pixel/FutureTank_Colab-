@@ -140,6 +140,11 @@ border-radius:14px;
 text-decoration:none;
 font-size:18px;
 font-weight:bold;
+transition:.3s;
+}
+
+.market-btn:hover{
+transform:scale(1.03);
 }
 
 .offer-bar{
@@ -201,6 +206,11 @@ background:#fff;
 padding:20px;
 border-radius:20px;
 box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.reviews-box h3{
+text-align:center;
+margin-bottom:15px;
 }
 
 .review-item{
@@ -305,7 +315,7 @@ cursor:pointer;
 
 <div class="brand-box">
 
-<img src="./icon-512.png">
+<img src="./icon-512.png" alt="Future Tank">
 
 <h2>Future Tank</h2>
 
@@ -433,7 +443,7 @@ onclick="shareApp()">
 
 <div class="reviews-box">
 
-<h3 style="text-align:center;margin-bottom:15px;">
+<h3>
 ⭐ تقييمات التطبيق
 </h3>
 
@@ -485,39 +495,44 @@ onclick="shareApp()">
 
 <input
 type="text"
+id="rateName"
 class="rate-input"
 placeholder="الاسم">
 
 <input
 type="tel"
+id="ratePhone"
 class="rate-input"
 placeholder="رقم الهاتف">
 
-<select class="rate-input">
+<select
+id="rateStars"
+class="rate-input">
 
-<option>
+<option value="5">
 ★★★★★ ممتاز
 </option>
 
-<option>
+<option value="4">
 ★★★★ جيد جدًا
 </option>
 
-<option>
+<option value="3">
 ★★★ جيد
 </option>
 
-<option>
+<option value="2">
 ★★ مقبول
 </option>
 
-<option>
+<option value="1">
 ★ ضعيف
 </option>
 
 </select>
 
 <textarea
+id="rateComment"
 class="rate-input"
 placeholder="اكتب رأيك">
 </textarea>
@@ -589,11 +604,9 @@ document.getElementById(
 
 }
 
-function shareApp(){
+async function shareApp(){
 
-if(navigator.share){
-
-navigator.share({
+const shareData = {
 
 title:"Future Tank",
 
@@ -601,7 +614,19 @@ text:"💧 حمّل تطبيق Future Tank الآن",
 
 url:window.location.href
 
-});
+};
+
+if(navigator.share){
+
+try{
+
+await navigator.share(shareData);
+
+}catch(e){
+
+console.log(e);
+
+}
 
 }else{
 
