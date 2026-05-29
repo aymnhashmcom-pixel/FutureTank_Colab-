@@ -1,430 +1,69 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-
-<title>
-ماركت هرم سيتي وحدائق أكتوبر
-</title>
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<meta name="theme-color"
-content="#ff9800">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ماركت هرم سيتي وحدائق أكتوبر</title>
 <style>
-
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Tahoma,sans-serif;
-}
-
 body{
+font-family:Tahoma;
 background:#f4f7fb;
-padding-bottom:120px;
+padding:20px;
+margin:0;
 }
-
-header{
-background:linear-gradient(135deg,#ff9800,#ffb74d);
-padding:25px;
-text-align:center;
-color:#fff;
-box-shadow:0 5px 20px rgba(0,0,0,.15);
-}
-
-header h1{
-margin-bottom:10px;
-font-size:28px;
-}
-
-.container{
-padding:18px;
-}
-
-.offer{
-background:#fff3e0;
-padding:18px;
+.card{
+background:#fff;
+padding:15px;
 border-radius:18px;
 margin-bottom:20px;
-border-right:6px solid #ff9800;
+box-shadow:0 4px 14px rgba(0,0,0,.08);
 }
-
-.categories{
-display:grid;
-grid-template-columns:repeat(2,1fr);
-gap:12px;
-margin-bottom:20px;
-}
-
-.cat{
-background:#fff;
-padding:16px;
-border-radius:16px;
-text-align:center;
-font-weight:bold;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-}
-
-.products-title{
-font-size:24px;
-margin:25px 0 15px;
-color:#ff9800;
-font-weight:bold;
-}
-
-.products-grid{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:18px;
-}
-
-.product-card{
-background:#fff;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-transition:.3s;
-}
-
-.product-card:hover{
-transform:translateY(-5px);
-}
-
-.product-card img{
+img{
 width:100%;
 height:220px;
 object-fit:cover;
-}
-
-.product-content{
-padding:15px;
-}
-
-.product-content h3{
-margin-bottom:10px;
-color:#0b6fc2;
-}
-
-.price{
-font-size:20px;
-font-weight:bold;
-color:#ff9800;
-margin-bottom:10px;
-}
-
-.desc{
-color:#666;
-line-height:1.8;
-margin-bottom:15px;
-}
-
-.views{
-margin-top:10px;
-font-size:14px;
-color:#777;
-}
-
-.rating{
-margin-top:8px;
-color:#ffb400;
-font-size:18px;
-}
-
-.whatsapp-btn{
-display:block;
-width:100%;
-padding:14px;
-border:none;
 border-radius:14px;
+}
+.btn{
+display:block;
 background:#25D366;
 color:#fff;
-font-size:16px;
-font-weight:bold;
-cursor:pointer;
-text-decoration:none;
-text-align:center;
-margin-top:12px;
-}
-
-.order-box{
-background:#fff;
-padding:20px;
-border-radius:20px;
-box-shadow:0 5px 18px rgba(0,0,0,.08);
-margin-top:30px;
-}
-
-.order-box h2{
-margin-bottom:15px;
-color:#ff9800;
-}
-
-.order-input{
-width:100%;
 padding:14px;
-margin-top:10px;
+text-align:center;
 border-radius:12px;
-border:1px solid #ddd;
-font-size:15px;
-}
-
-.order-btn{
-width:100%;
-padding:15px;
-border:none;
-border-radius:14px;
-background:#ff9800;
-color:#fff;
-font-size:17px;
-font-weight:bold;
-margin-top:15px;
-cursor:pointer;
-}
-
-footer{
-margin-top:40px;
-text-align:center;
-padding:20px;
-color:#777;
-}
-
-.success-box{
-display:none;
-margin-top:15px;
-background:#e8f5e9;
-padding:15px;
-border-radius:14px;
-color:#2e7d32;
-font-weight:bold;
-text-align:center;
-}
-
-.error-box{
-display:none;
-margin-top:15px;
-background:#ffebee;
-padding:15px;
-border-radius:14px;
-color:#c62828;
-font-weight:bold;
-text-align:center;
-}
-
-.admin-contact{
-margin-top:25px;
-text-align:center;
-}
-
-.admin-contact a{
-display:inline-block;
-padding:14px 22px;
-background:#0b6fc2;
-color:#fff;
-border-radius:14px;
 text-decoration:none;
+margin-top:15px;
 font-weight:bold;
 }
-
 </style>
-
 </head>
-
 <body>
-
-<header>
 
 <h1>
 🛒 ماركت هرم سيتي وحدائق أكتوبر
 </h1>
 
-<p>
-كل احتياجات البيت في أوردر واحد
-</p>
-
-</header>
-
-<div class="container">
-
-<div class="offer">
-
-<h3>
-🔥 عروض اليوم
-</h3>
-
-<p id="offersText">
-خصومات على السوبر ماركت والصيدلية والخضروات واللحوم والأسماك
-</p>
-
-</div>
-
-<div class="categories">
-
-<div class="cat">🛒 سوبر ماركت</div>
-<div class="cat">💊 صيدلية</div>
-<div class="cat">🥦 خضروات وفاكهة</div>
-<div class="cat">🥩 لحوم وأسماك</div>
-<div class="cat">🍞 مخبوزات</div>
-<div class="cat">🧃 مشروبات</div>
-<div class="cat">🧴 منظفات</div>
-<div class="cat">🐦 مستلزمات حيوانات</div>
-<div class="cat">👶 مستلزمات أطفال</div>
-<div class="cat">💄 تجميل وعناية</div>
-
-</div>
-
-<div class="products-title">
-🛍️ منتجات التجار
-</div>
-
-<div class="products-grid"
-id="merchantProducts">
-
-</div>
-
-<div class="order-box">
-
-<h2>
-🧾 أوردر شامل
-</h2>
-
-<input
-type="text"
-id="customerName"
-class="order-input"
-placeholder="الاسم">
-
-<input
-type="tel"
-id="customerPhone"
-class="order-input"
-placeholder="01xxxxxxxxx">
-
-<input
-type="text"
-id="customerAddress"
-class="order-input"
-placeholder="العنوان">
-
-<textarea
-id="marketItems"
-class="order-input"
-rows="6"
-placeholder="اكتب المنتجات المطلوبة بالتفصيل">
-</textarea>
-
-<button
-class="order-btn"
-onclick="submitOrder()">
-
-✅ إرسال الأوردر
-
-</button>
-
-<div
-class="success-box"
-id="successBox">
-
-✅ تم إرسال الأوردر بنجاح
-
-</div>
-
-<div
-class="error-box"
-id="errorBox">
-
-❌ حدث خطأ أثناء إرسال الأوردر
-
-</div>
-
-</div>
-
-<div class="admin-contact">
-
-<a
-target="_blank"
-href="https://wa.me/201150402031?text=السلام عليكم أريد التواصل مع إدارة Future Tank">
-
-📞 التواصل مع الإدارة
-
-</a>
-
-</div>
-
-</div>
-
-<footer>
-
-© Future Tank — نقاء الماء هو هدفنا 💧
-
-</footer>
+<div id="products"></div>
 
 <script>
 
-const API_URL =
-"https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+const API_URL = "PUT_YOUR_NEW_WEB_APP_URL_HERE";
 
-const offers = [
+async function loadProducts(){
 
-"🔥 خصومات على السوبر ماركت والصيدلية والخضروات",
-"🚚 توصيل سريع داخل هرم سيتي وحدائق أكتوبر",
-"💧 عروض خاصة على خزانات المياه والفلاتر",
-"🥩 عروض اللحوم والأسماك اليوم",
-"💊 خصومات على مستلزمات الصيدلية"
-
-];
-
-let currentOffer = 0;
-
-setInterval(()=>{
-
-currentOffer++;
-
-if(currentOffer >= offers.length){
-
-currentOffer = 0;
-
-}
-
-document.getElementById(
-"offersText"
-).innerText = offers[currentOffer];
-
-},3000);
-
-/* ===============================
-تحميل المنتجات
-=============================== */
-
-function loadMerchantProducts(){
-
-const products = JSON.parse(
-localStorage.getItem("merchant_products")
-|| "[]"
+const res = await fetch(
+API_URL + "?action=getMerchantProducts"
 );
 
-const box =
-document.getElementById(
-"merchantProducts"
-);
+const data = await res.json();
 
-if(products.length === 0){
+const box = document.getElementById("products");
+
+if(!data.products || data.products.length === 0){
 
 box.innerHTML = `
-<div class="product-card">
-<div class="product-content">
-<h3>لا توجد منتجات حالياً</h3>
-<p class="desc">
-سيتم إضافة منتجات التجار قريباً
-</p>
-</div>
+<div class="card">
+لا توجد منتجات حالياً
 </div>
 `;
 
@@ -434,232 +73,47 @@ return;
 
 box.innerHTML = "";
 
-products.forEach((p,index)=>{
+for(const p of data.products){
 
-let whatsapp =
-String(p.whatsapp || "")
+const phone = String(p.whatsapp || "")
 .replace(/\D/g,'');
 
-if(
-whatsapp.startsWith("0")
-){
-whatsapp =
-"20" + whatsapp.substring(1);
-}
-
-const views =
-localStorage.getItem(
-"views_" + index
-) || 0;
+const msg = encodeURIComponent(
+"مرحباً، أريد طلب المنتج: " + p.name
+);
 
 box.innerHTML += `
 
-<div class="product-card">
+<div class="card">
 
 <img src="${p.image}">
 
-<div class="product-content">
+<h2>${p.name}</h2>
 
-<h3>
-${p.name}
-</h3>
-
-<div class="price">
+<p>
 💰 ${p.price} جنيه
-</div>
+</p>
 
-<div class="desc">
-${p.desc}
-</div>
-
-<div class="rating">
-⭐⭐⭐⭐⭐
-</div>
-
-<div class="views">
-👁️ ${views} مشاهدة
-</div>
+<p>
+${p.description}
+</p>
 
 <a
-class="whatsapp-btn"
-target="_blank"
-onclick="increaseViews(${index})"
-href="https://wa.me/${whatsapp}?text=${encodeURIComponent("مرحباً، أريد طلب المنتج: " + p.name)}">
-
+class="btn"
+href="https://wa.me/${phone}?text=${msg}"
+target="_blank">
 📞 طلب عبر واتساب
-
 </a>
-
-</div>
 
 </div>
 
 `;
 
-});
+}
 
 }
 
-loadMerchantProducts();
-
-/* ===============================
-عداد المشاهدات
-=============================== */
-
-function increaseViews(id){
-
-let views =
-parseInt(
-localStorage.getItem(
-"views_" + id
-) || 0
-);
-
-views++;
-
-localStorage.setItem(
-"views_" + id,
-views
-);
-
-}
-
-/* ===============================
-إرسال الأوردر
-=============================== */
-
-function submitOrder(){
-
-document.getElementById(
-"successBox"
-).style.display = "none";
-
-document.getElementById(
-"errorBox"
-).style.display = "none";
-
-const name =
-document.getElementById(
-"customerName"
-).value.trim();
-
-const phone =
-document.getElementById(
-"customerPhone"
-).value.trim();
-
-const address =
-document.getElementById(
-"customerAddress"
-).value.trim();
-
-const items =
-document.getElementById(
-"marketItems"
-).value.trim();
-
-if(
-name === "" ||
-phone === "" ||
-address === "" ||
-items === ""
-){
-
-alert("يرجى استكمال البيانات");
-
-return;
-
-}
-
-const orderText =
-
-"🛒 أوردر جديد\n\n" +
-
-"👤 الاسم: " + name + "\n" +
-
-"📞 الهاتف: " + phone + "\n" +
-
-"📍 العنوان: " + address + "\n\n" +
-
-"📦 الطلب:\n" +
-
-items;
-
-fetch(API_URL,{
-
-method:"POST",
-
-headers:{
-"Content-Type":"text/plain;charset=utf-8"
-},
-
-body:JSON.stringify({
-
-action:"saveMarketOrder",
-
-type:"market",
-
-name:name,
-
-phone:phone,
-
-address:address,
-
-items:items,
-
-payment:"يحدد لاحقاً",
-
-total:"يحدد لاحقاً"
-
-})
-
-})
-
-.then(response => response.text())
-
-.then(result=>{
-
-document.getElementById(
-"successBox"
-).style.display = "block";
-
-window.open(
-
-"https://wa.me/201150402031?text=" +
-
-encodeURIComponent(orderText),
-
-"_blank"
-
-);
-
-document.getElementById(
-"customerName"
-).value = "";
-
-document.getElementById(
-"customerPhone"
-).value = "";
-
-document.getElementById(
-"customerAddress"
-).value = "";
-
-document.getElementById(
-"marketItems"
-).value = "";
-
-})
-
-.catch(error=>{
-
-document.getElementById(
-"errorBox"
-).style.display = "block";
-
-});
-
-}
+loadProducts();
 
 </script>
 
