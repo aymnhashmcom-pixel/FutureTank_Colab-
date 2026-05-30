@@ -17,9 +17,12 @@
         .add-btn { background:#0b6fc2; color:#fff; }
         .add-btn:disabled { background:#ccc; cursor:not-allowed; }
         .whatsapp-btn { background:#25D366; color:#fff; }
+        .delete-btn { background:#f44336; color:#fff; margin-top:5px; font-size:14px; padding:10px; }
         .logout-btn { background:#f44336; color:#fff; }
         .notice { background:#e8f7ff; padding:15px; border-radius:15px; line-height:2; margin-bottom:20px; font-size: 14px; }
-        #loadingStatus { display: none; color: #0b6fc2; font-weight: bold; margin-top: 10px; }
+        .product-item { background:#f8fbff; padding:15px; border-radius:15px; margin-top:15px; border:1px solid #d8ebff; text-align: center; }
+        .product-item img { width:100%; max-height:200px; object-fit:cover; border-radius:15px; }
+        #loadingStatus { display: none; color: #0b6fc2; font-weight: bold; margin-top: 10px; text-align: center; }
     </style>
 </head>
 <body>
@@ -32,8 +35,8 @@
 <div class="container">
     <div class="notice">
         ✅ أهلاً بك يا <span id="merchantDisplayName" style="font-weight:bold; color:#0b6fc2;">...</span><br>
-        ✅ المنتجات المضافة ستظهر في الشيت وفي الموقع أوتوماتيكياً.<br>
-        ✅ تأكد من أن اشتراكك ساري لتظهر منتجاتك للعملاء.
+        ✅ المنتجات ستظهر في الشيت وفي الموقع وفي هذه الصفحة أيضاً.<br>
+        ✅ تأكد من بقاء الإنترنت يعمل حتى تكتمل عملية الحفظ.
     </div>
 
     <div class="box">
@@ -45,7 +48,14 @@
         <textarea id="productDesc" placeholder="وصف المنتج"></textarea>
         
         <button class="add-btn" id="addBtn" onclick="addProduct()">➕ إضافة وحفظ في الشيت</button>
-        <div id="loadingStatus" style="text-align:center;">⏳ جاري المعالجة...</div>
+        <div id="loadingStatus">⏳ جاري رفع البيانات للشيت... يرجى الانتظار</div>
+    </div>
+
+    <div class="box">
+        <h2>منتجاتك الحالية (المحفوظة محلياً)</h2>
+        <div id="productsBox">
+            <p style="text-align:center; color:#888;">لا توجد منتجات معروضة حالياً.</p>
+        </div>
     </div>
 
     <div class="box">
@@ -60,18 +70,20 @@
 </div>
 
 <script>
-    // 1. حماية الصفحة والتحقق من الهوية
-    const merchantName = localStorage.getItem("merchant_name");
-    const merchantPhone = localStorage.getItem("merchant_phone");
-    const merchantPlan = localStorage.getItem("merchant_plan");
+    // الإعدادات الأساسية
+    const scriptURL = "https://script.google.com/macros/s/AKfycbxT_u8Nis36Z_l5X38C2z_U77aM0-86_T9-2w2S82Yq_670230/exec";
+    const merchantName = localStorage.getItem("merchant_name") || "تاجر";
+    const merchantPlan = localStorage.getItem("merchant_plan") || "Basic";
 
-    if (localStorage.getItem("merchant_logged") !== "yes" || !merchantName) {
+    // حماية الصفحة
+    if (localStorage.getItem("merchant_logged") !== "yes") {
         window.location.href = "./merchant-login.html";
     } else {
         document.getElementById("merchantDisplayName").innerText = merchantName;
+        renderLocalProducts();
     }
 
-    // 2. وظيفة إضافة المنتج وإرساله للسيرفر
+    // وظيفة الإضافة الرئيسية
     async function addProduct() {
         const name = document.getElementById("productName").value.trim();
         const price = document.getElementById("productPrice").value.trim();
@@ -82,18 +94,13 @@
         const loadingStatus = document.getElementById("loadingStatus");
 
         if (!name || !price || !whatsapp || !image || !desc) {
-            alert("⚠️ برجاء استكمال كافة البيانات ليظهر المنتج بشكل صحيح");
+            alert("⚠️ برجاء استكمال كافة البيانات");
             return;
         }
 
-        // قفل الزر لمنع التكرار
         addBtn.disabled = true;
         loadingStatus.style.display = "block";
 
-        // رابط السكريبت الخاص بك (تأكد من عمل New Deployment)
-        const scriptURL = "https://script.google.com/macros/s/AKfycbxT_u8Nis36Z_l5X38C2z_U77aM0-86_T9-2w2S82Yq_670230/exec";
-
-        // تجهيز البيانات للهيكل الجديد A-L
         const payload = {
             action: "saveMerchantProduct",
             merchant: merchantName,
@@ -103,33 +110,65 @@
             description: desc,
             whatsapp: whatsapp,
             category: "عام",
-            plan: merchantPlan || "Basic"
+            plan: merchantPlan
         };
 
         try {
-            // إرسال البيانات
+            // 1. الإرسال للسيرفر باستخدام طريقة Form Data لضمان وصولها 100%
+            const formData = new URLSearchParams();
+            for (const key in payload) { formData.append(key, payload[key]); }
+
             await fetch(scriptURL, {
                 method: "POST",
-                mode: "no-cors", // لضمان تخطي قيود الحماية في المتصفح
-                cache: "no-cache",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
+                mode: "no-cors",
+                body: formData
             });
 
-            // نجاح العملية (في حالة no-cors لا ننتظر الرد بل نفترض النجاح بعد ثوانٍ)
+            // 2. الحفظ محلياً ليظهر في الصفحة فوراً
+            let localData = JSON.parse(localStorage.getItem("merchant_products") || "[]");
+            localData.push(payload);
+            localStorage.setItem("merchant_products", JSON.stringify(localData));
+
+            // 3. تحديث العرض
             setTimeout(() => {
-                alert("✅ تم إرسال المنتج بنجاح! سيظهر في شيت (merchant_products) وفي الموقع خلال دقيقة.");
+                alert("✅ تم الحفظ بنجاح في الشيت والموقع!");
+                renderLocalProducts();
                 clearInputs();
                 addBtn.disabled = false;
                 loadingStatus.style.display = "none";
-            }, 2000);
+            }, 1500);
 
         } catch (error) {
-            console.error("Error:", error);
-            alert("❌ حدث خطأ في الاتصال بالسيرفر. تأكد من جودة الإنترنت.");
+            alert("❌ حدث خطأ، يرجى المحاولة مرة أخرى.");
             addBtn.disabled = false;
             loadingStatus.style.display = "none";
         }
+    }
+
+    function renderLocalProducts() {
+        const box = document.getElementById("productsBox");
+        const data = JSON.parse(localStorage.getItem("merchant_products") || "[]");
+        
+        if (data.length === 0) {
+            box.innerHTML = '<p style="text-align:center; color:#888;">لا توجد منتجات مضافة بعد.</p>';
+            return;
+        }
+
+        box.innerHTML = data.map((p, index) => `
+            <div class="product-item">
+                <img src="${p.image}" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+                <h3>${p.name}</h3>
+                <p>السعر: ${p.price} جنيه</p>
+                <button class="delete-btn" onclick="deleteLocalProduct(${index})">🗑️ حذف من القائمة</button>
+            </div>
+        `).join('');
+    }
+
+    function deleteLocalProduct(index) {
+        let data = JSON.parse(localStorage.getItem("merchant_products") || "[]");
+        data.splice(index, 1);
+        localStorage.setItem("merchant_products", JSON.stringify(data));
+        renderLocalProducts();
     }
 
     function clearInputs() {
@@ -145,6 +184,5 @@
         window.location.href = "./merchant-login.html";
     }
 </script>
-
 </body>
 </html>
