@@ -2,243 +2,197 @@
 <html lang="ar" dir="rtl">
 
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل دخول التجار | Future Tank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
 
-<meta charset="UTF-8">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f5f9ff;
+            font-family: Tahoma;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
+        .login-box {
+            background: #fff;
+            width: 90%;
+            max-width: 420px;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, .12);
+            text-align: center;
+        }
 
-<title>
-تسجيل دخول التجار | Future Tank
-</title>
+        .logo {
+            width: 120px;
+            height: 120px;
+            border-radius: 25px;
+            object-fit: cover;
+            margin-bottom: 15px;
+        }
 
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+        h1 {
+            color: #0b6fc2;
+            margin: 10px 0;
+        }
 
-<style>
+        p {
+            color: #666;
+            line-height: 1.8;
+            font-size: 15px;
+        }
 
-body{
-margin:0;
-padding:0;
-background:#f5f9ff;
-font-family:Tahoma;
-display:flex;
-justify-content:center;
-align-items:center;
-height:100vh;
-overflow:hidden;
-}
+        .input-box {
+            margin-top: 15px;
+            text-align: right;
+        }
 
-.login-box{
-background:#fff;
-width:90%;
-max-width:420px;
-padding:30px;
-border-radius:25px;
-box-shadow:0 5px 20px rgba(0,0,0,.12);
-text-align:center;
-}
+        .input-box label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+            color: #333;
+        }
 
-.logo{
-width:120px;
-height:120px;
-border-radius:25px;
-object-fit:cover;
-margin-bottom:15px;
-}
+        .input-box input {
+            width: 100%;
+            padding: 14px;
+            border-radius: 12px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
 
-h1{
-color:#0b6fc2;
-margin:10px 0;
-}
+        .login-btn {
+            margin-top: 20px;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 14px;
+            background: #0b6fc2;
+            color: #fff;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
 
-p{
-color:#666;
-line-height:1.8;
-font-size:15px;
-}
+        .login-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+        }
 
-.input-box{
-margin-top:15px;
-text-align:right;
-}
+        .login-btn:hover:not(:disabled) {
+            opacity: .9;
+        }
 
-.input-box label{
-display:block;
-margin-bottom:6px;
-font-weight:bold;
-color:#333;
-}
+        .note {
+            margin-top: 20px;
+            background: #e8f7ff;
+            padding: 15px;
+            border-radius: 15px;
+            font-size: 14px;
+            line-height: 2;
+            color: #444;
+        }
 
-.input-box input{
-width:100%;
-padding:14px;
-border-radius:12px;
-border:1px solid #ccc;
-font-size:16px;
-box-sizing:border-box;
-}
-
-.login-btn{
-margin-top:20px;
-width:100%;
-padding:15px;
-border:none;
-border-radius:14px;
-background:#0b6fc2;
-color:#fff;
-font-size:18px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.login-btn:hover{
-opacity:.9;
-}
-
-.note{
-margin-top:20px;
-background:#e8f7ff;
-padding:15px;
-border-radius:15px;
-font-size:14px;
-line-height:2;
-color:#444;
-}
-
-.footer{
-margin-top:20px;
-font-size:13px;
-color:#888;
-}
-
-</style>
-
+        .footer {
+            margin-top: 20px;
+            font-size: 13px;
+            color: #888;
+        }
+    </style>
 </head>
 
 <body>
 
-<div class="login-box">
+    <div class="login-box">
+        <img src="./icon-512.png" class="logo">
+        <h1>💼 رجال الأعمال</h1>
+        <p>تسجيل دخول التجار والشركات المشتركة</p>
 
-<img
-src="./icon-512.png"
-class="logo">
+        <div class="input-box">
+            <label>رقم الهاتف</label>
+            <input type="text" id="merchantPhone" placeholder="مثال 01150402031">
+        </div>
 
-<h1>
-💼 رجال الأعمال
-</h1>
+        <div class="input-box">
+            <label>كود الاشتراك</label>
+            <input type="password" id="merchantCode" placeholder="كود الاشتراك">
+        </div>
 
-<p>
-تسجيل دخول التجار والشركات المشتركة
-</p>
+        <button class="login-btn" id="loginBtn" onclick="merchantLogin()">
+            🚀 دخول لوحة التحكم
+        </button>
 
-<div class="input-box">
+        <div class="note">
+            ✅ نقاء الماء هو هدفنا <br>
+            ✅ بوابتك الرقمية لمياه نقية
+        </div>
 
-<label>
-رقم الهاتف
-</label>
+        <div class="footer">
+            Future Tank © 2026
+        </div>
+    </div>
 
-<input
-type="text"
-id="merchantPhone"
-placeholder="مثال 01150402031">
+    <script>
+        async function merchantLogin() {
+            const phoneField = document.getElementById("merchantPhone");
+            const codeField = document.getElementById("merchantCode");
+            const loginBtn = document.getElementById("loginBtn");
 
-</div>
+            const phone = phoneField.value.trim();
+            const code = codeField.value.trim();
 
-<div class="input-box">
+            if (phone === "" || code === "") {
+                alert("⚠️ برجاء استكمال البيانات");
+                return;
+            }
 
-<label>
-كود الاشتراك
-</label>
+            // تفعيل حالة التحميل
+            loginBtn.disabled = true;
+            loginBtn.innerText = "⏳ جاري التحقق من البيانات...";
 
-<input
-type="password"
-id="merchantCode"
-placeholder="كود الاشتراك">
+            // رابط الـ Web App الخاص بك من Google Apps Script
+            const scriptURL = "https://script.google.com/macros/s/AKfycbxT_u8Nis36Z_l5X38C2z_U77aM0-86_T9-2w2S82Yq_670230/exec";
 
-</div>
+            try {
+                // استخدام صيغة URLSearchParams لضمان وصول البيانات لـ doGet بشكل سليم
+                const finalURL = `${scriptURL}?action=merchantLogin&phone=${encodeURIComponent(phone)}&code=${encodeURIComponent(code)}`;
+                
+                const response = await fetch(finalURL);
+                const result = await response.json();
 
-<button
-class="login-btn"
-onclick="merchantLogin()">
+                if (result.success) {
+                    // حفظ بيانات الجلسة في المتصفح
+                    localStorage.setItem("merchant_logged", "yes");
+                    localStorage.setItem("merchant_phone", result.phone);
+                    localStorage.setItem("merchant_name", result.merchant);
+                    localStorage.setItem("merchant_plan", result.plan);
 
-🚀 دخول لوحة التحكم
+                    // التوجه للوحة التحكم
+                    window.location.href = "./merchant-dashboard.html";
+                } else {
+                    alert("❌ " + (result.message || "بيانات الدخول غير صحيحة"));
+                    loginBtn.disabled = false;
+                    loginBtn.innerText = "🚀 دخول لوحة التحكم";
+                }
 
-</button>
-
-<div class="note">
-
-✅ بعد الاشتراك يتم إرسال كود التفعيل للتاجر  
-✅ يتم الدخول للوحة التحكم الخاصة بالتاجر  
-✅ يمكن إضافة المنتجات والخدمات وإدارة الطلبات
-
-</div>
-
-<div class="footer">
-
-Future Tank ©
-
-</div>
-
-</div>
-
-<script>
-
-function merchantLogin(){
-
-const phone =
-document.getElementById("merchantPhone").value.trim();
-
-const code =
-document.getElementById("merchantCode").value.trim();
-
-if(phone==="" || code===""){
-
-alert("⚠️ برجاء استكمال البيانات");
-
-return;
-
-}
-
-/*
-
-هنا مؤقتاً بيانات تجريبية
-حتى نربط Firebase / Google Sheet
-
-*/
-
-const demoPhone =
-"01150402031";
-
-const demoCode =
-"FT2026";
-
-if(phone===demoPhone && code===demoCode){
-
-localStorage.setItem(
-"merchant_logged",
-"yes"
-);
-
-localStorage.setItem(
-"merchant_phone",
-phone
-);
-
-window.location.href =
-"./merchant-dashboard.html";
-
-}else{
-
-alert(
-"❌ بيانات الدخول غير صحيحة"
-);
-
-}
-
-}
-
-</script>
+            } catch (error) {
+                console.error("Login Error:", error);
+                alert("⚠️ عذراً، حدث خطأ في الاتصال بالسيرفر. يرجى المحاولة مرة أخرى.");
+                loginBtn.disabled = false;
+                loginBtn.innerText = "🚀 دخول لوحة التحكم";
+            }
+        }
+    </script>
 
 </body>
 </html>
