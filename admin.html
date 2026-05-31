@@ -1,499 +1,172 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-⚙️ لوحة التحكم | Future Tank
-</title>
-
-<link rel="stylesheet"
-href="style.css">
-
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>⚙️ لوحة التحكم | Future Tank</title>
+<link rel="stylesheet" href="style.css">
 <style>
-
-.orders-box{
-margin-top:40px;
-background:#fff;
-padding:20px;
-border-radius:20px;
-box-shadow:0 5px 20px rgba(0,0,0,.08);
-}
-
-.order-card{
-background:#f7fbff;
-padding:15px;
-border-radius:15px;
-margin-top:15px;
-border:1px solid #dbefff;
-}
-
-.order-card h4{
-margin:0 0 10px;
-color:#0b6fc2;
-}
-
-.order-item{
-margin-top:8px;
-line-height:1.8;
-}
-
-.status-select{
-width:100%;
-padding:12px;
-border-radius:10px;
-margin-top:15px;
-border:1px solid #ccc;
-}
-
-.save-btn{
-margin-top:10px;
-background:#28a745;
-color:#fff;
-border:none;
-padding:12px;
-border-radius:10px;
-cursor:pointer;
-width:100%;
-font-size:15px;
-font-weight:bold;
-}
-
-.save-btn:hover{
-opacity:.9;
-}
-
-input{
-width:100%;
-padding:12px;
-margin-top:10px;
-border-radius:10px;
-border:1px solid #ccc;
-box-sizing:border-box;
-}
-
-button{
-padding:12px 20px;
-border:none;
-border-radius:10px;
-cursor:pointer;
-font-weight:bold;
-}
-
+.orders-box{ margin-top:40px; background:#fff; padding:20px; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,.08); }
+.order-card{ background:#f7fbff; padding:15px; border-radius:15px; margin-top:15px; border:1px solid #dbefff; }
+.order-card h4{ margin:0 0 10px; color:#0b6fc2; }
+.order-item{ margin-top:8px; line-height:1.8; }
+.status-select{ width:100%; padding:12px; border-radius:10px; margin-top:15px; border:1px solid #ccc; }
+.save-btn{ margin-top:10px; background:#28a745; color:#fff; border:none; padding:12px; border-radius:10px; cursor:pointer; width:100%; font-size:15px; font-weight:bold; }
+.save-btn:hover{ opacity:.9; }
+input, select{ width:100%; padding:12px; margin-top:10px; border-radius:10px; border:1px solid #ccc; box-sizing:border-box; }
+button{ padding:12px 20px; border:none; border-radius:10px; cursor:pointer; font-weight:bold; }
 </style>
-
 </head>
-
 <body>
-
 <header class="main-header">
-
-<h1>
-⚙️ لوحة التحكم
-</h1>
-
-<p>
-إدارة الطلبات والمنتجات
-</p>
-
+  <h1>⚙️ لوحة التحكم</h1>
+  <p>إدارة الطلبات والمنتجات المتقدمة</p>
 </header>
-
 <main class="container">
+  <div id="loginBox" style="text-align:center;">
+    <h3>🔐 تسجيل الدخول للإدارة</h3>
+    <input type="password" id="password" placeholder="كلمة السر">
+    <br><br>
+    <button onclick="login()">دخول</button>
+    <p id="loginMsg" style="color:red;"></p>
+  </div>
 
-<div id="loginBox"
-style="text-align:center;">
+  <div id="adminPanel" style="display:none;">
+    <h3>➕ إضافة منتج جديد للقسم</h3>
+    <input id="name" placeholder="اسم المنتج">
+    <input id="desc" placeholder="وصف المنتج">
+    <select id="category">
+      <option value="خزانات المياه">خزانات المياه</option>
+      <option value="ماركت هرم سيتي">ماركت هرم سيتي وحدائق أكتوبر</option>
+      <option value="ملابس">ملابس</option>
+      <option value="عقارات">عقارات</option>
+      <option value="سيارات">سيارات</option>
+      <option value="خدمات">خدمات متنوعة</option>
+    </select>
+    <input id="price" placeholder="السعر">
+    <input id="image" placeholder="رابط الصورة">
+    <br><br>
+    <button onclick="addProduct()">💾 حفظ المنتج داخل القسم</button>
+    <p id="status"></p>
 
-<h3>
-🔐 تسجيل الدخول
-</h3>
-
-<input
-type="password"
-id="password"
-placeholder="كلمة السر">
-
-<br><br>
-
-<button
-onclick="login()">
-
-دخول
-
-</button>
-
-<p id="loginMsg"
-style="color:red;">
-</p>
-
-</div>
-
-<div id="adminPanel"
-style="display:none;">
-
-<h3>
-➕ إضافة منتج جديد
-</h3>
-
-<input id="name"
-placeholder="اسم المنتج">
-
-<input id="desc"
-placeholder="وصف المنتج">
-
-<input id="category"
-placeholder="القسم">
-
-<input id="price"
-placeholder="السعر">
-
-<input id="image"
-placeholder="رابط الصورة">
-
-<br><br>
-
-<button
-onclick="addProduct()">
-
-💾 حفظ المنتج
-
-</button>
-
-<p id="status"></p>
-
-<div class="orders-box">
-
-<h2>
-📦 إدارة الطلبات
-</h2>
-
-<div id="ordersList">
-
-⏳ جاري تحميل الطلبات...
-
-</div>
-
-</div>
-
-</div>
-
+    <div class="orders-box">
+      <h2>📦 إدارة الطلبات النشطة</h2>
+      <div id="ordersList">⏳ جاري تحميل الطلبات...</div>
+    </div>
+  </div>
 </main>
-
-<footer class="main-footer">
-
-© Future Tank — لوحة التحكم
-
-</footer>
+<footer class="main-footer">© Future Tank — لوحة التحكم</footer>
 
 <script>
-
-const API_URL =
-"https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-
+const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 let adminPassword="";
 
 function login(){
-
-const pass =
-document.getElementById("password").value.trim();
-
-fetch(
-API_URL +
-"?admin=true&check=1&password=" +
-encodeURIComponent(pass)
-)
-
-.then(res=>res.json())
-
-.then(data=>{
-
-if(data.success){
-
-adminPassword = pass;
-
-document.getElementById(
-"loginBox"
-).style.display="none";
-
-document.getElementById(
-"adminPanel"
-).style.display="block";
-
-loadOrders();
-
-}else{
-
-document.getElementById(
-"loginMsg"
-).innerText =
-"❌ كلمة السر غير صحيحة";
-
-}
-
-});
-
+  const pass = document.getElementById("password").value.trim();
+  fetch(API_URL + "?check=1&password=" + encodeURIComponent(pass))
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.success){
+      adminPassword = pass;
+      document.getElementById("loginBox").style.display="none";
+      document.getElementById("adminPanel").style.display="block";
+      loadOrders();
+    }else{
+      document.getElementById("loginMsg").innerText = "❌ كلمة السر غير صحيحة";
+    }
+  });
 }
 
 function addProduct(){
-
-const product={
-
-admin:true,
-
-action:"addProduct",
-
-password:adminPassword,
-
-name:
-document.getElementById("name").value,
-
-description:
-document.getElementById("desc").value,
-
-category:
-document.getElementById("category").value,
-
-price:
-document.getElementById("price").value,
-
-image:
-document.getElementById("image").value
-
-};
-
-fetch(API_URL,{
-
-method:"POST",
-
-body:JSON.stringify(product)
-
-})
-
-.then(res=>res.json())
-
-.then(data=>{
-
-if(data.success){
-
-document.getElementById(
-"status"
-).innerHTML =
-"✅ تم إضافة المنتج بنجاح";
-
-}else{
-
-document.getElementById(
-"status"
-).innerHTML =
-"❌ حدث خطأ";
-
-}
-
-});
-
+  const product={
+    action:"addProduct",
+    password:adminPassword,
+    name: document.getElementById("name").value,
+    description: document.getElementById("desc").value,
+    category: document.getElementById("category").value,
+    price: document.getElementById("price").value,
+    image: document.getElementById("image").value
+  };
+  fetch(API_URL,{
+    method:"POST",
+    body:JSON.stringify(product)
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.success){
+      document.getElementById("status").innerHTML = "✅ تم إضافة المنتج بنجاح بالقسم الصحيح";
+      document.getElementById("name").value = "";
+      document.getElementById("desc").value = "";
+      document.getElementById("price").value = "";
+      document.getElementById("image").value = "";
+    }else{
+      document.getElementById("status").innerHTML = "❌ حدث خطأ";
+    }
+  });
 }
 
 function loadOrders(){
-
-fetch(
-API_URL +
-"?admin=true&type=allOrders"
-)
-
-.then(res=>res.json())
-
-.then(data=>{
-
-const box =
-document.getElementById(
-"ordersList"
-);
-
-box.innerHTML="";
-
-if(!data || data.length===0){
-
-box.innerHTML=
-"<p>لا توجد طلبات حالياً</p>";
-
-return;
-
-}
-
-data.reverse();
-
-data.forEach(order=>{
-
-const orderId =
-String(order.id);
-
-box.innerHTML += `
-
-<div class="order-card">
-
-<h4>
-
-📦 طلب #${orderId}
-
-</h4>
-
-<div class="order-item">
-
-👤 ${order.name || "—"}
-
-</div>
-
-<div class="order-item">
-
-📞 ${order.phone || "—"}
-
-</div>
-
-<div class="order-item">
-
-📍 ${order.address || "—"}
-
-</div>
-
-<div class="order-item">
-
-💰 ${order.total || "—"} جنيه
-
-</div>
-
-<div class="order-item">
-
-📦 ${order.items || "—"}
-
-</div>
-
-<div class="order-item">
-
-📅 ${new Date(order.date)
-.toLocaleString("ar-EG")}
-
-</div>
-
-<select
-class="status-select"
-id="status-${orderId}">
-
-<option value="تم استلام الطلب"
-${order.status==="تم استلام الطلب"?"selected":""}>
-🟠 تم استلام الطلب
-</option>
-
-<option value="جاري التجهيز"
-${order.status==="جاري التجهيز"?"selected":""}>
-🔵 جاري التجهيز
-</option>
-
-<option value="الطلب في الطريق"
-${order.status==="الطلب في الطريق"?"selected":""}>
-🟣 الطلب في الطريق
-</option>
-
-<option value="تم تسليم الطلب"
-${order.status==="تم تسليم الطلب"?"selected":""}>
-🟢 تم تسليم الطلب
-</option>
-
-<option value="تم إلغاء الطلب"
-${order.status==="تم إلغاء الطلب"?"selected":""}>
-🔴 تم إلغاء الطلب
-</option>
-
-</select>
-
-<button
-class="save-btn"
-onclick="updateOrderStatus('${orderId}')">
-
-💾 حفظ الحالة
-
-</button>
-
-</div>
-
-`;
-
-});
-
-})
-
-.catch(err=>{
-
-document.getElementById(
-"ordersList"
-).innerHTML =
-"❌ فشل تحميل الطلبات";
-
-console.log(err);
-
-});
-
+  fetch(API_URL + "?type=allOrders")
+  .then(res=>res.json())
+  .then(data=>{
+    const box = document.getElementById("ordersList");
+    box.innerHTML="";
+    if(!data || data.length===0){
+      box.innerHTML="<p>لا توجد طلبات حالياً</p>";
+      return;
+    }
+    data.reverse();
+    data.forEach(order=>{
+      const orderId = String(order.id);
+      box.innerHTML += `
+        <div class="order-card">
+          <h4>📦 طلب #${orderId}</h4>
+          <div class="order-item">👤 ${order.name || "—"}</div>
+          <div class="order-item">📞 ${order.phone || "—"}</div>
+          <div class="order-item">📍 ${order.address || "—"}</div>
+          <div class="order-item">💰 ${order.total || "—"} جنيه</div>
+          <div class="order-item">📦 ${order.items || "—"}</div>
+          <select class="status-select" id="status-${orderId}">
+            <option value="تم استلام الطلب" ${order.status==="تم استلام الطلب"?"selected":""}>🟠 تم استلام الطلب</option>
+            <option value="جاري التجهيز" ${order.status==="جاري التجهيز"?"selected":""}>🔵 جاري التجهيز</option>
+            <option value="الطلب في الطريق" ${order.status==="الطلب في الطريق"?"selected":""}>🟣 الطلب في الطريق</option>
+            <option value="تم تسليم الطلب" ${order.status==="تم تسليم الطلب"?"selected":""}>🟢 تم تسليم الطلب</option>
+            <option value="تم إلغاء الطلب" ${order.status==="تم إلغاء الطلب"?"selected":""}>🔴 تم إلغاء الطلب</option>
+          </select>
+          <button class="save-btn" onclick="updateOrderStatus('${orderId}')">💾 حفظ الحالة الجديدة ثابتاً</button>
+        </div>
+      `;
+    });
+  })
+  .catch(err=>{
+    document.getElementById("ordersList").innerHTML = "❌ فشل تحميل الطلبات";
+  });
 }
 
 function updateOrderStatus(id){
-
-const status =
-document.getElementById(
-`status-${id}`
-).value;
-
-fetch(API_URL,{
-
-method:"POST",
-
-body:JSON.stringify({
-
-action:"updateOrderStatus",
-
-password:adminPassword,
-
-admin:true,
-
-id:id,
-
-status:status
-
-})
-
-})
-
-.then(res=>res.json())
-
-.then(data=>{
-
-if(data.success){
-
-alert("✅ تم تحديث الحالة");
-
-loadOrders();
-
-}else{
-
-alert("❌ فشل تحديث الحالة");
-
+  const status = document.getElementById(`status-${id}`).value;
+  fetch(API_URL,{
+    method:"POST",
+    body:JSON.stringify({
+      action:"updateOrderStatus",
+      password:adminPassword,
+      id:id,
+      status:status
+    })
+  })
+  .then(res=>res.json())
+  .then(data=>{
+    if(data.success){
+      alert("✅ تم تحديث الحالة وتثبيتها في الشيت بنجاح");
+      loadOrders();
+    }else{
+      alert("❌ فشل تحديث الحالة");
+    }
+  })
+  .catch(err=>{
+    alert("❌ حدث خطأ اتصال");
+  });
 }
-
-})
-
-.catch(err=>{
-
-alert("❌ حدث خطأ");
-
-console.log(err);
-
-});
-
-}
-
 </script>
-
 </body>
 </html>
