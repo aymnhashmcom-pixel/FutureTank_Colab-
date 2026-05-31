@@ -1,9 +1,18 @@
-<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport"
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
 <title>
-منتجات التجار والعروض
-</title><style>
+منتجات التجار والعروض | Future Tank
+</title>
+
+<style>
 
 body{
 font-family:Tahoma;
@@ -86,13 +95,67 @@ text-align:center;
 font-size:20px;
 }
 
-</style></head><body><header><h1>
+.info-box{
+background:#ffffff;
+padding:20px;
+border-radius:20px;
+margin-bottom:25px;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+line-height:2;
+text-align:center;
+font-size:16px;
+color:#444;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>
 🛍️ منتجات التجار والعروض
-</h1><p>
-أفضل عروض التجار داخل Future Tank
-</p></header><div class="container"><div class="products" id="products"><div class="empty">
+</h1>
+
+<p>
+تصفح منتجات التجار والشركات من جميع أنحاء مصر واحصل على أفضل العروض والأسعار وخدمات التوصيل المتاحة 🚚
+</p>
+
+</header>
+
+<div class="container">
+
+<div class="info-box">
+
+🇪🇬 نرحب بالتجار والشركات من جميع محافظات مصر
+
+<br><br>
+
+🛒 منتجات متنوعة
+
+🏪 متاجر وشركات معتمدة
+
+🚚 خدمات توصيل متاحة حسب المحافظة
+
+💰 عروض وأسعار تنافسية
+
+</div>
+
+<div class="products" id="products">
+
+<div class="empty">
+
 جاري تحميل المنتجات...
-</div></div></div><script>
+
+</div>
+
+</div>
+
+</div>
+
+<script>
 
 const API_URL =
 "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec?action=getMerchantProducts";
@@ -190,5 +253,8 @@ console.log(error);
 
 });
 
-</script></body>
+</script>
+
+</body>
+
 </html>
