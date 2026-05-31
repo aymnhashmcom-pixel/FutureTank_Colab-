@@ -5,118 +5,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ماركت هرم سيتي وحدائق أكتوبر</title>
 <style>
-body{
-font-family:Tahoma;
-background:#f4f7fb;
-padding:20px;
-margin:0;
-}
-.card{
-background:#fff;
-padding:15px;
-border-radius:18px;
-margin-bottom:20px;
-box-shadow:0 4px 14px rgba(0,0,0,.08);
-}
-img{
-width:100%;
-height:220px;
-object-fit:cover;
-border-radius:14px;
-}
-.btn{
-display:block;
-background:#25D366;
-color:#fff;
-padding:14px;
-text-align:center;
-border-radius:12px;
-text-decoration:none;
-margin-top:15px;
-font-weight:bold;
-}
+body{ font-family:Tahoma; background:#f4f7fb; padding:20px; margin:0; direction: rtl; }
+.card{ background:#fff; padding:15px; border-radius:18px; margin-bottom:20px; box-shadow:0 4px 14px rgba(0,0,0,.08); }
+img{ width:100%; height:220px; object-fit:cover; border-radius:14px; }
+.btn{ display:block; background:#25D366; color:#fff; padding:14px; text-align:center; border-radius:12px; text-decoration:none; margin-top:15px; font-weight:bold; }
 </style>
 </head>
 <body>
-
-<h1>
-🛒 ماركت هرم سيتي وحدائق أكتوبر
-</h1>
-
-<div id="products"></div>
+<h1>🛒 ماركت هرم سيتي وحدائق أكتوبر</h1>
+<p>عروض تجار المحلات والسوبرماركت واللحوم والصيدليات الحية</p>
+<div id="products">⏳ جاري استدعاء السلع والمتاجر المفتوحة بالمنطقة...</div>
 
 <script>
-
 const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-
 async function loadProducts(){
-
-const res = await fetch(
-API_URL + "?action=getMerchantProducts"
-);
-
-const data = await res.json();
-
-const box = document.getElementById("products");
-
-if(!data.products || data.products.length === 0){
-
-box.innerHTML = `
-<div class="card">
-لا توجد منتجات حالياً
-</div>
-`;
-
-return;
-
+  const box = document.getElementById("products");
+  try {
+    // جلب المنتجات المخصصة للماركت فقط
+    const res = await fetch(API_URL + "?action=getMerchantProducts&category=ماركت هرم سيتي");
+    const data = await res.json();
+    
+    if(!data.products || data.products.length === 0){
+      box.innerHTML = `<div class="card">لا توجد سلع معروضة حالياً لهرم سيتي وحدائق أكتوبر</div>`;
+      return;
+    }
+    box.innerHTML = "";
+    for(const p of data.products){
+      const phone = String(p.whatsapp || "201150402031").replace(/\D/g,'');
+      const msg = encodeURIComponent("مرحباً يا تاجر، أرغب في شراء السلعة التالية من ماركت هرم سيتي: " + p.name);
+      
+      box.innerHTML += `
+        <div class="card">
+          <img src="${p.image || 'https://via.placeholder.com/220'}">
+          <h2>${p.name}</h2>
+          <p style="color:#777; font-size:14px;">المتجر العارض: ${p.merchant}</p>
+          <p>💰 <b>${p.price} جنيه</b></p>
+          <p>${p.description}</p>
+          <a class="btn" href="https://wa.me/${phone}?text=${msg}" target="_blank">📞 طلب السلعة وتوصيل للمنزل</a>
+        </div>
+      `;
+    }
+  } catch(e) {
+    box.innerHTML = "❌ خطأ في تحميل بيانات الماركت";
+  }
 }
-
-box.innerHTML = "";
-
-for(const p of data.products){
-
-const phone = String(p.whatsapp || "")
-.replace(/\D/g,'');
-
-const msg = encodeURIComponent(
-"مرحباً، أريد طلب المنتج: " + p.name
-);
-
-box.innerHTML += `
-
-<div class="card">
-
-<img src="${p.image}">
-
-<h2>${p.name}</h2>
-
-<p>
-💰 ${p.price} جنيه
-</p>
-
-<p>
-${p.description}
-</p>
-
-<a
-class="btn"
-href="https://wa.me/${phone}?text=${msg}"
-target="_blank">
-📞 طلب عبر واتساب
-</a>
-
-</div>
-
-`;
-
-}
-
-}
-
 loadProducts();
-
 </script>
-
 </body>
 </html>
