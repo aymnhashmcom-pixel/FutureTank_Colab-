@@ -1,18 +1,9 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-
-<head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
+<!DOCTYPE html><html lang="ar" dir="rtl"><head><meta charset="UTF-8"><meta name="viewport"
 content="width=device-width, initial-scale=1.0">
 
 <title>
 منتجات التجار والعروض
-</title>
-
-<style>
+</title><style>
 
 body{
 font-family:Tahoma;
@@ -95,55 +86,30 @@ text-align:center;
 font-size:20px;
 }
 
-</style>
-
-</head>
-
-<body>
-
-<header>
-
-<h1>
+</style></head><body><header><h1>
 🛍️ منتجات التجار والعروض
-</h1>
-
-<p>
+</h1><p>
 أفضل عروض التجار داخل Future Tank
-</p>
-
-</header>
-
-<div class="container">
-
-<div class="products"
-id="products">
-
-<div class="empty">
+</p></header><div class="container"><div class="products" id="products"><div class="empty">
 جاري تحميل المنتجات...
-</div>
-
-</div>
-
-</div>
-
-<script>
+</div></div></div><script>
 
 const API_URL =
-"const API_URL =
 "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec?action=getMerchantProducts";
 
 fetch(API_URL)
 
-.then(r=>r.json())
+.then(response => response.json())
 
-.then(data=>{
+.then(data => {
 
 const box =
 document.getElementById("products");
 
 if(
+!data ||
 !data.products ||
-data.products.length===0
+data.products.length === 0
 ){
 
 box.innerHTML = `
@@ -158,7 +124,7 @@ return;
 
 box.innerHTML = "";
 
-data.products.forEach(p=>{
+data.products.forEach(p => {
 
 let phone =
 String(p.whatsapp || "")
@@ -175,34 +141,28 @@ box.innerHTML += `
 
 <div class="card">
 
-<img src="${p.image}">
+<img
+src="${p.image || ''}"
+onerror="this.src='https://via.placeholder.com/400x250?text=Future+Tank'">
 
 <div class="content">
 
 <h3>
-${p.name}
+${p.name || ''}
 </h3>
 
 <div class="price">
-💰 ${p.price} جنيه
+💰 ${p.price || ''} جنيه
 </div>
 
 <div class="desc">
-${p.description}
-</div>
-
-<div style="margin-top:10px;">
-${p.rating}
-</div>
-
-<div style="margin-top:8px;color:#777;">
-👁️ ${p.views}
+${p.description || ''}
 </div>
 
 <a
 class="btn"
 target="_blank"
-href="https://wa.me/${phone}?text=${encodeURIComponent("مرحباً، أريد طلب المنتج: " + p.name)}">
+href="https://wa.me/${phone}?text=${encodeURIComponent('مرحباً، أريد طلب المنتج: ' + (p.name || ''))}">
 
 📞 طلب عبر واتساب
 
@@ -216,9 +176,19 @@ href="https://wa.me/${phone}?text=${encodeURIComponent("مرحباً، أريد 
 
 });
 
+})
+
+.catch(error => {
+
+document.getElementById("products").innerHTML = `
+<div class="empty">
+❌ تعذر تحميل المنتجات
+</div>
+`;
+
+console.log(error);
+
 });
 
-</script>
-
-</body>
+</script></body>
 </html>
