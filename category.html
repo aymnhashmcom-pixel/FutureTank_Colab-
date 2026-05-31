@@ -1,350 +1,72 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Future Tank | عرض القسم</title>
-
+<title>عرض الأقسام | Future Tank</title>
 <link rel="stylesheet" href="style.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
 <style>
-
-body{
-font-family:Tahoma;
-margin:0;
-background:#f5f9ff;
-}
-
-.container{
-padding:20px;
-}
-
-.navbar{
-background:#0b6fc2;
-color:#fff;
-padding:15px;
-display:flex;
-justify-content:space-between;
-align-items:center;
-}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-gap:15px;
-margin-top:20px;
-}
-
-.card{
-background:#fff;
-padding:15px;
-border-radius:15px;
-box-shadow:0 5px 15px rgba(0,0,0,.1);
-}
-
-.product-image{
-width:100%;
-height:220px;
-object-fit:cover;
-border-radius:12px;
-margin-bottom:10px;
-background:#fff;
-}
-
-.badge{
-display:inline-block;
-padding:6px 12px;
-border-radius:20px;
-font-size:12px;
-color:#fff;
-margin-bottom:10px;
-}
-
-.available{background:#28a745;}
-.sold{background:#dc3545;}
-.hot{background:#ff9800;}
-
-.add-cart-btn{
-background:#4fc3f7;
-border:none;
-padding:10px;
-border-radius:8px;
-color:#fff;
-width:100%;
-margin-top:8px;
-cursor:pointer;
-}
-
-.buy-btn{
-background:#25D366;
-border:none;
-padding:10px;
-border-radius:8px;
-color:#fff;
-width:100%;
-margin-top:8px;
-cursor:pointer;
-font-weight:bold;
-}
-
-.popup{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,.6);
-display:none;
-align-items:center;
-justify-content:center;
-z-index:99999;
-}
-
-.popup-box{
-background:#fff;
-padding:20px;
-width:90%;
-max-width:400px;
-border-radius:15px;
-}
-
-.popup-input{
-width:100%;
-padding:10px;
-margin-top:10px;
-border-radius:8px;
-border:1px solid #ccc;
-}
-
-.popup-btn{
-background:#25D366;
-color:#fff;
-border:none;
-padding:10px;
-width:100%;
-margin-top:10px;
-border-radius:8px;
-font-weight:bold;
-}
-
-.close-btn{
-background:#eee;
-border:none;
-padding:10px;
-width:100%;
-margin-top:10px;
-border-radius:8px;
-}
-
+body{ font-family:Tahoma; margin:0; background:#f5f9ff; direction: rtl; }
+.container{ padding:20px; }
+.navbar{ background:#0b6fc2; color:#fff; padding:15px; display:flex; justify-content:space-between; align-items:center; }
+.cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; margin-top:20px; }
+.card{ background:#fff; padding:15px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,.1); }
+.product-image{ width:100%; height:220px; object-fit:cover; border-radius:12px; margin-bottom:10px; }
+.buy-btn{ background:#25D366; border:none; padding:12px; border-radius:8px; color:#fff; width:100%; margin-top:8px; cursor:pointer; font-weight:bold; font-size:15px; }
+.buy-btn:hover{ opacity: 0.9; }
 </style>
-
 </head>
-
 <body>
-
 <header class="navbar">
-<div>Future Tank</div>
-<nav>
-<a href="index.html" style="color:#fff">الرئيسية</a>
-<a href="shop.html" style="color:#fff">التسوق</a>
-<a href="cart.html" style="color:#fff">السلة</a>
-</nav>
+  <div style="font-weight:bold; font-size:18px;">Future Tank</div>
+  <nav>
+    <a href="index.html" style="color:#fff; margin-left:10px; text-decoration:none;">الرئيسية</a>
+    <a href="shop.html" style="color:#fff; text-decoration:none;">التسوق🛒</a>
+  </nav>
 </header>
 
 <div class="container">
-
-<h2 id="categoryTitle"></h2>
-
-<div id="productsList" class="cards"></div>
-
-</div>
-
-<!-- POPUP -->
-<div id="orderPopup" class="popup">
-
-<div class="popup-box">
-
-<h3>🛒 إتمام الطلب</h3>
-
-<input id="orderName" class="popup-input" placeholder="الاسم">
-<input id="orderPhone" class="popup-input" placeholder="الهاتف">
-<input id="orderAddress" class="popup-input" placeholder="العنوان">
-
-<select id="orderPayment" class="popup-input">
-<option>الدفع عند الاستلام</option>
-<option>فودافون كاش</option>
-<option>إنستا باي</option>
-</select>
-
-<button class="popup-btn" onclick="submitOrder()">
-تأكيد الطلب
-</button>
-
-<button class="close-btn" onclick="closePopup()">
-إغلاق
-</button>
-
-</div>
-
+  <h2 id="categoryTitle" style="color:#0b6fc2; border-bottom:2px solid #0b6fc2; padding-bottom:8px;">🎯 جاري الفحص...</h2>
+  <div id="productsList" class="cards">⏳ جاري تصفية وجلب سلع هذا القسم المحددة...</div>
 </div>
 
 <script>
-
 const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-
 const category = new URLSearchParams(location.search).get("cat");
+document.getElementById("categoryTitle").innerText = "قسم: " + (category || "العروض العامة");
 
-document.getElementById("categoryTitle").innerText = category;
-
-let selectedProduct = null;
-
-/* ================= LOAD PRODUCTS ================= */
-
-fetch(API_URL + "?type=products")
-
-.then(res=>res.json())
-
-.then(data=>{
-
-data = data.filter(p => (p.category || "").trim() === (category || "").trim());
-
-const box = document.getElementById("productsList");
-
-box.innerHTML = "";
-
-data.forEach(p=>{
-
-box.innerHTML += `
-<div class="card">
-
-<div class="badge ${p.badge==='متوفر'?'available':p.badge==='غير متوفر'?'sold':'hot'}">
-${p.badge || ""}
-</div>
-
-<img class="product-image" src="${p.image || ''}">
-
-<h3>${p.name || ""}</h3>
-
-<p>${p.description || ""}</p>
-
-<strong>${p.price || 0} ج</strong>
-
-<button class="add-cart-btn" onclick="addCart('${p.name}','${p.price}','${p.image}')">
-🛒 إضافة للسلة
-</button>
-
-<button class="buy-btn" onclick="openOrder('${p.name}','${p.price}')">
-📲 طلب مباشر
-</button>
-
-</div>
-`;
-});
-
-});
-
-/* ================= CART ================= */
-
-function addCart(name,price,image){
-
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
-
-cart.push({name,price,image});
-
-localStorage.setItem("cart",JSON.stringify(cart));
-
-alert("تمت الإضافة");
-
+async function loadCategoryProducts() {
+  const box = document.getElementById("productsList");
+  try {
+    // تصفية جلب السلع من جدول منتجات التجار حسب اسم القسم المار بالرابط تلقائياً
+    const res = await fetch(API_URL + "?action=getMerchantProducts&category=" + encodeURIComponent(category));
+    const data = await res.json();
+    
+    if(!data.products || data.products.length === 0) {
+      box.innerHTML = "<p>لا توجد منتجات معروضة حالياً في هذا القسم المحدد</p>";
+      return;
+    }
+    box.innerHTML = "";
+    data.products.forEach(p => {
+      const phone = String(p.whatsapp || "201150402031").replace(/\D/g,'');
+      box.innerHTML += `
+        <div class="card">
+          <img class="product-image" src="${p.image || 'https://via.placeholder.com/220'}">
+          <h3>${p.name}</h3>
+          <p style="color:#555;">العارض: ${p.merchant}</p>
+          <p>${p.description || ""}</p>
+          <strong>السعر: ${p.price} جنيه</strong>
+          <a style="text-decoration:none;" target="_blank" href="https://wa.me/${phone}?text=${encodeURIComponent('السلام عليكم، أريد طلب منتج من قسم ' + category + ': ' + p.name)}">
+            <button class="buy-btn">📲 طلب فوري عبر واتساب</button>
+          </a>
+        </div>
+      `;
+    });
+  } catch(e) {
+    box.innerHTML = "❌ حدث خطأ أثناء تحميل بيانات القسم";
+  }
 }
-
-/* ================= ORDER ================= */
-
-function openOrder(name,price){
-
-selectedProduct = {name,price};
-
-document.getElementById("orderPopup").style.display="flex";
-
-}
-
-function closePopup(){
-
-document.getElementById("orderPopup").style.display="none";
-
-}
-
-/* ================= FINAL FIXED ORDER ================= */
-
-async function submitOrder(){
-
-const name = document.getElementById("orderName").value.trim();
-const phone = document.getElementById("orderPhone").value.trim();
-const address = document.getElementById("orderAddress").value.trim();
-const payment = document.getElementById("orderPayment").value;
-
-if(!name || !phone || !address){
-alert("أكمل البيانات");
-return;
-}
-
-const text = `
-🛒 طلب جديد
-
-👤 ${name}
-📞 ${phone}
-📍 ${address}
-
-📦 ${selectedProduct.name}
-💰 ${selectedProduct.price}
-`;
-
-/* WhatsApp */
-window.open(
-"https://wa.me/201150402031?text=" + encodeURIComponent(text),
-"_blank"
-);
-
-/* Save API */
-try{
-
-await fetch(API_URL,{
-
-method:"POST",
-
-headers:{
-"Content-Type":"text/plain;charset=utf-8"
-},
-
-body:JSON.stringify({
-
-action:"saveOrder",
-
-name,
-phone,
-address,
-payment,
-items:selectedProduct.name,
-total:selectedProduct.price,
-notes:"طلب من التسوق - " + selectedProduct.name
-
-})
-
-});
-
-}catch(e){
-console.log(e);
-}
-
-alert("تم إرسال الطلب");
-closePopup();
-
-}
-
+loadCategoryProducts();
 </script>
-
 </body>
 </html>
