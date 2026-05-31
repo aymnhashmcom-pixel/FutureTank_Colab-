@@ -3,68 +3,61 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>عميل جديد | FutureTank</title>
-
+<title>تعاقد جديد | FutureTank</title>
 <style>
-body{
-  font-family:Tahoma;
-  background:#f5f7fa;
-  padding:30px;
-}
-
-.box{
-  background:#fff;
-  max-width:500px;
-  margin:auto;
-  padding:25px;
-  border-radius:12px;
-  box-shadow:0 8px 20px rgba(0,0,0,.1);
-}
-
-h2{
-  color:#0a74c9;
-  text-align:center;
-}
-
-input,textarea{
-  width:100%;
-  padding:10px;
-  margin:8px 0;
-  border:1px solid #ccc;
-  border-radius:6px;
-}
-
-button{
-  width:100%;
-  padding:12px;
-  background:#0a74c9;
-  color:#fff;
-  border:none;
-  border-radius:8px;
-  font-size:16px;
-  cursor:pointer;
-}
+body{ font-family:Tahoma; background:#f5f7fa; padding:30px; direction: rtl; }
+.box{ background:#fff; max-width:500px; margin:auto; padding:25px; border-radius:12px; box-shadow:0 8px 20px rgba(0,0,0,.1); }
+h2{ color:#0a74c9; text-align:center; }
+input, textarea, select{ width:100%; padding:12px; margin:10px 0; border:1px solid #ccc; border-radius:8px; box-sizing: border-box; font-size:15px; }
+button{ width:100%; padding:14px; background:#0a74c9; color:#fff; border:none; border-radius:8px; font-size:16px; cursor:pointer; font-weight:bold; }
+button:hover{ background:#0b6fc2; }
 </style>
 </head>
-
 <body>
 <div class="box">
-  <h2>🆕 عميل جديد</h2>
-
-  <input placeholder="الاسم">
-  <input placeholder="رقم الهاتف">
-  <input placeholder="العنوان">
-  <textarea placeholder="الخدمة المطلوبة"></textarea>
-
-  <button onclick="goWhats()">تعاقد الآن</button>
+  <h2>🆕 طلب تعاقد كعميل جديد</h2>
+  <p style="text-align:center; color:#555;">الرجاء تعبئة بياناتك لبدء التعاقد فوراً</p>
+  <input type="text" id="newName" placeholder="اسمك الكريم بالكامل">
+  <input type="text" id="newPhone" placeholder="رقم هاتفك للتواصل">
+  <input type="text" id="newAddress" placeholder="العنوان بالتفصيل">
+  <select id="newService">
+    <option value="تطهير وتعقيم خزانات مياه الشرب">تطهير وتعقيم خزانات مياه الشرب</option>
+    <option value="صيانة وإصلاح خزانات المياه">صيانة وإصلاح خزانات المياه</option>
+    <option value="توريد وتركيب فلاتر مياه">توريد وتركيب فلاتر مياه</option>
+  </select>
+  <button onclick="submitNewClient()">🚀 إرسال طلب التعاقد</button>
 </div>
 
 <script>
-function goWhats(){
-  const msg = encodeURIComponent(
-    "مرحباً، أرغب في التعاقد مع FutureTank كعميل جديد."
-  );
-  window.open("https://wa.me/201150402031?text="+msg,"_blank");
+const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+
+function submitNewClient() {
+  const name = document.getElementById("newName").value.trim();
+  const phone = document.getElementById("newPhone").value.trim();
+  const address = document.getElementById("newAddress").value.trim();
+  const service = document.getElementById("newService").value;
+
+  if(!name || !phone || !address) { alert("⚠️ من فضلك أكمل كافة حقول البيانات الحيوية أولاً"); return; }
+
+  const text = `🤝 طلب تعاقد كعميل جديد ينضم لـ FutureTank:\n\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n📍 العنوان: ${address}\n🛠️ الخدمة المطلوبة: ${service}`;
+  
+  // فتح الواتساب بالرسالة الكاملة والمنظمة
+  window.open("https://wa.me/201150402031?text=" + encodeURIComponent(text), "_blank");
+
+  // حفظ الطلب في شيت Orders تلقائياً
+  fetch(API_URL, {
+    method: "POST",
+    body: JSON.stringify({
+      action: "saveOrder",
+      name: name,
+      phone: phone,
+      address: address,
+      items: "طلب تعاقد جديد: " + service,
+      total: "سيتم التحديد بعد المعاينة",
+      type: "تعاقد جديد"
+    })
+  });
+  alert("✅ تم تجهيز الرسالة وحفظ طلبك على السيرفر");
 }
 </script>
 </body>
