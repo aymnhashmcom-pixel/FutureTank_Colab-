@@ -2,211 +2,71 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>💧 خزانات المياه | Future Tank</title>
+<title>💧 خزانات المياه ونقاء الماء | Future Tank</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <link rel="stylesheet" href="style.css">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 </head>
-
 <body>
-
 <header class="navbar">
-<div class="logo">Future Tank</div>
-
-<nav>
-<a href="index.html">الرئيسية</a>
-<a href="shop.html">التسوق</a>
-<a href="cart.html">🧾 السلة</a>
-</nav>
+  <div class="logo">Future Tank</div>
+  <nav>
+    <a href="index.html">الرئيسية</a>
+    <a href="shop.html">التسوق</a>
+    <a href="cart.html">🧾 السلة</a>
+  </nav>
 </header>
-
 <section class="section">
-
-<h2>💧 خزانات المياه</h2>
-
-<div id="products" class="cards"></div>
-
+  <h2>💧 منتجات نقاء وخزانات المياه (العامة والتجار)</h2>
+  <div id="products" class="cards">⏳ جاري فحص وجلب كافة المعروضات...</div>
 </section>
-
-<footer class="main-footer">
-© Future Tank — نقاء الماء هو هدفنا
-</footer>
-
-<!-- Floating Social -->
-<div id="ft-social-menu">
-
-<a class="ft-icon"
-href="https://wa.me/201150402031"
-target="_blank">
-<i class="fab fa-whatsapp"></i>
-</a>
-
-<a class="ft-icon"
-href="https://www.facebook.com/share/17pbzT4Hnm/"
-target="_blank">
-<i class="fab fa-facebook-f"></i>
-</a>
-
-<a class="ft-icon"
-href="https://www.instagram.com/aymn_hashm"
-target="_blank">
-<i class="fab fa-instagram"></i>
-</a>
-
-<a class="ft-icon"
-href="https://youtube.com/channel/UCyqPviD7dH7R7BkDxrodHfA"
-target="_blank">
-<i class="fab fa-youtube"></i>
-</a>
-
-<a class="ft-icon"
-href="https://www.tiktok.com/@user7817618680338"
-target="_blank">
-<i class="fab fa-tiktok"></i>
-</a>
-
-<a class="ft-icon"
-href="https://www.threads.com/@aymn_hashm"
-target="_blank">
-<i class="fa-brands fa-threads"></i>
-</a>
-
-<a class="ft-icon"
-href="mailto:aymnhashm.com@gmail.com">
-<i class="fas fa-envelope"></i>
-</a>
-
-</div>
-
-<div id="ft-float-btn">
-<i class="fas fa-share-alt"></i>
-</div>
+<footer class="main-footer">© Future Tank — نقاء الماء هو هدفنا</footer>
 
 <script>
+const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+const box = document.getElementById("products");
 
-const API_URL =
-"https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-
-fetch(API_URL + "?type=products&category=خزانات المياه")
-
-.then(res => res.json())
-
-.then(data => {
-
-const products = document.getElementById("products");
-
-products.innerHTML = "";
-
-data.forEach(p => {
-
-let badge = "";
-
-if(p.badge === "متوفر"){
-badge = `<div class="badge available">✔ متوفر</div>`;
+async function loadAllWaterProducts() {
+  try {
+    box.innerHTML = "";
+    
+    // 1. جلب المنتجات المحددة كخزانات مياه من شيت المنتجات الرئيسي
+    const resCore = await fetch(API_URL + "?type=products&category=خزانات المياه");
+    const dataCore = await resCore.json();
+    
+    // 2. جلب المنتجات المحددة كخزانات مياه من شيت التجار
+    const resMerch = await fetch(API_URL + "?action=getMerchantProducts&category=خزانات المياه");
+    const dataMerch = await resMerch.json();
+    
+    const allProducts = [...dataCore, ...(dataMerch.products || [])];
+    
+    if(allProducts.length === 0) { box.innerHTML = "<p>لا توجد منتجات متوفرة حالياً في هذا القسم</p>"; return; }
+    
+    allProducts.forEach(p => {
+      box.innerHTML += `
+        <div class="card">
+          <img src="${p.image || 'https://via.placeholder.com/220'}" alt="${p.name}">
+          <h3>${p.name}</h3>
+          <p>${p.description || p.desc || ""}</p>
+          <strong>${p.price} جنيه</strong>
+          <br><br>
+          <button onclick="addToCart('${p.name}','${p.price}','${p.image}')" class="cart-btn">🛒 أضف للسلة</button>
+          <a class="renew-btn" target="_blank" href="https://wa.me/${p.whatsapp || '201150402031'}?text=${encodeURIComponent('أرغب في طلب منتج المياه: ' + p.name)}">📲 طلب فوري</a>
+        </div>
+      `;
+    });
+  } catch(e) {
+    box.innerHTML = "❌ فشل تحميل معروضات قسم المياه";
+  }
 }
-
-if(p.badge === "غير متوفر"){
-badge = `<div class="badge unavailable">✖ غير متوفر</div>`;
-}
-
-if(p.badge === "الأكثر مبيعاً"){
-badge = `<div class="badge bestseller">🔥 الأكثر مبيعاً</div>`;
-}
-
-products.innerHTML += `
-
-<div class="card">
-
-${badge}
-
-<img src="${p.image}" alt="${p.name}">
-
-<h3>${p.name}</h3>
-
-<p>${p.desc}</p>
-
-<strong>${p.price} جنيه</strong>
-
-<br><br>
-
-<button onclick="addToCart(
-'${p.name}',
-'${p.price}',
-'${p.image}'
-)"
-class="cart-btn">
-
-🛒 أضف للسلة
-
-</button>
-
-<a
-class="renew-btn"
-target="_blank"
-href="https://wa.me/201150402031?text=أرغب في طلب المنتج: ${p.name}"
->
-
-📲 طلب مباشر
-
-</a>
-
-</div>
-
-`;
-
-});
-
-});
 
 function addToCart(name,price,image){
-
-let cart =
-JSON.parse(localStorage.getItem("cart")) || [];
-
-cart.push({
-name,
-price,
-image
-});
-
-localStorage.setItem("cart",JSON.stringify(cart));
-
-alert("✅ تم إضافة المنتج للسلة");
-
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
+  cart.push({name,price,image});
+  localStorage.setItem("cart",JSON.stringify(cart));
+  alert("✅ تم إضافة منتج نقاء الماء للسلة");
 }
-
-const btn =
-document.getElementById("ft-float-btn");
-
-const menu =
-document.getElementById("ft-social-menu");
-
-btn.onclick = () => {
-
-menu.style.display =
-menu.style.display === "flex"
-? "none"
-: "flex";
-
-};
-
-document.addEventListener("click",function(e){
-
-if(
-!btn.contains(e.target)
-&&
-!menu.contains(e.target)
-){
-menu.style.display="none";
-}
-
-});
-
+loadAllWaterProducts();
 </script>
-
 </body>
 </html>
