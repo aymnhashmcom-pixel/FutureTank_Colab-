@@ -36,7 +36,7 @@
     <div class="notice">
         ✅ أهلاً بك يا <span id="merchantDisplayName" style="font-weight:bold; color:#0b6fc2;">...</span><br>
         ✅ المنتجات ستظهر في الشيت وفي الموقع وفي هذه الصفحة أيضاً.<br>
-        ✅ تأكد من بقاء الإنترنت يعمل حتى تكتمل عملية الحفظ.
+        ✅ تأكد من ملء جميع الحقول لضمان الحفظ الصحيح.
     </div>
 
     <div class="box">
@@ -52,9 +52,9 @@
     </div>
 
     <div class="box">
-        <h2>منتجاتك الحالية (المحفوظة محلياً)</h2>
+        <h2>منتجاتك المضافة</h2>
         <div id="productsBox">
-            <p style="text-align:center; color:#888;">لا توجد منتجات معروضة حالياً.</p>
+            <p style="text-align:center; color:#888;">لا توجد منتجات مضافة بعد.</p>
         </div>
     </div>
 
@@ -70,12 +70,11 @@
 </div>
 
 <script>
-    // الإعدادات الأساسية
+    // الرابط الخاص بك (تأكد من تحديثه إذا قمت بعمل New Deployment)
     const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
     const merchantName = localStorage.getItem("merchant_name") || "تاجر";
     const merchantPlan = localStorage.getItem("merchant_plan") || "Basic";
 
-    // حماية الصفحة
     if (localStorage.getItem("merchant_logged") !== "yes") {
         window.location.href = "./merchant-login.html";
     } else {
@@ -83,7 +82,6 @@
         renderLocalProducts();
     }
 
-    // وظيفة الإضافة الرئيسية
     async function addProduct() {
         const name = document.getElementById("productName").value.trim();
         const price = document.getElementById("productPrice").value.trim();
@@ -101,37 +99,19 @@
         addBtn.disabled = true;
         loadingStatus.style.display = "block";
 
-        const payload = {
-            action: "saveMerchantProduct",
-            merchant: merchantName,
-            name: name,
-            price: price,
-            image: image,
-            description: desc,
-            whatsapp: whatsapp,
-            category: "عام",
-            plan: merchantPlan
-        };
+        // استخدام URLSearchParams لإرسال البيانات بشكل فردي يسهل على السكريبت قراءته
+        const finalURL = `${scriptURL}?action=saveMerchantProduct&merchant=${encodeURIComponent(merchantName)}&name=${encodeURIComponent(name)}&price=${encodeURIComponent(price)}&image=${encodeURIComponent(image)}&description=${encodeURIComponent(desc)}&whatsapp=${encodeURIComponent(whatsapp)}&plan=${encodeURIComponent(merchantPlan)}`;
 
         try {
-            // 1. الإرسال للسيرفر باستخدام طريقة Form Data لضمان وصولها 100%
-            const formData = new URLSearchParams();
-            for (const key in payload) { formData.append(key, payload[key]); }
+            await fetch(finalURL, { method: "POST", mode: "no-cors" });
 
-            await fetch(scriptURL, {
-                method: "POST",
-                mode: "no-cors",
-                body: formData
-            });
-
-            // 2. الحفظ محلياً ليظهر في الصفحة فوراً
+            // الحفظ المحلي للعرض
             let localData = JSON.parse(localStorage.getItem("merchant_products") || "[]");
-            localData.push(payload);
+            localData.push({name, price, image, desc});
             localStorage.setItem("merchant_products", JSON.stringify(localData));
 
-            // 3. تحديث العرض
             setTimeout(() => {
-                alert("✅ تم الحفظ بنجاح في الشيت والموقع!");
+                alert("✅ تم الحفظ بنجاح! سيظهر المنتج في الشيت والموقع الآن.");
                 renderLocalProducts();
                 clearInputs();
                 addBtn.disabled = false;
@@ -139,7 +119,7 @@
             }, 1500);
 
         } catch (error) {
-            alert("❌ حدث خطأ، يرجى المحاولة مرة أخرى.");
+            alert("❌ حدث خطأ في الشبكة، حاول مرة أخرى.");
             addBtn.disabled = false;
             loadingStatus.style.display = "none";
         }
@@ -148,20 +128,15 @@
     function renderLocalProducts() {
         const box = document.getElementById("productsBox");
         const data = JSON.parse(localStorage.getItem("merchant_products") || "[]");
-        
-        if (data.length === 0) {
-            box.innerHTML = '<p style="text-align:center; color:#888;">لا توجد منتجات مضافة بعد.</p>';
-            return;
-        }
-
-        box.innerHTML = data.map((p, index) => `
-            <div class="product-item">
-                <img src="${p.image}" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
-                <h3>${p.name}</h3>
-                <p>السعر: ${p.price} جنيه</p>
-                <button class="delete-btn" onclick="deleteLocalProduct(${index})">🗑️ حذف من القائمة</button>
-            </div>
-        `).join('');
+        box.innerHTML = data.length === 0 ? '<p style="text-align:center; color:#888;">لا توجد منتجات مضافة بعد.</p>' : 
+            data.map((p, index) => `
+                <div class="product-item">
+                    <img src="${p.image}" onerror="this.src='https://via.placeholder.com/150?text=No+Image'">
+                    <h3>${p.name}</h3>
+                    <p>💰 ${p.price} جنيه</p>
+                    <button class="delete-btn" onclick="deleteLocalProduct(${index})">🗑️ حذف</button>
+                </div>
+            `).join('');
     }
 
     function deleteLocalProduct(index) {
@@ -172,11 +147,7 @@
     }
 
     function clearInputs() {
-        document.getElementById("productName").value = "";
-        document.getElementById("productPrice").value = "";
-        document.getElementById("productWhatsapp").value = "";
-        document.getElementById("productImage").value = "";
-        document.getElementById("productDesc").value = "";
+        document.querySelectorAll(".box input, .box textarea").forEach(el => el.value = "");
     }
 
     function logoutMerchant() {
