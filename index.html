@@ -1,59 +1,58 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Future Tank | الرئيسية</title>
-<link rel="stylesheet" href="style.css">
-<style>
-  body { font-family: Tahoma, sans-serif; background: #f4f7fb; margin: 0; }
-  .navbar { background: #0b6fc2; padding: 15px; display: flex; justify-content: space-between; align-items: center; color: #fff; }
-  .navbar a { color: #fff; text-decoration: none; margin: 0 10px; font-weight: bold; }
-  .hero { text-align: center; padding: 60px 20px; background: linear-gradient(135deg, #0b6fc2, #4fc3f7); color: #fff; }
-  .container { max-width: 1200px; margin: auto; padding: 20px; }
-  .promo-box { text-align: center; padding: 40px 20px; background: #fff; border-radius: 20px; margin: 20px 0; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-  .main-btn { display: inline-block; padding: 15px 30px; background: #0b6fc2; color: #fff; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 15px; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Future Tank | الرئيسية</title>
+    <style>
+        :root { --primary: #0b6fc2; --secondary: #4fc3f7; --dark: #333; --light: #f4f7fb; }
+        body { font-family: 'Tahoma', sans-serif; background: var(--light); margin: 0; color: var(--dark); line-height: 1.6; }
+        .navbar { background: var(--primary); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .navbar .logo { font-size: 24px; font-weight: bold; }
+        .navbar nav a { color: #fff; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; }
+        .hero { text-align: center; padding: 80px 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; }
+        .hero h1 { margin: 0; font-size: 36px; }
+        .container { max-width: 1000px; margin: -40px auto 40px; padding: 0 20px; }
+        .promo-box { background: #fff; padding: 40px 30px; border-radius: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 30px; }
+        .promo-box h3 { color: var(--primary); font-size: 24px; margin-top: 0; }
+        .main-btn { display: inline-block; padding: 15px 40px; background: var(--primary); color: #fff; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; box-shadow: 0 5px 15px rgba(11, 111, 194, 0.3); }
+        .main-btn:hover { transform: translateY(-3px); opacity: 0.9; }
+        .new-client { background: #eef7ff; border: 2px dashed var(--primary); }
+        footer { text-align: center; padding: 30px; color: #888; font-size: 13px; }
+    </style>
 </head>
 <body>
 
 <header class="navbar">
-  <div style="font-size: 24px;">Future Tank</div>
-  <nav>
-    <a href="index.html">🏠 الرئيسية</a>
-    <a href="shop.html">🛍️ التسوق</a>
-    <a href="services.html">🛠️ الخدمات</a>
-    <a href="portal.html">👤 بوابة العملاء</a>
-  </nav>
+    <div class="logo">Future Tank</div>
+    <nav>
+        <a href="index.html">🏠 الرئيسية</a>
+        <a href="shop.html">🛍️ التسوق</a>
+        <a href="services.html">🛠️ الخدمات</a>
+        <a href="portal.html">👤 بوابة العملاء</a>
+    </nav>
 </header>
 
 <section class="hero">
-  <h1>نقاء الماء.. أمان لعائلتك 💧</h1>
-  <p>فيوتشر تانك لخدمات تطهير وتعقيم خزانات مياه الشرب</p>
+    <h1>نقاء الماء.. أمان لعائلتك 💧</h1>
+    <p>فيوتشر تانك لخدمات تطهير وتعقيم خزانات مياه الشرب</p>
 </section>
 
 <div class="container">
-  <!-- التعديل المطلوب: قسم منتجات التجار والشركات لجميع المحافظات -->
-  <section class="promo-box">
-    <h3>🛍️ منتجات التجار والعروض</h3>
-    <p style="color: #555; max-width: 600px; margin: 15px auto;">
-      تصفح منتجات التجار والشركات من جميع محافظات مصر واستمتع بأفضل العروض والأسعار وخدمات التوصيل المتاحة 🚚
-    </p>
-    <a href="merchant-products.html" class="main-btn">
-      🛒 دخول منتجات التجار
-    </a>
-  </section>
-  
-  <section class="promo-box" style="background: #eef7ff;">
-    <h3>🆕 هل أنت عميل جديد؟</h3>
-    <p>انضم الآن لشبكة عملاء Future Tank المتميزة واحصل على أفضل خدمات الصيانة والتعقيم.</p>
-    <a href="new.html" class="main-btn" style="background: #28a745;">🤝 اطلب تعاقد جديد</a>
-  </section>
+    <section class="promo-box">
+        <h3>🛍️ منتجات التجار والعروض</h3>
+        <p>تصفح منتجات التجار والشركات من جميع محافظات مصر واستمتع بأفضل العروض والأسعار وخدمات التوصيل المتاحة 🚚</p>
+        <a href="merchant-products.html" class="main-btn">🛒 دخول منتجات التجار</a>
+    </section>
+    
+    <section class="promo-box new-client">
+        <h3>🆕 هل أنت عميل جديد؟</h3>
+        <p>انضم الآن لشبكة عملاء Future Tank المتميزة واحصل على أفضل خدمات الصيانة والتعقيم.</p>
+        <a href="new.html" class="main-btn" style="background: #28a745; box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);">🤝 اطلب تعاقد جديد</a>
+    </section>
 </div>
 
-<footer style="text-align: center; padding: 20px; color: #777;">
-  © 2026 Future Tank - جميع الحقوق محفوظة
-</footer>
+<footer>© 2026 Future Tank - جميع الحقوق محفوظة</footer>
 
 </body>
 </html>
