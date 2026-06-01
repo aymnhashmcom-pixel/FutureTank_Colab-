@@ -4,69 +4,105 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>عرض الأقسام | Future Tank</title>
-<link rel="stylesheet" href="style.css">
 <style>
-body{ font-family:Tahoma; margin:0; background:#f5f9ff; direction: rtl; }
-.container{ padding:20px; }
-.navbar{ background:#0b6fc2; color:#fff; padding:15px; display:flex; justify-content:space-between; align-items:center; }
-.cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; margin-top:20px; }
-.card{ background:#fff; padding:15px; border-radius:15px; box-shadow:0 5px 15px rgba(0,0,0,.1); }
-.product-image{ width:100%; height:220px; object-fit:cover; border-radius:12px; margin-bottom:10px; }
-.buy-btn{ background:#25D366; border:none; padding:12px; border-radius:8px; color:#fff; width:100%; margin-top:8px; cursor:pointer; font-weight:bold; font-size:15px; }
-.buy-btn:hover{ opacity: 0.9; }
+body{font-family:Tahoma;background:#f5f9ff;margin:0}
+.navbar{background:#0b6fc2;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center}
+.navbar a{color:#fff;text-decoration:none;margin:0 8px}
+.container{padding:20px}
+.top-links{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+.top-links a{background:#0b6fc2;color:#fff;padding:10px 15px;border-radius:10px;text-decoration:none}
+.search{width:100%;padding:14px;border:1px solid #ccc;border-radius:12px;margin-bottom:20px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}
+.card{background:#fff;padding:15px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.08)}
+.card img{width:100%;height:220px;object-fit:cover;border-radius:12px}
+.btn{display:block;text-align:center;padding:12px;border-radius:10px;text-decoration:none;color:#fff;margin-top:8px}
+.cart{background:#0b6fc2}
+.wa{background:#25D366}
+.price{color:#ff9800;font-weight:bold}
 </style>
 </head>
 <body>
-<header class="navbar">
-  <div style="font-weight:bold; font-size:18px;">Future Tank</div>
-  <nav>
-    <a href="index.html" style="color:#fff; margin-left:10px; text-decoration:none;">الرئيسية</a>
-    <a href="shop.html" style="color:#fff; text-decoration:none;">التسوق🛒</a>
-  </nav>
-</header>
+<div class="navbar">
+<div>Future Tank</div>
+<div>
+<a href="index.html">الرئيسية</a>
+<a href="shop.html">التسوق</a>
+</div>
+</div>
 
 <div class="container">
-  <h2 id="categoryTitle" style="color:#0b6fc2; border-bottom:2px solid #0b6fc2; padding-bottom:8px;">🎯 جاري الفحص...</h2>
-  <div id="productsList" class="cards">⏳ جاري تصفية وجلب سلع هذا القسم المحددة...</div>
+<div class="top-links">
+<a href="index.html">🏠 الرئيسية</a>
+<a href="merchant-products.html">🛍️ منتجات التجار</a>
+<a href="shop.html">🛒 تسوق الآن</a>
+<a href="services.html">💧 الخدمات</a>
+</div>
+
+<input id="searchBox" class="search" placeholder="🔍 ابحث عن منتج">
+
+<h2 id="categoryTitle"></h2>
+<div id="productsList" class="cards"></div>
 </div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-const category = new URLSearchParams(location.search).get("cat");
-document.getElementById("categoryTitle").innerText = "قسم: " + (category || "العروض العامة");
+const API_URL="https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+const category=new URLSearchParams(location.search).get("cat")||"";
+document.getElementById("categoryTitle").innerText="قسم: "+category;
 
-async function loadCategoryProducts() {
-  const box = document.getElementById("productsList");
-  try {
-    // تصفية جلب السلع من جدول منتجات التجار حسب اسم القسم المار بالرابط تلقائياً
-    const res = await fetch(API_URL + "?action=getMerchantProducts&category=" + encodeURIComponent(category));
-    const data = await res.json();
-    
-    if(!data.products || data.products.length === 0) {
-      box.innerHTML = "<p>لا توجد منتجات معروضة حالياً في هذا القسم المحدد</p>";
-      return;
-    }
-    box.innerHTML = "";
-    data.products.forEach(p => {
-      const phone = String(p.whatsapp || "201150402031").replace(/\D/g,'');
-      box.innerHTML += `
-        <div class="card">
-          <img class="product-image" src="${p.image || 'https://via.placeholder.com/220'}">
-          <h3>${p.name}</h3>
-          <p style="color:#555;">العارض: ${p.merchant}</p>
-          <p>${p.description || ""}</p>
-          <strong>السعر: ${p.price} جنيه</strong>
-          <a style="text-decoration:none;" target="_blank" href="https://wa.me/${phone}?text=${encodeURIComponent('السلام عليكم، أريد طلب منتج من قسم ' + category + ': ' + p.name)}">
-            <button class="buy-btn">📲 طلب فوري عبر واتساب</button>
-          </a>
-        </div>
-      `;
-    });
-  } catch(e) {
-    box.innerHTML = "❌ حدث خطأ أثناء تحميل بيانات القسم";
-  }
+let allProducts=[];
+
+function renderProducts(list){
+const box=document.getElementById("productsList");
+if(!list.length){box.innerHTML="<p>لا توجد منتجات</p>";return;}
+box.innerHTML="";
+list.forEach(p=>{
+const phone=(p.whatsapp||"201150402031").replace(/\D/g,'');
+box.innerHTML+=`
+<div class="card">
+<img src="${p.image||'https://via.placeholder.com/400x250'}">
+<h3>${p.name||''}</h3>
+<p>${p.description||''}</p>
+<div class="price">${p.price||0} جنيه</div>
+<a href="#" class="btn cart" onclick="addToCart('${(p.name||'').replace(/'/g,'')}','${p.price||0}','${p.image||''}')">🛒 إضافة للسلة</a>
+<a target="_blank" class="btn wa" href="https://wa.me/${phone}?text=${encodeURIComponent('أريد طلب المنتج: '+(p.name||''))}">📲 طلب واتساب</a>
+</div>`;
+});
 }
-loadCategoryProducts();
+
+function addToCart(name,price,image){
+let cart=JSON.parse(localStorage.getItem('cart')||'[]');
+cart.push({name,price,image});
+localStorage.setItem('cart',JSON.stringify(cart));
+alert('تمت الإضافة للسلة');
+}
+
+async function loadData(){
+try{
+const r1=await fetch(API_URL+"?action=products&category="+encodeURIComponent(category));
+const d1=await r1.json();
+
+const r2=await fetch(API_URL+"?action=getMerchantProducts&category="+encodeURIComponent(category));
+const d2=await r2.json();
+
+const products=(d1.products||d1||[]).map(x=>({
+name:x.name,description:x.description,price:x.price,image:x.image,whatsapp:"201150402031"
+}));
+
+const merchants=(d2.products||[]);
+
+allProducts=[...products,...merchants];
+renderProducts(allProducts);
+}catch(e){
+document.getElementById("productsList").innerHTML="❌ خطأ في تحميل البيانات";
+}
+}
+
+document.getElementById("searchBox").addEventListener("input",e=>{
+const q=e.target.value.trim().toLowerCase();
+renderProducts(allProducts.filter(p=>(p.name||'').toLowerCase().includes(q)));
+});
+
+loadData();
 </script>
 </body>
 </html>
