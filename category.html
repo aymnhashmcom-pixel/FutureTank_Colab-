@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>الأقسام | Future Tank</title>
     <style>
-        body { font-family: 'Tahoma', sans-serif; background: #f4f7fb; margin: 0; direction: rtl; }
-        .navbar { background: #0b6fc2; padding: 15px; display: flex; justify-content: space-between; align-items: center; color: #fff; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f4f7fb; margin: 0; direction: rtl; text-align: right; }
+        .navbar { background: #0b6fc2; padding: 15px; display: flex; justify-content: space-between; align-items: center; color: #fff; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
         .navbar a { color: #fff; text-decoration: none; margin: 0 10px; font-weight: bold; }
         .container { padding: 20px; max-width: 1100px; margin: auto; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 20px; }
-        .card { background: #fff; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; transition: 0.3s; }
-        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; }
+        .card { background: #fff; padding: 15px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); text-align: center; border: 1px solid #eee; }
+        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 15px; margin-bottom: 15px; }
         .price { color: #0b6fc2; font-size: 22px; font-weight: bold; margin: 10px 0; }
-        .wa-btn { display: block; background: #25D366; color: #fff; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: bold; }
+        .wa-btn { display: block; background: #25D366; color: #fff; padding: 12px; border-radius: 12px; text-decoration: none; font-weight: bold; transition: 0.3s; }
+        .wa-btn:hover { background: #1ebe57; }
     </style>
 </head>
 <body>
@@ -35,21 +36,29 @@
 <script>
     const API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
     const cat = new URLSearchParams(window.location.search).get("cat");
+    
     if(cat) {
         document.getElementById("catTitle").innerText = "قسم: " + cat;
         fetch(API + "?action=getMerchantProducts&category=" + encodeURIComponent(cat))
         .then(res => res.json()).then(data => {
             const box = document.getElementById("list");
-            if(!data.products || data.products.length === 0) { box.innerHTML = "لا توجد منتجات حالياً"; return; }
+            if(!data.products || data.products.length === 0) { 
+                box.innerHTML = "<div style='grid-column: 1/-1; text-align:center; padding: 50px;'>لا توجد منتجات معروضة حالياً في هذا القسم المحدد</div>"; 
+                return; 
+            }
             data.products.forEach(p => {
-                const wa = "https://wa.me/" + String(p.whatsapp || "201150402031").replace(/\D/g,'') + "?text=" + encodeURIComponent("أرغب في طلب: " + p.name);
-                box.innerHTML += `<div class="card">
-                    <img src="${p.image}">
+                const phone = String(p.whatsapp || "201150402031").replace(/\D/g,'');
+                const wa = "https://wa.me/" + phone + "?text=" + encodeURIComponent("أريد طلب: " + p.name + " من قسم " + cat);
+                box.innerHTML += `
+                <div class="card">
+                    <img src="${p.image || 'https://via.placeholder.com/200'}" onerror="this.src='https://via.placeholder.com/200'">
                     <h3>${p.name}</h3>
                     <div class="price">${p.price} ج.م</div>
-                    <a href="${wa}" target="_blank" class="wa-btn">📲 اطلب عبر واتساب</a>
+                    <a href="${wa}" target="_blank" class="wa-btn">📲 اطلب الآن عبر واتساب</a>
                 </div>`;
             });
+        }).catch(err => {
+            document.getElementById("list").innerHTML = "حدث خطأ أثناء تحميل المنتجات.";
         });
     }
 </script>
