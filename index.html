@@ -1,59 +1,646 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Future Tank | الرئيسية</title>
-    <style>
-        :root { --primary: #0b6fc2; --secondary: #4fc3f7; --dark: #333; --light: #f4f7fb; }
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--light); margin: 0; color: var(--dark); line-height: 1.6; text-align: right; }
-        .navbar { background: var(--primary); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; color: #fff; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        .navbar .logo { font-size: 24px; font-weight: bold; }
-        .navbar nav a { color: #fff; text-decoration: none; margin: 0 10px; font-weight: bold; font-size: 14px; }
-        .hero { text-align: center; padding: 80px 20px; background: linear-gradient(135deg, var(--primary), var(--secondary)); color: #fff; border-bottom-left-radius: 50px; border-bottom-right-radius: 50px; }
-        .hero h1 { margin: 0; font-size: 36px; }
-        .container { max-width: 1000px; margin: -40px auto 40px; padding: 0 20px; }
-        .promo-box { background: #fff; padding: 40px 30px; border-radius: 25px; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.08); margin-bottom: 30px; }
-        .promo-box h3 { color: var(--primary); font-size: 24px; margin-top: 0; }
-        .main-btn { display: inline-block; padding: 15px 40px; background: var(--primary); color: #fff; border-radius: 50px; text-decoration: none; font-weight: bold; transition: 0.3s; box-shadow: 0 5px 15px rgba(11, 111, 194, 0.3); border: none; cursor: pointer; }
-        .main-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(11, 111, 194, 0.4); }
-        .new-client { background: #f0f9ff; border: 2px dashed var(--primary); }
-        footer { text-align: center; padding: 30px; color: #888; font-size: 13px; }
-    </style>
+
+<meta charset="UTF-8">
+
+<title>Future Tank</title>
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<meta name="theme-color"
+content="#4fc3f7">
+
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Tahoma,sans-serif;
+}
+
+body{
+background:#f5f9ff;
+overflow-x:hidden;
+}
+
+.main-header{
+background:linear-gradient(135deg,#0b6fc2,#4fc3f7);
+padding:30px 20px;
+text-align:center;
+color:#fff;
+}
+
+.main-header h1{
+font-size:32px;
+margin-bottom:10px;
+}
+
+.container{
+padding:20px;
+max-width:1200px;
+margin:auto;
+}
+
+.brand-box{
+background:#fff;
+padding:20px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+margin-bottom:20px;
+}
+
+.brand-box img{
+width:120px;
+height:120px;
+border-radius:30px;
+object-fit:cover;
+margin-bottom:15px;
+}
+
+.brand-box h2{
+color:#0b6fc2;
+margin-bottom:10px;
+}
+
+.notice-box{
+background:#e8f7ff;
+padding:15px;
+border-radius:16px;
+margin-bottom:25px;
+line-height:2;
+text-align:center;
+border:1px solid #bde7ff;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+gap:15px;
+margin-bottom:25px;
+}
+
+.card{
+background:#fff;
+padding:20px;
+border-radius:18px;
+text-align:center;
+text-decoration:none;
+color:#333;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+transition:.3s;
+}
+
+.card:hover{
+transform:translateY(-4px);
+}
+
+.card h3{
+margin-bottom:10px;
+color:#0b6fc2;
+}
+
+.business-card{
+background:linear-gradient(135deg,#009688,#00bfa5);
+color:#fff;
+}
+
+.business-card h3{
+color:#fff;
+}
+
+.market-box{
+background:#fff;
+padding:25px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+margin-bottom:25px;
+}
+
+.market-box h2{
+color:#ff9800;
+margin-bottom:10px;
+}
+
+.market-btn{
+display:inline-block;
+margin-top:15px;
+background:linear-gradient(135deg,#ff9800,#ffb74d);
+color:#fff;
+padding:15px 25px;
+border-radius:14px;
+text-decoration:none;
+font-size:18px;
+font-weight:bold;
+transition:.3s;
+}
+
+.market-btn:hover{
+transform:scale(1.03);
+}
+
+.offer-bar{
+background:#fff3e0;
+padding:18px;
+border-radius:16px;
+text-align:center;
+font-size:18px;
+font-weight:bold;
+color:#ff9800;
+margin-bottom:25px;
+}
+
+.action-buttons{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:15px;
+margin-bottom:25px;
+}
+
+.action-buttons button{
+padding:16px;
+border:none;
+border-radius:16px;
+font-size:17px;
+font-weight:bold;
+color:#fff;
+cursor:pointer;
+}
+
+.notify-btn{
+background:#ff5722;
+}
+
+.rate-btn{
+background:#9c27b0;
+}
+
+.share-btn{
+background:#0b6fc2;
+}
+
+.rating-summary{
+background:#fff;
+padding:20px;
+border-radius:20px;
+text-align:center;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+margin-bottom:25px;
+}
+
+.rating-summary h2{
+font-size:40px;
+color:#ff9800;
+}
+
+.reviews-box{
+background:#fff;
+padding:20px;
+border-radius:20px;
+box-shadow:0 5px 18px rgba(0,0,0,.08);
+}
+
+.reviews-box h3{
+text-align:center;
+margin-bottom:15px;
+}
+
+.review-item{
+background:#f7fbff;
+padding:15px;
+border-radius:14px;
+margin-top:12px;
+text-align:center;
+}
+
+.stars{
+color:#ff9800;
+margin:8px 0;
+}
+
+.show-more-btn{
+margin-top:15px;
+width:100%;
+padding:14px;
+border:none;
+border-radius:14px;
+background:#0b6fc2;
+color:#fff;
+font-size:16px;
+cursor:pointer;
+}
+
+footer{
+margin-top:40px;
+padding:20px;
+text-align:center;
+color:#777;
+}
+
+#ratePopup{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,.6);
+display:none;
+align-items:center;
+justify-content:center;
+z-index:99999;
+padding:15px;
+}
+
+.rate-box{
+background:#fff;
+width:100%;
+max-width:420px;
+padding:25px;
+border-radius:20px;
+}
+
+.rate-input{
+width:100%;
+padding:14px;
+margin-top:12px;
+border-radius:12px;
+border:1px solid #ccc;
+}
+
+.rate-submit{
+margin-top:15px;
+width:100%;
+padding:14px;
+background:#ff9800;
+color:#fff;
+border:none;
+border-radius:12px;
+font-size:16px;
+cursor:pointer;
+}
+
+.close-rate{
+margin-top:10px;
+width:100%;
+padding:12px;
+border:none;
+border-radius:12px;
+background:#eee;
+cursor:pointer;
+}
+
+</style>
+
 </head>
+
 <body>
 
-<header class="navbar">
-    <div class="logo">Future Tank</div>
-    <nav>
-        <a href="index.html">🏠 الرئيسية</a>
-        <a href="shop.html">🛍️ التسوق</a>
-        <a href="services.html">🛠️ الخدمات</a>
-        <a href="portal.html">👤 بوابة العملاء</a>
-    </nav>
+<header class="main-header">
+
+<h1>💧 Future Tank</h1>
+
+<p>نقاء الماء هو هدفنا</p>
+
 </header>
 
-<section class="hero">
-    <h1>نقاء الماء.. أمان لعائلتك 💧</h1>
-    <p>فيوتشر تانك لخدمات تطهير وتعقيم خزانات مياه الشرب</p>
-</section>
-
 <div class="container">
-    <!-- التعديل المطلوب: الانتشار لكل مصر -->
-    <section class="promo-box">
-        <h3>🛍️ منتجات التجار والعروض</h3>
-        <p>تصفح منتجات التجار والشركات من جميع محافظات مصر واستمتع بأفضل العروض والأسعار وخدمات التوصيل المتاحة 🚚</p>
-        <a href="merchant-products.html" class="main-btn">🛒 دخول منتجات التجار</a>
-    </section>
-    
-    <section class="promo-box new-client">
-        <h3>🆕 هل أنت عميل جديد؟</h3>
-        <p>انضم الآن لشبكة عملاء Future Tank المتميزة واحصل على أفضل خدمات الصيانة والتعقيم.</p>
-        <a href="new.html" class="main-btn" style="background: #28a745; box-shadow: 0 5px 15px rgba(40, 167, 69, 0.3);">🤝 اطلب تعاقد جديد</a>
-    </section>
+
+<div class="brand-box">
+
+<img src="./icon-512.png" alt="Future Tank">
+
+<h2>Future Tank</h2>
+
+<p>
+💧 خدمات المياه والتسوق والماركت وتتبع الطلبات والخدمات الذكية
+</p>
+
 </div>
 
-<footer>© 2026 Future Tank - جميع الحقوق محفوظة</footer>
+<div class="notice-box">
+
+📢 يمكنك الآن تتبع جميع الطلبات الخاصة بالمنتجات والخدمات والماركت لحظة بلحظة من خلال صفحة تتبع الطلبات.
+
+</div>
+
+<section class="cards">
+
+<a class="card" href="portal.html">
+<h3>بوابة العملاء</h3>
+<p>عرض بيانات التعاقد وتجديده</p>
+</a>
+
+<a class="card" href="admin.html">
+<h3>لوحة التحكم</h3>
+<p>إدارة العملاء والخدمات</p>
+</a>
+
+<a class="card" href="new.html">
+<h3>عميل جديد</h3>
+<p>إضافة تعاقد جديد</p>
+</a>
+
+<a class="card" href="services.html">
+<h3>الخدمات</h3>
+<p>خدمات Future Tank</p>
+</a>
+
+<a class="card" href="category.html?cat=خزانات المياه">
+<h3>منتجات نقاء الماء</h3>
+<p>خزانات وفلاتر ومنتجات معتمدة</p>
+</a>
+
+<a class="card" href="shop.html">
+<h3>تسوق الآن</h3>
+<p>اطلب بسهولة</p>
+</a>
+
+<a class="card" href="track-order.html">
+<h3>تتبع الطلبات</h3>
+<p>متابعة حالة الطلب لحظة بلحظة</p>
+</a>
+
+<a class="card" href="assistant.html">
+<h3>المساعد الذكي</h3>
+<p>اسأل واستفسر فورًا</p>
+</a>
+
+<a class="card business-card" href="business.html">
+<h3>💼 رجال الأعمال</h3>
+<p>لوحة خدمات التجار والشركات</p>
+</a>
+
+</section>
+
+<div class="market-box">
+
+<h2>🛍️ منتجات التجار والعروض</h2>
+
+<p>
+
+تصفح منتجات التجار داخل هرم سيتي وحدائق أكتوبر  
+واحصل على أفضل العروض والتوصيل السريع 🚚
+
+</p>
+
+<a href="merchant-products.html"
+class="market-btn">
+
+🛒 دخول منتجات التجار
+
+</a>
+
+</div>
+
+<div class="offer-bar"
+id="offersText">
+
+🔥 عروض اليوم على خدمات تنظيف الخزانات
+
+</div>
+
+<div class="action-buttons">
+
+<button class="notify-btn">
+🔔 تفعيل الإشعارات
+</button>
+
+<button class="rate-btn"
+onclick="openRatePopup()">
+
+⭐ تقييم التطبيق
+
+</button>
+
+<button class="share-btn"
+onclick="shareApp()">
+
+📤 مشاركة التطبيق
+
+</button>
+
+</div>
+
+<div class="rating-summary">
+
+<h2 id="ratingAverage">
+5.0 ⭐
+</h2>
+
+<p id="ratingCount">
+11 تقييم
+</p>
+
+</div>
+
+<div class="reviews-box">
+
+<h3>
+⭐ تقييمات التطبيق
+</h3>
+
+<div id="appReviews">
+
+<div class="review-item">
+<strong>حسن يوسف</strong>
+<div class="stars">⭐⭐⭐⭐⭐</div>
+<p>مشاء الله أداء . خدمه. تميز. ثقه. أمان</p>
+</div>
+
+<div class="review-item">
+<strong>محمد معراج</strong>
+<div class="stars">⭐⭐⭐⭐⭐</div>
+<p>خدمه ممتازه</p>
+</div>
+
+<div class="review-item">
+<strong>ذياد</strong>
+<div class="stars">⭐⭐⭐⭐⭐</div>
+<p>ممتاز</p>
+</div>
+
+</div>
+
+<button class="show-more-btn">
+
+عرض كل التقييمات
+
+</button>
+
+</div>
+
+</div>
+
+<footer>
+
+© Future Tank — جميع الحقوق محفوظة
+
+</footer>
+
+<div id="ratePopup">
+
+<div class="rate-box">
+
+<h2 style="text-align:center;">
+⭐ تقييم التطبيق
+</h2>
+
+<input
+type="text"
+id="rateName"
+class="rate-input"
+placeholder="الاسم">
+
+<input
+type="tel"
+id="ratePhone"
+class="rate-input"
+placeholder="رقم الهاتف">
+
+<select
+id="rateStars"
+class="rate-input">
+
+<option value="5">
+★★★★★ ممتاز
+</option>
+
+<option value="4">
+★★★★ جيد جدًا
+</option>
+
+<option value="3">
+★★★ جيد
+</option>
+
+<option value="2">
+★★ مقبول
+</option>
+
+<option value="1">
+★ ضعيف
+</option>
+
+</select>
+
+<textarea
+id="rateComment"
+class="rate-input"
+placeholder="اكتب رأيك">
+</textarea>
+
+<button class="rate-submit">
+
+إرسال التقييم
+
+</button>
+
+<button class="close-rate"
+onclick="closeRatePopup()">
+
+إغلاق
+
+</button>
+
+</div>
+
+</div>
+
+<script>
+
+const offers = [
+
+"💧 خصومات على خدمات تنظيف الخزانات",
+
+"🛍️ عروض يومية داخل ماركت Future Tank",
+
+"🚚 توصيل سريع داخل هرم سيتي وحدائق أكتوبر",
+
+"💦 خصومات على الفلاتر والخزانات",
+
+"🔥 عروض خاصة للتجار والشركات"
+
+];
+
+let currentOffer = 0;
+
+setInterval(()=>{
+
+currentOffer++;
+
+if(currentOffer >= offers.length){
+
+currentOffer = 0;
+
+}
+
+document.getElementById(
+"offersText"
+).innerText = offers[currentOffer];
+
+},3000);
+
+function openRatePopup(){
+
+document.getElementById(
+"ratePopup"
+).style.display="flex";
+
+}
+
+function closeRatePopup(){
+
+document.getElementById(
+"ratePopup"
+).style.display="none";
+
+}
+
+async function shareApp(){
+
+const shareData = {
+
+title:"Future Tank",
+
+text:"💧 حمّل تطبيق Future Tank الآن",
+
+url:window.location.href
+
+};
+
+if(navigator.share){
+
+try{
+
+await navigator.share(shareData);
+
+}catch(e){
+
+console.log(e);
+
+}
+
+}else{
+
+navigator.clipboard.writeText(
+window.location.href
+);
+
+alert("تم نسخ الرابط");
+
+}
+
+}
+
+</script>
 
 </body>
 </html>
