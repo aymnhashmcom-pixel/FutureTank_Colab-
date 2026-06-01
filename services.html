@@ -1,24 +1,45 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>خدماتنا | Future Tank</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>خدمات Future Tank</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  body { font-family: Tahoma, sans-serif; background: #f4f7fb; margin: 0; }
+  .navbar { background: #0b6fc2; padding: 15px; display: flex; justify-content: space-between; align-items: center; color: #fff; }
+  .service-card { background: #fff; padding: 20px; border-radius: 15px; margin-bottom: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-right: 5px solid #0b6fc2; }
+</style>
 </head>
 <body>
-<header class="navbar" style="background:#0b6fc2; padding:15px; display:flex; justify-content:space-between; align-items:center; color:#fff;">
-  <div style="font-weight:bold; font-size:20px;">Future Tank</div>
+
+<header class="navbar">
+  <div style="font-weight: bold; font-size: 20px;">Future Tank</div>
   <nav>
-    <a href="index.html" style="color:#fff; text-decoration:none; margin:0 10px;">🏠 الرئيسية</a>
-    <a href="shop.html" style="color:#fff; text-decoration:none; margin:0 10px;">🛍️ التسوق</a>
-    <a href="cart.html" style="color:#fff; text-decoration:none; margin:0 10px;">🛒 السلة</a>
+    <a href="index.html" style="color: #fff; text-decoration: none; margin: 0 10px;">🏠 الرئيسية</a>
+    <a href="shop.html" style="color: #fff; text-decoration: none; margin: 0 10px;">🛍️ التسوق</a>
+    <a href="cart.html" style="color: #fff; text-decoration: none; margin: 0 10px;">🛒 السلة</a>
   </nav>
 </header>
-<section style="padding:20px; text-align:center;">
-  <h2 style="color:#0b6fc2;">🛠️ خدمات التعقيم والصيانة</h2>
-  <div id="servicesList" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:20px; margin-top:20px;">
-    <!-- يتم الجلب من الشيت تلقائياً -->
+
+<div style="padding: 20px; max-width: 800px; margin: auto;">
+  <h2 style="text-align: center; color: #0b6fc2;">🛠️ خدمات التعقيم والصيانة</h2>
+  
+  <div class="service-card">
+    <h3>💧 تطهير وتعقيم الخزانات</h3>
+    <p>نستخدم أحدث المواد المعتمدة عالمياً لضمان مياه شرب نقية وخالية من البكتيريا.</p>
   </div>
-</section>
+
+  <div class="service-card">
+    <h3>🔧 صيانة وإصلاح الخزانات</h3>
+    <p>فريق فني متخصص لإصلاح كافة أنواع التسريبات والكسور في خزانات المياه.</p>
+  </div>
+
+  <div class="service-card">
+    <h3>🔍 تحليل عينات المياه</h3>
+    <p>خدمة مخبرية متكاملة للتأكد من جودة المياه وصلاحيتها للاستخدام الآدمي.</p>
+  </div>
+</div>
+
 </body>
 </html>
