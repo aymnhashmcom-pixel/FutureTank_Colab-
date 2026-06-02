@@ -1,440 +1,80 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
 <meta charset="UTF-8">
-
-<title>
-Future Tank | تسوق الآن
-</title>
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1">
-
-<link rel="stylesheet"
-href="style.css">
-
-<link rel="stylesheet"
-href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
+<title>Future Tank | تسوق الآن</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-
-body{
-background:#f5f9ff;
-font-family:Tahoma;
-margin:0;
-padding:0;
-}
-
-.shop-header{
-background:linear-gradient(135deg,#0b6fc2,#4fc3f7);
-padding:35px 20px;
-text-align:center;
-color:#fff;
-}
-
-.shop-header h1{
-margin:0;
-font-size:30px;
-}
-
-.shop-header p{
-margin-top:10px;
-font-size:16px;
-opacity:.95;
-}
-
-.notice-box{
-background:#fff3cd;
-border:1px solid #ffeeba;
-color:#856404;
-padding:15px;
-border-radius:15px;
-margin:20px;
-line-height:2;
-font-size:15px;
-}
-
-.cards{
-display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:18px;
-padding:20px;
-}
-
-.shop-card{
-background:#fff;
-padding:20px;
-border-radius:22px;
-box-shadow:0 6px 20px rgba(0,0,0,.08);
-text-decoration:none;
-color:#222;
-transition:.3s;
-position:relative;
-overflow:hidden;
-}
-
-.shop-card:hover{
-transform:translateY(-5px);
-}
-
-.shop-icon{
-font-size:45px;
-margin-bottom:15px;
-}
-
-.shop-card h3{
-margin:0;
-font-size:22px;
-}
-
-.shop-card p{
-margin-top:10px;
-line-height:1.8;
-color:#666;
-font-size:15px;
-}
-
-.badge{
-position:absolute;
-top:15px;
-left:15px;
-background:#ff9800;
-color:#fff;
-padding:6px 12px;
-border-radius:20px;
-font-size:12px;
-font-weight:bold;
-}
-
-.track-btn{
-display:block;
-margin:0 20px 20px;
-background:#25D366;
-color:#fff;
-text-align:center;
-padding:15px;
-border-radius:14px;
-font-size:17px;
-font-weight:bold;
-text-decoration:none;
-transition:.3s;
-}
-
-.track-btn:hover{
-opacity:.9;
-}
-
-footer{
-margin-top:30px;
-padding:25px;
-text-align:center;
-color:#777;
-font-size:14px;
-}
-
-#ft-social-menu{
-position:fixed;
-bottom:90px;
-left:20px;
-display:none;
-flex-direction:column;
-gap:12px;
-z-index:9999;
-}
-
-.ft-icon{
-width:50px;
-height:50px;
-border-radius:50%;
-background:#0b6fc2;
-display:flex;
-align-items:center;
-justify-content:center;
-color:#fff;
-font-size:20px;
-text-decoration:none;
-box-shadow:0 5px 15px rgba(0,0,0,.2);
-}
-
-#ft-float-btn{
-position:fixed;
-bottom:20px;
-left:20px;
-width:60px;
-height:60px;
-background:#ff9800;
-color:#fff;
-border-radius:50%;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:24px;
-cursor:pointer;
-z-index:99999;
-box-shadow:0 8px 25px rgba(0,0,0,.25);
-}
-
+  body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; }
+  .shop-header{ background:linear-gradient(135deg,#0b6fc2,#4fc3f7); padding:35px 20px; text-align:center; color:#fff; }
+  .notice-box{ background:#fff3cd; border:1px solid #ffeeba; color:#856404; padding:15px; border-radius:15px; margin:20px; font-size:15px; }
+  .cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; padding:20px; }
+  .shop-card{ background:#fff; padding:20px; border-radius:22px; box-shadow:0 6px 20px rgba(0,0,0,.08); text-decoration:none; color:#222; transition:.3s; text-align:center; position:relative; }
+  .shop-card:hover{ transform:translateY(-5px); }
+  .shop-icon{ font-size:45px; margin-bottom:15px; }
+  .badge{ position:absolute; top:15px; left:15px; background:#ff9800; color:#fff; padding:4px 10px; border-radius:20px; font-size:11px; }
+  .track-btn{ display:block; margin:20px; background:#25D366; color:#fff; text-align:center; padding:15px; border-radius:14px; font-weight:bold; text-decoration:none; }
+  footer{ padding:25px; text-align:center; color:#777; font-size:14px; }
+  /* Floating Menu */
+  #ft-social-menu{ position:fixed; bottom:90px; left:20px; display:none; flex-direction:column; gap:12px; z-index:9999; }
+  .ft-icon{ width:50px; height:50px; border-radius:50%; background:#0b6fc2; display:flex; align-items:center; justify-content:center; color:#fff; text-decoration:none; box-shadow:0 5px 15px rgba(0,0,0,.2); }
+  #ft-float-btn{ position:fixed; bottom:20px; left:20px; width:60px; height:60px; background:#ff9800; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; cursor:pointer; z-index:99999; }
 </style>
-
 </head>
-
 <body>
 
 <header class="shop-header">
-
-<h1>
-🛒 Future Tank
-</h1>
-
-<p>
-اختر القسم المناسب واطلب بسهولة
-</p>
-
+  <h1>🛒 Future Tank Shop</h1>
+  <p>اختر القسم المناسب واطلب بسهولة</p>
 </header>
 
 <div class="notice-box">
-
-📦 بعد إتمام أي طلب سيتم:
-<br><br>
-
-✅ إرسال الطلب مباشرة للإدارة  
-✅ إمكانية تتبع حالة الطلب  
-✅ معرفة إذا كان الطلب:
-طلب جديد / جاري التجهيز / في الطريق / تم التسليم
-
+  ✅ اطلب الآن وسيتم تتبع طلبك لحظة بلحظة عبر الإدارة.
 </div>
 
 <section class="cards">
+  <a href="category.html?cat=ملابس" class="shop-card">
+    <div class="badge">الأكثر زيارة</div>
+    <div class="shop-icon">👕</div>
+    <h3>ملابس</h3>
+    <p>رجالي – حريمي – أطفال</p>
+  </a>
 
-<a
-href="category.html?cat=ملابس"
-class="shop-card">
+  <a href="category.html?cat=عقارات" class="shop-card">
+    <div class="shop-icon">🏠</div>
+    <h3>عقارات</h3>
+    <p>بيع – إيجار – تشطيب</p>
+  </a>
 
-<div class="badge">
-الأكثر زيارة
-</div>
+  <a href="category.html?cat=سيارات" class="shop-card">
+    <div class="shop-icon">🚗</div>
+    <h3>سيارات</h3>
+    <p>جديدة – مستعملة</p>
+  </a>
 
-<div class="shop-icon">
-👕
-</div>
-
-<h3>
-ملابس
-</h3>
-
-<p>
-رجالي – حريمي – أطفال
-</p>
-
-</a>
-
-<a
-href="category.html?cat=عقارات"
-class="shop-card">
-
-<div class="shop-icon">
-🏠
-</div>
-
-<h3>
-عقارات
-</h3>
-
-<p>
-بيع – إيجار – تشطيب
-</p>
-
-</a>
-
-<a
-href="category.html?cat=سيارات"
-class="shop-card">
-
-<div class="shop-icon">
-🚗
-</div>
-
-<h3>
-سيارات
-</h3>
-
-<p>
-جديدة – مستعملة
-</p>
-
-</a>
-
-<a
-href="category.html?cat=خدمات"
-class="shop-card">
-
-<div class="shop-icon">
-🛠️
-</div>
-
-<h3>
-خدمات
-</h3>
-
-<p>
-خدمات متنوعة واحترافية
-</p>
-
-</a>
-
-<a
-href="category.html?cat=خزانات المياه"
-class="shop-card">
-
-<div class="badge">
-Future Tank
-</div>
-
-<div class="shop-icon">
-💧
-</div>
-
-<h3>
-خزانات المياه
-</h3>
-
-<p>
-خزانات – فلاتر – إكسسوارات – صيانة
-</p>
-
-</a>
-
+  <a href="category.html?cat=خزانات المياه" class="shop-card">
+    <div class="badge">Future Tank</div>
+    <div class="shop-icon">💧</div>
+    <h3>خزانات المياه</h3>
+    <p>خزانات – فلاتر – صيانة</p>
+  </a>
 </section>
 
-<a
-href="track-order.html"
-class="track-btn">
+<a href="track-order.html" class="track-btn">📦 تتبع طلباتك الآن</a>
 
-📦 تتبع طلباتك الآن
-
-</a>
-
-<footer>
-
-© Future Tank — جميع الحقوق محفوظة
-
-</footer>
-
-<!-- Floating Social -->
+<footer>© Future Tank — جميع الحقوق محفوظة</footer>
 
 <div id="ft-social-menu">
-
-<a
-class="ft-icon"
-href="https://wa.me/201150402031"
-target="_blank">
-
-<i class="fab fa-whatsapp"></i>
-
-</a>
-
-<a
-class="ft-icon"
-href="https://www.facebook.com/share/17pbzT4Hnm/"
-target="_blank">
-
-<i class="fab fa-facebook-f"></i>
-
-</a>
-
-<a
-class="ft-icon"
-href="https://www.instagram.com/aymn_hashm"
-target="_blank">
-
-<i class="fab fa-instagram"></i>
-
-</a>
-
-<a
-class="ft-icon"
-href="https://youtube.com/channel/UCyqPviD7dH7R7BkDxrodHfA"
-target="_blank">
-
-<i class="fab fa-youtube"></i>
-
-</a>
-
-<a
-class="ft-icon"
-href="https://www.tiktok.com/@user7817618680338"
-target="_blank">
-
-<i class="fab fa-tiktok"></i>
-
-</a>
-
-<a
-class="ft-icon"
-href="https://www.threads.com/@aymn_hashm"
-target="_blank">
-
-<i class="fa-brands fa-threads"></i>
-
-</a>
-
-<a
-class="ft-icon"
-href="mailto:aymnhashm.com@gmail.com">
-
-<i class="fas fa-envelope"></i>
-
-</a>
-
+  <a class="ft-icon" href="https://wa.me/201150402031"><i class="fab fa-whatsapp"></i></a>
+  <a class="ft-icon" href="mailto:aymnhashm.com@gmail.com"><i class="fas fa-envelope"></i></a>
 </div>
-
-<div id="ft-float-btn">
-
-<i class="fas fa-share-alt"></i>
-
-</div>
+<div id="ft-float-btn"><i class="fas fa-share-alt"></i></div>
 
 <script>
-
-const btn =
-document.getElementById(
-"ft-float-btn"
-);
-
-const menu =
-document.getElementById(
-"ft-social-menu"
-);
-
-btn.onclick = ()=>{
-
-menu.style.display =
-menu.style.display==="flex"
-? "none"
-: "flex";
-
-};
-
-document.addEventListener(
-"click",
-function(e){
-
-if(
-!btn.contains(e.target)
-&&
-!menu.contains(e.target)
-){
-
-menu.style.display="none";
-
-}
-
-}
-);
-
+  const btn = document.getElementById("ft-float-btn");
+  const menu = document.getElementById("ft-social-menu");
+  btn.onclick = () => { menu.style.display = menu.style.display === "flex" ? "none" : "flex"; };
 </script>
-
 </body>
 </html>
