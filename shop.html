@@ -2,79 +2,82 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>Future Tank | تسوق الآن</title>
+<title>Future Tank | تسوق بالمحافظات</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-  body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; }
-  .shop-header{ background:linear-gradient(135deg,#0b6fc2,#4fc3f7); padding:35px 20px; text-align:center; color:#fff; }
-  .notice-box{ background:#fff3cd; border:1px solid #ffeeba; color:#856404; padding:15px; border-radius:15px; margin:20px; font-size:15px; }
-  .cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; padding:20px; }
-  .shop-card{ background:#fff; padding:20px; border-radius:22px; box-shadow:0 6px 20px rgba(0,0,0,.08); text-decoration:none; color:#222; transition:.3s; text-align:center; position:relative; }
-  .shop-card:hover{ transform:translateY(-5px); }
-  .shop-icon{ font-size:45px; margin-bottom:15px; }
-  .badge{ position:absolute; top:15px; left:15px; background:#ff9800; color:#fff; padding:4px 10px; border-radius:20px; font-size:11px; }
-  .track-btn{ display:block; margin:20px; background:#25D366; color:#fff; text-align:center; padding:15px; border-radius:14px; font-weight:bold; text-decoration:none; }
-  footer{ padding:25px; text-align:center; color:#777; font-size:14px; }
-  /* Floating Menu */
-  #ft-social-menu{ position:fixed; bottom:90px; left:20px; display:none; flex-direction:column; gap:12px; z-index:9999; }
-  .ft-icon{ width:50px; height:50px; border-radius:50%; background:#0b6fc2; display:flex; align-items:center; justify-content:center; color:#fff; text-decoration:none; box-shadow:0 5px 15px rgba(0,0,0,.2); }
-  #ft-float-btn{ position:fixed; bottom:20px; left:20px; width:60px; height:60px; background:#ff9800; color:#fff; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; cursor:pointer; z-index:99999; }
+body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; }
+.nav-bar { background:#0b6fc2; padding:12px; display:flex; justify-content:space-around; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
+.nav-bar a { color:#fff; text-decoration:none; font-weight:bold; font-size:15px; display:flex; align-items:center; gap:5px; }
+.shop-header{ background:linear-gradient(135deg,#0b6fc2,#4fc3f7); padding:35px 20px; text-align:center; color:#fff; }
+.shop-header h1{ margin:0; font-size:30px; }
+.shop-header p{ margin-top:10px; font-size:16px; opacity:.95; }
+.notice-box{ background:#fff3cd; border:1px solid #ffeeba; color:#856404; padding:15px; border-radius:15px; margin:20px; line-height:2; font-size:15px; text-align:center; }
+.cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; padding:20px; }
+.shop-card{ background:#fff; padding:20px; border-radius:22px; box-shadow:0 6px 20px rgba(0,0,0,.08); text-decoration:none; color:#222; transition:.3s; text-align:center; position:relative; overflow:hidden; }
+.shop-card:hover{ transform:translateY(-5px); }
+.shop-icon{ font-size:45px; margin-bottom:15px; }
+.shop-card h3{ margin:0; font-size:22px; color:#0b6fc2; }
+.shop-card p{ margin-top:10px; line-height:1.8; color:#666; font-size:15px; }
+.badge{ position:absolute; top:15px; left:15px; background:#ff9800; color:#fff; padding:6px 12px; border-radius:20px; font-size:11px; font-weight:bold; }
+.track-btn{ display:block; margin:0 20px 20px; background:#25D366; color:#fff; text-align:center; padding:15px; border-radius:14px; font-size:17px; font-weight:bold; text-decoration:none; }
+footer{ padding:25px; text-align:center; color:#777; font-size:14px; }
 </style>
 </head>
 <body>
 
+<div class="nav-bar">
+  <a href="index.html"><i class="fa fa-home"></i> الرئيسية</a>
+  <a href="shop.html"><i class="fa fa-shopping-bag"></i> تسوق الآن</a>
+  <a href="cart.html"><i class="fa fa-shopping-cart"></i> السلة المعلقة</a>
+  <a href="services.html"><i class="fa fa-tint"></i> الخدمات</a>
+</div>
+
 <header class="shop-header">
-  <h1>🛒 Future Tank Shop</h1>
-  <p>اختر القسم المناسب واطلب بسهولة</p>
+  <h1>🛒 ماركت محافظات مصر 🇪🇬</h1>
+  <p>اختر المحافظة وتصفح عروض ومنتجات أفضل الشركات المعتمدة القريبة منك</p>
 </header>
 
 <div class="notice-box">
-  ✅ اطلب الآن وسيتم تتبع طلبك لحظة بلحظة عبر الإدارة.
+  💡 <b>للتجار والشركات:</b> الاشتراك الأساسي يتيح لك النشر في محافظة واحدة، يمكنك ترقية باقتك (ربع سنوي / سنوي) للاستفادة من أقوى العروض والتواجد في كافة المحافظات دفعة واحدة!
 </div>
 
 <section class="cards">
-  <a href="category.html?cat=ملابس" class="shop-card">
-    <div class="badge">الأكثر زيارة</div>
-    <div class="shop-icon">👕</div>
-    <h3>ملابس</h3>
-    <p>رجالي – حريمي – أطفال</p>
+  <a href="category.html?cat=القاهرة" class="shop-card">
+    <div class="badge">الأكثر نشاطاً</div>
+    <div class="shop-icon">🏢</div>
+    <h3>محافظة القاهرة</h3>
+    <p>تصفح شركات وماركت العاصمة</p>
   </a>
 
-  <a href="category.html?cat=عقارات" class="shop-card">
-    <div class="shop-icon">🏠</div>
-    <h3>عقارات</h3>
-    <p>بيع – إيجار – تشطيب</p>
+  <a href="category.html?cat=الجيزة" class="shop-card">
+    <div class="shop-icon">🕌</div>
+    <h3>محافظة الجيزة</h3>
+    <p>عروض الجيزة، هرم سيتي، وأكتوبر</p>
   </a>
 
-  <a href="category.html?cat=سيارات" class="shop-card">
-    <div class="shop-icon">🚗</div>
-    <h3>سيارات</h3>
-    <p>جديدة – مستعملة</p>
+  <a href="category.html?cat=الإسكندرية" class="shop-card">
+    <div class="shop-icon">🌊</div>
+    <h3>محافظة الإسكندرية</h3>
+    <p>عروض عروس البحر الأبيض</p>
+  </a>
+
+  <a href="category.html?cat=القليوبية" class="shop-card">
+    <div class="shop-icon">🌾</div>
+    <h3>محافظة القليوبية</h3>
+    <p>منتجات ومتاجر القليوبية</p>
   </a>
 
   <a href="category.html?cat=خزانات المياه" class="shop-card">
     <div class="badge">Future Tank</div>
     <div class="shop-icon">💧</div>
-    <h3>خزانات المياه</h3>
-    <p>خزانات – فلاتر – صيانة</p>
+    <h3>خزانات وفلاتر المياه</h3>
+    <p>القسم الرئيسي المعتمد لـ Future Tank بمصر</p>
   </a>
 </section>
 
-<a href="track-order.html" class="track-btn">📦 تتبع طلباتك الآن</a>
+<a href="track-order.html" class="track-btn">📦 تتبع طلباتك الحالية لحظة بلحظة</a>
 
 <footer>© Future Tank — جميع الحقوق محفوظة</footer>
-
-<div id="ft-social-menu">
-  <a class="ft-icon" href="https://wa.me/201150402031"><i class="fab fa-whatsapp"></i></a>
-  <a class="ft-icon" href="mailto:aymnhashm.com@gmail.com"><i class="fas fa-envelope"></i></a>
-</div>
-<div id="ft-float-btn"><i class="fas fa-share-alt"></i></div>
-
-<script>
-  const btn = document.getElementById("ft-float-btn");
-  const menu = document.getElementById("ft-social-menu");
-  btn.onclick = () => { menu.style.display = menu.style.display === "flex" ? "none" : "flex"; };
-</script>
 </body>
 </html>
