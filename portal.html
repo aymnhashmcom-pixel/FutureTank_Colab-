@@ -2,242 +2,122 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>Future Tank</title>
+<title>بوابة العملاء | Future Tank</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#4fc3f7">
-
-<meta property="og:title" content="Future Tank | نقاء الماء هو هدفنا 💧">
-<meta property="og:description" content="منصة ذكية لخدمات المياه، الماركت، وتسوق منتجات التجار عبر جميع محافظات مصر 🇪🇬.">
-<meta property="og:image" content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/icon-512.png">
-<meta property="og:url" content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/index.html">
-<meta property="og:type" content="website">
-<meta name="twitter:card" content="summary_large_image">
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-
 <style>
-*{ margin:0; padding:0; box-sizing:border-box; font-family:Tahoma,sans-serif; }
-body{ background:#f5f9ff; overflow-x:hidden; }
-.top-marquee-container { background:#fff176; color:#333; padding:10px 0; font-weight:bold; font-size:15px; border-bottom:2px solid #ffd600; text-align:center; }
-.main-header{ background:linear-gradient(135deg,#0b6fc2,#4fc3f7); padding:30px 20px; text-align:center; color:#fff; }
-.main-header h1{ font-size:32px; margin-bottom:10px; }
-.container{ padding:20px; max-width:1200px; margin:auto; }
-.brand-box{ background:#fff; padding:20px; border-radius:20px; text-align:center; box-shadow:0 5px 18px rgba(0,0,0,.08); margin-bottom:20px; }
-.brand-box img{ width:120px; height:120px; border-radius:30px; object-fit:cover; margin-bottom:15px; }
-.brand-box h2{ color:#0b6fc2; margin-bottom:10px; }
-.notice-box{ background:#e8f7ff; padding:15px; border-radius:16px; margin-bottom:25px; line-height:2; text-align:center; border:1px solid #bde7ff; }
-.cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; margin-bottom:25px; }
-.card{ background:#fff; padding:20px; border-radius:18px; text-align:center; text-decoration:none; color:#333; box-shadow:0 5px 18px rgba(0,0,0,.08); transition:.3s; }
-.card:hover{ transform:translateY(-4px); }
-.card h3{ margin-bottom:10px; color:#0b6fc2; }
-.business-card{ background:linear-gradient(135deg,#009688,#00bfa5); color:#fff; }
-.business-card h3{ color:#fff; }
-.market-box{ background:#fff; padding:25px; border-radius:20px; text-align:center; box-shadow:0 5px 18px rgba(0,0,0,.08); margin-bottom:25px; }
-.market-box h2{ color:#ff9800; margin-bottom:10px; }
-.market-btn{ display:inline-block; margin-top:15px; background:linear-gradient(135deg,#ff9800,#ffb74d); color:#fff; padding:15px 25px; border-radius:14px; text-decoration:none; font-size:18px; font-weight:bold; transition:.3s; }
-.market-btn:hover{ transform:scale(1.03); }
-.offer-bar{ background:#fff3e0; padding:18px; border-radius:16px; text-align:center; font-size:18px; font-weight:bold; color:#ff9800; margin-bottom:25px; }
-.action-buttons{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:15px; margin-bottom:25px; }
-.action-buttons button{ padding:16px; border:none; border-radius:16px; font-size:17px; font-weight:bold; color:#fff; cursor:pointer; }
-.notify-btn{ background:#ff5722; }
-.rate-btn{ background:#9c27b0; }
-.share-btn{ background:#0b6fc2; }
-.rating-summary{ background:#fff; padding:20px; border-radius:20px; text-align:center; box-shadow:0 5px 18px rgba(0,0,0,.08); margin-bottom:25px; }
-.rating-summary h2{ font-size:40px; color:#ff9800; }
-.reviews-box{ background:#fff; padding:20px; border-radius:20px; box-shadow:0 5px 18px rgba(0,0,0,.08); }
-.reviews-box h3{ text-align:center; margin-bottom:15px; }
-.review-item{ background:#f7fbff; padding:15px; border-radius:14px; margin-top:12px; text-align:center; }
-.stars{ color:#ff9800; margin:8px 0; }
-.show-more-btn{ margin-top:15px; width:100%; padding:14px; border:none; border-radius:14px; background:#0b6fc2; color:#fff; font-size:16px; cursor:pointer; }
-footer{ margin-top:40px; padding:20px; text-align:center; color:#777; }
-#ratePopup{ position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,.6); display:none; align-items:center; justify-content:center; z-index:99999; padding:15px; }
-.rate-box{ background:#fff; width:100%; max-width:420px; padding:25px; border-radius:20px; }
-.rate-input{ width:100%; padding:14px; margin-top:12px; border-radius:12px; border:1px solid #ccc; }
-.rate-submit{ margin-top:15px; width:100%; padding:14px; background:#ff9800; color:#fff; border:none; border-radius:12px; font-size:16px; cursor:pointer; }
-.close-rate{ margin-top:10px; width:100%; padding:12px; border:none; border-radius:12px; background:#eee; cursor:pointer; }
+body{ margin:0; padding:0; background:#f4f9ff; font-family:Tahoma; }
+.portal-header{ background:linear-gradient(135deg,#0b6fc2,#4fc3f7); padding:30px 20px; text-align:center; color:#fff; border-bottom-left-radius:30px; border-bottom-right-radius:30px; box-shadow:0 5px 20px rgba(0,0,0,.1); }
+.portal-header h1{ margin:0; font-size:32px; }
+.portal-header p{ margin-top:10px; font-size:16px; }
+.portal-container{ max-width:1100px; margin:25px auto; padding:15px; }
+.search-box{ background:#fff; padding:20px; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,.08); margin-bottom:20px; }
+.search-input{ width:100%; padding:15px; border-radius:14px; border:1px solid #ccc; font-size:16px; box-sizing:border-box; margin-top:10px; }
+.search-btn{ width:100%; padding:15px; margin-top:15px; border:none; border-radius:14px; background:linear-gradient(135deg,#0b6fc2,#4fc3f7); color:#fff; font-size:17px; font-weight:bold; cursor:pointer; }
+.client-card{ background:#fff; padding:20px; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,.08); margin-top:20px; }
+.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:15px; margin-top:15px; }
+.data-box{ background:#f7fbff; padding:15px; border-radius:14px; border:1px solid #dbeeff; }
+.label{ font-size:13px; color:#666; margin-bottom:8px; }
+.value{ font-size:16px; font-weight:bold; color:#222; word-break:break-word; }
+.remaining-box{ margin-top:20px; padding:25px; border-radius:20px; text-align:center; color:#fff; }
+.remaining-green{ background:linear-gradient(135deg,#16a34a,#22c55e); }
+.remaining-orange{ background:linear-gradient(135deg,#ea580c,#f59e0b); }
+.remaining-red{ background:linear-gradient(135deg,#dc2626,#ef4444); }
+.remaining-days{ font-size:55px; font-weight:bold; margin:15px 0; }
+.pay-box{ margin-top:20px; background:#fff; padding:20px; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,.08); }
+.pay-buttons{ display:grid; grid-template-columns:1fr 1fr; gap:15px; margin-top:15px; }
+.pay-btn{ display:block; padding:18px; border-radius:16px; text-align:center; text-decoration:none; font-size:18px; font-weight:bold; color:#fff; }
+.insta{ background:linear-gradient(135deg,#6d28d9,#9333ea); }
+.cash{ background:linear-gradient(135deg,#ff9800,#f57c00); }
+.renew-btn{ display:block; margin-top:20px; padding:16px; border-radius:16px; background:#25D366; color:#fff; font-size:18px; font-weight:bold; text-align:center; text-decoration:none; }
+.footer{ text-align:center; padding:25px; color:#777; font-size:14px; }
+.hidden{ display:none; }
 </style>
 </head>
 <body>
-
-<div class="top-marquee-container">
-    <marquee behavior="scroll" direction="right">📢 فيوتشر تانك الآن في جميع محافظات مصر 🇪🇬.. نرحب بانضمام التجار والشركات من كل مكان.. نقاء الماء هو هدفنا 💧</marquee>
-</div>
-
-<header class="main-header">
+<header class="portal-header">
   <h1>💧 Future Tank</h1>
-  <p>نقاء الماء هو هدفنا</p>
+  <p>بوابة العملاء الذكية — إدارة التعاقدات والروابط المباشرة</p>
 </header>
-
-<div class="container">
-  <div class="brand-box">
-    <img src="./icon-512.png" alt="Future Tank">
-    <h2>Future Tank</h2>
-    <p>💧 خدمات المياه والتسوق والماركت وتتبع الطلبات والخدمات الذكية</p>
+<div class="portal-container">
+  <div class="search-box">
+    <h2>🔍 عرض بيانات التعاقد</h2>
+    <input type="text" id="phone" class="search-input" placeholder="اكتب رقم الهاتف المسجل">
+    <button class="search-btn" onclick="searchClient()">بحث الآن</button>
   </div>
-
-  <div class="notice-box">
-    📢 يمكنك الآن تتبع جميع الطلبات الخاصة بالمنتجات والخدمات والماركت لحظة بلحظة من خلال صفحة تتبع الطلبات.
-  </div>
-
-  <section class="cards">
-    <a class="card" href="portal.html">
-      <h3>بوابة العملاء</h3>
-      <p>عرض بيانات التعاقد وتجديده</p>
-    </a>
-
-    <a class="card" href="admin.html">
-      <h3>لوحة التحكم</h3>
-      <p>إدارة العملاء والخدمات</p>
-    </a>
-
-    <a class="card" href="new.html">
-      <h3>عميل جديد</h3>
-      <p>إضافة تعاقد جديد</p>
-    </a>
-
-    <a class="card" href="services.html">
-      <h3>الخدمات</h3>
-      <p>خدمات Future Tank</p>
-    </a>
-
-    <a class="card" href="category.html?cat=خزانات المياه">
-      <h3>منتجات نقاء الماء</h3>
-      <p>خزانات وفلاتر ومنتجات معتمدة</p>
-    </a>
-
-    <a class="card" href="shop.html">
-      <h3>تسوق الآن</h3>
-      <p>اطلب بسهولة</p>
-    </a>
-
-    <a class="card" href="track-order.html">
-      <h3>تتبع الطلبات</h3>
-      <p>متابعة حالة الطلب لحظة بلحظة</p>
-    </a>
-
-    <a class="card" href="assistant.html">
-      <h3>المساعد الذكي</h3>
-      <p>اسأل واستفسر فورًا</p>
-    </a>
-
-    <a class="card business-card" href="business.html">
-      <h3>💼 رجال الأعمال</h3>
-      <p>لوحة خدمات التجار والشركات</p>
-    </a>
-  </section>
-
-  <div class="market-box">
-    <h2>🛍️ منتجات التجار والعروض</h2>
-    <p>تصفح منتجات التجار والشركات من جميع محافظات مصر واحصل على أفضل العروض والأسعار والخدمات المتنوعة في مكان واحد 🚚
-       <br><br>
-       🇪🇬 نرحب بالتجار والشركات من جميع أنحاء الجمهورية
-       <br>🛒 منتجات متنوعة
-       🏪 متاجر وشركات معتمدة
-       🚚 خدمات توصيل متاحة حسب المنطقة
-       💰 عروض وأسعار تنافسية
-    </p>
-    <a href="merchant-products.html" class="market-btn">🛒 دخول منتجات التجار</a>
-  </div>
-
-  <div class="offer-bar" id="offersText">
-    🔥 عروض اليوم على خدمات تنظيف الخزانات
-  </div>
-
-  <div class="action-buttons">
-    <button class="notify-btn">🔔 تفعيل الإشعارات</button>
-    <button class="rate-btn" onclick="openRatePopup()">⭐ تقييم التطبيق</button>
-    <button class="share-btn" onclick="shareApp()">📤 مشاركة التطبيق</button>
-  </div>
-
-  <div class="rating-summary">
-    <h2 id="ratingAverage">5.0 ⭐</h2>
-    <p id="ratingCount">11 تقييم</p>
-  </div>
-
-  <div class="reviews-box">
-    <h3>⭐ تقييمات التطبيق</h3>
-    <div id="appReviews">
-      <div class="review-item">
-        <strong>حسن يوسف</strong>
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>مشاء الله أداء . خدمه. تميز. ثقه. أمان</p>
-      </div>
-      <div class="review-item">
-        <strong>محمد معراج</strong>
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>خدمه ممتازه</p>
-      </div>
-      <div class="review-item">
-        <strong>ذياد</strong>
-        <div class="stars">⭐⭐⭐⭐⭐</div>
-        <p>ممتاز</p>
-      </div>
-    </div>
-    <button class="show-more-btn">عرض كل التقييمات</button>
-  </div>
+  <div id="result" class="hidden"></div>
 </div>
-
-<footer>© Future Tank — جميع الحقوق محفوظة</footer>
-
-<div id="ratePopup">
-  <div class="rate-box">
-    <h2 style="text-align:center;">⭐ تقييم التطبيق</h2>
-    <input type="text" id="rateName" class="rate-input" placeholder="الاسم">
-    <input type="tel" id="ratePhone" class="rate-input" placeholder="رقم الهاتف">
-    <select id="rateStars" class="rate-input">
-      <option value="5">★★★★★ ممتاز</option>
-      <option value="4">★★★★ جيد جدًا</option>
-      <option value="3">★★★ جيد</option>
-      <option value="2">★★ مقبول</option>
-      <option value="1">★ ضعيف</option>
-    </select>
-    <textarea id="rateComment" class="rate-input" placeholder="اكتب رأيك"></textarea>
-    <button class="rate-submit">إرسال التقييم</button>
-    <button class="close-rate" onclick="closeRatePopup()">إغلاق</button>
-  </div>
-</div>
+<div class="footer">© Future Tank — نقاء الماء هو هدفنا 💧</div>
 
 <script>
-const offers = [
-  "🇪🇬 نرحب بالتجار والشركات من جميع محافظات مصر",
-  "🛍️ آلاف المنتجات والعروض المميزة",
-  "🚚 خدمات توصيل متاحة حسب المنطقة",
-  "💰 أسعار تنافسية وعروض حصرية",
-  "🏪 فرصة مجانية لعرض منتجاتك داخل Future Tank",
-  "📈 وسّع نشاطك التجاري ووصل لعملاء جدد",
-  "💧 خصومات على الفلاتر والخزانات",
-  "🔥 عروض خاصة للتجار والشركات",
-  "🛒 تسوق بسهولة من خلال منصة Future Tank",
-  "🇪🇬 Future Tank منصة تخدم جميع أنحاء مصر"
-];
+const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+const WHATSAPP = "201150402031";
 
-let currentOffer = 0;
-setInterval(()=>{
-  currentOffer++;
-  if(currentOffer >= offers.length){ currentOffer = 0; }
-  document.getElementById("offersText").innerText = offers[currentOffer];
-},3000);
-
-function openRatePopup(){ document.getElementById("ratePopup").style.display="flex"; }
-function closeRatePopup(){ document.getElementById("ratePopup").style.display="none"; }
-
-async function shareApp(){
-  const shareData = {
-    title: "Future Tank",
-    text: "💧 حمّل تطبيق Future Tank الآن واحصل على أفضل الخدمات والمنتجات",
-    url: window.location.href
-  };
-  if(navigator.share){
-    try{
-      await navigator.share(shareData);
-    }catch(e){
-      console.log(e);
+function searchClient(){
+  const phoneInput = document.getElementById("phone").value.trim();
+  const result = document.getElementById("result");
+  if(!phoneInput){ alert("اكتب رقم الهاتف"); return; }
+  
+  result.classList.remove("hidden");
+  result.innerHTML = "<div class='client-card'>🔍 جاري جلب بيانات التعاقد الحية...</div>";
+  
+  fetch(API_URL + "?action=clientPortal&phone=" + encodeURIComponent(phoneInput))
+  .then(res => res.json())
+  .then(data => {
+    if(!data || !data.success){
+      result.innerHTML = "<div class='client-card'>❌ لا يوجد تعاقد مسجل بهذا الرقم</div>";
+      return;
     }
-  }else{
-    navigator.clipboard.writeText(window.location.href);
-    alert("تم نسخ الرابط الحصري للمشاركة بنجاح!");
-  }
+    const remaining = Number(data.remaining_days || 0);
+    let statusTxt = "✅ التعاقد ساري";
+    let color = "remaining-green";
+    if(remaining <= 30) { statusTxt = "⚠️ التعاقد يقترب من الانتهاء"; color = "remaining-orange"; }
+    if(remaining <= 0) { statusTxt = "❌ التعاقد منتهي"; color = "remaining-red"; }
+    
+    const msg = `السلام عليكم، أرغب في تجديد التعاقد: الاسم: ${data.name} - الهاتف: ${data.phone}`;
+    
+    result.innerHTML = `
+      <div class="client-card">
+        <div class="grid">
+          ${box("👤 اسم العميل", data.name)}
+          ${box("📞 رقم الهاتف", data.phone)}
+          ${box("📍 العنوان", data.address)}
+          ${box("🛠️ الخدمة متعاقد عليها", data.service)}
+          ${box("📅 مدة التعاقد", data.contract_months + " شهر")}
+          ${box("🔄 عدد الزيارات المتاحة", data.visits)}
+          ${box("💰 التكلفة الإجمالية", data.cost + " جنيه")}
+          ${box("📅 تاريخ التعاقد", formatDate(data.contract_date))}
+          ${box("📅 تاريخ انتهاء العقد", formatDate(data.end_date))}
+          ${box("⏱️ آخر زيارة صيانة", formatDate(data.last_visit))}
+          ${box("📅 الزيارة القادمة المقررة", formatDate(data.next_visit))}
+          ${box("💳 نوع الاشتراك", data.subscription_type)}
+          ${box("💰 حالة الدفع الحالية", data.payment_status)}
+          ${box("🧾 رقم العقد الرسمي", data.contract_number)}
+          ${box("🏧 طريقة الدفع المعتمَدة", data.payment_method)}
+          ${box("💵 قيمة القسط", data.installment_amount ? data.installment_amount + " جنيه" : "—")}
+          ${box("📅 تاريخ القسط القادم", formatDate(data.next_installment_date))}
+          ${box("📝 ملاحظات التعاقد", data.notes)}
+          ${box("👤 حالة حساب العميل", data.client_status)}
+        </div>
+        <div class="remaining-box ${color}">
+          <div style="font-size:24px;font-weight:bold">${statusTxt}</div>
+          <div class="remaining-days">${remaining}</div> يوم متبقي
+        </div>
+        
+        <div class="pay-box">
+          <h3>💳 روابط الدفع المباشرة الفورية</h3>
+          <div class="pay-buttons">
+            <a class="pay-btn insta" target="_blank" href="${data.instapay}">📱 إنستا باي مباشر</a>
+            <a class="pay-btn cash" target="_blank" href="${data.etisalat}">📲 اتصالات كاش مباشر</a>
+          </div>
+        </div>
+        
+        <a class="renew-btn" target="_blank" href="https://wa.me/${WHATSAPP}?text=${encodeURIComponent(msg)}">🔁 تجديد التعاقد الفوري عبر واتساب</a>
+      </div>
+    `;
+  });
 }
+function box(label,value){ return `<div class="data-box"><div class="label">${label}</div><div class="value">${value || "—"}</div></div>`; }
+function formatDate(dStr){ if(!dStr) return "—"; const d = new Date(dStr); return isNaN(d.getTime()) ? dStr : d.toLocaleDateString('ar-EG'); }
 </script>
 </body>
 </html>
