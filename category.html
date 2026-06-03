@@ -2,107 +2,128 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
+<title>تصفح المنتجات والعروض</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>عرض الأقسام | Future Tank</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-body{font-family:Tahoma;background:#f5f9ff;margin:0}
-.navbar{background:#0b6fc2;color:#fff;padding:15px;display:flex;justify-content:space-between;align-items:center}
-.navbar a{color:#fff;text-decoration:none;margin:0 8px}
-.container{padding:20px}
-.top-links{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
-.top-links a{background:#0b6fc2;color:#fff;padding:10px 15px;border-radius:10px;text-decoration:none}
-.search{width:100%;padding:14px;border:1px solid #ccc;border-radius:12px;margin-bottom:20px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:15px}
-.card{background:#fff;padding:15px;border-radius:15px;box-shadow:0 4px 15px rgba(0,0,0,.08)}
-.card img{width:100%;height:220px;object-fit:cover;border-radius:12px}
-.btn{display:block;text-align:center;padding:12px;border-radius:10px;text-decoration:none;color:#fff;margin-top:8px}
-.cart{background:#0b6fc2}
-.wa{background:#25D366}
-.price{color:#ff9800;font-weight:bold}
+body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; }
+.nav-bar { background:#0b6fc2; padding:12px; display:flex; justify-content:space-around; align-items:center; }
+.nav-bar a { color:#fff; text-decoration:none; font-weight:bold; }
+.header-box { background:linear-gradient(135deg,#0b6fc2,#4fc3f7); padding:25px; text-align:center; color:#fff; }
+.container { padding:20px; max-width:1200px; margin:auto; }
+.sub-cats { display:flex; gap:10px; overflow-x:auto; padding:10px 0; margin-bottom:20px; }
+.sub-btn { background:#fff; border:1px solid #0b6fc2; color:#0b6fc2; padding:8px 16px; border-radius:20px; cursor:pointer; font-weight:bold; white-space:nowrap; }
+.sub-btn.active { background:#0b6fc2; color:#fff; }
+.products-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; }
+.prod-card { background:#fff; border-radius:18px; padding:15px; box-shadow:0 4px 15px rgba(0,0,0,0.05); text-align:center; }
+.prod-card img { width:100%; height:180px; object-fit:cover; border-radius:14px; }
+.prod-title { font-size:18px; font-weight:bold; margin:10px 0; color:#222; }
+.prod-price { color:#ff9800; font-size:17px; font-weight:bold; margin-bottom:10px; }
+.order-btn { display:block; background:#25D366; color:#fff; padding:10px; border-radius:10px; text-decoration:none; font-weight:bold; margin-top:10px; }
+.error-msg { background:#ffebee; color:#c62828; padding:20px; border-radius:15px; text-align:center; font-weight:bold; }
 </style>
 </head>
 <body>
-<div class="navbar">
-<div>Future Tank</div>
-<div>
-<a href="index.html">الرئيسية</a>
-<a href="shop.html">التسوق</a>
+
+<div class="nav-bar">
+  <a href="index.html">الرئيسية</a>
+  <a href="shop.html">المحافظات</a>
+  <a href="services.html">الخدمات</a>
 </div>
+
+<div class="header-box">
+  <h2 id="catTitle">جاري التحميل...</h2>
+  <p>منصة Future Tank الذكية للمحافظات</p>
 </div>
 
 <div class="container">
-<div class="top-links">
-<a href="index.html">🏠 الرئيسية</a>
-<a href="merchant-products.html">🛍️ منتجات التجار</a>
-<a href="shop.html">🛒 تسوق الآن</a>
-<a href="services.html">💧 الخدمات</a>
-</div>
+  <div class="sub-cats" id="subCatsBox">
+    <button class="sub-btn active" onclick="filterSub('all')">كل المعروض</button>
+    <button class="sub-btn" onclick="filterSub('خزانات')">خزانات وفلاتر</button>
+    <button class="sub-btn" onclick="filterSub('ملابس')">ملابس</button>
+    <button class="sub-btn" onclick="filterSub('عقارات')">عقارات</button>
+    <button class="sub-btn" onclick="filterSub('سوبر ماركت')">سوبر ماركت</button>
+  </div>
 
-<input id="searchBox" class="search" placeholder="🔍 ابحث عن منتج">
-
-<h2 id="categoryTitle"></h2>
-<div id="productsList" class="cards"></div>
+  <div class="products-grid" id="productsBox"></div>
 </div>
 
 <script>
-const API_URL="https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-const category=new URLSearchParams(location.search).get("cat")||"";
-document.getElementById("categoryTitle").innerText="قسم: "+category;
+const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+const urlParams = new URLSearchParams(window.location.search);
+const currentCat = urlParams.get('cat') || "عام";
 
-let allProducts=[];
+document.getElementById("catTitle").innerText = "قسم: " + currentCat;
 
-function renderProducts(list){
-const box=document.getElementById("productsList");
-if(!list.length){box.innerHTML="<p>لا توجد منتجات</p>";return;}
-box.innerHTML="";
-list.forEach(p=>{
-const phone=(p.whatsapp||"201150402031").replace(/\D/g,'');
-box.innerHTML+=`
-<div class="card">
-<img src="${p.image||'https://via.placeholder.com/400x250'}">
-<h3>${p.name||''}</h3>
-<p>${p.description||''}</p>
-<div class="price">${p.price||0} جنيه</div>
-<a href="#" class="btn cart" onclick="addToCart('${(p.name||'').replace(/'/g,'')}','${p.price||0}','${p.image||''}')">🛒 إضافة للسلة</a>
-<a target="_blank" class="btn wa" href="https://wa.me/${phone}?text=${encodeURIComponent('أريد طلب المنتج: '+(p.name||''))}">📲 طلب واتساب</a>
-</div>`;
-});
+let allFetchedProducts = [];
+
+function loadProducts() {
+  const pBox = document.getElementById("productsBox");
+  pBox.innerHTML = "<div style='text-align:center; width:100%; grid-column: 1/-1;'>🔄 جاري تحميل المنتجات المتاحة حياً...</div>";
+  
+  // نطلب المنتجات بشكل صحيح مع إرسال باراميتر الفئة أو المحافظة
+  fetch(API_URL + "?action=merchantProducts&category=" + encodeURIComponent(currentCat))
+  .then(res => res.json())
+  .then(data => {
+    if (data && data.success && data.products) {
+      allFetchedProducts = data.products;
+      renderProducts(allFetchedProducts);
+    } else {
+      // محاولة إنقاذ ثانية إذا تم استخدام كود المنتجات العامة
+      fetch(API_URL + "?action=getMerchantProducts")
+      .then(res => res.json())
+      .then(d2 => {
+         if(d2 && d2.products) {
+           allFetchedProducts = d2.products.filter(p => p.category === currentCat || p.description.includes(currentCat));
+           renderProducts(allFetchedProducts);
+         } else {
+           showError();
+         }
+      }).catch(() => showError());
+    }
+  })
+  .catch(() => showError());
 }
 
-function addToCart(name,price,image){
-let cart=JSON.parse(localStorage.getItem('cart')||'[]');
-cart.push({name,price,image});
-localStorage.setItem('cart',JSON.stringify(cart));
-alert('تمت الإضافة للسلة');
+function renderProducts(prods) {
+  const pBox = document.getElementById("productsBox");
+  if(prods.length === 0) {
+    pBox.innerHTML = "<div class='error-msg' style='grid-column:1/-1; background:#fff3cd; color:#856404;'>🏪 لا توجد منتجات معروضة حالياً في هذه الفئة أو المحافظة. كن أول تاجر وأضف منتجك!</div>";
+    return;
+  }
+  
+  pBox.innerHTML = prods.map(p => `
+    <div class="prod-card">
+      <img src="${p.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
+      <div class="prod-title">${p.name}</div>
+      <div class="prod-price">${p.price} جنيه</div>
+      <p style="font-size:13px; color:#666; height:36px; overflow:hidden;">${p.description || ''}</p>
+      <a class="order-btn" href="https://wa.me/20${p.whatsapp || '1150402031'}?text=${encodeURIComponent('أرغب في طلب منتج: ' + p.name)}" target="_blank">
+        <i class="fab fa-whatsapp"></i> اطلب الآن عبر واتساب
+      </a>
+    </div>
+  `).join('');
 }
 
-async function loadData(){
-try{
-const r1=await fetch(API_URL+"?action=products&category="+encodeURIComponent(category));
-const d1=await r1.json();
+function filterSub(keyword) {
+  // إلغاء تفعيل الأزرار السابقة وتفعيل الحالي
+  const btns = document.querySelectorAll(".sub-btn");
+  btns.forEach(b => b.classList.remove("active"));
+  event.target.classList.add("active");
 
-const r2=await fetch(API_URL+"?action=getMerchantProducts&category="+encodeURIComponent(category));
-const d2=await r2.json();
-
-const products=(d1.products||d1||[]).map(x=>({
-name:x.name,description:x.description,price:x.price,image:x.image,whatsapp:"201150402031"
-}));
-
-const merchants=(d2.products||[]);
-
-allProducts=[...products,...merchants];
-renderProducts(allProducts);
-}catch(e){
-document.getElementById("productsList").innerHTML="❌ خطأ في تحميل البيانات";
-}
+  if(keyword === 'all') {
+    renderProducts(allFetchedProducts);
+  } else {
+    const filtered = allFetchedProducts.filter(p => p.name.includes(keyword) || p.description.includes(keyword) || p.category.includes(keyword));
+    renderProducts(filtered);
+  }
 }
 
-document.getElementById("searchBox").addEventListener("input",e=>{
-const q=e.target.value.trim().toLowerCase();
-renderProducts(allProducts.filter(p=>(p.name||'').toLowerCase().includes(q)));
-});
+function showError() {
+  document.getElementById("productsBox").innerHTML = "<div class='error-msg' style='grid-column:1/-1;'>❌ عذراً، لم نتمكن من الاتصال بقاعدة البيانات حلياً أو القسم فارغ.</div>";
+}
 
-loadData();
+window.onload = loadProducts;
 </script>
 </body>
 </html>
