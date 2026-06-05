@@ -4,18 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة عملاء Future Tank</title>
-    <link rel="stylesheet" href="client-portal.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
         body { font-family: Tahoma; background: #f0f4f8; margin: 0; padding: 0; direction: rtl; text-align: right; }
         .portal-container { max-width: 650px; margin: 30px auto; background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .search-section { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-section input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; text-align: center; }
         .search-section button { background: #0b6fc2; color: #fff; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .data-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #f0f4f8; font-size: 15px; }
+        .data-row { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid #f0f4f8; font-size: 15px; }
         .data-row span:first-child { color: #666; font-weight: bold; }
         .data-row span:last-child { color: #222; font-weight: bold; }
         .days-box { background: #e3f2fd; color: #0b6fc2; text-align: center; padding: 15px; border-radius: 10px; margin-top: 15px; font-size: 18px; font-weight: bold; }
-        .renew-btn { display: block; background: #25D366; color: #fff; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; }
+        .pay-links { background: #fff8e1; border: 1px dashed #ffb300; border-radius: 12px; padding: 15px; margin-top: 15px; text-align: center; }
+        .pay-grid { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
+        .pay-btn { padding: 10px 15px; border-radius: 8px; text-decoration: none; color: #fff; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; gap: 5px; }
+        .instapay { background: #8e24aa; }
+        .vodafone { background: #e53935; }
+        .renew-btn { display: block; background: #25D366; color: #fff; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; font-size: 16px; }
     </style>
 </head>
 <body>
@@ -42,7 +47,6 @@
         <div class="data-row"><span>⏱️ آخر زيارة صيانة:</span><span id="last">—</span></div>
         <div class="data-row"><span>📅 الزيارة القادمة المقررة:</span><span id="next">—</span></div>
         
-        <!-- الحقول التفصيلية الجديدة المسحوبة بالكامل -->
         <div class="data-row"><span>💳 نوع الاشتراك:</span><span id="sub_type">—</span></div>
         <div class="data-row"><span>💰 حالة الدفع الحالية:</span><span id="pay_status">—</span></div>
         <div class="data-row"><span>🧾 رقم العقد الرسمي:</span><span id="contract_no">—</span></div>
@@ -53,10 +57,19 @@
         <div class="data-row"><span>👤 حالة حساب العميل:</span><span id="account_status">—</span></div>
 
         <div class="days-box">
-            ⏳ متبقي على نهاية العقد: <span id="remaining">0</span> يوم
+            ⏳ متبقي على نهاية العقد: <span id="remaining">0</span> يوم متبقي
         </div>
 
-        <a class="renew-btn" href="#" target="_blank">🔁 تجديد التعاقد الفوري عبر واتساب</a>
+        <!-- 💳 روابط الدفع المباشرة الفورية التي كانت مختفية -->
+        <div class="pay-links">
+            <strong style="color: #b78103;"><i class="fa fa-credit-card"></i> روابط الدفع المباشرة الفورية</strong>
+            <div class="pay-grid">
+                <a href="https://instapay.me/" target="_blank" class="pay-btn instapay">📱 إنستا باي مباشر</a>
+                <a href="tel:*710#" class="pay-btn vodafone">📲 اتصالات كاش مباشر</a>
+            </div>
+        </div>
+
+        <a class="renew-btn" id="whatsappRenewBtn" href="#" target="_blank">🔁 تجديد التعاقد الفوري عبر واتساب</a>
     </div>
 </div>
 
