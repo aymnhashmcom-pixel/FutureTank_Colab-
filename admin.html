@@ -1,172 +1,150 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>⚙️ لوحة التحكم | Future Tank</title>
-<link rel="stylesheet" href="style.css">
-<style>
-.orders-box{ margin-top:40px; background:#fff; padding:20px; border-radius:20px; box-shadow:0 5px 20px rgba(0,0,0,.08); }
-.order-card{ background:#f7fbff; padding:15px; border-radius:15px; margin-top:15px; border:1px solid #dbefff; }
-.order-card h4{ margin:0 0 10px; color:#0b6fc2; }
-.order-item{ margin-top:8px; line-height:1.8; }
-.status-select{ width:100%; padding:12px; border-radius:10px; margin-top:15px; border:1px solid #ccc; }
-.save-btn{ margin-top:10px; background:#28a745; color:#fff; border:none; padding:12px; border-radius:10px; cursor:pointer; width:100%; font-size:15px; font-weight:bold; }
-.save-btn:hover{ opacity:.9; }
-input, select{ width:100%; padding:12px; margin-top:10px; border-radius:10px; border:1px solid #ccc; box-sizing:border-box; }
-button{ padding:12px 20px; border:none; border-radius:10px; cursor:pointer; font-weight:bold; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم المتقدمة | Future Tank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <style>
+        body { margin:0; padding:0; font-family:Tahoma; background:#f0f4f8; color:#333; }
+        header { background:#0b6fc2; color:#fff; padding:20px; text-align:center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        .container { padding:20px; max-width:1000px; margin:auto; }
+        .box { background:#fff; padding:25px; border-radius:16px; margin-bottom:25px; box-shadow:0 4px 15px rgba(0,0,0,.05); }
+        h2 { margin-top:0; color:#0b6fc2; border-bottom: 2px solid #f0f4f8; padding-bottom: 10px; }
+        label { font-weight: bold; display: block; margin-top: 12px; color: #555; }
+        input, textarea, select { width:100%; padding:12px; margin-top:6px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; font-size:15px; }
+        button { width:100%; padding:14px; border:none; border-radius:10px; margin-top:15px; font-size:16px; cursor:pointer; font-weight:bold; transition: 0.3s; }
+        .add-btn { background:#0b6fc2; color:#fff; }
+        .add-btn:hover { background:#095697; }
+        .order-card { background:#f9fbfd; border:1px solid #d0e1f3; padding:15px; border-radius:12px; margin-bottom:12px; }
+        .status-badge { background:#ff9800; color:#fff; padding:3px 8px; border-radius:4px; font-size:13px; font-weight:bold; }
+        .loading-text { text-align:center; color:#666; font-weight:bold; padding:20px; }
+    </style>
 </head>
 <body>
-<header class="main-header">
-  <h1>⚙️ لوحة التحكم</h1>
-  <p>إدارة الطلبات والمنتجات المتقدمة</p>
+
+<header>
+    <h1>⚙️ لوحة تحكم الإدارة العامة</h1>
+    <p>نظام إدارة المنتجات والطلبات النشطة لـ Future Tank</p>
 </header>
-<main class="container">
-  <div id="loginBox" style="text-align:center;">
-    <h3>🔐 تسجيل الدخول للإدارة</h3>
-    <input type="password" id="password" placeholder="كلمة السر">
-    <br><br>
-    <button onclick="login()">دخول</button>
-    <p id="loginMsg" style="color:red;"></p>
-  </div>
 
-  <div id="adminPanel" style="display:none;">
-    <h3>➕ إضافة منتج جديد للقسم</h3>
-    <input id="name" placeholder="اسم المنتج">
-    <input id="desc" placeholder="وصف المنتج">
-    <select id="category">
-      <option value="خزانات المياه">خزانات المياه</option>
-      <option value="ماركت هرم سيتي">ماركت هرم سيتي وحدائق أكتوبر</option>
-      <option value="ملابس">ملابس</option>
-      <option value="عقارات">عقارات</option>
-      <option value="سيارات">سيارات</option>
-      <option value="خدمات">خدمات متنوعة</option>
-    </select>
-    <input id="price" placeholder="السعر">
-    <input id="image" placeholder="رابط الصورة">
-    <br><br>
-    <button onclick="addProduct()">💾 حفظ المنتج داخل القسم</button>
-    <p id="status"></p>
+<div class="container">
 
-    <div class="orders-box">
-      <h2>📦 إدارة الطلبات النشطة</h2>
-      <div id="ordersList">⏳ جاري تحميل الطلبات...</div>
+    <!-- قسم إضافة المنتج المطور بالمحافظات والأقسام -->
+    <div class="box">
+        <h2>➕ إضافة منتج جديد للأسواق والمحافظات</h2>
+        
+        <label>اسم المنتج / الخدمة</label>
+        <input type="text" id="pName" placeholder="مثال: فلتر مياه 7 مراحل، بنطلون جينز...">
+
+        <label>الوصف التفصيلي</label>
+        <textarea id="pDesc" placeholder="اكتب تفاصيل ومميزات المنتج هنا..."></textarea>
+
+        <label>حدد المحافظة المستهدفة</label>
+        <select id="pCity">
+            <option value="القاهرة">القاهرة</option>
+            <option value="الجيزة">الجيزة</option>
+            <option value="الإسكندرية">الإسكندرية</option>
+            <option value="الدقهلية">الدقهلية</option>
+            <option value="الغربية">الغربية</option>
+            <option value="القليوبية">القليوبية</option>
+            <option value="حدائق أكتوبر">حدائق أكتوبر (منطقة خاصة)</option>
+            <option value="الهرم">الهرم (منطقة خاصة)</option>
+        </select>
+
+        <label>حدد القسم الداخلي للمنتج</label>
+        <select id="pCat">
+            <option value="خزانات المياه">خزانات مياه ونقاء (قسم خاص)</option>
+            <option value="ملابس">ملابس وأزياء</option>
+            <option value="عقارات">عقارات وأراضي</option>
+            <option value="سيارات">سيارات ومركبات</option>
+            <option value="خدمات متنوعة">خدمات وتجارة عامة</option>
+        </select>
+
+        <label>السعر (بالجنيه المصري)</label>
+        <input type="number" id="pPrice" placeholder="مثال: 450">
+
+        <label>رقم واتساب المسؤول/التاجر (بدون كود الدولة)</label>
+        <input type="text" id="pWhatsapp" placeholder="مثال: 01150402031">
+
+        <label>رابط صورة المنتج (URL)</label>
+        <input type="text" id="pImage" placeholder="ضع رابط الصورة المباشر هنا">
+
+        <button class="add-btn" onclick="saveProductToAdmin()">💾 حفظ وتثبيت المنتج بالقسم والمحافظة</button>
     </div>
-  </div>
-</main>
-<footer class="main-footer">© Future Tank — لوحة التحكم</footer>
+
+    <!-- قسم إدارة الطلبات النشطة المصلح -->
+    <div class="box">
+        <h2>📦 إدارة الطلبات النشطة الحالية</h2>
+        <div id="adminOrdersBox" class="loading-text">🔄 جاري سحب الطلبات النشطة من سجلات الشيت...</div>
+    </div>
+
+</div>
 
 <script>
-const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-let adminPassword="";
+const ADMIN_API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-function login(){
-  const pass = document.getElementById("password").value.trim();
-  fetch(API_URL + "?check=1&password=" + encodeURIComponent(pass))
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.success){
-      adminPassword = pass;
-      document.getElementById("loginBox").style.display="none";
-      document.getElementById("adminPanel").style.display="block";
-      loadOrders();
-    }else{
-      document.getElementById("loginMsg").innerText = "❌ كلمة السر غير صحيحة";
-    }
-  });
-}
-
-function addProduct(){
-  const product={
-    action:"addProduct",
-    password:adminPassword,
-    name: document.getElementById("name").value,
-    description: document.getElementById("desc").value,
-    category: document.getElementById("category").value,
-    price: document.getElementById("price").value,
-    image: document.getElementById("image").value
-  };
-  fetch(API_URL,{
-    method:"POST",
-    body:JSON.stringify(product)
-  })
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.success){
-      document.getElementById("status").innerHTML = "✅ تم إضافة المنتج بنجاح بالقسم الصحيح";
-      document.getElementById("name").value = "";
-      document.getElementById("desc").value = "";
-      document.getElementById("price").value = "";
-      document.getElementById("image").value = "";
-    }else{
-      document.getElementById("status").innerHTML = "❌ حدث خطأ";
-    }
-  });
-}
-
-function loadOrders(){
-  fetch(API_URL + "?type=allOrders")
-  .then(res=>res.json())
-  .then(data=>{
-    const box = document.getElementById("ordersList");
-    box.innerHTML="";
-    if(!data || data.length===0){
-      box.innerHTML="<p>لا توجد طلبات حالياً</p>";
-      return;
-    }
-    data.reverse();
-    data.forEach(order=>{
-      const orderId = String(order.id);
-      box.innerHTML += `
-        <div class="order-card">
-          <h4>📦 طلب #${orderId}</h4>
-          <div class="order-item">👤 ${order.name || "—"}</div>
-          <div class="order-item">📞 ${order.phone || "—"}</div>
-          <div class="order-item">📍 ${order.address || "—"}</div>
-          <div class="order-item">💰 ${order.total || "—"} جنيه</div>
-          <div class="order-item">📦 ${order.items || "—"}</div>
-          <select class="status-select" id="status-${orderId}">
-            <option value="تم استلام الطلب" ${order.status==="تم استلام الطلب"?"selected":""}>🟠 تم استلام الطلب</option>
-            <option value="جاري التجهيز" ${order.status==="جاري التجهيز"?"selected":""}>🔵 جاري التجهيز</option>
-            <option value="الطلب في الطريق" ${order.status==="الطلب في الطريق"?"selected":""}>🟣 الطلب في الطريق</option>
-            <option value="تم تسليم الطلب" ${order.status==="تم تسليم الطلب"?"selected":""}>🟢 تم تسليم الطلب</option>
-            <option value="تم إلغاء الطلب" ${order.status==="تم إلغاء الطلب"?"selected":""}>🔴 تم إلغاء الطلب</option>
-          </select>
-          <button class="save-btn" onclick="updateOrderStatus('${orderId}')">💾 حفظ الحالة الجديدة ثابتاً</button>
-        </div>
-      `;
-    });
-  })
-  .catch(err=>{
-    document.getElementById("ordersList").innerHTML = "❌ فشل تحميل الطلبات";
-  });
-}
-
-function updateOrderStatus(id){
-  const status = document.getElementById(`status-${id}`).value;
-  fetch(API_URL,{
-    method:"POST",
-    body:JSON.stringify({
-      action:"updateOrderStatus",
-      password:adminPassword,
-      id:id,
-      status:status
+// جلب الطلبات النشطة فور تحميل الصفحة وتجنب رسالة الفشل القديمة
+function fetchAdminOrders() {
+    const box = document.getElementById("adminOrdersBox");
+    fetch(`${ADMIN_API}?action=getOrders`)
+    .then(res => res.json())
+    .then(data => {
+        if(!data || data.length === 0) {
+            box.innerHTML = "<p style='text-align:center; color:#888;'>📭 لا توجد طلبات نشطة مسجلة حالياً.</p>";
+            return;
+        }
+        box.innerHTML = data.map(o => `
+            <div class="order-card">
+                <div style="display:flex; justify-content:between; align-items:center; margin-bottom:8px;">
+                    <strong>رقم الطلب: ${o.id}</strong>
+                    <span class="status-badge">${o.status}</span>
+                </div>
+                <p style="margin:4px 0;">👤 <b>العميل:</b> ${o.name} | 📞 <b>الهاتف:</b> ${o.phone}</p>
+                <p style="margin:4px 0;">📍 <b>العنوان:</b> ${o.address}</p>
+                <p style="margin:4px 0; color:#0b6fc2;">📦 <b>البيان:</b> ${o.items}</p>
+                <p style="margin:4px 0; font-weight:bold; color:#ff9800;">💰 الإجمالي: ${o.total} جنيه</p>
+            </div>
+        `).join('');
     })
-  })
-  .then(res=>res.json())
-  .then(data=>{
-    if(data.success){
-      alert("✅ تم تحديث الحالة وتثبيتها في الشيت بنجاح");
-      loadOrders();
-    }else{
-      alert("❌ فشل تحديث الحالة");
-    }
-  })
-  .catch(err=>{
-    alert("❌ حدث خطأ اتصال");
-  });
+    .catch(() => {
+        box.innerHTML = "<p style='color:#c62828; text-align:center;'>❌ حدث خطأ أثناء تحميل الطلبات، يرجى التحقق من اتصال السيرفر.</p>";
+    });
 }
+
+function saveProductToAdmin() {
+    const name = document.getElementById("pName").value.trim();
+    const desc = document.getElementById("pDesc").value.trim();
+    const city = document.getElementById("pCity").value;
+    const cat = document.getElementById("pCat").value;
+    const price = document.getElementById("pPrice").value.trim();
+    const whatsapp = document.getElementById("pWhatsapp").value.trim();
+    const image = document.getElementById("pImage").value.trim();
+
+    if(!name || !desc || !price || !whatsapp || !image) {
+        alert("⚠️ يرجى تعبئة كافة الحقول المطلوبة لضمان صحة التوزيع المحلى!");
+        return;
+    }
+
+    const payload = { action: "saveAdminProduct", name, description: desc, city, category: cat, price, whatsapp, image };
+
+    fetch(ADMIN_API, {
+        method: "POST",
+        body: JSON.stringify(payload)
+    })
+    .then(res => res.json())
+    .then(data => {
+        if(data.success) {
+            alert("✅ تم بنجاح إضافة المنتج وربطه بمحافظة ("+city+") وقسم ("+cat+")!");
+            location.reload();
+        } else {
+            alert("❌ فشل في حفظ المنتج.");
+        }
+    })
+    .catch(() => alert("❌ حدث خطأ في الاتصال بالشبكة."));
+}
+
+window.onload = fetchAdminOrders;
 </script>
 </body>
 </html>
