@@ -1,21 +1,95 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منتجات نقاء الماء وخزانات الشرب | Future Tank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <style>
+        body { background:#f4f8fc; font-family:Tahoma; margin:0; padding:0; direction: rtl; }
+        .nav-bar { background:#0b6fc2; padding:15px; display:flex; justify-content:center; gap:25px; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+        .nav-bar a { color:#fff; text-decoration:none; font-weight:bold; font-size:16px; padding:6px 12px; border-radius:6px; transition:0.3s; }
+        .nav-bar a:hover { background:rgba(255,255,255,0.2); }
+        .header-box { text-align:center; padding:35px; background:linear-gradient(135deg, #0b6fc2, #0288d1); color:#fff; }
+        .container { padding:20px; max-width:1200px; margin:auto; }
+        .products-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:25px; margin-top:20px; }
+        .prod-card { background:#fff; border-radius:18px; padding:20px; box-shadow:0 4px 15px rgba(0,0,0,0.06); text-align:center; border:1px solid #eef2f6; transition: 0.3s; }
+        .prod-card:hover { transform: translateY(-5px); }
+        .prod-card img { width:100%; height:200px; object-fit:cover; border-radius:14px; }
+        .prod-title { font-size:19px; font-weight:bold; margin:15px 0 8px; color:#111; }
+        .prod-price { color:#ff9800; font-size:18px; font-weight:bold; margin-bottom:12px; }
+        .prod-desc { color:#666; font-size:14px; line-height:1.6; height:48px; overflow:hidden; margin-bottom:15px; }
+        .order-btn { display:block; background:#25D366; color:#fff; padding:12px; border-radius:10px; text-decoration:none; font-weight:bold; font-size:15px; }
+        .error-msg { background:#fff3cd; color:#856404; padding:20px; border-radius:15px; text-align:center; font-weight:bold; width:100%; grid-column:1/-1; }
+    </style>
+</head>
+<body>
+
+<div class="nav-bar">
+    <a href="index.html">الرئيسية</a>
+    <a href="shop.html">المحافظات</a>
+    <a href="services.html">الخدمات</a>
+    <a href="shop-water.html" style="background:rgba(255,255,255,0.3)">💧 نقاء الماء</a>
+</div>
+
+<div class="header-box">
+    <h2>💧 منتجات وعروض نقاء مياه الشرب</h2>
+    <p>تصفح واطلب أفضل أنواع الخزانات، الفلاتر، وقطع الغيار المعتمدة مباشرة</p>
+</div>
+
+<div class="container">
+    <div class="products-grid" id="products">
+        <div style="text-align:center; width:100%; grid-column:1/-1;">🔄 جاري سحب معروضات الخزانات والفلاتر النشطة...</div>
+    </div>
+</div>
+
+<script>
+const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+
 async function loadAllWaterProducts() {
   const box = document.getElementById("products");
   try {
-    // جلب المنتجات التي تصنيفها "خزانات وفلاتر" من أي مكان
-    const res = await fetch(`${API_URL}?action=getProductsByLocation&city=Future Tank&subCat=خزانات وفلاتر`);
+    // 1. محاولة جلب المنتجات الموجهة لقسم خزانات المياه
+    const res = await fetch(`${API_URL}?action=getProductsByLocation&city=${encodeURIComponent("حدائق أكتوبر")}&subCat=${encodeURIComponent("خزانات المياه")}`);
     const data = await res.json();
     
     let items = data.products || [];
     
+    // 2. إذا كان الرد فارغاً من تجار حدائق أكتوبر، نقوم بسحب معروضات الجيزة العامة لتغطية الصفحة
     if(items.length === 0) {
-       // محاولة جلب المنتجات العامة إذا لم يتوفر تجار
-       const resGen = await fetch(`${API_URL}?type=products`);
+       const resGen = await fetch(`${API_URL}?action=getProductsByLocation&city=${encodeURIComponent("الجيزة")}&subCat=الكل`);
        const dataGen = await resGen.json();
-       items = dataGen.filter(p => p.category.includes("خزانات"));
+       items = (dataGen.products || []).filter(p => p.category === "خزانات المياه" || p.name.includes("خزان") || p.name.includes("فلتر"));
     }
 
     renderWaterItems(items);
   } catch(e) {
-    box.innerHTML = "❌ فشل جلب معروضات المياه";
+    box.innerHTML = "<div class='error-msg'>❌ فشل جلب معروضات المياه، يرجى التحقق من اتصال السيرفر.</div>";
   }
 }
+
+function renderWaterItems(prods) {
+  const box = document.getElementById("products");
+  if(!prods || prods.length === 0) {
+    box.innerHTML = "<div class='error-msg'>🏪 لا توجد عروض أو خزانات مضافة حالياً في هذا القسم.</div>";
+    return;
+  }
+  
+  box.innerHTML = prods.map(p => `
+    <div class="prod-card">
+      <img src="${p.image || 'https://via.placeholder.com/300'}" onerror="this.src='https://via.placeholder.com/300'">
+      <div class="prod-title">${p.name}</div>
+      <div class="prod-price">${p.price} جنيه</div>
+      <div class="prod-desc">${p.description || 'لا يوجد وصف تفصيلي متوفر للمنتج حالياً.'}</div>
+      <a class="order-btn" href="https://wa.me/${p.whatsapp.startsWith('0') ? '2' + p.whatsapp : '20' + p.whatsapp}?text=${encodeURIComponent('مرحباً، أرغب في شراء وتفقد: ' + p.name + ' المعروض بصفحة نقاء الماء.')}" target="_blank">
+        <i class="fab fa-whatsapp"></i> اطلب عبر واتساب الفوري
+      </a>
+    </div>
+  `).join('');
+}
+
+// تشغيل جلب المنتجات فور تحميل الصفحة بالكامل
+window.onload = loadAllWaterProducts;
+</script>
+</body>
+</html>
