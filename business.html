@@ -1,324 +1,79 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>
-رجال الأعمال | Future Tank
-</title>
-
-<style>
-
-body{
-margin:0;
-padding:0;
-font-family:Tahoma;
-background:#f4f9ff;
-color:#222;
-}
-
-header{
-background:#0b6fc2;
-color:#fff;
-padding:25px;
-text-align:center;
-}
-
-.container{
-padding:20px;
-max-width:700px;
-margin:auto;
-}
-
-.box{
-background:#fff;
-padding:20px;
-border-radius:20px;
-margin-bottom:20px;
-box-shadow:0 3px 12px rgba(0,0,0,.08);
-}
-
-h2{
-margin-top:0;
-color:#0b6fc2;
-}
-
-input,textarea,select{
-
-width:100%;
-padding:14px;
-margin-top:10px;
-border-radius:12px;
-border:1px solid #ccc;
-box-sizing:border-box;
-font-size:16px;
-
-}
-
-button{
-
-width:100%;
-padding:15px;
-border:none;
-border-radius:14px;
-margin-top:15px;
-font-size:17px;
-cursor:pointer;
-font-weight:bold;
-
-}
-
-.main-btn{
-background:#0b6fc2;
-color:#fff;
-}
-
-.whatsapp-btn{
-background:#25D366;
-color:#fff;
-}
-
-.insta-btn{
-background:#6a1b9a;
-color:#fff;
-}
-
-.cash-btn{
-background:#ff9800;
-color:#fff;
-}
-
-.notice{
-background:#e8f7ff;
-padding:15px;
-border-radius:15px;
-line-height:2;
-margin-bottom:20px;
-}
-
-.plan{
-background:#f8fbff;
-padding:15px;
-border-radius:14px;
-margin-top:15px;
-border:1px solid #d8ebff;
-}
-
-.success{
-background:#e8fff1;
-padding:15px;
-border-radius:15px;
-margin-top:15px;
-display:none;
-}
-
-</style>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابات الشركاء ورجال الأعمال | Future Tank</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <style>
+        body { font-family: Tahoma; background: #f5f9ff; margin:0; padding:0; direction: rtl; }
+        .nav-bar { background:#0b6fc2; padding:15px; display:flex; justify-content:center; gap:20px; }
+        .nav-bar a { color:#fff; text-decoration:none; font-weight:bold; }
+        .container { max-width:800px; margin:30px auto; padding:20px; }
+        .box { background:#fff; padding:20px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.06); margin-bottom:25px; }
+        h2, h3 { color:#0b6fc2; margin-top:0; }
+        label { font-weight:bold; display:block; margin-top:12px; }
+        input, textarea { width:100%; padding:12px; margin-top:5px; border:1px solid #ccc; border-radius:8px; box-sizing:border-box; }
+        .btn-submit { background:#0b6fc2; color:#fff; border:none; padding:12px; border-radius:8px; font-weight:bold; cursor:pointer; width:100%; margin-top:15px; font-size:16px; }
+        .pricing-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:15px; margin-top:15px; }
+        .price-card { background:#fff8e1; border:2px solid #ffb300; border-radius:12px; padding:15px; text-align:center; }
+        .price { font-size:22px; color:#ff9800; font-weight:bold; margin:10px 0; }
+    </style>
 </head>
-
 <body>
 
-<header>
-
-<h1>
-💼 رجال الأعمال
-</h1>
-
-<p>
-لوحة خدمات التجار والشركات
-</p>
-
-</header>
+<div class="nav-bar">
+    <a href="index.html">الرئيسية</a>
+    <a href="merchant-dashboard.html">💼 لوحة تحكم التاجر</a>
+</div>
 
 <div class="container">
+    <div class="box">
+        <h2>💼 انضم لشركاء وتجار منصة Future Tank</h2>
+        <p>قم بملء طلبك المجاني لعرض وتثبيت عروضك وسلعك في محافظتك فوراً والوصول لآلاف المشترين.</p>
+        
+        <label>اسم التاجر أو الشركة</label>
+        <input type="text" id="mName" placeholder="مثال: شركة النقاء للمقاولات والخزانات">
+        
+        <label>رقم هاتف الواتساب الفعال</label>
+        <input type="text" id="mPhone" placeholder="01158555708">
+        
+        <label>تفاصيل النشاط التجاري والمحافظة</label>
+        <textarea id="mDesc" style="width:100%; height:80px; padding:12px;" placeholder="اكتب السلع أو النشاط الذي ترغب في ترويجه..."></textarea>
+        
+        <button class="btn-submit" onclick="sendMerchantRequest()">🚀 إرسال طلب الانضمام والتفعيل الفوري</button>
+    </div>
 
-<div class="notice">
-
-✅ أول معاملة مجانية بالكامل للتجربة  
-✅ بعد ذلك يتم تفعيل الاشتراك  
-✅ يتم التواصل مباشرة مع الإدارة والتاجر عبر واتساب
-
-</div>
-
-<div class="box">
-
-<h2>
-بيانات التاجر
-</h2>
-
-<input
-type="text"
-id="merchantName"
-placeholder="اسم التاجر أو الشركة">
-
-<input
-type="text"
-id="merchantPhone"
-placeholder="رقم الهاتف">
-
-<textarea
-id="merchantDetails"
-placeholder="اكتب تفاصيل النشاط أو الطلب">
-</textarea>
-
-<button
-class="main-btn"
-onclick="sendBusinessRequest()">
-
-🚀 إرسال الطلب المجاني
-
-</button>
-
-<div
-class="success"
-id="successBox">
-
-✅ تم إرسال الطلب بنجاح
-
-</div>
-
-</div>
-
-<div class="box">
-
-<h2>
-الاشتراكات
-</h2>
-
-<div class="plan">
-
-<h3>
-الخطة الأساسية
-</h3>
-
-<p>
-30 يوم — دعم واتساب — ظهور داخل التطبيق
-</p>
-
-<p>
-💰 300 جنيه
-</p>
-
-<a
-href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K"
-target="_blank">
-
-<button class="insta-btn">
-
-💳 الدفع عبر InstaPay
-
-</button>
-
-</a>
-
-<a
-href="https://flous.page.link/bT9z"
-target="_blank">
-
-<button class="cash-btn">
-
-📲 الدفع عبر Etisalat Cash
-
-</button>
-
-</a>
-
-</div>
-
-</div>
-
-<div class="box">
-
-<h2>
-التواصل المباشر
-</h2>
-
-<button
-class="whatsapp-btn"
-onclick="openWhatsapp()">
-
-📞 تواصل واتساب مباشر
-
-</button>
-
-</div>
-
+    <div class="box">
+        <h3>💳 باقات ترقية اشتراكات التجار النشطة</h3>
+        <div class="pricing-grid">
+            <div class="price-card">
+                <h4>الخطة الأساسية الفردية</h4>
+                <p>ظهور كامل بأسواق محافظة واحدة لمدة 30 يوم مع دعم فني</p>
+                <div class="price">300 جنيه / شهرياً</div>
+            </div>
+            <div class="price-card" style="background:#e3f2fd; border-color:#0b6fc2;">
+                <h4>باقة التميز الإقليمي ⭐</h4>
+                <p>ظهور كامل بكافة المحافظات دفعة واحدة لزيادة المبيعات</p>
+                <div class="price">750 جنيه / ربع سنوي</div>
+            </div>
+        </div>
+        <p style="text-align:center; margin-top:15px; font-weight:bold; color:#666;">
+            🏧 طرق الدفع الفورية المتاحة: InstaPay (على حساب المنصة المعتمد) أو اتصالات كاش
+        </p>
+    </div>
 </div>
 
 <script>
-
-function sendBusinessRequest(){
-
-const name =
-document.getElementById("merchantName").value.trim();
-
-const phone =
-document.getElementById("merchantPhone").value.trim();
-
-const details =
-document.getElementById("merchantDetails").value.trim();
-
-if(name==="" || phone==="" || details===""){
-
-alert("⚠️ برجاء استكمال البيانات");
-
-return;
-
-}
-
-const adminNumber =
-"201150402031";
-
-const text =
-
-"💼 طلب جديد من رجال الأعمال%0A%0A"
-
-+
-
-"👤 الاسم: " + name + "%0A"
-
-+
-
-"📞 الهاتف: " + phone + "%0A"
-
-+
-
-"📝 التفاصيل: " + details;
-
-window.open(
-
-"https://wa.me/" + adminNumber + "?text=" + text,
-
-"_blank"
-
-);
-
-document.getElementById(
-"successBox"
-).style.display="block";
-
-}
-
-function openWhatsapp(){
-
-const msg =
-
-"السلام عليكم، أريد الاشتراك في نظام رجال الأعمال داخل تطبيق Future Tank";
-
-window.open(
-
-"https://wa.me/201150402031?text=" + encodeURIComponent(msg),
-
-"_blank"
-
-);
-
-}
-
+    function sendMerchantRequest() {
+        const name = document.getElementById("mName").value.trim();
+        const phone = document.getElementById("mPhone").value.trim();
+        const desc = document.getElementById("mDesc").value.trim();
+        if(!name || !phone) { alert("برجاء إدخال اسمك ورقم الهاتف لإرسال الطلب"); return; }
+        
+        const msg = `💼 طلب تفعيل حساب تاجر جديد بالمنصة:\n👤 الاسم: ${name}\n📞 هاتف التواصل: ${phone}\n📝 تفاصيل النشاط: ${desc}`;
+        window.open("https://wa.me/201150402031?text=" + encodeURIComponent(msg), "_blank");
+    }
 </script>
-
 </body>
 </html>
