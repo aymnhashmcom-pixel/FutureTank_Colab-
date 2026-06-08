@@ -2,13 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>تصفح المنتجات والعروض بالمحافظات</title>
+<title>تصفح المنتجات والعروض بالمحافظات | Future Tank</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
-body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; }
-.nav-bar { background:#0b6fc2; padding:12px; display:flex; justify-content:space-around; align-items:center; }
-.nav-bar a { color:#fff; text-decoration:none; font-weight:bold; }
+body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; direction: rtl; }
+.nav-bar { background:#0b6fc2; padding:15px; display:flex; justify-content:center; gap:25px; align-items:center; box-shadow:0 2px 8px rgba(0,0,0,0.1); }
+.nav-bar a { color:#fff; text-decoration:none; font-weight:bold; font-size:16px; padding:6px 12px; border-radius:6px; transition:0.3s; }
+.nav-bar a:hover { background:rgba(255,255,255,0.2); }
 .header-box { background:linear-gradient(135deg,#0b6fc2,#4fc3f7); padding:25px; text-align:center; color:#fff; }
 .container { padding:20px; max-width:1200px; margin:auto; }
 .sub-cats { display:flex; gap:10px; overflow-x:auto; padding:10px 0; margin-bottom:20px; }
@@ -21,6 +22,11 @@ body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; }
 .prod-price { color:#ff9800; font-size:17px; font-weight:bold; margin-bottom:10px; }
 .order-btn { display:block; background:#25D366; color:#fff; padding:10px; border-radius:10px; text-decoration:none; font-weight:bold; margin-top:10px; }
 .error-msg { background:#ffebee; color:#c62828; padding:20px; border-radius:15px; text-align:center; font-weight:bold; }
+/* تصميم كارت التقييم التفاعلي المدمج */
+.rate-popup { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); display:none; justify-content:center; align-items:center; z-index:9999; }
+.rate-card { background:#fff; padding:25px; border-radius:20px; width:90%; max-width:380px; text-align:center; box-shadow:0 5px 25px rgba(0,0,0,0.2); }
+.stars-row { display:flex; gap:10px; justify-content:center; margin:15px 0; font-size:30px; color:#ffb300; cursor:pointer; }
+.close-rate { background:#eee; border:none; padding:8px 15px; border-radius:8px; cursor:pointer; font-weight:bold; margin-top:10px; }
 </style>
 </head>
 <body>
@@ -29,6 +35,7 @@ body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; }
   <a href="index.html">الرئيسية</a>
   <a href="shop.html">المحافظات</a>
   <a href="services.html">الخدمات</a>
+  <a href="#" id="rateAppBtn"><i class="fa fa-star"></i> تقييم المنصة</a>
 </div>
 
 <div class="header-box">
@@ -42,17 +49,34 @@ body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; }
     <button class="sub-btn" onclick="filterSub('ملابس')">ملابس</button>
     <button class="sub-btn" onclick="filterSub('سيارات')">سيارات</button>
     <button class="sub-btn" onclick="filterSub('عقارات')">عقارات</button>
+    <button class="sub-btn" onclick="filterSub('خدمات متنوعة')">خدمات متنوعة</button>
   </div>
 
   <div class="products-grid" id="productsBox"></div>
 </div>
 
+<div class="rate-popup" id="ratePopup">
+    <div class="rate-card">
+        <h3 style="color:#0b6fc2; margin-top:0;">⭐ قيم تجربتك معنا</h3>
+        <p style="color:#666; font-size:14px;">رأيك يهمنا لمساعدتنا في تحسين خدمات وتجارة المنصة</p>
+        <div class="stars-row">
+            <span onclick="submitRate(1)">★</span>
+            <span onclick="submitRate(2)">★</span>
+            <span onclick="submitRate(3)">★</span>
+            <span onclick="submitRate(4)">★</span>
+            <span onclick="submitRate(5)">★</span>
+        </div>
+        <button class="close-rate" onclick="closeRatePopup()">إغلاق</button>
+    </div>
+</div>
+
+<script src="main.js"></script>
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 const urlParams = new URLSearchParams(window.location.search);
 const currentCat = urlParams.get('cat') || "القاهرة";
 
-// التوجيه الفوري الذكي لمنع تداخل قسم الخزانات مع المحافظات
+// التوجيه الفوري لمنع التداخل مع قسم الخزانات والمحافظات الأخرى
 if(currentCat.includes("خزانات") || currentCat.includes("مياه") || currentCat.includes("نقاء")) {
     window.location.href = "shop-water.html";
 }
@@ -62,7 +86,7 @@ let allFetchedProducts = [];
 
 function loadProducts() {
   const pBox = document.getElementById("productsBox");
-  pBox.innerHTML = "<div style='text-align:center; width:100%; grid-column:1/-1;'>🔄 جاري تحميل منتجات وأسواق " + currentCat + "...</div>";
+  pBox.innerHTML = "<div style='text-align:center; width:100%; grid-column:1/-1;'>🔄 جاري تحميل عروض ومنتجات " + currentCat + "...</div>";
   
   fetch(`${API_URL}?action=getProductsByLocation&city=${encodeURIComponent(currentCat)}&subCat=الكل`)
   .then(res => res.json())
@@ -86,17 +110,23 @@ function renderProducts(prods) {
     return;
   }
   
-  pBox.innerHTML = prods.map(p => `
-    <div class="prod-card">
-      <img src="${p.image || 'https://via.placeholder.com/300'}" onerror="this.src='https://via.placeholder.com/300'">
-      <div class="prod-title">${p.name}</div>
-      <div class="prod-price">${p.price} جنيه</div>
-      <p style="font-size:13px; color:#666; height:36px; overflow:hidden; margin:5px 0;">${p.description || ''}</p>
-      <a class="order-btn" href="https://wa.me/20${p.whatsapp}?text=${encodeURIComponent('مرحباً، أرغب في الاستفسار عن منتجك المعروض في منصة فيوتشر تانك: ' + p.name)}" target="_blank">
-        <i class="fab fa-whatsapp"></i> تواصل مع التاجر
-      </a>
-    </div>
-  `).join('');
+  pBox.innerHTML = prods.map(p => {
+    let finalPhone = String(p.whatsapp).trim();
+    if(finalPhone.startsWith("0")) {
+        finalPhone = finalPhone.substring(1);
+    }
+    return `
+      <div class="prod-card">
+        <img src="${p.image || 'https://via.placeholder.com/300'}" onerror="this.src='https://via.placeholder.com/300'">
+        <div class="prod-title">${p.name}</div>
+        <div class="prod-price">${p.price} جنيه</div>
+        <p style="font-size:13px; color:#666; height:36px; overflow:hidden; margin:5px 0;">${p.description || ''}</p>
+        <a class="order-btn" href="https://wa.me/20${finalPhone}?text=${encodeURIComponent('مرحباً، أرغب في الاستفسار عن منتجك المعروض في منصة فيوتشر تانك: ' + p.name)}" target="_blank">
+          <i class="fab fa-whatsapp"></i> تواصل مع التاجر
+        </a>
+      </div>
+    `;
+  }).join('');
 }
 
 function filterSub(keyword) {
