@@ -12,12 +12,13 @@
             margin: 0;
             padding: 0;
             background: #f5f9ff;
-            font-family: Tahoma;
+            font-family: Tahoma, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             overflow: hidden;
+            direction: rtl;
         }
 
         .login-box {
@@ -68,6 +69,7 @@
             border: 1px solid #ccc;
             font-size: 16px;
             box-sizing: border-box;
+            text-align: right;
         }
 
         .login-btn {
@@ -114,7 +116,7 @@
 <body>
 
     <div class="login-box">
-        <img src="./icon-512.png" class="logo">
+        <img src="./icon-512.png" class="logo" onerror="this.src='https://via.placeholder.com/120'">
         <h1>💼 رجال الأعمال</h1>
         <p>تسجيل دخول التجار والشركات المشتركة</p>
 
@@ -143,6 +145,16 @@
     </div>
 
     <script>
+        // دالة مدمجة لملء البيانات تلقائياً إذا جاءت في الرابط (Query Parameters) لراحة التجار
+        window.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const phoneParam = urlParams.get('phone');
+            const codeParam = urlParams.get('code');
+            
+            if (phoneParam) document.getElementById("merchantPhone").value = phoneParam;
+            if (codeParam) document.getElementById("merchantCode").value = codeParam;
+        });
+
         async function merchantLogin() {
             const phoneField = document.getElementById("merchantPhone");
             const codeField = document.getElementById("merchantCode");
@@ -160,24 +172,25 @@
             loginBtn.disabled = true;
             loginBtn.innerText = "⏳ جاري التحقق من البيانات...";
 
-            // رابط الـ Web App الخاص بك من Google Apps Script
+            // رابط الـ Web App المحدث الخاص بك
             const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
             try {
-                // استخدام صيغة URLSearchParams لضمان وصول البيانات لـ doGet بشكل سليم
+                // استخدام معايير الإصدار 9 المتوافقة تمامًا
                 const finalURL = `${scriptURL}?action=merchantLogin&phone=${encodeURIComponent(phone)}&code=${encodeURIComponent(code)}`;
                 
                 const response = await fetch(finalURL);
                 const result = await response.json();
 
                 if (result.success) {
-                    // حفظ بيانات الجلسة في المتصفح
+                    // حفظ بيانات الجلسة في المتصفح بالتوافق مع مخرجات الكود لـ Code.gs الحالي (result.merchantName)
                     localStorage.setItem("merchant_logged", "yes");
-                    localStorage.setItem("merchant_phone", result.phone);
-                    localStorage.setItem("merchant_name", result.merchant);
-                    localStorage.setItem("merchant_plan", result.plan);
+                    localStorage.setItem("merchant_phone", phone);
+                    localStorage.setItem("merchant_name", result.merchantName || "تاجر المنصة");
+                    localStorage.setItem("merchant_plan", result.plan || "basic");
+                    localStorage.setItem("merchant_expiry", result.expiry || "");
 
-                    // التوجه للوحة التحكم
+                    // التوجه للوحة التحكم الخاصة بالتجار
                     window.location.href = "./merchant-dashboard.html";
                 } else {
                     alert("❌ " + (result.message || "بيانات الدخول غير صحيحة"));
