@@ -11,6 +11,7 @@
         .search-section { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-section input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; text-align: center; }
         .search-section button { background: #0b6fc2; color: #fff; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .data-card { display: none; }
         .data-row { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid #f0f4f8; font-size: 15px; }
         .data-row span:first-child { color: #666; font-weight: bold; }
         .data-row span:last-child { color: #222; font-weight: bold; }
@@ -34,7 +35,7 @@
         <button onclick="searchClient()">🔍 بحث الآن</button>
     </div>
 
-    <div id="clientData" style="display:none;">
+    <div id="clientData" class="data-card">
         <div class="data-row"><span>👤 اسم العميل:</span><span id="name">—</span></div>
         <div class="data-row"><span>📞 رقم الهاتف:</span><span id="phone">—</span></div>
         <div class="data-row"><span>📍 العنوان:</span><span id="address">—</span></div>
@@ -60,12 +61,11 @@
             ⏳ متبقي على نهاية العقد: <span id="remaining">0</span> يوم متبقي
         </div>
 
-        <!-- 💳 روابط الدفع المباشرة الفورية التي كانت مختفية -->
         <div class="pay-links">
             <strong style="color: #b78103;"><i class="fa fa-credit-card"></i> روابط الدفع المباشرة الفورية</strong>
             <div class="pay-grid">
                 <a href="https://instapay.me/" target="_blank" class="pay-btn instapay">📱 إنستا باي مباشر</a>
-                <a href="tel:*710#" class="pay-btn vodafone">📲 اتصالات كاش مباشر</a>
+                <a href="tel:*777#" class="pay-btn vodafone">📲 اتصالات كاش مباشر</a>
             </div>
         </div>
 
@@ -73,6 +73,51 @@
     </div>
 </div>
 
-<script src="script.js"></script>
+<script>
+async function searchClient() {
+    const phoneInput = document.getElementById("searchInput").value.trim();
+    if(!phoneInput) { alert("يرجى كتابة رقم الهاتف أولاً"); return; }
+    
+    const dataBox = document.getElementById("clientData");
+    const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+    
+    try {
+        const response = await fetch(`${apiURL}?action=clientPortal&phone=${encodeURIComponent(phoneInput)}`);
+        const data = await response.json();
+        
+        if(data.success) {
+            document.getElementById("name").innerText = data.name || "—";
+            document.getElementById("phone").innerText = data.phone || "—";
+            document.getElementById("address").innerText = data.address || "—";
+            document.getElementById("service").innerText = data.service || "—";
+            document.getElementById("months").innerText = data.contract_months || "—";
+            document.getElementById("visits").innerText = data.visits || "—";
+            document.getElementById("cost").innerText = (data.cost || "0") + " جنيه";
+            document.getElementById("start").innerText = data.contract_date || "—";
+            document.getElementById("end").innerText = data.end_date || "—";
+            document.getElementById("last").innerText = data.last_visit || "—";
+            document.getElementById("next").innerText = data.next_visit || "—";
+            
+            document.getElementById("sub_type").innerText = data.sub_type || "—";
+            document.getElementById("pay_status").innerText = data.pay_status || "—";
+            document.getElementById("contract_no").innerText = data.contract_no || "—";
+            document.getElementById("pay_method").innerText = data.pay_method || "—";
+            document.getElementById("installment").innerText = data.installment || "—";
+            document.getElementById("next_installment").innerText = data.next_installment || "—";
+            document.getElementById("notes").innerText = data.notes || "—";
+            document.getElementById("account_status").innerText = data.account_status || "—";
+            document.getElementById("remaining").innerText = data.remaining_days || "0";
+            
+            document.getElementById("whatsappRenewBtn").href = `https://wa.me/201158555708?text=${encodeURIComponent("مرحباً فيوتشر تانك، أرغب في تجديد تعاقدي الحالي المسجل باسم: " + data.name + " ورقم هاتف: " + data.phone)}`;
+            dataBox.style.display = "block";
+        } else {
+            alert(data.message || "الرقم المدخل غير مسجل بالنظام الحسابي للتعاقدات");
+            dataBox.style.display = "none";
+        }
+    } catch(e) {
+        alert("حدث خطأ في الاتصال بالسيرفر، يرجى المحاولة لاحقاً");
+    }
+}
+</script>
 </body>
 </html>
