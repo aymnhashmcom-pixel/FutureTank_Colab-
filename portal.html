@@ -6,7 +6,7 @@
     <title>بوابة عملاء Future Tank</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
-        body { font-family: Tahoma; background: #f0f4f8; margin: 0; padding: 0; direction: rtl; text-align: right; }
+        body { font-family: Tahoma, sans-serif; background: #f0f4f8; margin: 0; padding: 0; direction: rtl; text-align: right; }
         .portal-container { max-width: 650px; margin: 30px auto; background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
         .search-section { display: flex; gap: 10px; margin-bottom: 20px; }
         .search-section input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; text-align: center; }
@@ -28,7 +28,7 @@
 
 <div class="portal-container">
     <h2 style="color:#0b6fc2; text-align:center; margin-top:0;">💧 بوابة العملاء الذكية لإدارة التعاقدات</h2>
-    <p style="text-align:center; color:#666;">أدخل رقم هاتفك المتعاقد به لعرض بيانات الصيانة والدفع المباشر فوراً</p>
+    <p style="text-align:center; color:#666;">أدخل رقم الهاتف المتعاقد به لعرض البيانات المحدثة مباشرة</p>
     
     <div class="search-section">
         <input type="text" id="searchInput" placeholder="ضع رقم الهاتف المتعاقد به هنا">
@@ -64,8 +64,8 @@
         <div class="pay-links">
             <strong style="color: #b78103;"><i class="fa fa-credit-card"></i> روابط الدفع المباشرة الفورية</strong>
             <div class="pay-grid">
-                <a href="https://instapay.me/" target="_blank" class="pay-btn instapay">📱 إنستا باي مباشر</a>
-                <a href="tel:*777#" class="pay-btn vodafone">📲 اتصالات كاش مباشر</a>
+                <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" target="_blank" class="pay-btn instapay"><i class="fa fa-bolt"></i> إنستا باي مباشر</a>
+                <a href="https://flous.page.link/bT9z" target="_blank" class="pay-btn vodafone"><i class="fa fa-wallet"></i> اتصالات كاش مباشر</a>
             </div>
         </div>
 
@@ -86,29 +86,31 @@ async function searchClient() {
         const data = await response.json();
         
         if(data.success) {
-            document.getElementById("name").innerText = data.name || "—";
+            // ربط صارم ومباشر للمفاتيح لتجنب ترحيل الأعمدة
+            document.getElementById("name").innerText = data.name || data.customer_name || "—";
             document.getElementById("phone").innerText = data.phone || "—";
             document.getElementById("address").innerText = data.address || "—";
             document.getElementById("service").innerText = data.service || "—";
             document.getElementById("months").innerText = data.contract_months || "—";
             document.getElementById("visits").innerText = data.visits || "—";
-            document.getElementById("cost").innerText = (data.cost || "0") + " جنيه";
+            document.getElementById("cost").innerText = (data.cost || "—") + (data.cost ? " جنيه" : "");
             document.getElementById("start").innerText = data.contract_date || "—";
             document.getElementById("end").innerText = data.end_date || "—";
             document.getElementById("last").innerText = data.last_visit || "—";
             document.getElementById("next").innerText = data.next_visit || "—";
             
-            document.getElementById("sub_type").innerText = data.sub_type || "—";
-            document.getElementById("pay_status").innerText = data.pay_status || "—";
-            document.getElementById("contract_no").innerText = data.contract_no || "—";
-            document.getElementById("pay_method").innerText = data.pay_method || "—";
+            // الأعمدة الـ 8 المضافة حديثاً والتأكد من مطابقتها مع مفاتيح السيرفر الجاري إرسالها
+            document.getElementById("sub_type").innerText = data.sub_type || data.subscription_type || "—";
+            document.getElementById("pay_status").innerText = data.pay_status || data.payment_status || "—";
+            document.getElementById("contract_no").innerText = data.contract_no || data.contract_id || "—";
+            document.getElementById("pay_method").innerText = data.pay_method || data.payment_method || "—";
             document.getElementById("installment").innerText = data.installment || "—";
             document.getElementById("next_installment").innerText = data.next_installment || "—";
             document.getElementById("notes").innerText = data.notes || "—";
             document.getElementById("account_status").innerText = data.account_status || "—";
             document.getElementById("remaining").innerText = data.remaining_days || "0";
             
-            document.getElementById("whatsappRenewBtn").href = `https://wa.me/201158555708?text=${encodeURIComponent("مرحباً فيوتشر تانك، أرغب في تجديد تعاقدي الحالي المسجل باسم: " + data.name + " ورقم هاتف: " + data.phone)}`;
+            document.getElementById("whatsappRenewBtn").href = `https://wa.me/201158555708?text=${encodeURIComponent("مرحباً فيوتشر تانك، أرغب في تجديد تعاقدي الحالي المسجل باسم: " + (data.name || "") + " ورقم هاتف: " + phoneInput)}`;
             dataBox.style.display = "block";
         } else {
             alert(data.message || "الرقم المدخل غير مسجل بالنظام الحسابي للتعاقدات");
