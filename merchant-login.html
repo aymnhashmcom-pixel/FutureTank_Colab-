@@ -1,118 +1,26 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تسجيل دخول التجار | Future Tank</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
-
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background: #f5f9ff;
-            font-family: Tahoma, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            overflow: hidden;
-            direction: rtl;
-        }
-
-        .login-box {
-            background: #fff;
-            width: 90%;
-            max-width: 420px;
-            padding: 30px;
-            border-radius: 25px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, .12);
-            text-align: center;
-        }
-
-        .logo {
-            width: 120px;
-            height: 120px;
-            border-radius: 25px;
-            object-fit: cover;
-            margin-bottom: 15px;
-        }
-
-        h1 {
-            color: #0b6fc2;
-            margin: 10px 0;
-        }
-
-        p {
-            color: #666;
-            line-height: 1.8;
-            font-size: 15px;
-        }
-
-        .input-box {
-            margin-top: 15px;
-            text-align: right;
-        }
-
-        .input-box label {
-            display: block;
-            margin-bottom: 6px;
-            font-weight: bold;
-            color: #333;
-        }
-
-        .input-box input {
-            width: 100%;
-            padding: 14px;
-            border-radius: 12px;
-            border: 1px solid #ccc;
-            font-size: 16px;
-            box-sizing: border-box;
-            text-align: right;
-        }
-
-        .login-btn {
-            margin-top: 20px;
-            width: 100%;
-            padding: 15px;
-            border: none;
-            border-radius: 14px;
-            background: #0b6fc2;
-            color: #fff;
-            font-size: 18px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .login-btn:disabled {
-            background: #ccc;
-            cursor: not-allowed;
-        }
-
-        .login-btn:hover:not(:disabled) {
-            opacity: .9;
-        }
-
-        .note {
-            margin-top: 20px;
-            background: #e8f7ff;
-            padding: 15px;
-            border-radius: 15px;
-            font-size: 14px;
-            line-height: 2;
-            color: #444;
-        }
-
-        .footer {
-            margin-top: 20px;
-            font-size: 13px;
-            color: #888;
-        }
+        body { margin: 0; padding: 0; background: #f5f9ff; font-family: Tahoma, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; overflow: hidden; direction: rtl; }
+        .login-box { background: #fff; width: 90%; max-width: 420px; padding: 30px; border-radius: 25px; box-shadow: 0 5px 20px rgba(0, 0, 0, .12); text-align: center; }
+        .logo { width: 120px; height: 120px; border-radius: 25px; object-fit: cover; margin-bottom: 15px; }
+        h1 { color: #0b6fc2; margin: 10px 0; }
+        p { color: #666; line-height: 1.8; font-size: 15px; }
+        .input-box { margin-top: 15px; text-align: right; }
+        .input-box label { display: block; margin-bottom: 6px; font-weight: bold; color: #333; }
+        .input-box input { width: 100%; padding: 14px; border-radius: 12px; border: 1px solid #ccc; font-size: 16px; box-sizing: border-box; text-align: right; }
+        .login-btn { margin-top: 20px; width: 100%; padding: 15px; border: none; border-radius: 14px; background: #0b6fc2; color: #fff; font-size: 18px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .login-btn:disabled { background: #ccc; cursor: not-allowed; }
+        .login-btn:hover:not(:disabled) { opacity: .9; }
+        .note { margin-top: 20px; background: #e8f7ff; padding: 15px; border-radius: 15px; font-size: 14px; line-height: 2; color: #444; }
+        .footer { margin-top: 20px; font-size: 13px; color: #888; }
     </style>
 </head>
-
 <body>
 
     <div class="login-box">
@@ -145,12 +53,10 @@
     </div>
 
     <script>
-        // دالة مدمجة لملء البيانات تلقائياً إذا جاءت في الرابط (Query Parameters) لراحة التجار
         window.addEventListener('DOMContentLoaded', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const phoneParam = urlParams.get('phone');
             const codeParam = urlParams.get('code');
-            
             if (phoneParam) document.getElementById("merchantPhone").value = phoneParam;
             if (codeParam) document.getElementById("merchantCode").value = codeParam;
         });
@@ -168,36 +74,31 @@
                 return;
             }
 
-            // تفعيل حالة التحميل
             loginBtn.disabled = true;
             loginBtn.innerText = "⏳ جاري التحقق من البيانات...";
 
-            // رابط الـ Web App المحدث الخاص بك
             const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
             try {
-                // استخدام معايير الإصدار 9 المتوافقة تمامًا
                 const finalURL = `${scriptURL}?action=merchantLogin&phone=${encodeURIComponent(phone)}&code=${encodeURIComponent(code)}`;
                 
                 const response = await fetch(finalURL);
                 const result = await response.json();
 
                 if (result.success) {
-                    // حفظ بيانات الجلسة في المتصفح بالتوافق مع مخرجات الكود لـ Code.gs الحالي (result.merchantName)
+                    // المواءمة الكاملة والتامة مع مخرجات السيرفر لدخول لوحة التحكم بنجاح
                     localStorage.setItem("merchant_logged", "yes");
-                    localStorage.setItem("merchant_phone", phone);
-                    localStorage.setItem("merchant_name", result.merchantName || "تاجر المنصة");
+                    localStorage.setItem("merchant_phone", result.phone || phone);
+                    localStorage.setItem("merchant_name", result.merchantName || result.merchant || "تاجر المنصة");
                     localStorage.setItem("merchant_plan", result.plan || "basic");
                     localStorage.setItem("merchant_expiry", result.expiry || "");
 
-                    // التوجه للوحة التحكم الخاصة بالتجار
                     window.location.href = "./merchant-dashboard.html";
                 } else {
                     alert("❌ " + (result.message || "بيانات الدخول غير صحيحة"));
                     loginBtn.disabled = false;
                     loginBtn.innerText = "🚀 دخول لوحة التحكم";
                 }
-
             } catch (error) {
                 console.error("Login Error:", error);
                 alert("⚠️ عذراً، حدث خطأ في الاتصال بالسيرفر. يرجى المحاولة مرة أخرى.");
@@ -206,6 +107,5 @@
             }
         }
     </script>
-
 </body>
 </html>
