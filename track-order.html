@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>تتبع حالة الطلبات | Future Tank</title>
     <style>
-        body { font-family:Tahoma; background:#f4f9ff; margin:0; padding:0; text-align:center; }
+        body { font-family:Tahoma; background:#f4f9ff; margin:0; padding:0; text-align:center; direction: rtl; }
         .track-container { max-width:500px; margin:50px auto; background:#fff; padding:30px; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.08); }
         h2 { color:#0b6fc2; }
         input { width:100%; padding:14px; margin:15px 0; border-radius:10px; border:1px solid #ccc; box-sizing:border-box; font-size:16px; text-align:center; }
@@ -36,20 +36,22 @@ function trackMyOrders() {
 
     resultBox.innerHTML = "⏳ جاري البحث في سجلات الشيت المحدثة...";
 
-    fetch(`${TRACK_API}?action=getOrders&phone=${encodeURIComponent(phone)}`)
+    fetch(`${TRACK_API}?action=trackOrder&phone=${encodeURIComponent(phone)}`)
     .then(res => res.json())
     .then(data => {
-        if(!data || data.length === 0) {
-            resultBox.innerHTML = "<p style='color:#856404; background:#fff3cd; padding:10px; border-radius:8px;'>⚠️ لم نجد أي طلبات مسجلة بهذا الرقم حالياً.</p>";
+        if(!data.success || !data.orders || data.orders.length === 0) {
+            resultBox.innerHTML = "<p style='color:#856404; background:#fff3cd; padding:10px; border-radius:8px;'>⚠️ لم نجد أي طلبات خدمات أو ماركت مسجلة بهذا الرقم حالياً.</p>";
             return;
         }
         
-        resultBox.innerHTML = data.map(o => `
+        resultBox.innerHTML = data.orders.map(o => `
             <div class="order-box">
                 <span class="badge">${o.status}</span>
                 <strong>رقم الطلب: ${o.id}</strong>
-                <p style="margin:5px 0 0 0; font-size:14px; color:#555;">📦 المطلوب: ${o.items}</p>
-                <p style="margin:3px 0 0 0; font-size:14px; color:#ff9800;">💰 القيمة: ${o.total} جنيه</p>
+                <p style="margin:5px 0 0 0; font-size:14px; color:#555;">📦 المصدر: ${o.type}</p>
+                <p style="margin:5px 0 0 0; font-size:14px; color:#555;">🛒 المطلوب: ${o.items}</p>
+                <p style="margin:3px 0 0 0; font-size:14px; color:#ff9800;">💰 القيمة الإجمالية: ${o.total} جنيه</p>
+                <p style="margin:3px 0 0 0; font-size:12px; color:#999;">📅 التاريخ: ${o.date}</p>
             </div>
         `).join('');
     })
