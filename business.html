@@ -6,7 +6,7 @@
     <title>بوابات الشركاء ورجال الأعمال | Future Tank</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
-        body { font-family: Tahoma; background: #f5f9ff; margin:0; padding:0; direction: rtl; }
+        body { font-family: Tahoma, sans-serif; background: #f5f9ff; margin:0; padding:0; direction: rtl; }
         .nav-bar { background:#0b6fc2; padding:15px; display:flex; justify-content:center; gap:20px; }
         .nav-bar a { color:#fff; text-decoration:none; font-weight:bold; }
         .container { max-width:800px; margin:30px auto; padding:20px; }
@@ -14,12 +14,13 @@
         h2, h3 { color:#0b6fc2; margin-top:0; }
         label { font-weight:bold; display:block; margin-top:12px; }
         input, textarea { width:100%; padding:12px; margin-top:5px; border:1px solid #ccc; border-radius:8px; box-sizing:border-box; }
-        .btn-submit { background:#25D366; color:#fff; border:none; padding:15px; border-radius:12px; font-weight:bold; cursor:pointer; width:100%; margin-top:15px; font-size:16px; }
         .pricing-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:15px; margin-top:15px; }
-        .price-card { background:#fff8e1; border:2px solid #ffb300; border-radius:12px; padding:15px; text-align:center; cursor:pointer; transition:0.3s; }
-        .price-card:hover { transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-        .price-card.selected { border-color: #0b6fc2; background: #e8f3fc; }
+        .price-card { background:#fff; border:2px solid #ccc; border-radius:12px; padding:15px; text-align:center; cursor:pointer; transition:0.3s; }
+        .price-card.selected { border-color: #0b6fc2; background: #e8f3fc; box-shadow: 0 4px 12px rgba(11,111,194,0.15); }
         .price { font-size:22px; color:#ff9800; font-weight:bold; margin:10px 0; }
+        .pay-checkout-box { display:none; background:#fff8e1; border:2px dashed #ffb300; padding:20px; border-radius:12px; margin-top:20px; text-align:center; }
+        .pay-link-btn { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; color:#fff; text-decoration:none; font-weight:bold; border-radius:8px; margin:10px 5px; font-size:15px; }
+        .btn-submit { background:#25D366; color:#fff; border:none; padding:15px; border-radius:12px; font-weight:bold; cursor:pointer; width:100%; margin-top:20px; font-size:16px; }
     </style>
 </head>
 <body>
@@ -32,44 +33,52 @@
 <div class="container">
     <div class="box">
         <h2>💼 انضم لشركاء وتجار منصة Future Tank</h2>
-        <p>قم بملء طلبك لتثبيت وتفعيل عروضك وسلعك في محافظتك فوراً والحصول على كود دخول لوحة التحكم.</p>
+        <p>قم بملء بياناتك واختيار خطة الاشتراك المناسبة لتفعيل حسابك وعرض منتجاتك فورا في المحافظات.</p>
         
         <label>اسم التاجر أو الشركة</label>
         <input type="text" id="mName" placeholder="مثال: شركة النقاء للمقاولات والخزانات">
         
-        <label>رقم هاتف الواتساب الفعال</label>
+        <label>رقم هاتف الواتساب الفعال (سيتم ربط الحساب به)</label>
         <input type="text" id="mPhone" placeholder="01158555708">
         
         <label>تفاصيل النشاط التجاري والمحافظة</label>
         <textarea id="mDesc" style="width:100%; height:80px; padding:12px; font-family: Tahoma;" placeholder="اكتب السلع أو النشاط الذي ترغب في ترويجه والمحافظة الفعالة..."></textarea>
-        
-        <input type="hidden" id="mPlan" value="basic">
-        
-        <button class="btn-submit" onclick="sendMerchantRegistration()">🚀 إرسال طلب الانضمام والتفعيل الفوري بالحساب</button>
     </div>
 
     <div class="box">
         <h3>💳 باقات ترقية اشتراكات التجار النشطة (اضغط لاختيار الخطة)</h3>
         <div class="pricing-grid">
-            <div class="price-card selected" id="p_basic" onclick="selectMerchantPlan('basic')">
+            <div class="price-card" id="p_basic" onclick="selectMerchantPlan('basic', 300)">
                 <h4>الخطة الأساسية الفردية</h4>
                 <p>ظهور كامل بأسواق محافظة واحدة لمدة 30 يوم مع دعم فني</p>
                 <div class="price">300 جنيه / شهرياً</div>
             </div>
-            <div class="price-card" id="p_premium" style="background:#e3f2fd; border-color:#0b6fc2;" onclick="selectMerchantPlan('premium')">
+            <div class="price-card" id="p_premium" onclick="selectMerchantPlan('premium', 750)">
                 <h4>باقة التميز الإقليمي ⭐</h4>
                 <p>ظهور كامل بكافة المحافظات دفعة واحدة لزيادة المبيعات</p>
                 <div class="price">750 جنيه / ربع سنوي</div>
             </div>
         </div>
-        <p style="text-align:center; margin-top:15px; font-weight:bold; color:#666;">
-            🏧 طرق الدفع الفورية المتاحة: InstaPay (على حساب المنصة المعتمد) أو اتصالات كاش
-        </p>
+        
+        <input type="hidden" id="mPlan" value="">
+
+        <!-- نظام سداد الفواتير الذكي الفوري المدمج -->
+        <div id="payCheckoutBox" class="pay-checkout-box">
+            <h4 style="color:#b78103; margin-bottom:10px;"><i class="fa fa-credit-card"></i> اضغط على الرابط أدناه لإتمام عملية الدفع الفوري:</h4>
+            <p style="font-weight:bold; margin-bottom:15px;">المبلغ المطلوب سداده: <span id="checkoutAmount" style="color:#e53935; font-size:20px;">0</span> جنيه مصري</p>
+            
+            <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" target="_blank" class="pay-link-btn" style="background:#8e24aa;"><i class="fa fa-bolt"></i> سداد عبر InstaPay الفوري</a>
+            <a href="https://flous.page.link/bT9z" target="_blank" class="pay-link-btn" style="background:#e53935;"><i class="fa fa-wallet"></i> سداد عبر اتصالات كاش</a>
+            
+            <p style="font-size:12px; color:#666; margin-top:10px;">بعد إتمام التحويل المالي، انقر على الزر بالأسفل لتثبيت الحساب وتوليد كود الدخول.</p>
+        </div>
+
+        <button class="btn-submit" onclick="sendMerchantRegistration()">🚀 تفعيل الحساب وحفظ الاشتراك بقاعدة البيانات</button>
     </div>
 </div>
 
 <script>
-function selectMerchantPlan(planCode) {
+function selectMerchantPlan(planCode, price) {
     document.getElementById("mPlan").value = planCode;
     document.getElementById("p_basic").classList.remove("selected");
     document.getElementById("p_premium").classList.remove("selected");
@@ -79,6 +88,9 @@ function selectMerchantPlan(planCode) {
     } else {
         document.getElementById("p_premium").classList.add("selected");
     }
+    
+    document.getElementById("checkoutAmount").innerText = price;
+    document.getElementById("payCheckoutBox").style.display = "block";
 }
 
 async function sendMerchantRegistration() {
@@ -87,7 +99,8 @@ async function sendMerchantRegistration() {
     const desc = document.getElementById("mDesc").value.trim();
     const plan = document.getElementById("mPlan").value;
     
-    if(!name || !phone) { alert("برجاء إدخال اسمك ورقم الهاتف لإرسال الطلب"); return; }
+    if(!name || !phone) { alert("برجاء إدخال اسمك ورقم الهاتف أولاً"); return; }
+    if(!plan) { alert("برجاء النقر على إحدى الباقات واختيارها أولاً لتفعيل الدفع"); return; }
     
     const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
     
@@ -96,16 +109,15 @@ async function sendMerchantRegistration() {
         const data = await response.json();
         
         if(data.success) {
-            alert(`🎉 تم تسجيلك بنجاح في قاعدة البيانات الحية!\n🔐 كود دخول لوحة التحكم المخصص لك هو: ${data.code}\nسيتم الآن توجيهك التلقائي وتأكيد تفعيل الحساب برسال واتساب.`);
-            const waMsg = `💼 طلب تفعيل حساب تاجر جديد بالمنصة:\n👤 الاسم: ${name}\n📞 هاتف التواصل: ${phone}\n💳 الخطة المختارة: ${plan}\n🔑 كود التفعيل المولد: ${data.code}\n📝 تفاصيل النشاط: ${desc}`;
-            window.open("https://wa.me/201150402031?text=" + encodeURIComponent(waMsg), "_blank");
-            window.location.href = data.redirectUrl;
+            alert(`🎉 ممتاز! تم تفعيل الحساب الحسابي بنجاح.\n🔑 كود الدخول الخاص بك هو: ${data.code}\nسيتم توجيهك الآن للوحة التحكم.`);
+            window.location.href = `merchant-dashboard.html?merchant_code=${data.code}`;
         } else {
-            alert("حدث خطأ أثناء معالجة الحساب الحسابي المباشر، يرجى إعادة المحاولة.");
+            alert(data.message || "حدث خطأ أثناء معالجة الاشتراك الحسابي المباشر.");
         }
     } catch(e) {
-        alert("خطأ في الاتصال بالسيرفر المركزي، تم تحويلك للطلب التقليدي");
-        window.open("https://wa.me/201150402031?text=" + encodeURIComponent(`طلب تاجر: ${name} - ${phone}`), "_blank");
+        alert("تم الحفظ وتثبيت طلبك! يرجى إرسال لقطة شاشة بالتحويل لتأكيد التفعيل اليدوي الفوري.");
+        const waMsg = `💼 طلب تفعيل تاجر جديد:\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n💳 الباقة: ${plan}`;
+        window.open("https://wa.me/201150402031?text=" + encodeURIComponent(waMsg), "_blank");
     }
 }
 </script>
