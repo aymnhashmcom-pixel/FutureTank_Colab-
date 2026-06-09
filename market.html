@@ -31,13 +31,12 @@ img{ width:100%; height:220px; object-fit:cover; border-radius:14px; }
 </div>
 
 <script>
-// رابط الـ Web App المحدث الخاص بك
 const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
 async function loadProducts(){
   const box = document.getElementById("products");
   try {
-    // استدعاء الأكشن المتوافق مع الإصدار 9 ومطابقة "ماركت هرم سيتي" كموقع وقسم
+    // إرسال الأكشن المحدث لـ 9.5 لتصفية السلع الخاصة بحدائق أكتوبر والماركت
     const targetURL = `${API_URL}?action=getProductsByLocation&city=${encodeURIComponent("حدائق أكتوبر")}&subCat=${encodeURIComponent("ماركت هرم سيتي")}`;
     
     const res = await fetch(targetURL);
@@ -50,7 +49,6 @@ async function loadProducts(){
     
     box.innerHTML = "";
     for(const p of data.products){
-      // التأكد من وجود رقم التاجر أو استخدام الرقم الافتراضي المدعوم بالسيرفر
       const phone = String(p.whatsapp || "201150402031").replace(/\D/g,'');
       const msg = encodeURIComponent("مرحباً يا تاجر، أرغب في شراء السلعة التالية من ماركت هرم سيتي: " + p.name);
       
@@ -58,7 +56,7 @@ async function loadProducts(){
         <div class="card">
           <img src="${p.image || 'https://via.placeholder.com/220'}" alt="${p.name}">
           <h2 class="product-title">${p.name}</h2>
-          <p class="merchant-name">🏬 المتجر العارض: ${p.merchant || p.category}</p>
+          <p class="merchant-name">🏬 المتجر العارض: ${p.merchant || 'تاجر محلي'}</p>
           <p class="price">💰 <b>${p.price} جنيه</b></p>
           <p class="desc">${p.description || 'لا يوجد وصف متاح للسلعة'}</p>
           <a class="btn" href="https://wa.me/${phone}?text=${msg}" target="_blank">📞 طلب السلعة وتوصيل للمنزل</a>
@@ -71,7 +69,6 @@ async function loadProducts(){
   }
 }
 
-// تشغيل الدالة فور تحميل الصفحة
 loadProducts();
 </script>
 </body>
