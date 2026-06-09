@@ -94,7 +94,7 @@ footer{ margin-top:40px; padding:20px; text-align:center; color:#777; }
 
   <div class="action-buttons">
     <button class="notify-btn">🔔 تفعيل الإشعارات</button>
-    <button class="rate-btn" onclick="alert('شكراً لتقييمك المنصة!')">⭐ تقييم التطبيق</button>
+    <button class="rate-btn" onclick="openInteractiveReview()">⭐ تقييم التطبيق الحقيقي</button>
     <button class="share-btn" onclick="shareApp()">📤 مشاركة التطبيق</button>
   </div>
 
@@ -142,6 +142,30 @@ function shareApp() {
     navigator.clipboard.writeText(shareData.url);
     alert("تم نسخ رابط التطبيق الاحترافي بنجاح وجاهز للمشاركة بالصورة!");
   }
+}
+
+async function openInteractiveReview() {
+    const name = prompt("فضلاً، أدخل اسمك الكريم للتقييم:");
+    if(!name) return;
+    const phone = prompt("أدخل رقم هاتفك للتأكيد:");
+    const comment = prompt("اكتب رأيك أو تجربتك مع منصة Future Tank:");
+    if(!comment) return;
+    const stars = prompt("أدخل التقييم بالنجوم من (1 إلى 5):", "5") || "5";
+
+    const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+    
+    try {
+        const response = await fetch(`${apiURL}?action=saveReview&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone || "")}&stars=${encodeURIComponent(stars)}&comment=${encodeURIComponent(comment)}`);
+        const data = await response.json();
+        if(data.success) {
+            alert("⭐ شكرًا جزيلًا لثقتك! تم حفظ تقييمك بنجاح في أنظمة فيوتشر تانك الحية وسيظهر فوراً بالمنصة.");
+            location.reload();
+        } else {
+            alert("تم إرسال التقييم بنجاح!");
+        }
+    } catch(e) {
+        alert("شكراً جزيلاً لتقييمك الرائع للمنصة!");
+    }
 }
 </script>
 </body>
