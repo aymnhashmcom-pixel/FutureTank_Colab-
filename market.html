@@ -5,51 +5,73 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ماركت هرم سيتي وحدائق أكتوبر</title>
 <style>
-body{ font-family:Tahoma; background:#f4f7fb; padding:20px; margin:0; direction: rtl; }
-.card{ background:#fff; padding:15px; border-radius:18px; margin-bottom:20px; box-shadow:0 4px 14px rgba(0,0,0,.08); }
+body{ font-family:Tahoma, sans-serif; background:#f4f7fb; padding:20px; margin:0; direction: rtl; }
+h1 { color: #0b6fc2; text-align: center; font-size: 24px; margin-bottom: 5px; }
+.sub-title { text-align: center; color: #666; margin-bottom: 25px; font-size: 14px; }
+.products-container { max-width: 600px; margin: 0 auto; }
+.card{ background:#fff; padding:15px; border-radius:18px; margin-bottom:20px; box-shadow:0 4px 14px rgba(0,0,0,.08); border: 1px solid #eaeaea; }
 img{ width:100%; height:220px; object-fit:cover; border-radius:14px; }
-.btn{ display:block; background:#25D366; color:#fff; padding:14px; text-align:center; border-radius:12px; text-decoration:none; margin-top:15px; font-weight:bold; }
+.product-title { font-size: 18px; color: #333; margin: 12px 0 5px 0; }
+.merchant-name { color:#777; font-size:13px; margin: 0 0 10px 0; }
+.price { color: #e67e22; font-size: 16px; margin: 10px 0; }
+.desc { color: #555; font-size: 14px; line-height: 1.6; }
+.btn{ display:block; background:#25D366; color:#fff; padding:14px; text-align:center; border-radius:12px; text-decoration:none; margin-top:15px; font-weight:bold; transition: 0.3s; }
+.btn:hover { opacity: 0.9; }
+.error-msg { text-align: center; color: #d32f2f; padding: 20px; font-weight: bold; }
+.loading { text-align: center; color: #0b6fc2; padding: 20px; font-weight: bold; }
 </style>
 </head>
 <body>
+
 <h1>🛒 ماركت هرم سيتي وحدائق أكتوبر</h1>
-<p>عروض تجار المحلات والسوبرماركت واللحوم والصيدليات الحية</p>
-<div id="products">⏳ جاري استدعاء السلع والمتاجر المفتوحة بالمنطقة...</div>
+<p class="sub-title">عروض تجار المحلات والسوبرماركت واللحوم والصيدليات الحية</p>
+
+<div class="products-container" id="products">
+  <div class="loading">⏳ جاري استدعاء السلع والمتاجر المفتوحة بالمنطقة...</div>
+</div>
 
 <script>
+// رابط الـ Web App المحدث الخاص بك
 const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
 async function loadProducts(){
   const box = document.getElementById("products");
   try {
-    // جلب المنتجات المخصصة للماركت فقط
-    const res = await fetch(API_URL + "?action=getMerchantProducts&category=ماركت هرم سيتي");
+    // استدعاء الأكشن المتوافق مع الإصدار 9 ومطابقة "ماركت هرم سيتي" كموقع وقسم
+    const targetURL = `${API_URL}?action=getProductsByLocation&city=${encodeURIComponent("حدائق أكتوبر")}&subCat=${encodeURIComponent("ماركت هرم سيتي")}`;
+    
+    const res = await fetch(targetURL);
     const data = await res.json();
     
-    if(!data.products || data.products.length === 0){
-      box.innerHTML = `<div class="card">لا توجد سلع معروضة حالياً لهرم سيتي وحدائق أكتوبر</div>`;
+    if(!data.success || !data.products || data.products.length === 0){
+      box.innerHTML = `<div class="card" style="text-align:center; color:#666;">لا توجد سلع معروضة حالياً لهرم سيتي وحدائق أكتوبر</div>`;
       return;
     }
+    
     box.innerHTML = "";
     for(const p of data.products){
+      // التأكد من وجود رقم التاجر أو استخدام الرقم الافتراضي المدعوم بالسيرفر
       const phone = String(p.whatsapp || "201150402031").replace(/\D/g,'');
       const msg = encodeURIComponent("مرحباً يا تاجر، أرغب في شراء السلعة التالية من ماركت هرم سيتي: " + p.name);
       
       box.innerHTML += `
         <div class="card">
-          <img src="${p.image || 'https://via.placeholder.com/220'}">
-          <h2>${p.name}</h2>
-          <p style="color:#777; font-size:14px;">المتجر العارض: ${p.merchant}</p>
-          <p>💰 <b>${p.price} جنيه</b></p>
-          <p>${p.description}</p>
+          <img src="${p.image || 'https://via.placeholder.com/220'}" alt="${p.name}">
+          <h2 class="product-title">${p.name}</h2>
+          <p class="merchant-name">🏬 المتجر العارض: ${p.merchant || p.category}</p>
+          <p class="price">💰 <b>${p.price} جنيه</b></p>
+          <p class="desc">${p.description || 'لا يوجد وصف متاح للسلعة'}</p>
           <a class="btn" href="https://wa.me/${phone}?text=${msg}" target="_blank">📞 طلب السلعة وتوصيل للمنزل</a>
         </div>
       `;
     }
   } catch(e) {
-    box.innerHTML = "❌ خطأ في تحميل بيانات الماركت";
+    console.error("Fetch Error:", e);
+    box.innerHTML = `<div class="error-msg">❌ خطأ في تحميل بيانات الماركت، يرجى المحاولة لاحقاً.</div>`;
   }
 }
+
+// تشغيل الدالة فور تحميل الصفحة
 loadProducts();
 </script>
 </body>
