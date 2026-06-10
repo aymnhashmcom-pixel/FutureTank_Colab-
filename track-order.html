@@ -3,61 +3,73 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تتبع حالة الطلبات | Future Tank</title>
+    <title>تتبع حالة طلبك وعقدك الفوري | Future Tank</title>
     <style>
-        body { font-family:Tahoma; background:#f4f9ff; margin:0; padding:0; text-align:center; direction: rtl; }
-        .track-container { max-width:500px; margin:50px auto; background:#fff; padding:30px; border-radius:20px; box-shadow:0 4px 20px rgba(0,0,0,0.08); }
-        h2 { color:#0b6fc2; }
-        input { width:100%; padding:14px; margin:15px 0; border-radius:10px; border:1px solid #ccc; box-sizing:border-box; font-size:16px; text-align:center; }
-        button { background:#0b6fc2; color:#fff; border:none; padding:14px; width:100%; border-radius:10px; font-weight:bold; font-size:16px; cursor:pointer; }
-        .order-box { background:#f9fbfd; border:1px solid #d0e1f3; padding:15px; border-radius:12px; margin-top:15px; text-align:right; }
-        .badge { background:#ff9800; color:#fff; padding:3px 8px; border-radius:4px; font-size:13px; font-weight:bold; float:left; }
+        body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:0; direction: rtl; text-align: center; }
+        .box { background:#fff; padding:25px; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.06); max-width:550px; margin:40px auto; }
+        input { width:80%; padding:12px; border:1px solid #ccc; border-radius:8px; font-size:16px; margin-bottom:15px; text-align:center; }
+        .btn-search { background:#0b6fc2; color:#fff; border:none; padding:12px 25px; border-radius:8px; font-weight:bold; font-size:16px; cursor:pointer; }
+        .result-card { display:none; background:#eaf6ff; border:1px solid #bce1ff; padding:20px; border-radius:12px; margin-top:20px; text-align:right; line-height:1.8; }
     </style>
 </head>
 <body>
 
-<div class="track-container">
-    <h2>📦 تتبع حالة طلبك الفوري</h2>
-    <p>أدخل رقم الهاتف المسجل به الطلب لمعرفة الحالة الحالية مباشرة</p>
+<div class="box">
+    <h2>📦 تتبع حالة طلبك والتعاقد الفوري</h2>
+    <p>أدخل رقم الهاتف المسجل به العقد أو الطلب لمعرفة الحالة الحالية مباشرة من الشيت</p>
     
-    <input type="text" id="trackPhone" placeholder="ضع رقم الهاتف هنا (مثال: 01158555708)">
-    <button onclick="trackMyOrders()">🔍 تتبع الطلب الآن</button>
-
-    <div id="trackResult" style="margin-top:20px;"></div>
+    <input type="text" id="userPhone" placeholder="أدخل رقم الهاتف هنا (مثال: 01158555708)"><br>
+    <button class="btn-search" id="searchBtn" onclick="trackMyOrder()">🔍 تتبع الطلب الآن</button>
+    
+    <div id="resultBox" class="result-card"></div>
+    <p id="statusMsg" style="color:red; font-weight:bold; margin-top:15px;"></p>
 </div>
 
 <script>
-const TRACK_API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-function trackMyOrders() {
-    const phone = document.getElementById("trackPhone").value.trim();
-    const resultBox = document.getElementById("trackResult");
-    if(!phone) { alert("الرجاء إدخال رقم هاتف صحيح"); return; }
+async function trackMyOrder() {
+    const phone = document.getElementById("userPhone").value.trim();
+    const resultBox = document.getElementById("resultBox");
+    const statusMsg = document.getElementById("statusMsg");
+    const btn = document.getElementById("searchBtn");
 
-    resultBox.innerHTML = "⏳ جاري البحث في سجلات الشيت المحدثة...";
+    if(!phone) { alert("يرجى إدخال رقم الهاتف أولاً"); return; }
+    
+    btn.disabled = true;
+    btn.innerText = "⏳ جاري فحص سجلات السيرفر...";
+    statusMsg.innerText = "";
+    resultBox.style.display = "none";
 
-    fetch(`${TRACK_API}?action=trackOrder&phone=${encodeURIComponent(phone)}`)
-    .then(res => res.json())
-    .then(data => {
-        if(!data.success || !data.orders || data.orders.length === 0) {
-            resultBox.innerHTML = "<p style='color:#856404; background:#fff3cd; padding:10px; border-radius:8px;'>⚠️ لم نجد أي طلبات خدمات أو ماركت مسجلة بهذا الرقم حالياً.</p>";
-            return;
-        }
+    try {
+        const response = await fetch(`${scriptURL}?action=trackOrder&phone=${encodeURIComponent(phone)}`);
+        const data = await response.json();
         
-        resultBox.innerHTML = data.orders.map(o => `
-            <div class="order-box">
-                <span class="badge">${o.status}</span>
-                <strong>رقم الطلب: ${o.id}</strong>
-                <p style="margin:5px 0 0 0; font-size:14px; color:#555;">📦 المصدر: ${o.type}</p>
-                <p style="margin:5px 0 0 0; font-size:14px; color:#555;">🛒 المطلوب: ${o.items}</p>
-                <p style="margin:3px 0 0 0; font-size:14px; color:#ff9800;">💰 القيمة الإجمالية: ${o.total} جنيه</p>
-                <p style="margin:3px 0 0 0; font-size:12px; color:#999;">📅 التاريخ: ${o.date}</p>
-            </div>
-        `).join('');
-    })
-    .catch(() => {
-        resultBox.innerHTML = "<p style='color:#c62828;'>❌ حدث خطأ أثناء جلب البيانات، يرجى المحاولة لاحقاً.</p>";
-    });
+        btn.disabled = false;
+        btn.innerText = "🔍 تتبع الطلب الآن";
+
+        if(data.success) {
+            resultBox.style.display = "block";
+            resultBox.innerHTML = `
+                <h3 style="color:#0b6fc2; margin-top:0; border-bottom:1px solid #ccc; padding-bottom:5px;">📋 بيانات العقد والطلب للعميل</h3>
+                <b>👤 الاسم:</b> ${data.name}<br>
+                <b>📞 الهاتف:</b> ${data.phone}<br>
+                <b>📍 العنوان:</b> ${data.address}<br>
+                <b>🛠️ نوع الخدمة:</b> ${data.service}<br>
+                <b>📅 تاريخ العقد:</b> ${data.contract_date}<br>
+                <b>⏭️ الزيارة القادمة:</b> ${data.next_visit}<br>
+                <b>💰 التكلفة الماليّة:</b> ${data.cost}<br>
+                <b>💳 حالة السداد:</b> ${data.pay_status}<br>
+                <b>📌 حالة الحساب الإجمالية:</b> <span style="color:green; font-weight:bold;">${data.account_status}</span>
+            `;
+        } else {
+            statusMsg.innerText = data.message || "⚠️ لم نجد أي طلبات خدمات أو ماركت مسجلة بهذا الرقم حالياً.";
+        }
+    } catch(e) {
+        btn.disabled = false;
+        btn.innerText = "🔍 تتبع الطلب الآن";
+        statusMsg.innerText = "❌ حدث خطأ في الاتصال بالسيرفر، يرجى المحاولة لاحقاً.";
+    }
 }
 </script>
 </body>
