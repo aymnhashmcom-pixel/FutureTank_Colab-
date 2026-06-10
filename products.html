@@ -2,28 +2,32 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>سوق وعروض المحافظات الشامل | Future Tank</title>
+  <title>سوق وعروض المحافظات الشامل وعروض السلع | Future Tank</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:0; direction: rtl; text-align: center; }
     .filter-box { background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 900px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; align-items: center; }
     .filter-box select { padding: 12px 20px; font-size: 16px; border-radius: 10px; border: 1px solid #0b6fc2; background: #fff; color: #0b6fc2; font-weight: bold; outline: none; cursor: pointer; }
     .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1100px; margin: auto; }
-    .card { background: #fff; border-radius: 16px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); text-align: center; border: 1px solid #e1effa; }
+    .card { background: #fff; border-radius: 16px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); text-align: center; border: 1px solid #e1effa; position: relative; }
     .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; }
-    .btn-buy { display: block; background: #25D366; color: white; padding: 10px; border-radius: 8px; text-decoration: none; margin-top: 12px; font-weight: bold; font-size: 15px; }
+    .btn-buy { display: block; background: #0b6fc2; color: white; padding: 10px; border-radius: 8px; text-decoration: none; margin-top: 12px; font-weight: bold; font-size: 15px; cursor: pointer; }
+    .btn-add-cart { display: block; background: #ff9800; color: white; padding: 10px; border-radius: 8px; text-decoration: none; margin-top: 5px; font-weight: bold; font-size: 14px; border:none; width:100%; cursor:pointer; }
+    
+    /* سلة المشتريات العائمة */
+    .cart-floating { position: fixed; bottom: 20px; left: 20px; background: #25D366; color: white; padding: 15px 25px; border-radius: 30px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); font-weight: bold; cursor: pointer; display: none; z-index: 999; font-size:16px; }
   </style>
 </head>
 <body>
 
 <header style="background:#0b6fc2; color:#fff; padding:25px;">
-  <h1>💧 منتجات وعروض نقاء مياه الشرب والأسواق المتنوعة</h1>
-  <p>تصفح واطلب السلع والخدمات مباشرة من سيرفر السيرفر المركزي</p>
+  <h1>💧 منتجات وعروض نقاء مياه الشرب المعتمدة والأسواق</h1>
+  <p>تصفح واطلب أفضل المنتجات والخزانات من شيت السيرفر المباشر</p>
 </header>
 
 <div class="filter-box">
     <div>
-        <span style="font-weight:bold; color:#555;">📍 تصفية حسب المحافظة:</span>
+        <span style="font-weight:bold; color:#555;">📍 المحافظة المستهدفة:</span>
         <select id="filterCity" onchange="loadProducts()">
             <option value="الكل">🌍 كل المحافظات</option>
             <option value="القاهرة">القاهرة</option>
@@ -35,10 +39,10 @@
         </select>
     </div>
     <div>
-        <span style="font-weight:bold; color:#555;">🗂️ تصفية حسب القسم المعتمد:</span>
+        <span style="font-weight:bold; color:#555;">🗂️ القسم المعتمد:</span>
         <select id="filterCat" onchange="loadProducts()">
             <option value="الكل">🛍️ كل الأقسام وعروض السلع</option>
-            <option value="خزانات المياه">خزانات مياه ونقاء</option>
+            <option value="خزانات المياه">خزانات المياه ونقاء</option>
             <option value="ملابس">ملابس</option>
             <option value="عقارات">عقارات</option>
             <option value="سيارات">سيارات</option>
@@ -47,12 +51,17 @@
     </div>
 </div>
 
-<main class="container">
-  <div id="productsList" class="cards">⏳ جاري سحب وتنظيم عروض السيرفر الشامل...</div>
-</main>
+<div id="productsList" class="cards">⏳ جاري سحب وتحديث عروض السيرفر الشامل...</div>
+
+<!-- السلة الذكية -->
+<div id="cartBtn" class="cart-floating" onclick="checkoutCart()">
+  🛒 سلة المشتريات الذكية (<span id="cartCount">0</span>) | إرسال الطلب عبر واتساب
+</div>
 
 <script>
 const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+const ADMIN_MAIN_WHATSAPP = "201150402031"; // رقم الإدارة الرسمي الموحد والجديد
+let cart = [];
 
 async function loadProducts() {
     const listContainer = document.getElementById("productsList");
@@ -64,22 +73,53 @@ async function loadProducts() {
         const data = await res.json();
         
         if(data.success && data.products && data.products.length > 0) {
-            listContainer.innerHTML = data.products.map(p => `
+            listContainer.innerHTML = data.products.map(p => {
+                // فلترة الأرقام لضمان إرسالها للإدارة إن كانت المنتجات تابعة لها أو خالية من رقم تاجر
+                let finalPhone = (p.whatsapp && p.whatsapp !== "—" && p.whatsapp !== "1158555708") ? p.whatsapp : ADMIN_MAIN_WHATSAPP;
+                if(!finalPhone.startsWith("20")) finalPhone = "20" + finalPhone.replace(/^0+/, "");
+
+                return `
                 <div class="card">
                     <img src="${p.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
                     <h3 style="color:#0b6fc2; font-size:18px; margin:10px 0;">${p.name}</h3>
                     <p style="color:#666; font-size:13px; min-height:35px;">📋 ${p.description}</p>
                     <div style="font-weight:bold; color:#ff9800; margin:5px 0; font-size:16px;">💰 ${p.price} جنيه</div>
-                    <div style="font-size:11px; color:#0b6fc2; background:#e8f3fc; display:inline-block; padding:3px 8px; border-radius:15px; margin-bottom:8px;">📍 ${p.city} | القسم: ${p.category}</div>
-                    <a class="btn-buy" href="https://wa.me/20${p.whatsapp}?text=${encodeURIComponent('أرغب في شراء واستلام منتج: ' + p.name)}" target="_blank">💬 اطلب عبر واتساب الفوري</a>
+                    <div style="font-size:11px; color:#0b6fc2; background:#e8f3fc; display:inline-block; padding:3px 8px; border-radius:15px; margin-bottom:8px;">📍 ${p.city}</div>
+                    
+                    <a class="btn-buy" href="https://wa.me/${finalPhone}?text=${encodeURIComponent('أرغب في شراء منتج: ' + p.name + ' بسعر ' + p.price + ' ج.م.')}" target="_blank">💬 اطلب الفوري عبر واتساب</a>
+                    <button class="btn-add-cart" onclick="addToCart('${p.name}', '${p.price}', '${finalPhone}')">➕ أضف لسلة المشتريات الذكية</button>
                 </div>
-            `).join('');
+            `}).join('');
         } else {
-            listContainer.innerHTML = `<p style="text-align:center; width:100%; color:#888; font-weight:bold; padding:30px;">⚠️ لا توجد سلع معروضة حالياً في هذه المحافظة أو هذا القسم المعين.</p>`;
+            listContainer.innerHTML = `<p style="padding:30px; color:#888; font-weight:bold; width:100%;">⚠️ لا توجد منتجات متاحة حالياً وفقاً للفلاتر المختارة.</p>`;
         }
     } catch(e) {
-        listContainer.innerHTML = `<p style="text-align:center; width:100%; color:red;">❌ فشل الاتصال بقاعدة البيانات المباشرة.</p>`;
+        listContainer.innerHTML = `<p style="color:red; font-weight:bold; width:100%;">❌ فشل تحميل البيانات من السيرفر السحابي.</p>`;
     }
+}
+
+function addToCart(name, price, phone) {
+    cart.push({ name, price, phone });
+    document.getElementById("cartCount").innerText = cart.length;
+    document.getElementById("cartBtn").style.display = "block";
+    alert(`تم إضافة ${name} إلى سلة المشتريات الذكية بنجاح!`);
+}
+
+function checkoutCart() {
+    if(cart.length === 0) return;
+    let text = "🛒 طلب شراء مجمع من سلة المشتريات الذكية - Future Tank:\n\n";
+    let totalPrice = 0;
+    let targetPhone = cart[0].phone || ADMIN_MAIN_WHATSAPP;
+
+    cart.forEach((item, index) => {
+        text += `${index + 1}. المنتج: ${item.name} - السعر: ${item.price} ج.م.\n`;
+        totalPrice += parseFloat(item.price) || 0;
+    });
+
+    text += `\n💰 الإجمالي الكلي للمشتريات: ${totalPrice} جنيه مصري.`;
+    
+    const waURL = `https://wa.me/${targetPhone}?text=${encodeURIComponent(text)}`;
+    window.open(waURL, '_blank');
 }
 
 window.onload = loadProducts;
