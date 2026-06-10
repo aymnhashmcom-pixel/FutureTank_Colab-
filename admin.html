@@ -2,164 +2,158 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>لوحة تحكم الإدارة العامة | Future Tank</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <title>لوحة تحكم الإدارة العامة لـ Future Tank</title>
     <style>
-        body { font-family: Tahoma; background: #f0f4f8; margin: 0; padding: 0; direction: rtl; }
-        .login-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:#0b6fc2; display:flex; justify-content:center; align-items:center; z-index:99999; }
-        .login-box { background:#fff; padding:30px; border-radius:16px; text-align:center; box-shadow:0 4px 15px rgba(0,0,0,0.2); width:90%; max-width:400px; }
-        .login-box input { width:100%; padding:12px; margin:15px 0; border:1px solid #ccc; border-radius:8px; text-align:center; font-size:16px; box-sizing:border-box; }
-        .login-box button { background:#25D366; color:#fff; border:none; padding:12px; width:100%; border-radius:8px; font-weight:bold; cursor:pointer; font-size:16px; }
-        .admin-container { max-width: 1000px; margin: 30px auto; padding: 20px; display:none; }
-        .box { background:#fff; padding:20px; border-radius:12px; margin-bottom:20px; box-shadow:0 2px 10px rgba(0,0,0,0.05); }
-        h2 { color:#0b6fc2; margin-top:0; }
-        label { font-weight:bold; display:block; margin-top:10px; }
-        input, textarea, select { width:100%; padding:12px; margin-top:5px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }
-        .btn-save { background:#0b6fc2; color:#fff; border:none; padding:12px 20px; border-radius:8px; cursor:pointer; font-weight:bold; width:100%; margin-top:15px; font-size:16px; }
-        .order-item { background:#f9f9f9; padding:15px; border-radius:8px; border-right:5px solid #0b6fc2; margin-bottom:10px; line-height: 1.8; }
+        body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:20px; direction: rtl; text-align: right; }
+        .box { background: white; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); margin-bottom: 25px; }
+        .form-group { margin-bottom:15px; }
+        label { display:block; margin-bottom:5px; font-weight:bold; color:#0b6fc2; }
+        input, select, textarea { width:100%; padding:10px; border:1px solid #ccc; border-radius:8px; box-sizing: border-box; }
+        .btn-submit { background:#0b6fc2; color:white; border:none; padding:12px 20px; border-radius:8px; font-weight:bold; cursor:pointer; font-size:16px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: white; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: center; }
+        th { background-color: #0b6fc2; color: white; }
+        tr:nth-child(even) { background-color: #f9f9f9; }
     </style>
 </head>
 <body>
 
-<div class="login-overlay" id="loginOverlay">
-    <div class="login-box">
-        <img src="icon-192.png" width="70" style="border-radius:10px;" onerror="this.style.display='none'">
-        <h2 style="margin-top:10px;">دخول الإدارة العامة</h2>
-        <p style="color:#666; font-size:14px;">برجاء إدخال كلمة المرور السرية لفتح لوحة التحكم والطلبات</p>
-        <input type="password" id="adminPass" placeholder="أدخل كلمة المرور هنا">
-        <button onclick="checkAdminPassword()">🔓 تسجيل الدخول الآمن</button>
-    </div>
+<div class="box">
+    <h2>لوحة تحكم الإدارة العامة لـ Future Tank</h2>
+    <p>من هنا يمكنك التحكم في مخزون المنتجات، الخدمات، وإرسال البيانات مباشرة لشيت السيرفر.</p>
 </div>
 
-<div class="admin-container" id="adminContent">
-    <div class="box">
-        <h2><i class="fa fa-cogs"></i> لوحة تحكم الإدارة العامة لـ Future Tank</h2>
-        <p style="color:#666;">من هنا يمكنك التحكم في مخزون المنتجات، الخدمات، وإرسال البيانات مباشرة لشيت السيرفر.</p>
-    </div>
+<!-- نموذج إضافة المنتج -->
+<div class="box">
+    <h3>➕ إضافة منتج جديد للأسواق والمحافظات</h3>
+    <form id="productForm" onsubmit="saveProduct(event)">
+        <div class="form-group">
+            <label>اسم المنتج / الخدمة</label>
+            <input type="text" id="pName" required placeholder="مثال: فلتر 7 مراحل">
+        </div>
+        <div class="form-group">
+            <label>الوصف التفصيلي</label>
+            <textarea id="pDesc" rows="3" required placeholder="اكتب المواصفات والضمان هنا..."></textarea>
+        </div>
+        <div class="form-group">
+            <label>حدد المحافظة المستهدفة</label>
+            <select id="pCity">
+                <option value="كل المحافظات">كل المحافظات</option>
+                <option value="القاهرة">القاهرة</option>
+                <option value="الجيزة">الجيزة</option>
+                <option value="الإسكندرية">الإسكندرية</option>
+                <option value="الدقهلية">الدقهلية</option>
+                <option value="الغربية">الغربية</option>
+                <option value="القليوبية">القليوبية</option>
+                <option value="حدائق أكتوبر">حدائق أكتوبر</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>حدد القسم المعتمد (هام للتوجيه التلقائي)</label>
+            <select id="pCat">
+                <option value="خزانات المياه">خزانات المياه</option>
+                <option value="ملابس">ملابس</option>
+                <option value="عقارات">عقارات</option>
+                <option value="سيارات">سيارات</option>
+                <option value="خدمات متنوعة">خدمات متنوعة</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>السعر (بالجنيه المصري)</label>
+            <input type="number" id="pPrice" required placeholder="مثال: 6000">
+        </div>
+        <div class="form-group">
+            <label>رقم واتساب المسؤول أو التاجر</label>
+            <input type="text" id="pWhatsapp" value="01150402031" placeholder="اتركه كقيمة افتراضية للإدارة">
+        </div>
+        <div class="form-group">
+            <label>رابط صورة المنتج (URL)</label>
+            <input type="url" id="pImage" placeholder="أدخل رابط الصورة السحابي">
+        </div>
+        <button type="submit" class="btn-submit">💾 حفظ وتثبيت المنتج بالقسم والمحافظة</button>
+    </form>
+</div>
 
-    <div class="box">
-        <h3>➕ إضافة منتج جديد للأسواق والمحافظات</h3>
-        <label>اسم المنتج / الخدمة</label>
-        <input type="text" id="pName" placeholder="مثال: خزان مياه بولي إيثيلين">
-        
-        <label>الوصف التفصيلي</label>
-        <textarea id="pDesc" style="width:100%; height:80px; padding:12px;" placeholder="تفاصيل المنتج..."></textarea>
-        
-        <label>حدد المحافظة المستهدفة</label>
-        <select id="pCity">
-            <option value="القاهرة">القاهرة</option>
-            <option value="الجيزة">الجيزة</option>
-            <option value="الإسكندرية">الإسكندرية</option>
-            <option value="الدقهلية">الدقهلية</option>
-            <option value="الغربية">الغربية</option>
-            <option value="القليوبية">القليوبية</option>
-            <option value="حدائق أكتوبر">حدائق أكتوبر</option>
-        </select>
-
-        <label>حدد القسم المعتمد (هام للتوجيه التلقائي)</label>
-        <select id="pCat">
-            <option value="خزانات المياه">خزانات المياه</option>
-            <option value="ملابس">ملابس</option>
-            <option value="عقارات">عقارات</option>
-            <option value="سيارات">سيارات</option>
-            <option value="خدمات متنوعة">خدمات متنوعة</option>
-        </select>
-
-        <label>السعر (بالجنيه المصري)</label>
-        <input type="number" id="pPrice" placeholder="3500">
-
-        <label>رقم واتساب المسؤول أو التاجر</label>
-        <input type="text" id="pPhone" placeholder="01150402031">
-
-        <label>رابط صورة المنتج (URL)</label>
-        <input type="text" id="pImage" placeholder="https://i.ibb.co/...">
-
-        <button class="btn-save" onclick="saveAdminProduct()">💾 حفظ وتثبيت المنتج بالقسم والمحافظة</button>
-    </div>
-
-    <div class="box">
-        <h3>📦 الطلبات الحالية الواردة بالمنصة</h3>
-        <div id="adminOrdersBox">⏳ جاري جلب وقراءة قائمة الطلبات من شيت Orders...</div>
-    </div>
+<!-- عرض الطلبات الحالية الواردة بالمنصة -->
+<div class="box">
+    <h3>📦 الطلبات الحالية الواردة بالمنصة (من شيت Contracts الموحد)</h3>
+    <div id="ordersTableBox">⏳ جاري جلب الطلبات ومراجعة السيرفر...</div>
 </div>
 
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-    
-    function checkAdminPassword() {
-        const pass = document.getElementById("adminPass").value;
-        if (pass === "FT2026Admin") {
-            document.getElementById("loginOverlay").style.display = "none";
-            document.getElementById("adminContent").style.display = "block";
-            loadAdminOrders();
+const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+
+async function saveProduct(e) {
+    e.preventDefault();
+    const btn = document.querySelector("#productForm button");
+    btn.disabled = true;
+    btn.innerText = "⏳ جاري التثبيت بالسيرفر السحابي...";
+
+    const payload = {
+        action: "saveAdminProduct",
+        name: document.getElementById("pName").value,
+        description: document.getElementById("pDesc").value,
+        city: document.getElementById("pCity").value,
+        category: document.getElementById("pCat").value,
+        price: document.getElementById("pPrice").value,
+        whatsapp: document.getElementById("pWhatsapp").value,
+        image: document.getElementById("pImage").value
+    };
+
+    try {
+        const response = await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
+        const data = await response.json();
+        if(data.success) {
+            alert("✅ تم حفظ وتثبيت المنتج بنجاح بالقسم والمحافظة المحددة!");
+            document.getElementById("productForm").reset();
+            document.getElementById("pWhatsapp").value = "01150402031";
+        } else { alert("❌ حدث خطأ بالسيرفر أثناء الحفظ."); }
+    } catch (err) { alert("❌ فشل الاتصال بقاعدة البيانات السحابية."); }
+    btn.disabled = false;
+    btn.innerText = "💾 حفظ وتثبيت المنتج بالقسم والمحافظة";
+}
+
+async function loadAdminOrders() {
+    const box = document.getElementById("ordersTableBox");
+    try {
+        const response = await fetch(`${scriptURL}?action=getAdminOrders`);
+        const data = await response.json();
+        if(data.success && data.orders && data.orders.length > 0) {
+            let html = `<table>
+                <thead>
+                    <tr>
+                        <th>العميل</th>
+                        <th>الهاتف</th>
+                        <th>العنوان</th>
+                        <th>الخدمة / الطلب</th>
+                        <th>التكلفة</th>
+                        <th>التاريخ</th>
+                        <th>الحالة</th>
+                    </tr>
+                </thead>
+                <tbody>`;
+            data.orders.forEach(o => {
+                html += `<tr>
+                    <td><b>${o.name}</b></td>
+                    <td>${o.phone}</td>
+                    <td>${o.address}</td>
+                    <td><span style="color:#0b6fc2;">${o.service}</span></td>
+                    <td>${o.cost} ج.م</td>
+                    <td>${o.date}</td>
+                    <td><span style="color:green;font-weight:bold;">${o.status}</span></td>
+                </tr>`;
+            });
+            html += `</tbody></table>`;
+            box.innerHTML = html;
         } else {
-            alert("❌ كلمة المرور غير صحيحة! يرجى المحاولة مرة أخرى.");
+            box.innerHTML = `<p style="color:#888; font-weight:bold; text-align:center;">📦 لا توجد طلبات مسجلة حالياً في السيرفر.</p>`;
         }
+    } catch(e) {
+        box.innerHTML = `<p style="color:red; font-weight:bold; text-align:center;">❌ فشل تحميل الطلبات من السيرفر. يرجى مراجعة اتصال السيرفر بـ Google Sheets.</p>`;
     }
+}
 
-    async function saveAdminProduct() {
-        const name = document.getElementById("pName").value.trim();
-        const desc = document.getElementById("pDesc").value.trim();
-        const city = document.getElementById("pCity").value;
-        const cat = document.getElementById("pCat").value;
-        const price = document.getElementById("pPrice").value.trim();
-        const phone = document.getElementById("pPhone").value.trim();
-        const img = document.getElementById("pImage").value.trim();
-
-        if(!name || !price || !phone) { alert("⚠️ برجاء ملء الحقول الأساسية لضمان التثبيت"); return; }
-
-        try {
-            const response = await fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify({
-                    action: "saveAdminProduct",
-                    name: name, description: desc, city: city, category: cat, price: price, whatsapp: phone, image: img
-                })
-            });
-            const res = await response.json();
-            if(res.success) {
-                alert("✅ تم حفظ وتثبيت المنتج بنجاح في شيت AllProducts والموقع!");
-                location.reload();
-            }
-        } catch(e) {
-            alert("✅ تم إرسال طلب التحديث وجاري التثبيت النهائي بالشيت.");
-        }
-    }
-
-    function loadAdminOrders() {
-        const box = document.getElementById("adminOrdersBox");
-        fetch(`${API_URL}?action=getOrders`)
-        .then(res => res.json())
-        .then(data => {
-            if(!data || data.length === 0) {
-                box.innerHTML = "<p>لا توجد طلبات مسجلة حالياً.</p>";
-                return;
-            }
-            
-            let htmlContent = "";
-            data.forEach(o => {
-                // استخدام نظام الحماية لتفادي توقف الكود بسبب أسطر الشيت التالفة
-                try {
-                    htmlContent += `
-                        <div class="order-item">
-                            <strong>رقم الطلب:</strong> ${o.id || 'غير محدد'} | <strong>العميل:</strong> ${o.name || 'بدون اسم'} | <strong>الهاتف:</strong> ${o.phone || 'لا يوجد'}<br>
-                            <strong>العنوان:</strong> ${o.address || 'غير مدرج'} | <strong>المشتريات:</strong> ${o.items || 'لا توجد تفاصيل'} | <strong>الإجمالي:</strong> ${o.total || '0'} جنيه<br>
-                            <span style="color:#0b6fc2; font-weight:bold;">الحالة الحالية: ${o.status || 'تحت المراجعة'}</span>
-                        </div>
-                    `;
-                } catch(err) {
-                    console.warn("تم تخطي سطر يحتوي على بيانات تالفة في الشيت:", err);
-                }
-            });
-
-            box.innerHTML = htmlContent || "<p>لم يتم العثور على طلبات صالحة للعرض.</p>";
-        })
-        .catch((error) => {
-            console.error("Error loading orders:", error);
-            box.innerHTML = "❌ فشل تحميل الطلبات من السيرفر. يرجى مراجعة اتصال السيرفر بـ Google Sheets.";
-        });
-    }
+window.onload = loadAdminOrders;
 </script>
 </body>
 </html>
