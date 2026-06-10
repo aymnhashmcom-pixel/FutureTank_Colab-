@@ -3,8 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خدمات التطهير والتعقيم الاحترافية | Future Tank</title>
-    <link rel="stylesheet" href="style.css">
+    <title>خدمات التطهير والتعقيم | Future Tank</title>
     <style>
         body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:0; direction: rtl; text-align: center; }
         .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
@@ -21,11 +20,12 @@
 </header>
 
 <div id="servicesBox" class="grid-container">
-    <p id="loadingMsg">⏳ جاري تحميل قائمة الخدمات المعتمدة من السيرفر السحابي...</p>
+    <p id="loadingMsg">⏳ جاري تحميل قائمة الخدمات الحالية من السيرفر السحابي...</p>
 </div>
 
 <script>
 const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+const DEFAULT_ADMIN_PHONE = "201150402031"; // توجيه معتمد ومباشر للإدارة
 
 async function fetchServices() {
     const box = document.getElementById("servicesBox");
@@ -40,14 +40,14 @@ async function fetchServices() {
                     <h3 style="color:#0b6fc2; margin:15px 0;">${s.name}</h3>
                     <p style="color:#666; font-size:14px; min-height:40px;">${s.description}</p>
                     <div style="font-size:18px; color:#ff9800; font-weight:bold; margin:10px 0;">السعر: ${s.price} جنيه</div>
-                    <a class="btn-order" href="https://wa.me/201158555708?text=${encodeURIComponent('أرغب في حجز خدمة: ' + s.name)}" target="_blank">📅 احجز خدمتك الآن</a>
+                    <a class="btn-order" href="https://wa.me/${DEFAULT_ADMIN_PHONE}?text=${encodeURIComponent('مرحباً Future Tank، أرغب في حجز خدمة: ' + s.name + ' بسعر ' + s.price + ' ج.م.')}" target="_blank">📅 احجز خدمتك الآن</a>
                 </div>
             `).join('');
         } else {
-            box.innerHTML = `<p style="color:#888; font-weight:bold;">📍 لا توجد خدمات معروضة حالياً، يرجى مراجعة الإدارة.</p>`;
+            box.innerHTML = `<p style="color:#888; font-weight:bold;">📍 لا توجد خدمات معروضة حالياً.</p>`;
         }
     } catch (e) {
-        box.innerHTML = `<p style="color:red; font-weight:bold;">❌ عذراً، فشل تحميل الخدمات. جاري إعادة الاتصال التلقائي بالسيرفر...</p>`;
+        box.innerHTML = `<p style="color:red; font-weight:bold;">❌ عذراً، فشل تحميل الخدمات. يرجى مراجعة اتصال السيرفر بـ Google Sheets.</p>`;
     }
 }
 
