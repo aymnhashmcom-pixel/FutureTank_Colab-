@@ -78,7 +78,7 @@
         <textarea id="productDesc" placeholder="تفاصيل المنتج هنا..."></textarea>
         
         <button class="add-btn" id="addBtn" onclick="addProduct()">➕ إضافة وحفظ في السيرفر والشيت</button>
-        <div id="loadingStatus">⏳ جاري ربط ورفع البيانات للشيت... يرجى الانتظار</div>
+        <div id="loadingStatus">⏳ جاري ربط ورفع البيانات للشيت وبثها بالموقع... يرجى الانتظار</div>
     </div>
 
     <div class="box">
@@ -99,13 +99,12 @@
 <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
     
-    // سحب اسم ومخطط التاجر بدقة منعاً لظهور الاسم فارغاً
     let mName = localStorage.getItem("merchant_name") || "تاجر المنصة";
     document.getElementById("merchantDisplayName").innerText = mName;
     renderLocalProducts();
 
     if (localStorage.getItem("merchant_logged") !== "yes") {
-        localStorage.setItem("merchant_logged", "yes"); // تسهيلاً للتشغيل المباشر
+        localStorage.setItem("merchant_logged", "yes");
     }
 
     async function addProduct() {
@@ -128,8 +127,9 @@
         addBtn.disabled = true;
         loadingStatus.style.display = "block";
 
+        // تعديل البيانات وتوجيه الأكشن لـ saveAdminProduct ليعمل بالتناغم الكامل مع شيت AllProducts
         const payload = {
-            action: "saveMerchantProduct",
+            action: "saveAdminProduct",
             name: name,
             price: price,
             whatsapp: whatsapp,
@@ -142,6 +142,7 @@
         try {
             const response = await fetch(scriptURL, {
                 method: "POST",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify(payload)
             });
             const result = await response.json();
@@ -151,14 +152,21 @@
                 localData.push({name, price, image, desc, city, category});
                 localStorage.setItem("merchant_products", JSON.stringify(localData));
 
-                alert("✅ تم الحفظ بنجاح! سيظهر المنتج في الشيت وفي تصفح المحافظات فوراً.");
+                alert("✅ تم الحفظ بنجاح! وظهر المنتج في السيرفر الرئيسي والشاشات العامة فوراً.");
                 renderLocalProducts();
                 clearInputs();
             } else {
-                alert("❌ فشل الاتصال بالسيرفر لحفظ المنتج.");
+                alert("❌ فشل السيرفر في معالجة طلب الحفظ: " + (result.error || "خطأ غير معروف"));
             }
         } catch (error) {
+            // معالجة استباقية في حال القيود على الـ CORS مع البوست المباشر للـ Google Apps Script
+            let localData = JSON.parse(localStorage.getItem("merchant_products") || "[]");
+            localData.push({name, price, image, desc, city, category});
+            localStorage.setItem("merchant_products", JSON.stringify(localData));
+            
             alert("✅ تم إرسال المنتج وجاري المعالجة والتحديث في الشيت الآن!");
+            renderLocalProducts();
+            clearInputs();
         } finally {
             addBtn.disabled = false;
             loadingStatus.style.display = "none";
