@@ -13,7 +13,7 @@
         .box { background:#fff; padding:20px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.06); margin-bottom:25px; }
         h2, h3 { color:#0b6fc2; margin-top:0; }
         label { font-weight:bold; display:block; margin-top:12px; }
-        input, textarea { width:100%; padding:12px; margin-top:5px; border:1px solid #ccc; border-radius:8px; box-sizing:border-box; }
+        input, textarea { width:100%; padding:12px; margin-top:5px; border:1px solid #ccc; border-radius:8px; box-sizing:border-box; font-size:15px; }
         .pricing-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:15px; margin-top:15px; }
         .price-card { background:#fff; border:2px solid #ccc; border-radius:12px; padding:15px; text-align:center; cursor:pointer; transition:0.3s; }
         .price-card.selected { border-color: #0b6fc2; background: #e8f3fc; box-shadow: 0 4px 12px rgba(11,111,194,0.15); }
@@ -21,6 +21,7 @@
         .pay-checkout-box { display:none; background:#fff8e1; border:2px dashed #ffb300; padding:20px; border-radius:12px; margin-top:20px; text-align:center; }
         .pay-link-btn { display:inline-flex; align-items:center; gap:8px; padding:12px 20px; color:#fff; text-decoration:none; font-weight:bold; border-radius:8px; margin:10px 5px; font-size:15px; }
         .btn-submit { background:#25D366; color:#fff; border:none; padding:15px; border-radius:12px; font-weight:bold; cursor:pointer; width:100%; margin-top:20px; font-size:16px; }
+        .btn-submit:disabled { background:#ccc; cursor:not-allowed; }
     </style>
 </head>
 <body>
@@ -73,7 +74,7 @@
             <p style="font-size:12px; color:#666; margin-top:10px;">بعد إتمام التحويل المالي، انقر على الزر بالأسفل لتثبيت الحساب وتوليد كود الدخول.</p>
         </div>
 
-        <button class="btn-submit" onclick="sendMerchantRegistration()">🚀 تفعيل الحساب وحفظ الاشتراك بقاعدة البيانات</button>
+        <button class="btn-submit" id="submitBtn" onclick="sendMerchantRegistration()">🚀 تفعيل الحساب وحفظ الاشتراك بقاعدة البيانات</button>
     </div>
 </div>
 
@@ -98,10 +99,14 @@ async function sendMerchantRegistration() {
     const phone = document.getElementById("mPhone").value.trim();
     const desc = document.getElementById("mDesc").value.trim();
     const plan = document.getElementById("mPlan").value;
+    const btn = document.getElementById("submitBtn");
     
-    if(!name || !phone) { alert("برجاء إدخال اسمك ورقم الهاتف أولاً"); return; }
-    if(!plan) { alert("برجاء النقر على إحدى الباقات واختيارها أولاً لتفعيل الدفع"); return; }
+    if(!name || !phone) { alert("⚠️ برجاء إدخل اسمك ورقم الهاتف أولاً"); return; }
+    if(!plan) { alert("⚠️ برجاء النقر على إحدى الباقات واختيارها أولاً لتفعيل الدفع"); return; }
     
+    btn.disabled = true;
+    btn.innerText = "⏳ جاري توليد كود الحساب الموثق...";
+
     const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
     
     try {
@@ -109,15 +114,23 @@ async function sendMerchantRegistration() {
         const data = await response.json();
         
         if(data.success) {
-            alert(`🎉 ممتاز! تم تفعيل الحساب الحسابي بنجاح.\n🔑 كود الدخول الخاص بك هو: ${data.code}\nسيتم توجيهك الآن للوحة التحكم.`);
-            window.location.href = `merchant-dashboard.html?merchant_code=${data.code}`;
+            alert(`🎉 هنيئاً لك! تم تفعيل الحساب بنجاح بقاعدة البيانات السحابية.\n🔑 كود الاشتراك الخاص بك للدخول هو: [ ${data.code} ]\n👉 يرجى حفظ هذا الكود جيداً للدخول به إلى لوحتك.`);
+            localStorage.setItem("merchant_logged", "yes");
+            localStorage.setItem("merchant_phone", phone);
+            localStorage.setItem("merchant_name", name);
+            localStorage.setItem("merchant_code", data.code);
+            localStorage.setItem("merchant_plan", plan);
+            window.location.href = "merchant-dashboard.html";
         } else {
-            alert(data.message || "حدث خطأ أثناء معالجة الاشتراك الحسابي المباشر.");
+            alert(data.message || "حدث خطأ أثناء معالجة الاشتراك.");
+            btn.disabled = false;
+            btn.innerText = "🚀 تفعيل الحساب وحفظ الاشتراك بقاعدة البيانات";
         }
     } catch(e) {
-        alert("تم الحفظ وتثبيت طلبك! يرجى إرسال لقطة شاشة بالتحويل لتأكيد التفعيل اليدوي الفوري.");
-        const waMsg = `💼 طلب تفعيل تاجر جديد:\n👤 الاسم: ${name}\n📞 الهاتف: ${phone}\n💳 الباقة: ${plan}`;
-        window.open("https://wa.me/201150402031?text=" + encodeURIComponent(waMsg), "_blank");
+        alert("✅ تم إرسال طلبك! يرجى إرسال لقطة شاشة بالتحويل للواتساب لتأكيد التفعيل اليدوي الفوري وتوليد الكود.");
+        window.open(`https://wa.me/201150402031?text=${encodeURIComponent('مرحباً إدارة فيوتشر تانك، قمت بالتسجيل وأرغب في استلام كود الدخول الخاص بي لهاتف: ' + phone)}`, "_blank");
+        btn.disabled = false;
+        btn.innerText = "🚀 تفعيل الحساب وحفظ الاشتراك بقاعدة البيانات";
     }
 }
 </script>
