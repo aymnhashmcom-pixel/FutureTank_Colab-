@@ -17,7 +17,7 @@
         label { font-weight:bold; display:block; margin-top:10px; }
         input, textarea, select { width:100%; padding:12px; margin-top:5px; border-radius:8px; border:1px solid #ccc; box-sizing:border-box; }
         .btn-save { background:#0b6fc2; color:#fff; border:none; padding:12px 20px; border-radius:8px; cursor:pointer; font-weight:bold; width:100%; margin-top:15px; font-size:16px; }
-        .order-item { background:#f9f9f9; padding:15px; border-radius:8px; border-right:5px solid #0b6fc2; margin-bottom:10px; }
+        .order-item { background:#f9f9f9; padding:15px; border-radius:8px; border-right:5px solid #0b6fc2; margin-bottom:10px; line-height: 1.8; }
     </style>
 </head>
 <body>
@@ -44,7 +44,7 @@
         <input type="text" id="pName" placeholder="مثال: خزان مياه بولي إيثيلين">
         
         <label>الوصف التفصيلي</label>
-        <textarea id="pDesc" style="width:100%; height:8px0px; padding:12px;" placeholder="تفاصيل المنتج..."></textarea>
+        <textarea id="pDesc" style="width:100%; height:80px; padding:12px;" placeholder="تفاصيل المنتج..."></textarea>
         
         <label>حدد المحافظة المستهدفة</label>
         <select id="pCity">
@@ -89,7 +89,6 @@
     
     function checkAdminPassword() {
         const pass = document.getElementById("adminPass").value;
-        // كلمة السر المعتمدة لك للإدارة
         if (pass === "FT2026Admin") {
             document.getElementById("loginOverlay").style.display = "none";
             document.getElementById("adminContent").style.display = "block";
@@ -137,14 +136,29 @@
                 box.innerHTML = "<p>لا توجد طلبات مسجلة حالياً.</p>";
                 return;
             }
-            box.innerHTML = data.map(o => `
-                <div class="order-item">
-                    <strong>رقم الطلب: ${o.id}</strong> | العميل: ${o.name} | الهاتف: ${o.phone}<br>
-                    العنوان: ${o.address} | المشتريات: ${o.items} | الإجمالي: ${o.total} جنيه<br>
-                    <span style="color:#0b6fc2; font-weight:bold;">الحالة الحالية: ${o.status}</span>
-                </div>
-            `).join('');
-        }).catch(() => box.innerHTML = "❌ فشل تحميل الطلبات من السيرفر.");
+            
+            let htmlContent = "";
+            data.forEach(o => {
+                // استخدام نظام الحماية لتفادي توقف الكود بسبب أسطر الشيت التالفة
+                try {
+                    htmlContent += `
+                        <div class="order-item">
+                            <strong>رقم الطلب:</strong> ${o.id || 'غير محدد'} | <strong>العميل:</strong> ${o.name || 'بدون اسم'} | <strong>الهاتف:</strong> ${o.phone || 'لا يوجد'}<br>
+                            <strong>العنوان:</strong> ${o.address || 'غير مدرج'} | <strong>المشتريات:</strong> ${o.items || 'لا توجد تفاصيل'} | <strong>الإجمالي:</strong> ${o.total || '0'} جنيه<br>
+                            <span style="color:#0b6fc2; font-weight:bold;">الحالة الحالية: ${o.status || 'تحت المراجعة'}</span>
+                        </div>
+                    `;
+                } catch(err) {
+                    console.warn("تم تخطي سطر يحتوي على بيانات تالفة في الشيت:", err);
+                }
+            });
+
+            box.innerHTML = htmlContent || "<p>لم يتم العثور على طلبات صالحة للعرض.</p>";
+        })
+        .catch((error) => {
+            console.error("Error loading orders:", error);
+            box.innerHTML = "❌ فشل تحميل الطلبات من السيرفر. يرجى مراجعة اتصال السيرفر بـ Google Sheets.";
+        });
     }
 </script>
 </body>
