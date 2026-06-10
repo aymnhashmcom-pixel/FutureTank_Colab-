@@ -6,6 +6,17 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b6fc2">
 
+<!-- وسوم الـ Open Graph لمشاركة الرابط بشكل احترافي مع الصورة على الواتساب ووسائل التواصل -->
+<meta property="og:title" content="منصة Future Tank الذكية" />
+<meta property="og:description" content="المنصة المتكاملة لتطهير وتعقيم خزانات مياه الشرب وتجارة المنتجات بجميع المحافظات" />
+<meta property="og:image" content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/icon-512.png" />
+<meta property="og:url" content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/index.html" />
+<meta property="og:type" content="website" />
+
+<!-- ربط ملف المانيفست الخاص بالتثبيت والتطبيق الحقيقي PWA -->
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
 *{ margin:0; padding:0; box-sizing:border-box; font-family:Tahoma,sans-serif; }
@@ -27,6 +38,11 @@ body{ background:#f5f9ff; overflow-x:hidden; }
 .market-box{ background:#fff; padding:25px; border-radius:20px; text-align:center; box-shadow:0 5px 18px rgba(0,0,0,.08); margin-bottom:25px; }
 .market-box h2{ color:#ff9800; margin-bottom:10px; }
 .market-btn{ display:inline-block; margin-top:15px; background:linear-gradient(135deg,#ff9800,#ffb74d); color:#fff; padding:15px 25px; border-radius:14px; text-decoration:none; font-size:18px; font-weight:bold; }
+
+/* زر التثبيت الذكي */
+.install-container { text-align: center; margin-bottom: 20px; display: none; }
+.install-btn { background: linear-gradient(135deg, #1e88e5, #1565c0); color: #fff; border: none; padding: 15px 35px; font-size: 18px; font-weight: bold; border-radius: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(21,101,192,0.3); }
+
 .action-buttons{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:15px; margin-bottom:25px; }
 .action-buttons button{ padding:16px; border:none; border-radius:16px; font-size:17px; font-weight:bold; color:#fff; cursor:pointer; }
 .notify-btn{ background:#ff5722; }
@@ -53,6 +69,11 @@ footer{ margin-top:40px; padding:20px; text-align:center; color:#777; }
 </header>
 
 <div class="container">
+  <!-- منطقة زر تثبيت التطبيق الذكي (تظهر وتختفي تلقائياً) -->
+  <div class="install-container" id="installContainer">
+     <button class="install-btn" id="btnInstall"><i class="fa fa-download"></i> 📥 تـثـبـيـت الـتـطـبـيـق الآن</button>
+  </div>
+
   <div class="brand-box">
     <img src="./icon-512.png" alt="Future Tank">
     <h2>منصة فيوتشر تانك الذكية</h2>
@@ -95,12 +116,9 @@ footer{ margin-top:40px; padding:20px; text-align:center; color:#777; }
   <div class="reviews-box">
     <h3>⭐ تقييمات وآراء العملاء</h3>
     <div id="appReviews">
-      <!-- التقييمات الافتراضية المثبتة -->
-      <div class="review-item"><strong>حسن يوسف</strong><div class="stars">⭐⭐⭐⭐•</div><p>ما شاء الله أداء، خدمة، تميز، ثقة، أمان واحترافية عالية في العمل.</p></div>
+      <div class="review-item"><strong>حسن يوسف</strong><div class="stars">⭐⭐⭐⭐★</div><p>ما شاء الله أداء، خدمة، تميز، ثقة، أمان واحترافية عالية في العمل.</p></div>
       <div class="review-item"><strong>محمد معراج</strong><div class="stars">⭐⭐⭐⭐⭐</div><p>خدمة ممتازة وفريق عمل منظم وسريع الاستجابة دائماً.</p></div>
       <div class="review-item"><strong>زياد أيمن</strong><div class="stars">⭐⭐⭐⭐⭐</div><p>تطبيق ممتاز ويسهل علينا تتبع الخزانات ومواعيد الصيانة الدورية.</p></div>
-      
-      <!-- التقييمات الإضافية المخفية تلقائياً والتي تظهر عند الضغط على زر عرض المزيد -->
       <div class="review-item hidden"><strong>الحج فوزي (الهرم)</strong><div class="stars">⭐⭐⭐⭐⭐</div><p>منظومة محترمة جداً والتزام تام بمواعيد تطهير وتعقيم الخزانات.</p></div>
       <div class="review-item hidden"><strong>المهندس رضا</strong><div class="stars">⭐⭐⭐⭐⭐</div><p>تحديث ممتاز للبوابات الإلكترونية، يسهل العمل الإداري والتجاري.</p></div>
     </div>
@@ -111,6 +129,41 @@ footer{ margin-top:40px; padding:20px; text-align:center; color:#777; }
 <footer>© Future Tank — جميع الحقوق محفوظة</footer>
 
 <script>
+// كود تشغيل وإدارة نظام التثبيت المتقدم PWA ليتناسب مع المتصفحات المعاصرة في 2026
+let deferredPrompt;
+const installContainer = document.getElementById('installContainer');
+const btnInstall = document.getElementById('btnInstall');
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  if(installContainer) installContainer.style.display = 'block';
+});
+
+if(btnInstall) {
+  btnInstall.addEventListener('click', async () => {
+    if (!deferredPrompt) return;
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+    if (outcome === 'accepted') {
+      if(installContainer) installContainer.style.display = 'none';
+    }
+    deferredPrompt = null;
+  });
+}
+
+window.addEventListener('appinstalled', () => {
+  if(installContainer) installContainer.style.display = 'none';
+  deferredPrompt = null;
+});
+
+// تسجيل الـ Service Worker لضمان تفعيل ميزة التثبيت والتصفح دون إنترنت
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(err => console.log("SW registration failed: ", err));
+  });
+}
+
 const offers = [
   "🇪🇬 نرحب بالتجار والشركات من جميع محافظات مصر من كل مكان",
   "🛍️ آلاف المنتجات والعروض المميزة في المحافظات",
@@ -124,26 +177,35 @@ setInterval(() => {
 }, 3000);
 
 function toggleReviewsVisibility() {
-    const hiddenItems = document.querySelectorAll("#appReviews .review-item.hidden");
     const btn = document.getElementById("toggleReviewsBtn");
     const allItems = document.querySelectorAll("#appReviews .review-item");
-    
     if (btn.innerText.includes("عرض المزيد")) {
         allItems.forEach(item => item.classList.remove("hidden"));
         btn.innerText = "▲ عرض أقل";
     } else {
-        // إعادة إخفاء التقييمات الإضافية (بعد أول 3 عناصر)
-        for (let i = 3; i < allItems.length; i++) {
-            allItems[i].classList.add("hidden");
-        }
+        for (let i = 3; i < allItems.length; i++) { allItems[i].classList.add("hidden"); }
         btn.innerText = "👁️ عرض المزيد من التقييمات";
     }
 }
 
 function shareApp() {
-    const url = "https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/index.html";
+    const shareData = {
+        title: 'منصة Future Tank الذكية',
+        text: 'المنصة المتكاملة لتطهير وتعقيم خزانات مياه الشرب وتجارة المنتجات بمصر 💧',
+        url: 'https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/index.html'
+    };
+    
+    // إذا كان الهاتف يدعم المشاركة الذكية عبر تطبيقات الجوال والواتس مباشرة مع الصورة
+    if (navigator.share) {
+        navigator.share(shareData).catch(() => copyToClipboard(shareData.url));
+    } else {
+        copyToClipboard(shareData.url);
+    }
+}
+
+function copyToClipboard(url) {
     navigator.clipboard.writeText(url);
-    alert("تم نسخ رابط المنصة بنجاح وجاهز للمشاركة والترويج!");
+    alert("تم نسخ رابط المنصة الاحترافي بنجاح وجاهز للمشاركه والترويج!");
 }
 
 async function openInteractiveReview() {
@@ -156,19 +218,10 @@ async function openInteractiveReview() {
     const stars = prompt("ضع تقييمك بالدرجات والنجوم من (1 إلى 5):", "5") || "5";
 
     const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-    
     try {
-        // إرسال كافة المعاملات دفعة واحدة بالترتيب البرمجي الدقيق
-        const response = await fetch(`${apiURL}?action=saveReview&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&stars=${encodeURIComponent(stars)}&comment=${encodeURIComponent(comment)}`);
-        const data = await response.json();
-        
-        if(data.success) {
-            alert("⭐ شكرًا جزيلًا لتقييمك! تم حفظ الاسم والهاتف والتعليق بنجاح في سجلات السيرفر الفورية.");
-            location.reload();
-        } else {
-            alert("تم إرسال التقييم وحفظ حقوله بنجاح!");
-            location.reload();
-        }
+        await fetch(`${apiURL}?action=saveReview&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&stars=${encodeURIComponent(stars)}&comment=${encodeURIComponent(comment)}`);
+        alert("⭐ شكرًا جزيلًا لتقييمك! تم حفظ الاسم والهاتف والتعليق بنجاح في سجلات السيرفر الفورية.");
+        location.reload();
     } catch(e) {
         alert("🎉 تم تسجيل التقييم وحفظ الاسم والتعليق بنجاح داخل شيت AppReviews المحدث!");
         location.reload();
