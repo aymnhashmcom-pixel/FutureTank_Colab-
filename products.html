@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <title>سوق وعروض المحافظات الشامل | Future Tank</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
   <style>
     body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:0; direction: rtl; text-align: center; }
     .filter-box { background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 900px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; align-items: center; }
@@ -13,25 +12,19 @@
     .card { background: #fff; border-radius: 16px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); text-align: center; border: 1px solid #e1effa; }
     .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; }
     .btn-buy { display: block; background: #25D366; color: white; padding: 10px; border-radius: 8px; text-decoration: none; margin-top: 12px; font-weight: bold; font-size: 15px; }
-    .services-status { background: #ffebee; color: #c62828; padding: 12px; border-radius: 8px; display: none; max-width: 500px; margin: 10px auto; font-weight: bold; }
   </style>
 </head>
-
 <body>
 
-<header class="main-header" style="background:#0b6fc2; color:#fff; padding:25px;">
-  <h1>💧 دليل خدمات وعروض محافظات مصر الفوري</h1>
-  <p>منصة الشركاء والتجار الرسمية لـ Future Tank</p>
+<header style="background:#0b6fc2; color:#fff; padding:25px;">
+  <h1>💧 منتجات وعروض نقاء مياه الشرب والأسواق المتنوعة</h1>
+  <p>تصفح واطلب السلع والخدمات مباشرة من سيرفر السيرفر المركزي</p>
 </header>
 
-<!-- قسم الخدمات المحمي من الفشل -->
-<div class="services-status" id="serviceErrorMsg">⚠️ فشل تحميل بيانات الخدمات الحالية من السيرفر.</div>
-
-<!-- الفلتر المنظم الذكي الجديد للمحافظات والأقسام -->
 <div class="filter-box">
     <div>
-        <span style="font-weight:bold; color:#555;">📍 اختر المحافظة:</span>
-        <select id="filterCity" onchange="loadOrganizedProducts()">
+        <span style="font-weight:bold; color:#555;">📍 تصفية حسب المحافظة:</span>
+        <select id="filterCity" onchange="loadProducts()">
             <option value="الكل">🌍 كل المحافظات</option>
             <option value="القاهرة">القاهرة</option>
             <option value="الجيزة">الجيزة</option>
@@ -42,8 +35,8 @@
         </select>
     </div>
     <div>
-        <span style="font-weight:bold; color:#555;">🗂️ اختر القسم الداخلي:</span>
-        <select id="filterCat" onchange="loadOrganizedProducts()">
+        <span style="font-weight:bold; color:#555;">🗂️ تصفية حسب القسم المعتمد:</span>
+        <select id="filterCat" onchange="loadProducts()">
             <option value="الكل">🛍️ كل الأقسام وعروض السلع</option>
             <option value="خزانات المياه">خزانات مياه ونقاء</option>
             <option value="ملابس">ملابس</option>
@@ -55,34 +48,16 @@
 </div>
 
 <main class="container">
-  <div id="productsList" class="cards">⏳ جاري تنظيم وبث العروض من قاعدة البيانات الحية...</div>
+  <div id="productsList" class="cards">⏳ جاري سحب وتنظيم عروض السيرفر الشامل...</div>
 </main>
-
-<footer class="main-footer" style="margin-top:40px; padding:20px; background:#e1effa; color:#555;">
-  © Future Tank – جميع الحقوق محفوظة لجمهورية مصر العربية 2026
-</footer>
 
 <script>
 const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-async function checkServicesHealth() {
-    try {
-        const res = await fetch(`${apiURL}?action=getServices`);
-        const data = await res.json();
-        if(!data.success) {
-            document.getElementById("serviceErrorMsg").style.display = "block";
-        }
-    } catch(e) {
-        document.getElementById("serviceErrorMsg").style.display = "block";
-    }
-}
-
-async function loadOrganizedProducts() {
+async function loadProducts() {
     const listContainer = document.getElementById("productsList");
     const chosenCity = document.getElementById("filterCity").value;
     const chosenCat = document.getElementById("filterCat").value;
-    
-    listContainer.innerHTML = "⏳ جاري فلترة وجلب منتجاتك المحددة...";
     
     try {
         const res = await fetch(`${apiURL}?action=getAllProducts&city=${encodeURIComponent(chosenCity)}&category=${encodeURIComponent(chosenCat)}`);
@@ -93,25 +68,21 @@ async function loadOrganizedProducts() {
                 <div class="card">
                     <img src="${p.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
                     <h3 style="color:#0b6fc2; font-size:18px; margin:10px 0;">${p.name}</h3>
-                    <p style="color:#666; font-size:13px; min-height:35px; margin:5px 0;">📋 ${p.description || 'مواصفات ممتازة معتمدة ومطابقة للجودة'}</p>
+                    <p style="color:#666; font-size:13px; min-height:35px;">📋 ${p.description}</p>
                     <div style="font-weight:bold; color:#ff9800; margin:5px 0; font-size:16px;">💰 ${p.price} جنيه</div>
-                    <div style="font-size:12px; color:#0b6fc2; background:#e8f3fc; display:inline-block; padding:4px 10px; border-radius:20px; margin-bottom:10px;">📍 ${p.city}</div>
-                    <a class="btn-buy" href="https://wa.me/20${p.whatsapp || '1158555708'}?text=${encodeURIComponent('أرغب في شراء واستلام منتج: ' + p.name)}" target="_blank"><i class="fab fa-whatsapp"></i> اطلب عبر واتساب</a>
+                    <div style="font-size:11px; color:#0b6fc2; background:#e8f3fc; display:inline-block; padding:3px 8px; border-radius:15px; margin-bottom:8px;">📍 ${p.city} | القسم: ${p.category}</div>
+                    <a class="btn-buy" href="https://wa.me/20${p.whatsapp}?text=${encodeURIComponent('أرغب في شراء واستلام منتج: ' + p.name)}" target="_blank">💬 اطلب عبر واتساب الفوري</a>
                 </div>
             `).join('');
         } else {
-            listContainer.innerHTML = `<p style="text-align:center; width:100%; color:#888; font-weight:bold; padding:30px;">⚠️ عذراً، لا توجد عروض مضافة حالياً في محافظة [ ${chosenCity} ] لقسم [ ${chosenCat} ].</p>`;
+            listContainer.innerHTML = `<p style="text-align:center; width:100%; color:#888; font-weight:bold; padding:30px;">⚠️ لا توجد سلع معروضة حالياً في هذه المحافظة أو هذا القسم المعين.</p>`;
         }
     } catch(e) {
-        listContainer.innerHTML = `<p style="text-align:center; width:100%; color:red;">❌ فشل الاتصال بالسيرفر السحابي، جاري التحديث المباشر.</p>`;
+        listContainer.innerHTML = `<p style="text-align:center; width:100%; color:red;">❌ فشل الاتصال بقاعدة البيانات المباشرة.</p>`;
     }
 }
 
-window.onload = function() {
-    checkServicesHealth();
-    loadOrganizedProducts();
-};
+window.onload = loadProducts;
 </script>
-
 </body>
 </html>
