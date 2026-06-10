@@ -3,59 +3,55 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خدمات التطهير والتعقيم | Future Tank</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <title>خدمات التطهير والتعقيم الاحترافية | Future Tank</title>
+    <link rel="stylesheet" href="style.css">
     <style>
-        body { font-family: Tahoma; background: #f4f9ff; margin: 0; padding: 0; direction: rtl; }
-        .nav-bar { background:#0b6fc2; padding:15px; display:flex; justify-content:center; gap:20px; }
-        .nav-bar a { color:#fff; text-decoration:none; font-weight:bold; }
-        .container { padding: 20px; max-width: 800px; margin: auto; }
-        .service-card { background:#fff; padding:20px; border-radius:15px; box-shadow:0 4px 12px rgba(0,0,0,0.05); margin-bottom:20px; text-align:center; }
-        .service-card img { width:100%; max-height:220px; object-fit:cover; border-radius:12px; }
-        .service-title { font-size:20px; font-weight:bold; color:#0b6fc2; margin:15px 0; }
-        .service-price { font-size:18px; color:#ff9800; font-weight:bold; margin-bottom:15px; }
-        .btn-request { display:block; background:#25D366; color:#fff; padding:12px; border-radius:8px; text-decoration:none; font-weight:bold; }
+        body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:0; direction: rtl; text-align: center; }
+        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
+        .service-card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 1px solid #e1effa; text-align: center; }
+        .service-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; }
+        .btn-order { display: block; background: #0b6fc2; color: #fff; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 15px; }
     </style>
 </head>
 <body>
 
-<div class="nav-bar">
-    <a href="index.html">الرئيسية</a>
-    <a href="shop.html">المحافظات</a>
-    <a href="services.html">💧 خدماتنا</a>
-</div>
+<header style="background:#0b6fc2; color:#fff; padding:30px;">
+    <h2>🛠️ خدمات التطهير والتعقيم الاحترافية لـ Future Tank</h2>
+    <p>حلول هندسية معتمدة لتطهير وتعقيم الخزانات بمواصفات وزارة الصحة</p>
+</header>
 
-<div class="container">
-    <h2 style="text-align:center; color:#0b6fc2;">🛠️ خدمات التطهير والتعقيم الاحترافية لـ Future Tank</h2>
-    <div id="servicesContainer">🔄 جاري سحب بيانات الخدمات المعتمدة حالياً...</div>
+<div id="servicesBox" class="grid-container">
+    <p id="loadingMsg">⏳ جاري تحميل قائمة الخدمات المعتمدة من السيرفر السحابي...</p>
 </div>
 
 <script>
-    const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-    
-    function loadServicesData() {
-        const box = document.getElementById("servicesContainer");
-        fetch(`${API_URL}?action=services`)
-        .then(res => res.json())
-        .then(data => {
-            if(!data || data.length === 0) {
-                box.innerHTML = "<p style='text-align:center;'>لا توجد خدمات مضافة بالشيت حالياً.</p>";
-                return;
-            }
-            box.innerHTML = data.map(s => `
+const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+
+async function fetchServices() {
+    const box = document.getElementById("servicesBox");
+    try {
+        const response = await fetch(`${scriptURL}?action=getServices`);
+        const data = await response.json();
+        
+        if (data.success && data.services && data.services.length > 0) {
+            box.innerHTML = data.services.map(s => `
                 <div class="service-card">
-                    <img src="${s.image}" onerror="this.src='https://via.placeholder.com/300'">
-                    <div class="service-title">${s.name}</div>
-                    <p style="color:#666;">${s.desc}</p>
-                    <div class="service-price">${s.price} جنيه مصري</div>
-                    <a class="btn-request" href="https://wa.me/201150402031?text=${encodeURIComponent('مرحباً فيوتشر تانك، أرغب في طلب خدمة: ' + s.name)}" target="_blank">
-                        <i class="fab fa-whatsapp"></i> اطلب الخدمة الآن
-                    </a>
+                    <img src="${s.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
+                    <h3 style="color:#0b6fc2; margin:15px 0;">${s.name}</h3>
+                    <p style="color:#666; font-size:14px; min-height:40px;">${s.description}</p>
+                    <div style="font-size:18px; color:#ff9800; font-weight:bold; margin:10px 0;">السعر: ${s.price} جنيه</div>
+                    <a class="btn-order" href="https://wa.me/201158555708?text=${encodeURIComponent('أرغب في حجز خدمة: ' + s.name)}" target="_blank">📅 احجز خدمتك الآن</a>
                 </div>
             `).join('');
-        }).catch(() => box.innerHTML = "❌ فشل تحميل بيانات الخدمات الحالية.");
+        } else {
+            box.innerHTML = `<p style="color:#888; font-weight:bold;">📍 لا توجد خدمات معروضة حالياً، يرجى مراجعة الإدارة.</p>`;
+        }
+    } catch (e) {
+        box.innerHTML = `<p style="color:red; font-weight:bold;">❌ عذراً، فشل تحميل الخدمات. جاري إعادة الاتصال التلقائي بالسيرفر...</p>`;
     }
-    window.onload = loadServicesData;
+}
+
+window.onload = fetchServices;
 </script>
 </body>
 </html>
