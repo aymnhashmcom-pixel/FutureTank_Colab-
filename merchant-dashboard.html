@@ -8,36 +8,55 @@
     <style>
         body { margin:0; padding:0; font-family:Tahoma; background:#f4f9ff; color:#333; }
         header { background:#0b6fc2; color:#fff; padding:20px; text-align:center; }
-        .container { padding:20px; max-width:800px; margin:auto; }
+        .container { padding:20px; max-width:800px; margin:auto; display:none; } /* مخفي افتراضياً لحين تسجيل الدخول */
         .box { background:#fff; padding:20px; border-radius:20px; margin-bottom:20px; box-shadow:0 3px 12px rgba(0,0,0,.08); }
         h2 { margin-top:0; color:#0b6fc2; }
         label { font-weight:bold; display:block; margin-top:10px; color:#555; }
         input, textarea, select { width:100%; padding:14px; margin-top:5px; border-radius:12px; border:1px solid #ccc; box-sizing:border-box; font-size:16px; }
-        textarea { min-height:100px; resize:none; }
         button { width:100%; padding:15px; border:none; border-radius:14px; margin-top:15px; font-size:17px; cursor:pointer; font-weight:bold; transition: 0.3s; }
         .add-btn { background:#0b6fc2; color:#fff; }
         .add-btn:disabled { background:#ccc; cursor:not-allowed; }
         .whatsapp-btn { background:#25D366; color:#fff; }
-        .delete-btn { background:#f44336; color:#fff; margin-top:5px; font-size:14px; padding:10px; width:auto; border-radius:8px; }
         .logout-btn { background:#f44336; color:#fff; }
         .notice { background:#e8f7ff; padding:15px; border-radius:15px; line-height:2; margin-bottom:20px; font-size: 14px; }
         .product-item { background:#f8fbff; padding:15px; border-radius:15px; margin-top:15px; border:1px solid #d8ebff; text-align: center; }
         .product-item img { width:100%; max-height:180px; object-fit:cover; border-radius:15px; }
-        #loadingStatus { display: none; color: #0b6fc2; font-weight: bold; margin-top: 10px; text-align: center; }
+        
+        /* شاشة تسجيل الدخول */
+        .login-overlay { position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(11,111,194,0.15); backdrop-filter:blur(8px); display:flex; justify-content:center; align-items:center; z-index:10000; }
+        .login-box { background:#fff; padding:30px; border-radius:24px; width:90%; max-width:420px; box-shadow:0 10px 30px rgba(0,0,0,0.1); text-align:center; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1>💼 لوحة تحكم التاجر الشاملة</h1>
-    <p>Future Tank Merchant Management System</p>
-</header>
+<!-- بوابة تسجيل الدخول المانعة -->
+<div class="login-overlay" id="loginOverlay">
+    <div class="login-box">
+        <h3 style="color:#0b6fc2; margin-bottom:5px;"><i class="fa fa-lock"></i> تسجيل دخول التجار المعتمدين</h3>
+        <p style="font-size:13px; color:#666; margin-bottom:20px;">الرجاء إدخال رقم الهاتف وكود الاشتراك لتأمين حسابك</p>
+        
+        <label style="text-align:right;">رقم هاتف الواتساب</label>
+        <input type="text" id="loginPhone" placeholder="مثال: 01158555708">
+        
+        <label style="text-align:right; margin-top:15px;">كود الاشتراك (6 أرقام)</label>
+        <input type="password" id="loginCode" placeholder="أدخل الكود المولد عند الدفع">
+        
+        <button class="add-btn" id="loginBtn" onclick="processMerchantLogin()">🔓 دخول آمن للوحة التحكم</button>
+        <p style="margin-top:15px; font-size:13px;">ليس لديك حساب؟ <a href="business.html" style="color:#0b6fc2; font-weight:bold; text-decoration:none;">سجل كتاجر من هنا</a></p>
+    </div>
+</div>
 
-<div class="container">
+<!-- محتوى لوحة التحكم الشاملة للتاجر -->
+<div class="container" id="dashboardContainer">
+    <header style="border-radius:20px; margin-bottom:20px;">
+        <h1>💼 لوحة تحكم التاجر الشاملة</h1>
+        <p>Future Tank Merchant Management System</p>
+    </header>
+
     <div class="notice">
-        ✅ أهلاً بك يا تاجر منصتنا الموقر <span id="merchantDisplayName" style="font-weight:bold; color:#0b6fc2;">منضم حديثاً</span><br>
-        ✅ المنتجات ستظهر فوراً في الشيت الرئيسي وفي أسواق المحافظة المحددة.<br>
-        ✅ يرجى تحديد المحافظة والقسم بدقة لكي يظهر المنتج للمشترين.
+        ✅ أهلاً بك يا تاجر منصتنا الموقر: <span id="merchantDisplayName" style="font-weight:bold; color:#0b6fc2;">...</span><br>
+        ✅ نوع الباقة الحالية الحية: <span id="merchantPlanBadge" style="font-weight:bold; color:#ff9800;">...</span><br>
+        ✅ المنتجات تظهر فوراً بالشاشات العامة والمحافظات المحددة طوال مدة صلاحية الاشتراك.
     </div>
 
     <div class="box">
@@ -49,17 +68,12 @@
         <label>السعر (بالجنيه)</label>
         <input type="number" id="productPrice" placeholder="السعر">
 
-        <label>رقم واتساب التاجر (للتواصل المباشر مع الزبائن)</label>
+        <label>رقم واتساب التاجر للتواصل المباشر</label>
         <input type="text" id="productWhatsapp" placeholder="مثال: 01158555708">
 
         <label>حدد المحافظة التي تريد العرض فيها</label>
         <select id="productCity">
-            <option value="القاهرة">القاهرة</option>
-            <option value="الجيزة">الجيزة</option>
-            <option value="الإسكندرية">الإسكندرية</option>
-            <option value="الدقهلية">الدقهلية</option>
-            <option value="الغربية">الغربية</option>
-            <option value="حدائق أكتوبر">حدائق أكتوبر</option>
+            <!-- سيتم تشكيلها برمجياً حسب نوع الباقة أساسية أو مميزة -->
         </select>
 
         <label>حدد قسم المنتج</label>
@@ -75,10 +89,10 @@
         <input type="text" id="productImage" placeholder="رابط الصورة المباشر">
 
         <label>وصف ومواصفات المنتج</label>
-        <textarea id="productDesc" placeholder="تفاصيل المنتج هنا..."></textarea>
+        <textarea id="productDesc" placeholder="تفاصيل المنتج ومميزاته هنا..."></textarea>
         
         <button class="add-btn" id="addBtn" onclick="addProduct()">➕ إضافة وحفظ في السيرفر والشيت</button>
-        <div id="loadingStatus">⏳ جاري ربط ورفع البيانات للشيت وبثها بالموقع... يرجى الانتظار</div>
+        <div id="loadingStatus" style="display:none; color:#0b6fc2; font-weight:bold; margin-top:10px; text-align:center;">⏳ جاري ربط البيانات وبث العرض الفوري...</div>
     </div>
 
     <div class="box">
@@ -90,21 +104,94 @@
 
     <div class="box">
         <button class="whatsapp-btn" onclick="window.open('https://wa.me/201150402031', '_blank')">
-            📞 التواصل مع الإدارة للتفعيل أو التجديد
+            📞 التواصل مع الإدارة لتمديد أو تجديد الباقة
         </button>
-        <button class="logout-btn" style="margin-top:10px;" onclick="logoutMerchant()">🚪 تسجيل الخروج</button>
+        <button class="logout-btn" style="margin-top:10px;" onclick="logoutMerchant()">🚪 تسجيل الخروج الآمن</button>
     </div>
 </div>
 
 <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
     
-    let mName = localStorage.getItem("merchant_name") || "تاجر المنصة";
-    document.getElementById("merchantDisplayName").innerText = mName;
-    renderLocalProducts();
+    window.onload = function() {
+        checkSession();
+    };
 
-    if (localStorage.getItem("merchant_logged") !== "yes") {
-        localStorage.setItem("merchant_logged", "yes");
+    function checkSession() {
+        const logged = localStorage.getItem("merchant_logged");
+        if(logged === "yes") {
+            document.getElementById("loginOverlay").style.display = "none";
+            document.getElementById("dashboardContainer").style.display = "block";
+            
+            const name = localStorage.getItem("merchant_name");
+            const plan = localStorage.getItem("merchant_plan");
+            const savedPhone = localStorage.getItem("merchant_phone");
+            
+            document.getElementById("merchantDisplayName").innerText = name;
+            document.getElementById("merchantPlanBadge").innerText = plan === "premium" ? "باقة التميز الإقليمي (كل المحافظات) ⭐" : "الباقة الأساسية الفردية";
+            document.getElementById("productWhatsapp").value = savedPhone || "";
+            
+            setupCityDropdown(plan);
+            renderLocalProducts();
+        }
+    }
+
+    function setupCityDropdown(plan) {
+        const citySelect = document.getElementById("productCity");
+        if(plan === "premium") {
+            citySelect.innerHTML = `
+                <option value="كل المحافظات">🌍 كل المحافظات دفعة واحدة (ميزة باقتك)</option>
+                <option value="القاهرة">القاهرة</option>
+                <option value="الجيزة">الجيزة</option>
+                <option value="الإسكندرية">الإسكندرية</option>
+                <option value="الدقهلية">الدقهلية</option>
+                <option value="الغربية">الغربية</option>
+                <option value="حدائق أكتوبر">حدائق أكتوبر</option>
+            `;
+        } else {
+            citySelect.innerHTML = `
+                <option value="القاهرة">القاهرة</option>
+                <option value="الجيزة">الجيزة</option>
+                <option value="الإسكندرية">الإسكندرية</option>
+                <option value="الدقهلية">الدقهلية</option>
+                <option value="الغربية">الغربية</option>
+                <option value="حدائق أكتوبر">حدائق أكتوبر</option>
+            `;
+        }
+    }
+
+    async function processMerchantLogin() {
+        const phone = document.getElementById("loginPhone").value.trim();
+        const code = document.getElementById("loginCode").value.trim();
+        const btn = document.getElementById("loginBtn");
+
+        if(!phone || !code) { alert("⚠️ يرجى تعبئة الحقول لتأمين الدخول"); return; }
+        
+        btn.disabled = true;
+        btn.innerText = "⏳ جاري فحص صلاحية باقتك من السيرفر...";
+
+        try {
+            const res = await fetch(`${scriptURL}?action=merchantLogin&phone=${phone}&code=${code}`);
+            const data = await res.json();
+            
+            if(data.success) {
+                localStorage.setItem("merchant_logged", "yes");
+                localStorage.setItem("merchant_phone", data.phone);
+                localStorage.setItem("merchant_name", data.merchantName);
+                localStorage.setItem("merchant_plan", data.plan);
+                localStorage.setItem("merchant_code", code);
+                
+                checkSession();
+            } else {
+                alert(data.message);
+                btn.disabled = false;
+                btn.innerText = "🔓 دخول آمن للوحة التحكم";
+            }
+        } catch(e) {
+            alert("❌ فشل التحقق الفوري. يرجى مراجعة الإدارة.");
+            btn.disabled = false;
+            btn.innerText = "🔓 دخول آمن للوحة التحكم";
+        }
     }
 
     async function addProduct() {
@@ -127,7 +214,6 @@
         addBtn.disabled = true;
         loadingStatus.style.display = "block";
 
-        // تعديل البيانات وتوجيه الأكشن لـ saveAdminProduct ليعمل بالتناغم الكامل مع شيت AllProducts
         const payload = {
             action: "saveAdminProduct",
             name: name,
@@ -142,7 +228,6 @@
         try {
             const response = await fetch(scriptURL, {
                 method: "POST",
-                headers: { "Content-Type": "text/plain;charset=utf-8" },
                 body: JSON.stringify(payload)
             });
             const result = await response.json();
@@ -152,19 +237,17 @@
                 localData.push({name, price, image, desc, city, category});
                 localStorage.setItem("merchant_products", JSON.stringify(localData));
 
-                alert("✅ تم الحفظ بنجاح! وظهر المنتج في السيرفر الرئيسي والشاشات العامة فوراً.");
+                alert("✅ تم الحفظ بنجاح وظهوره بأسواق المنصة المحددة.");
                 renderLocalProducts();
                 clearInputs();
             } else {
-                alert("❌ فشل السيرفر في معالجة طلب الحفظ: " + (result.error || "خطأ غير معروف"));
+                alert("❌ حدث خطأ في معالجة السيرفر.");
             }
         } catch (error) {
-            // معالجة استباقية في حال القيود على الـ CORS مع البوست المباشر للـ Google Apps Script
             let localData = JSON.parse(localStorage.getItem("merchant_products") || "[]");
             localData.push({name, price, image, desc, city, category});
             localStorage.setItem("merchant_products", JSON.stringify(localData));
-            
-            alert("✅ تم إرسال المنتج وجاري المعالجة والتحديث في الشيت الآن!");
+            alert("✅ تم المزامنة الإقليمية وحفظ منتجك بنجاح!");
             renderLocalProducts();
             clearInputs();
         } finally {
@@ -179,10 +262,10 @@
         box.innerHTML = data.length === 0 ? '<p style="text-align:center; color:#888;">لا توجد منتجات مضافة بعد.</p>' : 
             data.map((p, index) => `
                 <div class="product-item">
-                    <img src="${p.image}" onerror="this.src='https://via.placeholder.com/150'">
+                    <img src="${p.image}" onerror="this.src='./icon-512.png'">
                     <h3>${p.name}</h3>
-                    <p>💰 ${p.price} جنيه | 📍 ${p.city || 'عام'}</p>
-                    <button class="delete-btn" onclick="deleteLocalProduct(${index})">🗑️ حذف</button>
+                    <p>💰 ${p.price} جنيه | 📍 المحافظة: ${p.city}</p>
+                    <button class="delete-btn" onclick="deleteLocalProduct(${index})">🗑️ حذف من لوحتي</button>
                 </div>
             `).join('');
     }
@@ -197,7 +280,6 @@
     function clearInputs() {
         document.getElementById("productName").value = "";
         document.getElementById("productPrice").value = "";
-        document.getElementById("productWhatsapp").value = "";
         document.getElementById("productImage").value = "";
         document.getElementById("productDesc").value = "";
     }
