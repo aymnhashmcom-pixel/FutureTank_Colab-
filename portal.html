@@ -86,24 +86,23 @@ async function searchClient() {
         const data = await response.json();
         
         if(data.success) {
-            // ربط صارم ومباشر للمفاتيح لتجنب ترحيل الأعمدة
-            document.getElementById("name").innerText = data.name || data.customer_name || "—";
+            document.getElementById("name").innerText = data.name || "—";
             document.getElementById("phone").innerText = data.phone || "—";
             document.getElementById("address").innerText = data.address || "—";
             document.getElementById("service").innerText = data.service || "—";
             document.getElementById("months").innerText = data.contract_months || "—";
             document.getElementById("visits").innerText = data.visits || "—";
-            document.getElementById("cost").innerText = (data.cost || "—") + (data.cost ? " جنيه" : "");
+            document.getElementById("cost").innerText = data.cost || "—";
             document.getElementById("start").innerText = data.contract_date || "—";
             document.getElementById("end").innerText = data.end_date || "—";
             document.getElementById("last").innerText = data.last_visit || "—";
             document.getElementById("next").innerText = data.next_visit || "—";
             
-            // الأعمدة الـ 8 المضافة حديثاً والتأكد من مطابقتها مع مفاتيح السيرفر الجاري إرسالها
-            document.getElementById("sub_type").innerText = data.sub_type || data.subscription_type || "—";
-            document.getElementById("pay_status").innerText = data.pay_status || data.payment_status || "—";
-            document.getElementById("contract_no").innerText = data.contract_no || data.contract_id || "—";
-            document.getElementById("pay_method").innerText = data.pay_method || data.payment_method || "—";
+            // الربط الصارم بعد معالجة وترتيب أعمدة الشيت في ملف السيرفر الجديد
+            document.getElementById("sub_type").innerText = data.sub_type || "—";
+            document.getElementById("pay_status").innerText = data.pay_status || "—";
+            document.getElementById("contract_no").innerText = data.contract_no || "—";
+            document.getElementById("pay_method").innerText = data.pay_method || "—";
             document.getElementById("installment").innerText = data.installment || "—";
             document.getElementById("next_installment").innerText = data.next_installment || "—";
             document.getElementById("notes").innerText = data.notes || "—";
