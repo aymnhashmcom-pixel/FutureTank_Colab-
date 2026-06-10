@@ -5,6 +5,13 @@
   <title>منتجاتنا | Future Tank</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
+  <style>
+    /* تنسيق افتراضي سريع لحماية المظهر في حال عدم تحميل الاستايل الخارجي كاملاً */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; padding: 20px 0; }
+    .card { background: #fff; border-radius: 12px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); text-align: center; }
+    .card img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; }
+    .btn-buy { display: inline-block; background: #25D366; color: white; padding: 8px 15px; border-radius: 6px; text-decoration: none; margin-top: 10px; font-weight: bold; }
+  </style>
 </head>
 
 <body>
@@ -14,16 +21,47 @@
 </header>
 
 <main class="container">
-  <h2>منتجات نقاء الماء</h2>
-  <div id="productsList" class="cards"></div>
+  <h2>منتجات وعروض نقاء الماء الشاملة</h2>
+  <div id="productsList" class="cards">⏳ جاري تحميل كافة عروض المنتجات والتاجر الفورية...</div>
 </main>
 
 <footer class="main-footer">
-  © Future Tank – جميع الحقوق محفوظة
+  © Future Tank – جميع الحقوق محفوظة 2026
 </footer>
 
 <script src="script.js"></script>
-<script>loadProducts();</script>
+<script>
+// دالة الجلب الصارمة والمتوافقة مع الدمج الجديد للسيرفر
+async function loadProducts() {
+    const listContainer = document.getElementById("productsList");
+    const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec?action=getAllProducts&category=الكل";
+    
+    try {
+        const res = await fetch(apiURL);
+        const data = await res.json();
+        
+        if(data.success && data.products && data.products.length > 0) {
+            listContainer.innerHTML = data.products.map(p => `
+                <div class="card">
+                    <img src="${p.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
+                    <h3 style="color:#0b6fc2; font-size:18px; margin:10px 0;">${p.name}</h3>
+                    <p style="color:#666; font-size:14px; min-height:40px;">${p.description || 'بولي ايثيلين معتمد ومطابق للمواصفات'}</p>
+                    <div style="font-weight:bold; color:#ff9800; margin:5px 0;">💰 ${p.price} جنيه</div>
+                    <div style="font-size:12px; color:#888; margin-bottom:10px;">📍 الموقع: ${p.city || 'كل المحافظات'}</div>
+                    <a class="btn-buy" href="https://wa.me/20${p.whatsapp || '1158555708'}?text=${encodeURIComponent('أرغب في الاستفسار عن منتج: ' + p.name)}" target="_blank">💬 اطلب الآن</a>
+                </div>
+            `).join('');
+        } else {
+            listContainer.innerHTML = `<p style="text-align:center; width:100%; color:#888;">⚠️ لا توجد منتجات معروضة حالياً.</p>`;
+        }
+    } catch(e) {
+        listContainer.innerHTML = `<p style="text-align:center; width:100%; color:red;">❌ فشل جلب البيانات الحية من السيرفر.</p>`;
+    }
+}
+
+// تشغيل جلب المنتجات فور اكتمال تحميل الصفحة
+window.onload = loadProducts;
+</script>
 
 </body>
 </html>
