@@ -6,18 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:20px; direction: rtl; text-align: center; }
-       .track-box { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); max-width: 500px; margin: 40px auto; border: 1px solid #e1effa; }
+        .track-box { background: white; padding: 30px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); max-width: 500px; margin: 40px auto; border: 1px solid #e1effa; }
         input { width: 100%; padding: 12px; margin: 15px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; text-align: center; font-size: 16px; font-weight: bold; }
-       .btn-track { background: #0b6fc2; color: white; padding: 12px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; width: 100%; }
-       .result-box { margin-top: 20px; text-align: right; background: #e8f3fc; padding: 20px; border-radius: 12px; display: none; border: 1px solid #bce0fd; }
-       .result-box p { margin: 8px 0; font-size: 15px; color: #333; }
+        .btn-track { background: #0b6fc2; color: white; padding: 12px 25px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 16px; width: 100%; }
+        .result-box { margin-top: 20px; text-align: right; background: #e8f3fc; padding: 20px; border-radius: 12px; display: none; border: 1px solid #bce0fd; }
+        .result-box p { margin: 8px 0; font-size: 15px; color: #333; }
     </style>
 </head>
 <body>
 
 <div class="track-box">
     <h3 style="color:#0b6fc2; margin-top:0;">📦 تتبع حالة طلبك والتعاقد الفوري</h3>
-    <p style="color:#666; font-size:13px;">أدخل رقم الهاتف المسجل به العقد أو الطلب لمعرفة الحالة الحالية مباشرة من شيت السيرفر.</p>
+    <p style="color:#666; font-size:13px;">أدخل رقم الهاتف المسجل به العقد أو الطلب لمعرفة الحالة الحالية.</p>
     
     <input type="text" id="clientPhone" placeholder="أدخل رقم الهاتف (مثال: 01009056019)">
     <button class="btn-track" onclick="trackMyOrder()">🔍 تتبع الطلب الآن</button>
@@ -35,38 +35,27 @@ async function trackMyOrder() {
     if(!phoneInput) { alert("يرجى إدخال رقم الهاتف أولاً."); return; }
     
     resultBox.style.display = "block";
-    resultBox.innerHTML = "⏳ جاري البحث الفوري في شيتات السيرفر المركزي...";
+    resultBox.innerHTML = "⏳ جاري البحث في السيرفر...";
     
     try {
-        // إرسال كـ Simple text/plain لتخطي الـ CORS Block التمهيدي للمتصفحات بنجاح
-        const response = await fetch(`${scriptURL}?action=trackOrder&phone=${encodeURIComponent(phoneInput)}`, {
-            method: "POST",
-            mode: "cors",
-            redirect: "follow",
-            headers: { "Content-Type": "text/plain;charset=utf-8" }
-        });
+        const response = await fetch(`${scriptURL}?action=trackOrder&phone=${encodeURIComponent(phoneInput)}`);
         const data = await response.json();
         
         if(data.success) {
-            resultBox.style.backgroundColor = "#e8f3fc";
-            resultBox.style.borderColor = "#bce0fd";
             resultBox.innerHTML = `
-                <h4 style="color:#0b6fc2; margin-top:0; border-bottom:1px solid #bce0fd; padding-bottom:5px;">📋 تفاصيل العقد والطلب الحالي:</h4>
-                <p>👤 <b>اسم العميل:</b> ${data.name}</p>
-                <p>📞 <b>رقم العقد:</b> ${data.phone}</p>
-                <p>📍 <b>العنوان المسجل:</b> ${data.address}</p>
-                <p>🛠️ <b>الخدمة المطلوبة:</b> ${data.service}</p>
-                <p>💰 <b>التكلفة:</b> ${data.cost}</p>
-                <p>📅 <b>تاريخ الطلب:</b> ${data.contract_date}</p>
-                <p>🚦 <b>حالة التعاقد الآن:</b> <span style="color:green; font-weight:bold;">${data.account_status}</span></p>
+                <h4 style="color:#0b6fc2; border-bottom:1px solid #bce0fd; padding-bottom:5px;">📋 تفاصيل العقد:</h4>
+                <p>👤 <b>الاسم:</b> ${data.name}</p>
+                <p>📞 <b>الهاتف:</b> ${data.phone}</p>
+                <p>📍 <b>العنوان:</b> ${data.address}</p>
+                <p>🛠️ <b>الخدمة:</b> ${data.service}</p>
+                <p>💰 <b>التكلفة:</b> ${data.cost} ج.م</p>
+                <p>🚦 <b>حالة التعاقد:</b> <span style="color:green; font-weight:bold;">${data.account_status}</span></p>
             `;
         } else {
-            resultBox.style.backgroundColor = "#fff3cd";
-            resultBox.style.borderColor = "#ffeeba";
-            resultBox.innerHTML = `<p style="color:#856404; font-weight:bold; text-align:center; margin:0;">${data.message}</p>`;
+            resultBox.innerHTML = `<p style="color:#856404; font-weight:bold; text-align:center;">${data.message || "لم يتم العثور على بيانات لهذا الرقم."}</p>`;
         }
     } catch(e) {
-        resultBox.innerHTML = `<p style="color:red; font-weight:bold; text-align:center; margin:0;">❌ عذراً، حدث خطأ أثناء الاتصال بالخادم الرئيسي.</p>`;
+        resultBox.innerHTML = `<p style="color:red; font-weight:bold; text-align:center;">❌ خطأ في الاتصال بالسيرفر.</p>`;
     }
 }
 </script>
