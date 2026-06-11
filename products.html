@@ -1,67 +1,7 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-  <meta charset="UTF-8">
-  <title>سوق وعروض المحافظات الشامل | Future Tank</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:0; direction: rtl; text-align: center; padding-bottom: 90px; }
-   .filter-box { background: #fff; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); max-width: 950px; margin: 20px auto; display: flex; flex-wrap: wrap; gap: 15px; justify-content: center; align-items: center; border:1px solid #e1effa; }
-   .filter-box select { padding: 12px 20px; font-size: 15px; border-radius: 10px; border: 1px solid #0b6fc2; background: #fff; color: #0b6fc2; font-weight: bold; outline: none; cursor: pointer; }
-   .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
-   .card { background: #fff; border-radius: 16px; padding: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); text-align: center; border: 1px solid #e1effa; display: flex; flex-direction: column; justify-content: space-between; }
-   .card img { width: 100%; height: 190px; object-fit: cover; border-radius: 12px; }
-   .btn-buy { display: block; background: #25D366; color: white; padding: 12px; border-radius: 8px; text-decoration: none; margin-top: 12px; font-weight: bold; font-size: 14px; }
-   .btn-add-cart { display: block; background: #ff9800; color: white; padding: 12px; border-radius: 8px; text-decoration: none; margin-top: 6px; font-weight: bold; font-size: 14px; border:none; width:100%; cursor:pointer; }
-    
-    /* تصميم سلة المشتريات العائمة المستقرة */
-   .cart-floating-bar { position: fixed; bottom: 0; left: 0; right: 0; background: #0b6fc2; color: white; padding: 15px 20px; box-shadow: 0 -4px 15px rgba(0,0,0,0.15); font-weight: bold; display: none; z-index: 9999; font-size:16px; text-align: center; cursor: pointer; border-top-left-radius: 15px; border-top-right-radius: 15px; }
-   .cart-floating-bar:hover { background: #085da5; }
-  </style>
-</head>
-<body>
-
-<header style="background:#0b6fc2; color:#fff; padding:25px;">
-  <h1>🛍️ المنصة الذكية وعروض الأسواق الشاملة | Future Tank</h1>
-  <p>تصفح منتجات وعروض كافة المحافظات والأقسام المعتمدة مباشرة من السيرفر</p>
-</header>
-
-<div class="filter-box">
-    <div>
-        <span style="font-weight:bold; color:#555;">📍 تصفح حسب المحافظة:</span>
-        <select id="filterCity" onchange="loadProducts()">
-            <option value="الكل">🌍 عرض كل المحافظات</option>
-            <option value="القاهرة">القاهرة</option>
-            <option value="الجيزة">الجيزة</option>
-            <option value="الإسكندرية">الإسكندرية</option>
-            <option value="الدقهلية">الدقهلية</option>
-            <option value="الغربية">الغربية</option>
-            <option value="حدائق أكتوبر">حدائق أكتوبر</option>
-        </select>
-    </div>
-    <div>
-        <span style="font-weight:bold; color:#555;">🗂️ تصفح القسم المعتمد:</span>
-        <select id="filterCat" onchange="loadProducts()">
-            <option value="الكل">🛍️ كل الأقسام والسلع</option>
-            <option value="خزانات المياه">💧 خزانات المياه ونقاء</option>
-            <option value="ملابس">👔 ملابس وأزياء</option>
-            <option value="عقارات">🏢 عقارات وإنشاءات</option>
-            <option value="سيارات">🚗 سيارات وخدمات نقل</option>
-            <option value="خدمات متنوعة">🛠️ خدمات متنوعة وصيانة</option>
-        </select>
-    </div>
-</div>
-
-<div id="productsList" class="cards">⏳ جاري سحب وتحديث عروض السيرفر الشامل...</div>
-
-<div id="cartBar" class="cart-floating-bar" onclick="checkoutCart()">
-  🛒 سلة المشتريات الذكية لـ Future Tank (<span id="cartCount">0</span> منتجات) | 💬 اضغط هنا لإرسال طلبك المجمع فوراً
-</div>
-
-<script>
+// ... (داخل قسم <script> في نهاية الملف)
 const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-const ADMIN_MAIN_WHATSAPP = "201150402031"; // رقم الإدارة الموحد المعتمد
-let cart =;
+const ADMIN_MAIN_WHATSAPP = "201150402031";
+let cart = []; // تم إصلاح الخطأ هنا (إضافة القوسين)
 
 async function loadProducts() {
     const listContainer = document.getElementById("productsList");
@@ -74,33 +14,24 @@ async function loadProducts() {
         
         if(data.success && data.products && data.products.length > 0) {
             listContainer.innerHTML = data.products.map(p => {
-                // فلترة وتطهير رقم التوجيه ليكون للإدارة في حال عدم وجود رقم تاجر مخصص
-                let finalPhone = (p.whatsapp && p.whatsapp!== "" && p.whatsapp!== "1158555708")? "2" + String(p.whatsapp).replace(/^0+/, "") : ADMIN_MAIN_WHATSAPP;
-
-                // صياغة الرسالة المنفردة فائقة الدقة والاحترافية جداً للعملاء
-                const proMessage = `السلام عليكم ورحمة الله وبركاته 💧\n\nأود طلب شراء المنتج التالي المعروض بمنصة Future Tank الذكية:\n-------------------------------------------\n📦 الاسم: ${p.name}\n💰 السعر: ${p.price} جنيه مصري\n📍 المحافظة المستهدفة: ${p.city}\n-------------------------------------------\nيرجى تأكيد استلام الطلب والتواصل للمتابعة والتسليم ولكم جزيل الشكر.`;
+                let finalPhone = (p.whatsapp && p.whatsapp !== "" && p.whatsapp !== "1158555708") ? "2" + String(p.whatsapp).replace(/^0+/, "") : ADMIN_MAIN_WHATSAPP;
+                const proMessage = `أود طلب شراء: ${p.name} - السعر: ${p.price} جنيه`;
 
                 return `
                 <div class="card">
-                    <div>
-                        <img src="${p.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
-                        <h3 style="color:#0b6fc2; font-size:17px; margin:10px 0;">${p.name}</h3>
-                        <p style="color:#666; font-size:13px; text-align:justify;">📋 ${p.description}</p>
-                    </div>
-                    <div>
-                        <div style="font-weight:bold; color:#ff9800; margin:5px 0; font-size:18px;">💰 ${p.price} جنيه</div>
-                        <div style="font-size:11px; color:#0b6fc2; background:#e8f3fc; display:inline-block; padding:4px 10px; border-radius:15px; margin-bottom:8px; font-weight:bold;">📍 ${p.city}</div>
-                        
-                        <a class="btn-buy" href="https://wa.me/${finalPhone}?text=${encodeURIComponent(proMessage)}" target="_blank">💬 اطلب الفوري عبر واتساب</a>
-                        <button class="btn-add-cart" onclick="addToCart('${p.name}', '${p.price}', '${finalPhone}')">➕ أضف للسلة الذكية</button>
-                    </div>
+                    <img src="${p.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
+                    <h3>${p.name}</h3>
+                    <p>${p.description}</p>
+                    <div style="font-weight:bold; color:#ff9800; font-size:18px;">💰 ${p.price} جنيه</div>
+                    <a class="btn-buy" href="https://wa.me/${finalPhone}?text=${encodeURIComponent(proMessage)}" target="_blank">💬 اطلب الفوري</a>
+                    <button class="btn-add-cart" onclick="addToCart('${p.name}', '${p.price}', '${finalPhone}')">➕ أضف للسلة</button>
                 </div>
             `}).join('');
         } else {
-            listContainer.innerHTML = `<p style="padding:30px; color:#666; font-weight:bold; width:100%;">🚫 لا توجد عروض أو منتجات معروضة حالياً ضمن الفلاتر المحددة.</p>`;
+            listContainer.innerHTML = `<p style="padding:30px;">🚫 لا توجد منتجات حالياً.</p>`;
         }
     } catch(e) {
-        listContainer.innerHTML = `<p style="color:red; font-weight:bold; width:100%;">❌ فشل تحميل البيانات من السيرفر السحابي.</p>`;
+        listContainer.innerHTML = `<p style="color:red;">❌ فشل الاتصال بالسيرفر.</p>`;
     }
 }
 
@@ -112,28 +43,11 @@ function addToCart(name, price, phone) {
 
 function checkoutCart() {
     if(cart.length === 0) return;
-    
-    // صياغة الرسالة المجمعة فائقة الدقة والاحترافية للسلة بالكامل
-    let text = "السلام عليكم ورحمة الله وبركاته 💧\n";
-    text += "مرفق لسيادتكم طلب شراء مجمع من سلة المشتريات لـ Future Tank:\n";
-    text += "-------------------------------------------\n\n";
-    let totalPrice = 0;
-    let targetPhone = cart.phone || ADMIN_MAIN_WHATSAPP;
-
-    cart.forEach((item, index) => {
-        text += `🔹 [${index + 1}] منتج: ${item.name}\n   السعر: ${item.price} ج.م.\n\n`;
-        totalPrice += parseFloat(item.price) || 0;
-    });
-
-    text += "-------------------------------------------\n";
-    text += `💰 الإجمالي الكلي للمشتريات: ${totalPrice} جنيه مصري.\n\n`;
-    text += "يرجى تأكيد الطلب والتواصل لتحديد موعد التسليم والمواصفات.";
-    
-    const waURL = `https://wa.me/${targetPhone}?text=${encodeURIComponent(text)}`;
-    window.open(waURL, '_blank');
+    let text = "طلب شراء مجمع:\n";
+    let total = 0;
+    cart.forEach(item => { text += `• ${item.name} (${item.price} ج)\n`; total += parseFloat(item.price); });
+    text += `\nالإجمالي: ${total} ج.م`;
+    window.open(`https://wa.me/${ADMIN_MAIN_WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
 }
 
 window.onload = loadProducts;
-</script>
-</body>
-</html>
