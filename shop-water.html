@@ -39,39 +39,34 @@
 
 <div class="container">
     <div class="products-grid" id="products">
-        <div style="text-align:center; width:100%; grid-column:1/-1;">🔄 جاري سحب معروضات الخزانات والفلاتر النشطة...</div>
+        <div style="text-align:center; width:100%; grid-column:1/-1;">🔄 جاري تحميل منتجات نقاء المياه...</div>
     </div>
 </div>
 
 <script>
+// الرابط الأساسي للـ Web App
 const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
 async function loadAllWaterProducts() {
   const box = document.getElementById("products");
   try {
-    // 1. محاولة جلب المنتجات الموجهة لقسم خزانات المياه
-    const res = await fetch(`${API_URL}?action=getProductsByLocation&city=${encodeURIComponent("حدائق أكتوبر")}&subCat=${encodeURIComponent("خزانات المياه")}`);
+    // جلب كل المنتجات من خلال الدالة الموحدة
+    const res = await fetch(`${API_URL}?action=getAllProducts`);
     const data = await res.json();
     
-    let items = data.products || [];
+    // فلترة المنتجات التي تنتمي لقسم "خزانات المياه" فقط
+    const filteredProducts = (data.products || []).filter(p => p.category === "خزانات المياه");
     
-    // 2. إذا كان الرد فارغاً من تجار حدائق أكتوبر، نقوم بسحب معروضات الجيزة العامة لتغطية الصفحة
-    if(items.length === 0) {
-       const resGen = await fetch(`${API_URL}?action=getProductsByLocation&city=${encodeURIComponent("الجيزة")}&subCat=الكل`);
-       const dataGen = await resGen.json();
-       items = (dataGen.products || []).filter(p => p.category === "خزانات المياه" || p.name.includes("خزان") || p.name.includes("فلتر"));
-    }
-
-    renderWaterItems(items);
+    renderWaterItems(filteredProducts);
   } catch(e) {
-    box.innerHTML = "<div class='error-msg'>❌ فشل جلب معروضات المياه، يرجى التحقق من اتصال السيرفر.</div>";
+    box.innerHTML = "<div class='error-msg'>❌ تعذر الاتصال بالسيرفر، يرجى المحاولة لاحقاً.</div>";
   }
 }
 
 function renderWaterItems(prods) {
   const box = document.getElementById("products");
   if(!prods || prods.length === 0) {
-    box.innerHTML = "<div class='error-msg'>🏪 لا توجد عروض أو خزانات مضافة حالياً في هذا القسم.</div>";
+    box.innerHTML = "<div class='error-msg'>🏪 لا توجد منتجات مضافة حالياً في قسم خزانات المياه.</div>";
     return;
   }
   
@@ -88,7 +83,6 @@ function renderWaterItems(prods) {
   `).join('');
 }
 
-// تشغيل جلب المنتجات فور تحميل الصفحة بالكامل
 window.onload = loadAllWaterProducts;
 </script>
 </body>
