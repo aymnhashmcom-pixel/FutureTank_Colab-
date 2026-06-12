@@ -1,5 +1,6 @@
 const GLOBAL_API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
+// دالة جلب البيانات مع معالجة الأخطاء
 async function getApiData(action, params = {}) {
     let url = new URL(GLOBAL_API);
     url.searchParams.append("action", action);
@@ -7,26 +8,11 @@ async function getApiData(action, params = {}) {
     try {
         const response = await fetch(url);
         return await response.json();
-    } catch (e) { return { success: false, error: e.message }; }
+    } catch (e) { console.error(e); return { success: false, error: e.message }; }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
-    const rateBtn = document.getElementById("rateAppBtn");
-    const ratePopup = document.getElementById("ratePopup");
-    if (rateBtn && ratePopup) {
-        rateBtn.addEventListener("click", (e) => { e.preventDefault(); ratePopup.style.display = "flex"; });
-    }
-});
-
-function closeRatePopup() {
-    const ratePopup = document.getElementById("ratePopup");
-    if (ratePopup) ratePopup.style.display = "none";
-}
-
-async function submitRate(stars) {
-    const comment = prompt("📝 يسعدنا كتابة رأيك:");
-    try {
-        await fetch(GLOBAL_API, { method: "POST", body: JSON.stringify({ action: "saveReview", stars, comment }) });
-        alert("شكراً لتقييمك!");
-    } catch(e) { alert("تم الحفظ."); } finally { closeRatePopup(); }
+// دالة تنسيق التاريخ
+function formatDate(d) {
+    if (!d || d === "—") return "—";
+    return new Date(d).toLocaleDateString("ar-EG");
 }
