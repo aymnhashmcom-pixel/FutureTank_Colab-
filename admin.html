@@ -2,14 +2,12 @@
 <div id="ordersTableBox"></div>
 <script>
 async function loadAdminOrders() {
-    const box = document.getElementById("ordersTableBox");
     const data = await getApiData("getAdminOrders");
-    if(data.success && Array.isArray(data.orders)) {
-        box.innerHTML = `<table>...عرض الطلبات...</table>`;
+    const box = document.getElementById("ordersTableBox");
+    if(data.success && data.orders) {
+        box.innerHTML = `<table><thead><tr><th>العميل</th><th>الخدمة</th><th>الحالة</th></tr></thead>
+        <tbody>` + data.orders.map(o => `<tr><td>${o.name}</td><td>${o.service}</td><td>${o.status}</td></tr>`).join('') + `</tbody></table>`;
     }
 }
-window.onload = () => {
-    const pass = prompt("كلمة المرور:");
-    if(pass === "الحمدلله") loadAdminOrders();
-};
+window.onload = () => { if(prompt("كلمة المرور:") === "الحمدلله") loadAdminOrders(); };
 </script>
