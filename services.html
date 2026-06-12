@@ -1,34 +1,18 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>خدمات Future Tank</title>
-    <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f9ff; text-align: center; }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; }
-        .service-card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); }
-        .btn-order { display: block; background: #0b6fc2; color: #fff; padding: 12px; border-radius: 8px; text-decoration: none; margin-top: 15px; }
-    </style>
-</head>
-<body>
-    <div id="servicesBox" class="grid-container">⏳ جاري التحميل...</div>
-    <script src="main.js"></script>
-    <script>
-        async function fetchServices() {
-            const box = document.getElementById("servicesBox");
-            const data = await getApiData("getServices");
-            if (data.success && data.services) {
-                box.innerHTML = data.services.map(s => `
-                    <div class="service-card">
-                        <h3>${s.name}</h3>
-                        <p>${s.description}</p>
-                        <div style="color:#ff9800; font-weight:bold;">السعر: ${s.price} جنيه</div>
-                        <a class="btn-order" href="https://wa.me/201150402031?text=${encodeURIComponent('أرغب في حجز: ' + s.name)}" target="_blank">📅 احجز الآن</a>
-                    </div>
-                `).join('');
-            }
-        }
-        window.onload = fetchServices;
-    </script>
-</body>
-</html>
+const GLOBAL_API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+
+// دالة جلب البيانات مع معالجة الأخطاء
+async function getApiData(action, params = {}) {
+    let url = new URL(GLOBAL_API);
+    url.searchParams.append("action", action);
+    for (let key in params) url.searchParams.append(key, params[key]);
+    try {
+        const response = await fetch(url);
+        return await response.json();
+    } catch (e) { console.error(e); return { success: false, error: e.message }; }
+}
+
+// دالة تنسيق التاريخ
+function formatDate(d) {
+    if (!d || d === "—") return "—";
+    return new Date(d).toLocaleDateString("ar-EG");
+}
