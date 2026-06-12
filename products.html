@@ -2,21 +2,18 @@
 <select id="filterCity" onchange="loadProducts()">
     <option value="الكل">كل المحافظات</option>
     <option value="القاهرة">القاهرة</option>
-    <option value="الجيزة">الجيزة</option>
 </select>
-<div id="productsList"></div>
+<div id="productsList" class="cards"></div>
 <script>
 async function loadProducts() {
-    const data = await getApiData("getAllProducts", { 
-        city: document.getElementById("filterCity").value 
-    });
+    const data = await getApiData("getAllProducts", { city: document.getElementById("filterCity").value });
     const list = document.getElementById("productsList");
-    if(data.success && Array.isArray(data.products)) {
+    if(data.success && data.products) {
         list.innerHTML = data.products.map(p => `
             <div class="card">
                 <h3>${p.name}</h3>
-                <p>${p.description}</p>
-                <button onclick="addToCart('${p.name}', '${p.price}')">➕ أضف للسلة</button>
+                <p>${p.price} جنيه</p>
+                <button onclick="alert('تمت الإضافة')">➕ أضف للسلة</button>
             </div>
         `).join('');
     }
