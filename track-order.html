@@ -7,7 +7,9 @@ async function trackMyOrder() {
     const phone = document.getElementById("clientPhone").value;
     const data = await getApiData("trackOrder", { phone: phone });
     if(data.success) {
-        document.getElementById("resultBox").innerHTML = `الاسم: ${data.name} - الحالة: ${data.account_status}`;
+        document.getElementById("resultBox").innerHTML = `الاسم: ${data.name}<br>الحالة: ${data.account_status}`;
+    } else {
+        alert("غير موجود");
     }
 }
 </script>
