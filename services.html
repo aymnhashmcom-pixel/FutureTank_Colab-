@@ -1,57 +1,21 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>خدمات التطهير والتعقيم | Future Tank</title>
-    <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:0; direction: rtl; text-align: center; }
-        .grid-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: auto; }
-        .service-card { background: white; padding: 20px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); border: 1px solid #e1effa; text-align: center; }
-        .service-card img { width: 100%; height: 200px; object-fit: cover; border-radius: 12px; }
-        .btn-order { display: block; background: #0b6fc2; color: #fff; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; margin-top: 15px; }
-    </style>
-</head>
-<body>
-
-<header style="background:#0b6fc2; color:#fff; padding:30px;">
-    <h2>🛠️ خدمات التطهير والتعقيم الاحترافية لـ Future Tank</h2>
-    <p>حلول هندسية معتمدة لتطهير وتعقيم الخزانات بمواصفات وزارة الصحة</p>
-</header>
-
-<div id="servicesBox" class="grid-container">
-    <p id="loadingMsg">⏳ جاري تحميل قائمة الخدمات الحالية من السيرفر السحابي...</p>
-</div>
-
+<link rel="stylesheet" href="style.css">
+<script src="main.js"></script>
+<div id="servicesBox" class="grid-container">⏳ جاري التحميل...</div>
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-const DEFAULT_ADMIN_PHONE = "201150402031"; // توجيه معتمد ومباشر للإدارة
-
 async function fetchServices() {
     const box = document.getElementById("servicesBox");
-    try {
-        const response = await fetch(`${scriptURL}?action=getServices`);
-        const data = await response.json();
-        
-        if (data.success && data.services && data.services.length > 0) {
-            box.innerHTML = data.services.map(s => `
-                <div class="service-card">
-                    <img src="${s.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
-                    <h3 style="color:#0b6fc2; margin:15px 0;">${s.name}</h3>
-                    <p style="color:#666; font-size:14px; min-height:40px;">${s.description}</p>
-                    <div style="font-size:18px; color:#ff9800; font-weight:bold; margin:10px 0;">السعر: ${s.price} جنيه</div>
-                    <a class="btn-order" href="https://wa.me/${DEFAULT_ADMIN_PHONE}?text=${encodeURIComponent('مرحباً Future Tank، أرغب في حجز خدمة: ' + s.name + ' بسعر ' + s.price + ' ج.م.')}" target="_blank">📅 احجز خدمتك الآن</a>
-                </div>
-            `).join('');
-        } else {
-            box.innerHTML = `<p style="color:#888; font-weight:bold;">📍 لا توجد خدمات معروضة حالياً.</p>`;
-        }
-    } catch (e) {
-        box.innerHTML = `<p style="color:red; font-weight:bold;">❌ عذراً، فشل تحميل الخدمات. يرجى مراجعة اتصال السيرفر بـ Google Sheets.</p>`;
+    const data = await getApiData("getServices"); 
+    if (data.success && Array.isArray(data.services)) {
+        box.innerHTML = data.services.map(s => `
+            <div class="service-card">
+                <img src="${s.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
+                <h3>${s.name}</h3>
+                <p>${s.description}</p>
+                <div style="color:#ff9800; font-weight:bold;">السعر: ${s.price} جنيه</div>
+                <a class="btn-order" href="https://wa.me/201150402031?text=${encodeURIComponent('أرغب في حجز: ' + s.name)}" target="_blank">📅 احجز الآن</a>
+            </div>
+        `).join('');
     }
 }
-
 window.onload = fetchServices;
 </script>
-</body>
-</html>
