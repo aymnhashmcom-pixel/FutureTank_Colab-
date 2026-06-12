@@ -1,13 +1,20 @@
 <script src="main.js"></script>
-<div id="ordersTableBox"></div>
+<div id="ordersTableBox">⏳ جاري تحميل الطلبات...</div>
 <script>
 async function loadAdminOrders() {
-    const data = await getApiData("getAdminOrders");
     const box = document.getElementById("ordersTableBox");
+    const data = await getApiData("getAdminOrders");
     if(data.success && data.orders) {
-        box.innerHTML = `<table><thead><tr><th>العميل</th><th>الخدمة</th><th>الحالة</th></tr></thead>
-        <tbody>` + data.orders.map(o => `<tr><td>${o.name}</td><td>${o.service}</td><td>${o.status}</td></tr>`).join('') + `</tbody></table>`;
+        let html = `<table border="1"><tr><th>العميل</th><th>الخدمة</th><th>الحالة</th></tr>`;
+        data.orders.forEach(o => {
+            html += `<tr><td>${o.name}</td><td>${o.service}</td><td>${o.status}</td></tr>`;
+        });
+        box.innerHTML = html + "</table>";
     }
 }
-window.onload = () => { if(prompt("كلمة المرور:") === "الحمدلله") loadAdminOrders(); };
+window.onload = () => {
+    const pass = prompt("كلمة مرور الإدارة:");
+    if(pass === "الحمدلله") loadAdminOrders();
+    else { alert("كلمة المرور خطأ"); window.location.href="about:blank"; }
+};
 </script>
