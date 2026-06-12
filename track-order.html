@@ -1,15 +1,16 @@
 <script src="main.js"></script>
 <input id="clientPhone" placeholder="رقم الهاتف">
-<button onclick="trackMyOrder()">تتبع</button>
+<button onclick="trackMyOrder()">🔍 تتبع</button>
 <div id="resultBox"></div>
 <script>
 async function trackMyOrder() {
     const phone = document.getElementById("clientPhone").value;
+    const box = document.getElementById("resultBox");
     const data = await getApiData("trackOrder", { phone: phone });
     if(data.success) {
-        document.getElementById("resultBox").innerHTML = `الاسم: ${data.name}<br>الحالة: ${data.account_status}`;
+        box.innerHTML = `<h4>البيانات:</h4><p>الاسم: ${data.name}<br>الحالة: ${data.account_status}</p>`;
     } else {
-        alert("غير موجود");
+        box.innerHTML = "❌ لم يتم العثور على طلب لهذا الرقم.";
     }
 }
 </script>
