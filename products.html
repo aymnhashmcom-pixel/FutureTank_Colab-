@@ -1,18 +1,53 @@
-const GLOBAL_API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+// ... (داخل قسم <script> في نهاية الملف)
+const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+const ADMIN_MAIN_WHATSAPP = "201150402031";
+let cart = []; // تم إصلاح الخطأ هنا (إضافة القوسين)
 
-// دالة جلب البيانات مع معالجة الأخطاء
-async function getApiData(action, params = {}) {
-    let url = new URL(GLOBAL_API);
-    url.searchParams.append("action", action);
-    for (let key in params) url.searchParams.append(key, params[key]);
+async function loadProducts() {
+    const listContainer = document.getElementById("productsList");
+    const chosenCity = document.getElementById("filterCity").value;
+    const chosenCat = document.getElementById("filterCat").value;
+    
     try {
-        const response = await fetch(url);
-        return await response.json();
-    } catch (e) { console.error(e); return { success: false, error: e.message }; }
+        const res = await fetch(`${apiURL}?action=getAllProducts&city=${encodeURIComponent(chosenCity)}&category=${encodeURIComponent(chosenCat)}`);
+        const data = await res.json();
+        
+        if(data.success && data.products && data.products.length > 0) {
+            listContainer.innerHTML = data.products.map(p => {
+                let finalPhone = (p.whatsapp && p.whatsapp !== "" && p.whatsapp !== "1158555708") ? "2" + String(p.whatsapp).replace(/^0+/, "") : ADMIN_MAIN_WHATSAPP;
+                const proMessage = `أود طلب شراء: ${p.name} - السعر: ${p.price} جنيه`;
+
+                return `
+                <div class="card">
+                    <img src="${p.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
+                    <h3>${p.name}</h3>
+                    <p>${p.description}</p>
+                    <div style="font-weight:bold; color:#ff9800; font-size:18px;">💰 ${p.price} جنيه</div>
+                    <a class="btn-buy" href="https://wa.me/${finalPhone}?text=${encodeURIComponent(proMessage)}" target="_blank">💬 اطلب الفوري</a>
+                    <button class="btn-add-cart" onclick="addToCart('${p.name}', '${p.price}', '${finalPhone}')">➕ أضف للسلة</button>
+                </div>
+            `}).join('');
+        } else {
+            listContainer.innerHTML = `<p style="padding:30px;">🚫 لا توجد منتجات حالياً.</p>`;
+        }
+    } catch(e) {
+        listContainer.innerHTML = `<p style="color:red;">❌ فشل الاتصال بالسيرفر.</p>`;
+    }
 }
 
-// دالة تنسيق التاريخ
-function formatDate(d) {
-    if (!d || d === "—") return "—";
-    return new Date(d).toLocaleDateString("ar-EG");
+function addToCart(name, price, phone) {
+    cart.push({ name, price, phone });
+    document.getElementById("cartCount").innerText = cart.length;
+    document.getElementById("cartBar").style.display = "block";
 }
+
+function checkoutCart() {
+    if(cart.length === 0) return;
+    let text = "طلب شراء مجمع:\n";
+    let total = 0;
+    cart.forEach(item => { text += `• ${item.name} (${item.price} ج)\n`; total += parseFloat(item.price); });
+    text += `\nالإجمالي: ${total} ج.م`;
+    window.open(`https://wa.me/${ADMIN_MAIN_WHATSAPP}?text=${encodeURIComponent(text)}`, '_blank');
+}
+
+window.onload = loadProducts;
