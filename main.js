@@ -1,6 +1,5 @@
 const GLOBAL_API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-// تحسين عام لجلب أي بيانات من السيرفر
 async function getApiData(action, params = {}) {
     let url = new URL(GLOBAL_API);
     url.searchParams.append("action", action);
@@ -11,7 +10,6 @@ async function getApiData(action, params = {}) {
     } catch (e) { return { success: false, error: e.message }; }
 }
 
-// نظام التقييم
 document.addEventListener("DOMContentLoaded", () => {
     const rateBtn = document.getElementById("rateAppBtn");
     const ratePopup = document.getElementById("ratePopup");
