@@ -1,6 +1,5 @@
-const GLOBAL_API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+const GLOBAL_API = "ضع_هنا_رابط_الـ_Web_App_الجديد";
 
-// دالة جلب البيانات مع معالجة الأخطاء
 async function getApiData(action, params = {}) {
     let url = new URL(GLOBAL_API);
     url.searchParams.append("action", action);
@@ -8,11 +7,10 @@ async function getApiData(action, params = {}) {
     try {
         const response = await fetch(url);
         return await response.json();
-    } catch (e) { console.error(e); return { success: false, error: e.message }; }
+    } catch (e) { return { success: false, error: e.message }; }
 }
 
-// دالة تنسيق التاريخ
+// دالة مريحة لعرض التواريخ
 function formatDate(d) {
-    if (!d || d === "—") return "—";
-    return new Date(d).toLocaleDateString("ar-EG");
+    return (!d || d === "—") ? "—" : d; 
 }
