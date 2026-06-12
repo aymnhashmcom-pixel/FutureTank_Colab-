@@ -1,4 +1,4 @@
-const GLOBAL_API = "ضع_رابط_الـ_Web_App_الجديد_هنا"; 
+const GLOBAL_API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec"; 
 
 // دالة جلب البيانات الموحدة
 async function getApiData(action, params = {}) {
