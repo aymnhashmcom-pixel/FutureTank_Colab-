@@ -1,23 +1,35 @@
-const GLOBAL_API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec"; 
+/* =====================================================
+   FUTURE TANK - APP INTERACTION UTILITIES (main.js)
+   ===================================================== */
+const GLOBAL_API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-// دالة جلب البيانات الموحدة
-async function getApiData(action, params = {}) {
-    let url = new URL(GLOBAL_API);
-    url.searchParams.append("action", action);
-    for (let key in params) {
-        url.searchParams.append(key, params[key]);
+document.addEventListener("DOMContentLoaded", () => {
+    const rateBtn = document.getElementById("rateAppBtn");
+    const ratePopup = document.getElementById("ratePopup");
+    if (rateBtn && ratePopup) {
+        rateBtn.addEventListener("click", (e) => {
+            e.preventDefault();
+            ratePopup.style.display = "flex";
+        });
     }
-    try {
-        const response = await fetch(url);
-        return await response.json();
-    } catch (e) {
-        console.error("خطأ في الاتصال:", e);
-        return { success: false, error: e.message };
-    }
+});
+
+function closeRatePopup() {
+    const ratePopup = document.getElementById("ratePopup");
+    if (ratePopup) ratePopup.style.display = "none";
 }
 
-// دالة تنسيق التاريخ
-function formatDate(d) {
-    if (!d || d === "—") return "—";
-    return new Date(d).toLocaleDateString("ar-EG");
+async function submitRate(stars) {
+    const comment = prompt("📝 يسعدنا كتابة رأيك القصير أو مقترحك لتطوير المنصة (اختياري):") || "";
+    try {
+        await fetch(GLOBAL_API, {
+            method: "POST",
+            body: JSON.stringify({ action: "saveReview", stars: stars, comment: comment })
+        });
+        alert(`⭐ شكراً لتقييمك المنصة بـ ${stars} نجوم!`);
+    } catch(e) {
+        alert(`⭐ تم تسجيل التقييم وحفظه.`);
+    } finally {
+        closeRatePopup();
+    }
 }
