@@ -1,13 +1,11 @@
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-
 async function trackMyOrder() {
     const phoneInput = document.getElementById("clientPhone").value.trim();
     const resultBox = document.getElementById("resultBox");
     if(!phoneInput) { alert("يرجى إدخال رقم الهاتف"); return; }
     
     resultBox.style.display = "block";
-    resultBox.innerHTML = "⏳ جاري البحث...";
+    resultBox.innerHTML = "⏳ جاري تحميل البيانات...";
     
     try {
         const response = await fetch(`${scriptURL}?action=clientPortal&phone=${encodeURIComponent(phoneInput)}`);
@@ -15,16 +13,32 @@ async function trackMyOrder() {
         
         if(data.success) {
             resultBox.innerHTML = `
-                <h4 style="color:#0b6fc2;">📋 تفاصيل العقد:</h4>
-                <p>👤 <b>الاسم:</b> ${data.name}</p>
-                <p>🛠️ <b>الخدمة:</b> ${data.service}</p>
-                <p>💰 <b>التكلفة:</b> ${data.cost} ج.م</p>
-                <p>📅 <b>الزيارة القادمة:</b> ${data.next_visit}</p>
-                <p>🚦 <b>حالة العميل:</b> ${data.account_status}</p>
+                <div style="text-align:right; line-height:1.8;">
+                    <h4 style="color:#0b6fc2; border-bottom:2px solid #0b6fc2; padding-bottom:5px;">📋 بيانات التعاقد الكاملة</h4>
+                    <p>👤 <b>الاسم:</b> ${data.name}</p>
+                    <p>📞 <b>الهاتف:</b> ${data.phone}</p>
+                    <p>📍 <b>العنوان:</b> ${data.address}</p>
+                    <p>🛠️ <b>الخدمة:</b> ${data.service}</p>
+                    <p>📅 <b>مدة التعاقد:</b> ${data.contract_months} شهر</p>
+                    <p>🔄 <b>عدد الزيارات:</b> ${data.visits}</p>
+                    <p>💰 <b>التكلفة:</b> ${data.cost} ج.م</p>
+                    <p>📅 <b>تاريخ التعاقد:</b> ${data.contract_date}</p>
+                    <p>🏁 <b>انتهاء العقد:</b> ${data.end_date}</p>
+                    <p>⏱️ <b>آخر زيارة:</b> ${data.last_visit}</p>
+                    <p>🔜 <b>الزيارة القادمة:</b> ${data.next_visit}</p>
+                    <p>💳 <b>نوع الاشتراك:</b> ${data.sub_type}</p>
+                    <p>💸 <b>حالة الدفع:</b> ${data.pay_status}</p>
+                    <p>🧾 <b>رقم العقد:</b> ${data.contract_no}</p>
+                    <p>🏧 <b>طريقة الدفع:</b> ${data.pay_method}</p>
+                    <p>💵 <b>قيمة القسط:</b> ${data.installment}</p>
+                    <p>📅 <b>تاريخ القسط القادم:</b> ${data.next_installment}</p>
+                    <p>📝 <b>ملاحظات:</b> ${data.notes}</p>
+                    <p>🚦 <b>حالة العميل:</b> <b style="color:green;">${data.account_status}</b></p>
+                </div>
             `;
         } else {
-            resultBox.innerHTML = `<p style="color:red;">${data.message}</p>`;
+            resultBox.innerHTML = `<p style="color:red; font-weight:bold;">${data.message}</p>`;
         }
-    } catch(e) { resultBox.innerHTML = "❌ خطأ في الاتصال بالسيرفر."; }
+    } catch(e) { resultBox.innerHTML = "❌ خطأ في الاتصال."; }
 }
 </script>
