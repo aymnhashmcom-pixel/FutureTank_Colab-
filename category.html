@@ -18,23 +18,25 @@
 <body>
 
 <h2 id="pageTitle" style="color:#0b6fc2; margin-top:30px;">جاري التحميل...</h2>
-
 <div class="grid" id="contentGrid"></div>
 
 <script>
+// ضع رابط السكريبت الخاص بك هنا:
+const API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+
 const urlParams = new URLSearchParams(window.location.search);
 const cat = urlParams.get('cat');
+const sub = urlParams.get('sub');
 
-function initPage() {
+async function initPage() {
     const grid = document.getElementById("contentGrid");
     const title = document.getElementById("pageTitle");
 
-    // إذا كانت المحافظة هي "خزانات المياه" نعرض المنتجات مباشرة
-    if(cat === "خزانات المياه") {
-        title.innerText = "💧 منتجات وعروض نقاء مياه الشرب";
-        loadProducts();
-    } else {
-        // إذا كانت أي محافظة أخرى، نعرض الأقسام بداخلها
+    if(cat && sub) {
+        title.innerText = `منتجات ${sub} في ${cat}`;
+        loadProducts(cat, sub);
+    } 
+    else if(cat && cat !== "خزانات المياه") {
         title.innerText = "أقسام محافظة " + cat;
         grid.innerHTML = `
             <a href="category.html?cat=${cat}&sub=ملابس" class="card"><div class="icon">👕</div><h3>ملابس وأزياء</h3></a>
@@ -44,25 +46,33 @@ function initPage() {
             <a href="category.html?cat=${cat}&sub=خدمات" class="card"><div class="icon">🛠️</div><h3>خدمات متنوعة</h3></a>
         `;
     }
+    else {
+        title.innerText = "💧 منتجات وعروض نقاء مياه الشرب";
+        loadProducts("خزانات المياه", "خزانات المياه");
+    }
 }
 
-async function loadProducts() {
+async function loadProducts(gov, section) {
     const grid = document.getElementById("contentGrid");
-    const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec?action=getAllProducts&category=خزانات المياه";
+    const apiURL = `${API}?action=getAllProducts&gov=${encodeURIComponent(gov)}&section=${encodeURIComponent(section)}`;
+    
     try {
         const res = await fetch(apiURL);
         const data = await res.json();
-        if(data.success && data.products) {
+        
+        if(data.success && data.products && data.products.length > 0) {
             grid.innerHTML = data.products.map(p => `
                 <div class="prod-card">
                     <img src="${p.image || './icon-512.png'}">
-                    <div style="font-weight:bold; color:#0b6fc2;">${p.name}</div>
-                    <div style="color:#ff9800; font-weight:bold;">${p.price} جنيه</div>
+                    <div class="prod-title">${p.name}</div>
+                    <div class="prod-price">${p.price} جنيه</div>
                     <a class="order-btn" href="https://wa.me/20${p.whatsapp || '1158555708'}?text=أرغب في طلب: ${p.name}" target="_blank">💬 اطلب عبر واتساب</a>
                 </div>
             `).join('');
+        } else {
+            grid.innerHTML = `<p>⚠️ عذراً، لا توجد منتجات في قسم ${section} بمحافظة ${gov} حالياً.</p>`;
         }
-    } catch(e) { grid.innerHTML = "حدث خطأ في تحميل المنتجات."; }
+    } catch(e) { grid.innerHTML = "حدث خطأ في تحميل البيانات."; }
 }
 
 window.onload = initPage;
