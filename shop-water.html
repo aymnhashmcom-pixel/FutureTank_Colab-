@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>منتجات نقاء الماء</title>
-<style>
-.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:15px; }
-.prod-card{ background:#fff; padding:15px; border-radius:15px; text-align:center; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-</style>
+    <meta charset="UTF-8">
+    <title>منتجات نقاء الماء المعتمدة</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f4f9ff; padding: 20px; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+        .prod-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-align: center; }
+        .order-btn { display: block; background: #25D366; color: #fff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; }
+    </style>
 </head>
 <body>
-<h1>💧 منتجات نقاء الماء</h1>
-<div class="grid" id="products">⏳ جاري التحميل...</div>
+<h2>💧 منتجات نقاء مياه الشرب المعتمدة</h2>
+<div class="grid" id="products">⏳ جاري جلب المنتجات...</div>
 <script>
 const API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 async function load() {
@@ -19,7 +21,7 @@ async function load() {
   document.getElementById("products").innerHTML = data.products.map(p => `
     <div class="prod-card">
       <img src="${p.image}" width="100%"><h3>${p.name}</h3><p>${p.price} جنيه</p>
-      <a href="https://wa.me/2${p.whatsapp}">اطلب الآن</a>
+      <a class="order-btn" href="https://wa.me/2${p.whatsapp}">اطلب الآن</a>
     </div>
   `).join('');
 }
