@@ -3,59 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منتجات نقاء الماء المعتمدة</title>
+    <title>Future Tank | التصنيفات</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
         body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:0; direction: rtl; text-align: center; }
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 20px; max-width: 1100px; margin: auto; }
+        .card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-decoration: none; color: #222; display: block; }
+        .icon { font-size: 50px; color: #0b6fc2; margin-bottom: 10px; }
         .prod-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-align: center; }
         .prod-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; }
-        .prod-title { font-size: 18px; font-weight: bold; color: #0b6fc2; margin: 10px 0; }
-        .prod-price { font-size: 16px; color: #ff9800; font-weight: bold; margin-bottom: 12px; }
-        .order-btn { display: block; background: #25D366; color: #fff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; }
+        .order-btn { display: block; background: #25D366; color: #fff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; margin-top:10px;}
     </style>
 </head>
 <body>
 
-<h2 style="color:#0b6fc2; margin-top:30px;">💧 منتجات وعروض نقاء مياه الشرب المعتمدة</h2>
-<p>تصفح واطلب أفضل المنتجات والخزانات من شيت السيرفر المباشر</p>
+<h2 id="pageTitle" style="color:#0b6fc2; margin-top:30px;">جاري التحميل...</h2>
 
-<div class="grid" id="productsGrid">⏳ جاري جلب المنتجات المعتمدة من الشيت الحقيقي...</div>
+<div class="grid" id="contentGrid"></div>
 
 <script>
-async function loadMainProducts() {
-    const grid = document.getElementById("productsGrid");
-    // تحديث الأكشن لـ getAllProducts الموحد للسيرفر V11.0 لدمج القديم والجديد والتجار النشطين
+const urlParams = new URLSearchParams(window.location.search);
+const cat = urlParams.get('cat');
+
+function initPage() {
+    const grid = document.getElementById("contentGrid");
+    const title = document.getElementById("pageTitle");
+
+    // إذا كانت المحافظة هي "خزانات المياه" نعرض المنتجات مباشرة
+    if(cat === "خزانات المياه") {
+        title.innerText = "💧 منتجات وعروض نقاء مياه الشرب";
+        loadProducts();
+    } else {
+        // إذا كانت أي محافظة أخرى، نعرض الأقسام بداخلها
+        title.innerText = "أقسام محافظة " + cat;
+        grid.innerHTML = `
+            <a href="category.html?cat=${cat}&sub=ملابس" class="card"><div class="icon">👕</div><h3>ملابس وأزياء</h3></a>
+            <a href="category.html?cat=${cat}&sub=ماركت" class="card"><div class="icon">🏪</div><h3>ماركت ومواد غذائية</h3></a>
+            <a href="category.html?cat=${cat}&sub=عقارات" class="card"><div class="icon">🏠</div><h3>عقارات وشقق</h3></a>
+            <a href="category.html?cat=${cat}&sub=سيارات" class="card"><div class="icon">🚗</div><h3>سيارات ومواصلات</h3></a>
+            <a href="category.html?cat=${cat}&sub=خدمات" class="card"><div class="icon">🛠️</div><h3>خدمات متنوعة</h3></a>
+        `;
+    }
+}
+
+async function loadProducts() {
+    const grid = document.getElementById("contentGrid");
     const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec?action=getAllProducts&category=خزانات المياه";
-    
     try {
         const res = await fetch(apiURL);
         const data = await res.json();
-        
-        if(data.success && data.products && data.products.length > 0) {
+        if(data.success && data.products) {
             grid.innerHTML = data.products.map(p => `
                 <div class="prod-card">
-                    <img src="${p.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
-                    <div class="prod-title">${p.name}</div>
-                    <div style="color:#666; font-size:13px; margin-bottom:5px;">📋 ${p.description || 'بولي ايثيلين معتمد عالي الجودة'}</div>
-                    <div class="prod-price">${p.price} جنيه</div>
-                    <a class="order-btn" href="https://wa.me/20${p.whatsapp || '1158555708'}?text=${encodeURIComponent('مرحباً، أرغب في طلب منتج: ' + p.name)}" target="_blank">💬 اطلب عبر واتساب الفوري</a>
+                    <img src="${p.image || './icon-512.png'}">
+                    <div style="font-weight:bold; color:#0b6fc2;">${p.name}</div>
+                    <div style="color:#ff9800; font-weight:bold;">${p.price} جنيه</div>
+                    <a class="order-btn" href="https://wa.me/20${p.whatsapp || '1158555708'}?text=أرغب في طلب: ${p.name}" target="_blank">💬 اطلب عبر واتساب</a>
                 </div>
             `).join('');
-        } else {
-            grid.innerHTML = `<p>⚠️ لم يتم العثور على منتجات نشطة حالياً في هذا القسم.</p>`;
         }
-    } catch(e) {
-        grid.innerHTML = `
-            <div class="prod-card">
-                <img src="./icon-512.png">
-                <div class="prod-title">خزان مياه فيوتشر تانك معتمد</div>
-                <div style="color:#666; font-size:13px; margin-bottom:5px;">📋 بولي ايثيلين صحي متعدد الطبقات</div>
-                <div class="prod-price">4444 جنيه</div>
-                <a class="order-btn" href="https://wa.me/201158555708?text=أرغب في شراء خزان المياه المعتمد" target="_blank">💬 اطلب عبر واتساب الفوري</a>
-            </div>`;
-    }
+    } catch(e) { grid.innerHTML = "حدث خطأ في تحميل المنتجات."; }
 }
-window.onload = loadMainProducts;
+
+window.onload = initPage;
 </script>
 </body>
 </html>
