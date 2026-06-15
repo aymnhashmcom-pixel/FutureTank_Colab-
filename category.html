@@ -1,26 +1,61 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<title>عرض المنتجات</title>
-<style>
-.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; padding:20px; }
-.prod-card{ background:#fff; padding:20px; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.06); }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منتجات نقاء الماء المعتمدة</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f4f9ff; margin:0; padding:0; direction: rtl; text-align: center; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; padding: 20px; max-width: 1100px; margin: auto; }
+        .prod-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-align: center; }
+        .prod-card img { width: 100%; height: 180px; object-fit: cover; border-radius: 12px; }
+        .prod-title { font-size: 18px; font-weight: bold; color: #0b6fc2; margin: 10px 0; }
+        .prod-price { font-size: 16px; color: #ff9800; font-weight: bold; margin-bottom: 12px; }
+        .order-btn { display: block; background: #25D366; color: #fff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; }
+    </style>
 </head>
 <body>
-<div class="grid" id="productsGrid">⏳ جاري التحميل...</div>
+
+<h2 style="color:#0b6fc2; margin-top:30px;">💧 منتجات وعروض نقاء مياه الشرب المعتمدة</h2>
+<p>تصفح واطلب أفضل المنتجات والخزانات من شيت السيرفر المباشر</p>
+
+<div class="grid" id="productsGrid">⏳ جاري جلب المنتجات المعتمدة من الشيت الحقيقي...</div>
+
 <script>
-async function load() {
-    const cat = new URLSearchParams(window.location.search).get('cat');
-    const url = `https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec?action=getProducts&cat=${encodeURIComponent(cat)}`;
-    const res = await fetch(url);
-    const data = await res.json();
-    document.getElementById("productsGrid").innerHTML = data.products.map(p => `
-        <div class="prod-card"><h3>${p.name}</h3><p>${p.price} جنيه</p><a href="https://wa.me/2${p.whatsapp}">اطلب واتساب</a></div>
-    `).join('');
+async function loadMainProducts() {
+    const grid = document.getElementById("productsGrid");
+    // تحديث الأكشن لـ getAllProducts الموحد للسيرفر V11.0 لدمج القديم والجديد والتجار النشطين
+    const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec?action=getAllProducts&category=خزانات المياه";
+    
+    try {
+        const res = await fetch(apiURL);
+        const data = await res.json();
+        
+        if(data.success && data.products && data.products.length > 0) {
+            grid.innerHTML = data.products.map(p => `
+                <div class="prod-card">
+                    <img src="${p.image || './icon-512.png'}" onerror="this.src='./icon-512.png'">
+                    <div class="prod-title">${p.name}</div>
+                    <div style="color:#666; font-size:13px; margin-bottom:5px;">📋 ${p.description || 'بولي ايثيلين معتمد عالي الجودة'}</div>
+                    <div class="prod-price">${p.price} جنيه</div>
+                    <a class="order-btn" href="https://wa.me/20${p.whatsapp || '1158555708'}?text=${encodeURIComponent('مرحباً، أرغب في طلب منتج: ' + p.name)}" target="_blank">💬 اطلب عبر واتساب الفوري</a>
+                </div>
+            `).join('');
+        } else {
+            grid.innerHTML = `<p>⚠️ لم يتم العثور على منتجات نشطة حالياً في هذا القسم.</p>`;
+        }
+    } catch(e) {
+        grid.innerHTML = `
+            <div class="prod-card">
+                <img src="./icon-512.png">
+                <div class="prod-title">خزان مياه فيوتشر تانك معتمد</div>
+                <div style="color:#666; font-size:13px; margin-bottom:5px;">📋 بولي ايثيلين صحي متعدد الطبقات</div>
+                <div class="prod-price">4444 جنيه</div>
+                <a class="order-btn" href="https://wa.me/201158555708?text=أرغب في شراء خزان المياه المعتمد" target="_blank">💬 اطلب عبر واتساب الفوري</a>
+            </div>`;
+    }
 }
-window.onload = load;
+window.onload = loadMainProducts;
 </script>
 </body>
 </html>
