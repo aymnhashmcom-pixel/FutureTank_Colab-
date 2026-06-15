@@ -1,31 +1,32 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <title>منتجات نقاء الماء المعتمدة</title>
-    <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f9ff; padding: 20px; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-        .prod-card { background: #fff; border-radius: 16px; padding: 20px; box-shadow: 0 4px 15px rgba(0,0,0,0.06); text-align: center; }
-        .order-btn { display: block; background: #25D366; color: #fff; text-decoration: none; padding: 10px; border-radius: 8px; font-weight: bold; }
-    </style>
-</head>
-<body>
-<h2>💧 منتجات نقاء مياه الشرب المعتمدة</h2>
-<div class="grid" id="products">⏳ جاري جلب المنتجات...</div>
 <script>
-const API = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-async function load() {
-  const res = await fetch(`${API}?action=getProducts&cat=خزانات المياه`);
-  const data = await res.json();
-  document.getElementById("products").innerHTML = data.products.map(p => `
+const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+
+async function loadAllWaterProducts() {
+  const box = document.getElementById("products");
+  try {
+    // تحديد القسم من الرابط مباشرة
+    const res = await fetch(`${API_URL}?action=getAllProducts&cat=خزانات المياه`);
+    const data = await res.json();
+    renderWaterItems(data.products);
+  } catch(e) {
+    box.innerHTML = "<div class='error-msg'>❌ تعذر الاتصال بالسيرفر.</div>";
+  }
+}
+
+function renderWaterItems(prods) {
+  const box = document.getElementById("products");
+  if(!prods || prods.length === 0) {
+    box.innerHTML = "<div class='error-msg'>🏪 لا توجد منتجات لهذا القسم.</div>";
+    return;
+  }
+  box.innerHTML = prods.map(p => `
     <div class="prod-card">
-      <img src="${p.image}" width="100%"><h3>${p.name}</h3><p>${p.price} جنيه</p>
-      <a class="order-btn" href="https://wa.me/2${p.whatsapp}">اطلب الآن</a>
+      <img src="${p.image}" onerror="this.src='https://via.placeholder.com/300'">
+      <div class="prod-title">${p.name}</div>
+      <div class="prod-price">${p.price} جنيه</div>
+      <a class="order-btn" href="https://wa.me/2${p.whatsapp}" target="_blank">اطلب الآن</a>
     </div>
   `).join('');
 }
-window.onload = load;
+window.onload = loadAllWaterProducts;
 </script>
-</body>
-</html>
