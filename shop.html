@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>Future Tank | تسوق بالمحافظات</title>
+<title>Future Tank | التسوق والخدمات</title>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
@@ -10,20 +10,39 @@ body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; }
 .nav-bar { background:#0b6fc2; padding:12px; display:flex; justify-content:space-around; align-items:center; }
 .nav-bar a { color:#fff; text-decoration:none; font-weight:bold; }
 .shop-header{ background:linear-gradient(135deg,#0b6fc2,#4fc3f7); padding:35px 20px; text-align:center; color:#fff; }
+.section-title { padding:20px 20px 0; color:#0b6fc2; font-weight:bold; }
 .cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; padding:20px; }
-.shop-card{ background:#fff; padding:20px; border-radius:22px; box-shadow:0 6px 20px rgba(0,0,0,.08); text-decoration:none; color:#222; text-align:center; }
+.shop-card{ background:#fff; padding:20px; border-radius:22px; box-shadow:0 6px 20px rgba(0,0,0,.08); text-decoration:none; color:#222; text-align:center; transition:.3s; }
+.shop-card:hover{ transform:translateY(-5px); }
 .shop-icon{ font-size:45px; margin-bottom:15px; }
 .shop-card h3{ color:#0b6fc2; }
 </style>
 </head>
 <body>
-<div class="nav-bar"><a href="index.html">الرئيسية</a></div>
-<header class="shop-header"><h1>🛒 ماركت محافظات مصر 🇪🇬</h1></header>
+
+<div class="nav-bar"><a href="index.html"><i class="fa fa-home"></i> الرئيسية</a></div>
+
+<header class="shop-header"><h1>🛍️ منصة التسوق والخدمات</h1></header>
+
+<!-- قسم منتجات نقاء المياه -->
+<div class="section-title">💧 منتجات نقاء المياه</div>
 <section class="cards">
-  <!-- قريباً سنقوم هنا بإضافة الأقسام الجديدة (ملابس، ماركت، عقارات...) -->
-  <a href="category.html?cat=القاهرة" class="shop-card"><div class="shop-icon">🏢</div><h3>القاهرة</h3></a>
-  <a href="category.html?cat=الجيزة" class="shop-card"><div class="shop-icon">🕌</div><h3>الجيزة</h3></a>
-  <a href="category.html?cat=خزانات المياه" class="shop-card"><div class="shop-icon">💧</div><h3>خزانات المياه</h3></a>
+  <a href="category.html?cat=خزانات المياه" class="shop-card">
+    <div class="shop-icon">💧</div>
+    <h3>خزانات وفلاتر المياه</h3>
+    <p>المنتجات المعتمدة من Future Tank</p>
+  </a>
 </section>
+
+<!-- قسم التسوق العام -->
+<div class="section-title">🛒 تسوق وتصفح المحافظات</div>
+<section class="cards">
+  <a href="category.html?cat=ملابس" class="shop-card"><div class="shop-icon">👕</div><h3>ملابس وأزياء</h3></a>
+  <a href="category.html?cat=ماركت" class="shop-card"><div class="shop-icon">🏪</div><h3>ماركت ومواد غذائية</h3></a>
+  <a href="category.html?cat=عقارات" class="shop-card"><div class="shop-icon">🏠</div><h3>عقارات وشقق</h3></a>
+  <a href="category.html?cat=سيارات" class="shop-card"><div class="shop-icon">🚗</div><h3>سيارات ومواصلات</h3></a>
+  <a href="category.html?cat=خدمات متنوعة" class="shop-card"><div class="shop-icon">🛠️</div><h3>خدمات متنوعة</h3></a>
+</section>
+
 </body>
 </html>
