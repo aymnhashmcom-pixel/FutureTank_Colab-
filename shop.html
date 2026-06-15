@@ -7,113 +7,23 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
 <style>
 body{ background:#f5f9ff; font-family:Tahoma; margin:0; padding:0; }
-.nav-bar { background:#0b6fc2; padding:12px; display:flex; justify-content:space-around; align-items:center; box-shadow:0 2px 10px rgba(0,0,0,0.1); }
-.nav-bar a { color:#fff; text-decoration:none; font-weight:bold; font-size:15px; display:flex; align-items:center; gap:5px; }
+.nav-bar { background:#0b6fc2; padding:12px; display:flex; justify-content:space-around; align-items:center; }
+.nav-bar a { color:#fff; text-decoration:none; font-weight:bold; }
 .shop-header{ background:linear-gradient(135deg,#0b6fc2,#4fc3f7); padding:35px 20px; text-align:center; color:#fff; }
-.shop-header h1{ margin:0; font-size:30px; }
-.shop-header p{ margin-top:10px; font-size:16px; opacity:.95; }
-.notice-box{ background:#fff3cd; border:1px solid #ffeeba; color:#856404; padding:15px; border-radius:15px; margin:20px; line-height:2; font-size:15px; text-align:center; }
 .cards{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:18px; padding:20px; }
-.shop-card{ background:#fff; padding:20px; border-radius:22px; box-shadow:0 6px 20px rgba(0,0,0,.08); text-decoration:none; color:#222; transition:.3s; text-align:center; position:relative; overflow:hidden; }
-.shop-card:hover{ transform:translateY(-5px); }
+.shop-card{ background:#fff; padding:20px; border-radius:22px; box-shadow:0 6px 20px rgba(0,0,0,.08); text-decoration:none; color:#222; text-align:center; }
 .shop-icon{ font-size:45px; margin-bottom:15px; }
-.shop-card h3{ margin:0; font-size:22px; color:#0b6fc2; }
-.shop-card p{ margin-top:10px; line-height:1.8; color:#666; font-size:15px; }
-.badge{ position:absolute; top:15px; left:15px; background:#ff9800; color:#fff; padding:6px 12px; border-radius:20px; font-size:11px; font-weight:bold; }
-.track-btn{ display:block; margin:0 20px 20px; background:#25D366; color:#fff; text-align:center; padding:15px; border-radius:14px; font-size:17px; font-weight:bold; text-decoration:none; }
-footer{ padding:25px; text-align:center; color:#777; font-size:14px; }
+.shop-card h3{ color:#0b6fc2; }
 </style>
 </head>
 <body>
-
-<div class="nav-bar">
-  <a href="index.html"><i class="fa fa-home"></i> الرئيسية</a>
-  <a href="shop.html"><i class="fa fa-shopping-bag"></i> تسوق الآن</a>
-  <a href="services.html"><i class="fa fa-tint"></i> الخدمات</a>
-</div>
-
-<header class="shop-header">
-  <h1>🛒 ماركت محافظات مصر 🇪🇬</h1>
-  <p>اختر المحافظة وتصفح عروض ومنتجات أفضل الشركات المعتمدة القريبة منك</p>
-</header>
-
-<div class="notice-box">
-  💡 <b>للتجار والشركات:</b> الاشتراك الأساسي يتيح لك النشر في محافظة واحدة، يمكنك ترقية باقتك (ربع سنوي / سنوي) للاستفادة من أقوى العروض والتواجد في كافة المحافظات دفعة واحدة!
-</div>
-
+<div class="nav-bar"><a href="index.html">الرئيسية</a></div>
+<header class="shop-header"><h1>🛒 ماركت محافظات مصر 🇪🇬</h1></header>
 <section class="cards">
-  <a href="category.html?cat=القاهرة" class="shop-card">
-    <div class="badge">العاصمة</div>
-    <div class="shop-icon">🏢</div>
-    <h3>محافظة القاهرة</h3>
-    <p>تصفح شركات وماركت العاصمة</p>
-  </a>
-
-  <a href="category.html?cat=الجيزة" class="shop-card">
-    <div class="badge">نشط</div>
-    <div class="shop-icon">🕌</div>
-    <h3>محافظة الجيزة</h3>
-    <p>عروض الجيزة، هرم سيتي، وأكتوبر</p>
-  </a>
-
-  <a href="category.html?cat=الإسكندرية" class="shop-card">
-    <div class="shop-icon">🌊</div>
-    <h3>محافظة الإسكندرية</h3>
-    <p>عروض عروس البحر الأبيض</p>
-  </a>
-
-  <a href="category.html?cat=القليوبية" class="shop-card">
-    <div class="shop-icon">🌾</div>
-    <h3>محافظة القليوبية</h3>
-    <p>منتجات ومتاجر القليوبية</p>
-  </a>
-
-  <a href="category.html?cat=الشرقية" class="shop-card">
-    <div class="shop-icon">🐎</div>
-    <h3>محافظة الشرقية</h3>
-    <p>متاجر وعروض أهل الشرقية</p>
-  </a>
-
-  <a href="category.html?cat=الدقهلية" class="shop-card">
-    <div class="shop-icon">🌴</div>
-    <h3>محافظة الدقهلية</h3>
-    <p>عروض المنصورة والدقهلية</p>
-  </a>
-
-  <a href="category.html?cat=الغربية" class="shop-card">
-    <div class="shop-icon">🏙️</div>
-    <h3>محافظة الغربية</h3>
-    <p>منتجات ومحلات طنطا والغربية</p>
-  </a>
-
-  <a href="category.html?cat=المنوفية" class="shop-card">
-    <div class="shop-icon">🚜</div>
-    <h3>محافظة المنوفية</h3>
-    <p>دليل تجار وماركت المنوفية</p>
-  </a>
-
-  <a href="category.html?cat=البحيرة" class="shop-card">
-    <div class="shop-icon">🌱</div>
-    <h3>محافظة البحيرة</h3>
-    <p>عروض وماركت دمنهور والبحيرة</p>
-  </a>
-
-  <a href="category.html?cat=الفيوم" class="shop-card">
-    <div class="shop-icon">🌊</div>
-    <h3>محافظة الفيوم</h3>
-    <p>منتجات ومتاجر الفيوم</p>
-  </a>
-
-  <a href="category.html?cat=خزانات المياه" class="shop-card">
-    <div class="badge">Future Tank</div>
-    <div class="shop-icon">💧</div>
-    <h3>خزانات وفلاتر المياه</h3>
-    <p>القسم الرئيسي المعتمد لـ Future Tank بمصر</p>
-  </a>
+  <!-- قريباً سنقوم هنا بإضافة الأقسام الجديدة (ملابس، ماركت، عقارات...) -->
+  <a href="category.html?cat=القاهرة" class="shop-card"><div class="shop-icon">🏢</div><h3>القاهرة</h3></a>
+  <a href="category.html?cat=الجيزة" class="shop-card"><div class="shop-icon">🕌</div><h3>الجيزة</h3></a>
+  <a href="category.html?cat=خزانات المياه" class="shop-card"><div class="shop-icon">💧</div><h3>خزانات المياه</h3></a>
 </section>
-
-<a href="track-order.html" class="track-btn">📦 تتبع طلباتك الحالية لحظة بلحظة</a>
-
-<footer>© Future Tank — جميع الحقوق محفوظة</footer>
 </body>
 </html>
