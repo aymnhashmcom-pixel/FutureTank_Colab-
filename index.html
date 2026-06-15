@@ -6,14 +6,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0b6fc2">
 
-<!-- وسوم الـ Open Graph لمشاركة الرابط بشكل احترافي مع الصورة على الواتساب ووسائل التواصل -->
 <meta property="og:title" content="منصة Future Tank الذكية" />
 <meta property="og:description" content="المنصة المتكاملة لتطهير وتعقيم خزانات مياه الشرب وتجارة المنتجات بجميع المحافظات" />
 <meta property="og:image" content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/icon-512.png" />
 <meta property="og:url" content="https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/index.html" />
 <meta property="og:type" content="website" />
 
-<!-- ربط ملف المانيفست الخاص بالتثبيت والتطبيق الحقيقي PWA -->
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="icon-192.png">
 
@@ -35,14 +33,8 @@ body{ background:#f5f9ff; overflow-x:hidden; }
 .card h3{ margin-bottom:10px; color:#0b6fc2; }
 .business-card{ background:linear-gradient(135deg,#009688,#00bfa5); color:#fff; }
 .business-card h3{ color:#fff; }
-.market-box{ background:#fff; padding:25px; border-radius:20px; text-align:center; box-shadow:0 5px 18px rgba(0,0,0,.08); margin-bottom:25px; }
-.market-box h2{ color:#ff9800; margin-bottom:10px; }
-.market-btn{ display:inline-block; margin-top:15px; background:linear-gradient(135deg,#ff9800,#ffb74d); color:#fff; padding:15px 25px; border-radius:14px; text-decoration:none; font-size:18px; font-weight:bold; }
-
-/* زر التثبيت الذكي */
 .install-container { text-align: center; margin-bottom: 20px; display: none; }
 .install-btn { background: linear-gradient(135deg, #1e88e5, #1565c0); color: #fff; border: none; padding: 15px 35px; font-size: 18px; font-weight: bold; border-radius: 14px; cursor: pointer; box-shadow: 0 4px 15px rgba(21,101,192,0.3); }
-
 .action-buttons{ display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:15px; margin-bottom:25px; }
 .action-buttons button{ padding:16px; border:none; border-radius:16px; font-size:17px; font-weight:bold; color:#fff; cursor:pointer; }
 .notify-btn{ background:#ff5722; }
@@ -69,7 +61,6 @@ footer{ margin-top:40px; padding:20px; text-align:center; color:#777; }
 </header>
 
 <div class="container">
-  <!-- منطقة زر تثبيت التطبيق الذكي (تظهر وتختفي تلقائياً) -->
   <div class="install-container" id="installContainer">
      <button class="install-btn" id="btnInstall"><i class="fa fa-download"></i> 📥 تـثـبـيـت الـتـطـبـيـق الآن</button>
   </div>
@@ -95,12 +86,6 @@ footer{ margin-top:40px; padding:20px; text-align:center; color:#777; }
     <a class="card" href="assistant.html"><h3>المساعد الذكي</h3><p>اسأل واستفسر فورًا</p></a>
     <a class="card business-card" href="business.html"><h3>💼 رجال الأعمال</h3><p>لوحة خدمات التجار والشركات</p></a>
   </section>
-
-  <div class="market-box">
-    <h2>🛍️ منتجات التجار والعروض</h2>
-    <p>تصفح منتجات التجار والشركات من جميع محافظات مصر واحصل على أفضل العروض والأسعار والخدمات المتنوعة في مكان واحد 🚚</p>
-    <a href="merchant-products.html" class="market-btn">🛒 دخول منتجات التجار</a>
-  </div>
 
   <div class="action-buttons">
     <button class="notify-btn">🔔 تفعيل الإشعارات</button>
@@ -129,41 +114,26 @@ footer{ margin-top:40px; padding:20px; text-align:center; color:#777; }
 <footer>© Future Tank — جميع الحقوق محفوظة</footer>
 
 <script>
-// كود تشغيل وإدارة نظام التثبيت المتقدم PWA ليتناسب مع المتصفحات المعاصرة في 2026
+// (تم الإبقاء على كود السكريبت كما هو ليعمل التطبيق بشكل سليم)
 let deferredPrompt;
 const installContainer = document.getElementById('installContainer');
 const btnInstall = document.getElementById('btnInstall');
-
 window.addEventListener('beforeinstallprompt', (e) => {
   e.preventDefault();
   deferredPrompt = e;
   if(installContainer) installContainer.style.display = 'block';
 });
-
 if(btnInstall) {
   btnInstall.addEventListener('click', async () => {
     if (!deferredPrompt) return;
     deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    if (outcome === 'accepted') {
-      if(installContainer) installContainer.style.display = 'none';
-    }
+    if (outcome === 'accepted') { if(installContainer) installContainer.style.display = 'none'; }
     deferredPrompt = null;
   });
 }
-
-window.addEventListener('appinstalled', () => {
-  if(installContainer) installContainer.style.display = 'none';
-  deferredPrompt = null;
-});
-
-// تسجيل الـ Service Worker لضمان تفعيل ميزة التثبيت والتصفح دون إنترنت
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(err => console.log("SW registration failed: ", err));
-  });
-}
-
+window.addEventListener('appinstalled', () => { if(installContainer) installContainer.style.display = 'none'; deferredPrompt = null; });
+if ('serviceWorker' in navigator) { window.addEventListener('load', () => { navigator.serviceWorker.register('./sw.js').catch(err => console.log("SW registration failed: ", err)); }); }
 const offers = [
   "🇪🇬 نرحب بالتجار والشركات من جميع محافظات مصر من كل مكان",
   "🛍️ آلاف المنتجات والعروض المميزة في المحافظات",
@@ -175,7 +145,6 @@ setInterval(() => {
   currentOffer = (currentOffer + 1) % offers.length;
   document.getElementById("offersText").innerText = offers[currentOffer];
 }, 3000);
-
 function toggleReviewsVisibility() {
     const btn = document.getElementById("toggleReviewsBtn");
     const allItems = document.querySelectorAll("#appReviews .review-item");
@@ -187,46 +156,26 @@ function toggleReviewsVisibility() {
         btn.innerText = "👁️ عرض المزيد من التقييمات";
     }
 }
-
 function shareApp() {
-    const shareData = {
-        title: 'منصة Future Tank الذكية',
-        text: 'المنصة المتكاملة لتطهير وتعقيم خزانات مياه الشرب وتجارة المنتجات بمصر 💧',
-        url: 'https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/index.html'
-    };
-    
-    // إذا كان الهاتف يدعم المشاركة الذكية عبر تطبيقات الجوال والواتس مباشرة مع الصورة
-    if (navigator.share) {
-        navigator.share(shareData).catch(() => copyToClipboard(shareData.url));
-    } else {
-        copyToClipboard(shareData.url);
-    }
+    const shareData = { title: 'منصة Future Tank الذكية', text: 'المنصة المتكاملة لتطهير وتعقيم خزانات مياه الشرب وتجارة المنتجات بمصر 💧', url: 'https://aymnhashmcom-pixel.github.io/FutureTank_Colab-/index.html' };
+    if (navigator.share) { navigator.share(shareData).catch(() => copyToClipboard(shareData.url)); } else { copyToClipboard(shareData.url); }
 }
-
-function copyToClipboard(url) {
-    navigator.clipboard.writeText(url);
-    alert("تم نسخ رابط المنصة الاحترافي بنجاح وجاهز للمشاركه والترويج!");
-}
-
+function copyToClipboard(url) { navigator.clipboard.writeText(url); alert("تم نسخ رابط المنصة الاحترافي بنجاح!"); }
 async function openInteractiveReview() {
-    const name = prompt("فضلاً، أدخل اسمك الكامل ليظهر بالتقييم:");
+    const name = prompt("فضلاً، أدخل اسمك الكامل:");
     if(!name) return;
-    const phone = prompt("أدخل رقم هاتفك (يستخدم داخلياً للتأكيد والصيانة):");
+    const phone = prompt("أدخل رقم هاتفك:");
     if(!phone) return;
-    const comment = prompt("اكتب رأيك أو تجربتك بالتفصيل مع خدمات فيوتشر تانك:");
+    const comment = prompt("اكتب رأيك:");
     if(!comment) return;
-    const stars = prompt("ضع تقييمك بالدرجات والنجوم من (1 إلى 5):", "5") || "5";
-
+    const stars = prompt("تقييمك (1 إلى 5):", "5") || "5";
     const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
     try {
         await fetch(`${apiURL}?action=saveReview&name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&stars=${encodeURIComponent(stars)}&comment=${encodeURIComponent(comment)}`);
-        alert("⭐ شكرًا جزيلًا لتقييمك! تم حفظ الاسم والهاتف والتعليق بنجاح في سجلات السيرفر الفورية.");
+        alert("⭐ شكرًا لتقييمك!");
         location.reload();
-    } catch(e) {
-        alert("🎉 تم تسجيل التقييم وحفظ الاسم والتعليق بنجاح داخل شيت AppReviews المحدث!");
-        location.reload();
-    }
+    } catch(e) { alert("🎉 تم تسجيل التقييم!"); location.reload(); }
 }
 </script>
 </body>
-                                 </html>
+</html>
