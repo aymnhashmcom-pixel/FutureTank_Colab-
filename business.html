@@ -2,26 +2,38 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة الشركاء | Future Tank</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f5f9ff; margin:0; padding:0; direction: rtl; }
-        .nav-bar { background:#0b6fc2; padding:15px; display:flex; justify-content:center; }
-        .nav-bar a { color:#fff; text-decoration:none; font-weight:bold; }
-        .container { max-width:800px; margin:30px auto; padding:20px; text-align:center; }
-        .box { background:#fff; padding:30px; border-radius:15px; box-shadow:0 4px 15px rgba(0,0,0,0.06); }
-        h2 { color:#0b6fc2; }
+        body { font-family: Tahoma; background: #f5f9ff; padding: 20px; text-align: center; }
+        .box { background: #fff; max-width: 500px; margin: auto; padding: 30px; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ccc; border-radius: 10px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #0b6fc2; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-<div class="nav-bar"><a href="index.html">العودة للرئيسية</a></div>
-<div class="container">
-    <div class="box">
-        <h2>💼 بوابة الشركاء ورجال الأعمال</h2>
-        <p>نعمل حالياً على تطوير نظام خاص بالباقات والاشتراكات الاستراتيجية لشركاء النجاح. يرجى التواصل مع الإدارة مباشرة لتفعيل شراكتكم.</p>
-        <a href="https://wa.me/201150402031" style="display:inline-block; margin-top:20px; padding:15px 30px; background:#25D366; color:#fff; text-decoration:none; border-radius:10px; font-weight:bold;">تواصل مع الإدارة عبر واتساب</a>
-    </div>
+<div class="box">
+    <h2>💼 بوابة الشركاء</h2>
+    <a href="https://wa.me/201150402031?text=مرحباً، لقد قمت بالدفع. يرجى تفعيل اشتراكي." style="display:block; background:#25D366; color:white; padding:15px; text-decoration:none; border-radius:10px;">💬 إرسال إثبات الدفع للإدارة</a>
+    <hr>
+    <h3>دخول لوحة التحكم</h3>
+    <input type="text" id="phone" placeholder="رقم الهاتف">
+    <input type="password" id="code" placeholder="كود التفعيل">
+    <button onclick="login()">🚀 دخول اللوحة</button>
 </div>
+<script>
+async function login() {
+    const phone = document.getElementById("phone").value;
+    const code = document.getElementById("code").value;
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+    const res = await fetch(`${scriptURL}?action=merchantLogin&phone=${phone}&code=${code}`);
+    const data = await res.json();
+    if(data.success) {
+        localStorage.setItem("merchant_name", data.merchantName);
+        localStorage.setItem("merchant_plan", data.plan);
+        localStorage.setItem("merchant_logged", "yes");
+        window.location.href = "merchant-dashboard.html";
+    } else { alert(data.message); }
+}
+</script>
 </body>
 </html>
