@@ -19,7 +19,6 @@ function searchClient() {
 
       if (resultBox) resultBox.style.display = "block";
       
-      // إظهار الرقم كاملاً ومسبوقاً بالصفر الأول
       let cleanPhone = data.phone;
       if(String(cleanPhone).length === 10 && !String(cleanPhone).startsWith("0")) {
           cleanPhone = "0" + cleanPhone;
@@ -47,7 +46,6 @@ function searchClient() {
       document.getElementById("notes").textContent = data.notes || "—";
       document.getElementById("account_status").textContent = data.account_status || "—";
 
-      // تحديث رابط الواتساب للتجديد الفوري
       const msg = `🛠️ طلب تجديد تعاقد بأسعار المنصة الرسمية\n👤 الاسم: ${data.name}\n📞 الهاتف: ${cleanPhone}\n📜 رقم العقد: ${data.contract_no}`;
       const renewBtn = document.getElementById("whatsappRenewBtn");
       if (renewBtn) renewBtn.href = "https://wa.me/201150402031?text=" + encodeURIComponent(msg);
