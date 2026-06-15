@@ -2,10 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<title>القسم</title>
+<title>عرض المنتجات</title>
+<style>
+.grid{ display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:20px; padding:20px; }
+.prod-card{ background:#fff; padding:20px; border-radius:16px; box-shadow:0 4px 15px rgba(0,0,0,0.06); }
+</style>
 </head>
 <body>
-<div id="productsGrid">⏳ جاري التحميل...</div>
+<div class="grid" id="productsGrid">⏳ جاري التحميل...</div>
 <script>
 async function load() {
     const cat = new URLSearchParams(window.location.search).get('cat');
@@ -13,7 +17,7 @@ async function load() {
     const res = await fetch(url);
     const data = await res.json();
     document.getElementById("productsGrid").innerHTML = data.products.map(p => `
-        <div><h3>${p.name}</h3><p>${p.price} جنيه</p><a href="https://wa.me/2${p.whatsapp}">اطلب واتساب</a></div>
+        <div class="prod-card"><h3>${p.name}</h3><p>${p.price} جنيه</p><a href="https://wa.me/2${p.whatsapp}">اطلب واتساب</a></div>
     `).join('');
 }
 window.onload = load;
