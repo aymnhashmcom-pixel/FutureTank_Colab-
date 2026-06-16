@@ -3,90 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة الشركاء | Future Tank</title>
+    <title>Future Tank | بوابة الشركاء</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f5f9ff; margin: 0; padding: 10px; direction: rtl; }
-        .container { width: 100%; max-width: 500px; margin: 0 auto; }
-        .header { text-align: center; color: #0b6fc2; margin: 20px 0; }
-        
-        /* تصميم الباقات العمودي */
-        .packages { display: flex; flex-direction: column; gap: 15px; margin-bottom: 30px; }
-        .card { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); text-align: center; border: 2px solid #e1effa; cursor: pointer; transition: 0.3s; }
-        .card:hover { border-color: #0b6fc2; }
-        .card h3 { margin: 5px 0; color: #0b6fc2; font-size: 18px; }
-        .price { font-size: 18px; font-weight: bold; color: #25D366; }
-
-        /* منطقة الدفع */
-        #paymentArea { display: none; background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; }
-        .pay-btn { display: block; width: 100%; padding: 14px; margin: 8px 0; text-decoration: none; color: white; border-radius: 10px; font-weight: bold; font-size: 15px; }
-        
-        /* قسم تسجيل الدخول */
-        .login-box { background: #eef6ff; padding: 20px; border-radius: 15px; }
-        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ccc; border-radius: 10px; box-sizing: border-box; }
-        button { width: 100%; padding: 14px; background: #0b6fc2; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        body { font-family: Tahoma; background: #f4f7f6; padding: 15px; direction: rtl; }
+        .container { max-width: 450px; margin: auto; }
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); margin-bottom: 20px; text-align: center; border: 2px solid #e1effa; }
+        h3 { color: #0b6fc2; margin: 10px 0; }
+        .price { font-weight: bold; color: #25D366; font-size: 1.2em; }
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #0b6fc2; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-
 <div class="container">
-    <div class="header">
-        <h2>💼 بوابة الشركاء ورجال الأعمال</h2>
-        <p>اختر الباقة المناسبة لتوسع نشاطك التجاري معنا</p>
-    </div>
-
-    <div class="packages">
-        <div class="card" onclick="selectPlan('محافظة واحدة', 300)">
-            <h3>محافظة واحدة</h3>
-            <div class="price">300 ج / 30 يوم</div>
-        </div>
-        <div class="card" onclick="selectPlan('نصف المحافظات', 500)">
-            <h3>نصف المحافظات</h3>
-            <div class="price">500 ج / 30 يوم</div>
-        </div>
-        <div class="card" onclick="selectPlan('جميع المحافظات', 750)">
-            <h3>جميع المحافظات</h3>
-            <div class="price">750 ج / 30 يوم</div>
-        </div>
-    </div>
-
-    <div id="paymentArea">
-        <h3 id="selectedPlanTitle" style="color:#0b6fc2; margin-top:0;"></h3>
-        <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#673ab7;">دفع عبر إنستا باي</a>
-        <a href="https://flous.page.link/bT9z" class="pay-btn" style="background:#e91e63;">دفع عبر اتصالات كاش</a>
-        <a href="#" id="whatsappLink" class="pay-btn" style="background:#25D366;">💬 إرسال إثبات الدفع للإدارة</a>
-    </div>
-
-    <div class="login-box">
-        <h3>دخول لوحة التحكم (للمشتركين)</h3>
-        <input type="text" id="phone" placeholder="رقم الهاتف">
-        <input type="password" id="code" placeholder="كود التفعيل">
-        <button onclick="login()">🚀 دخول اللوحة</button>
-    </div>
+    <h2>💼 انضم لشركاء النجاح</h2>
+    <input type="text" id="mName" placeholder="اسمك الكريم">
+    <input type="text" id="mPhone" placeholder="رقم الهاتف (الواتساب)">
+    
+    <select id="mPlan">
+        <option value="الأساس|300">باقة الأساس (محافظة واحدة) - 300 ج</option>
+        <option value="النمو|500">باقة النمو (نصف المحافظات) - 500 ج</option>
+        <option value="الريادة|750">باقة الريادة (جميع المحافظات) - 750 ج</option>
+    </select>
+    
+    <button onclick="sendJoinRequest()">إرسال طلب الانضمام</button>
 </div>
 
 <script>
-    function selectPlan(name, price) {
-        document.getElementById('paymentArea').style.display = 'block';
-        document.getElementById('selectedPlanTitle').innerText = 'تم اختيار: ' + name + ' - ' + price + ' ج';
-        document.getElementById('whatsappLink').href = "https://wa.me/201150402031?text=مرحباً، لقد قمت بالدفع لباقة " + name;
-    }
-
-    async function login() {
-        const phone = document.getElementById("phone").value;
-        const code = document.getElementById("code").value;
-        // تأكد من وضع الرابط الصحيح الخاص بك هنا
-        const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-        
-        const res = await fetch(`${scriptURL}?action=merchantLogin&phone=${phone}&code=${code}`);
-        const data = await res.json();
-        
-        if(data.success) {
-            localStorage.setItem("merchant_name", data.merchantName);
-            localStorage.setItem("merchant_logged", "yes");
-            window.location.href = "merchant-dashboard.html";
-        } else {
-            alert(data.message);
-        }
+    async function sendJoinRequest() {
+        const name = document.getElementById('mName').value;
+        const phone = document.getElementById('mPhone').value;
+        const plan = document.getElementById('mPlan').value;
+        const msg = `مرحباً، أرغب في الانضمام لباقة ${plan.split('|')[0]}. اسمي: ${name}، ورقمي: ${phone}`;
+        window.open(`https://wa.me/201150402031?text=${encodeURIComponent(msg)}`);
     }
 </script>
 </body>
