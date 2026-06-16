@@ -2,78 +2,42 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>لوحة تحكم الإدارة لـ Future Tank</title>
+    <title>لوحة إدارة الشركاء</title>
     <style>
-        body { font-family: Tahoma; background: #f4f9ff; padding:20px; direction: rtl; display:none; }
-        .box { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); margin-bottom: 20px; }
-        input, textarea, select { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
-        button { background: #0b6fc2; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; }
+        body { font-family: Tahoma; background: #f4f9ff; padding:10px; direction: rtl; display:none; }
+        .box { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; }
+        table { width: 100%; font-size: 13px; border-collapse: collapse; }
+        th { background: #0b6fc2; color: white; padding: 10px; }
+        td { padding: 8px; border-bottom: 1px solid #eee; text-align: center; }
+        button { padding: 8px; background: #25D366; color: white; border: none; border-radius: 5px; cursor: pointer; }
     </style>
 </head>
 <body>
-
-<!-- نموذج إضافة المنتج -->
 <div class="box">
-    <h3>➕ إضافة منتج جديد</h3>
-    <form id="productForm" onsubmit="saveProduct(event)">
-        <input type="text" id="pName" placeholder="اسم المنتج" required>
-        <textarea id="pDesc" placeholder="الوصف" rows="2"></textarea>
-        <input type="number" id="pPrice" placeholder="السعر" required>
-        <button type="submit">💾 حفظ المنتج</button>
-    </form>
+    <h3>📋 طلبات الانضمام</h3>
+    <div id="requestsTable">جاري التحميل...</div>
 </div>
-
-<div class="box">
-    <h3>📦 الطلبات الحالية وتفعيل الشركاء</h3>
-    <div id="ordersTableBox">جاري التحميل...</div>
-</div>
-
 <script>
-const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-
-// حماية كلمة السر
-function checkPassword() {
-    const password = prompt("🔐 يرجى إدخال كلمة مرور الإدارة:");
-    if (password === "الحمدلله") {
-        document.body.style.display = "block";
-        loadAdminData();
-    } else { alert("❌ خطأ!"); window.location.href = "about:blank"; }
-}
-
-async function loadAdminData() {
-    const res = await fetch(`${scriptURL}?action=getAdminOrders`);
-    const data = await res.json();
-    let html = `<table><tr><th>العميل</th><th>الهاتف</th><th>إجراء</th></tr>`;
-    data.orders.forEach(o => {
-        html += `<tr><td>${o.name}</td><td>${o.phone}</td>
-        <td><button onclick="activateMerchant('${o.phone}', '${o.name}')" style="background:#25D366;">✅ تفعيل</button></td></tr>`;
-    });
-    document.getElementById("ordersTableBox").innerHTML = html + `</table>`;
-}
-
-async function activateMerchant(phone, name) {
-    const res = await fetch(`${scriptURL}?action=activateMerchant&phone=${phone}&name=${name}`);
-    const data = await res.json();
-    if(data.success) {
-        alert("تم التفعيل والكود هو: " + data.code);
-        // الرابط المباشر للواتساب لإرسال الكود
-        window.open(`https://wa.me/20${phone}?text=مرحباً ${name}، تم تفعيل اشتراكك في Future Tank. كود الدخول الخاص بك هو: ${data.code}`);
+    const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+    async function loadRequests() {
+        const res = await fetch(`${scriptURL}?action=getAdminOrders`);
+        const data = await res.json();
+        let html = `<table><tr><th>الاسم</th><th>الهاتف</th><th>الباقة</th><th>تفعيل</th></tr>`;
+        data.orders.forEach(o => {
+            html += `<tr><td>${o.name}</td><td>${o.phone}</td><td>${o.plan}</td>
+            <td><button onclick="activate('${o.phone}', '${o.name}')">✅</button></td></tr>`;
+        });
+        document.getElementById('requestsTable').innerHTML = html + `</table>`;
     }
-}
-
-async function saveProduct(e) {
-    e.preventDefault();
-    const payload = {
-        action: "saveAdminProduct",
-        name: document.getElementById("pName").value,
-        description: document.getElementById("pDesc").value,
-        price: document.getElementById("pPrice").value
+    function activate(phone, name) {
+        fetch(`${scriptURL}?action=activateMerchant&phone=${phone}&name=${name}`).then(() => {
+            alert("تم التفعيل!"); location.reload();
+        });
+    }
+    window.onload = () => {
+        if(prompt("كلمة المرور:") === "الحمدلله") { document.body.style.display = "block"; loadRequests(); }
+        else { window.location.href = "about:blank"; }
     };
-    await fetch(scriptURL, { method: 'POST', body: JSON.stringify(payload) });
-    alert("✅ تم حفظ المنتج!");
-}
-
-window.onload = checkPassword;
 </script>
 </body>
 </html>
