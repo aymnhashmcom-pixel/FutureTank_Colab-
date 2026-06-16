@@ -3,38 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Future Tank | بوابة الشركاء</title>
+    <title>بوابة الشركاء | Future Tank</title>
     <style>
         body { font-family: Tahoma; background: #f4f7f6; padding: 15px; direction: rtl; }
         .container { max-width: 450px; margin: auto; }
-        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.08); margin-bottom: 20px; text-align: center; border: 2px solid #e1effa; }
-        h3 { color: #0b6fc2; margin: 10px 0; }
-        .price { font-weight: bold; color: #25D366; font-size: 1.2em; }
-        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #0b6fc2; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
+        .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; border: 2px solid #e1effa; }
+        .pay-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #0b6fc2; color: white; border-radius: 10px; text-decoration: none; font-weight: bold; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #25D366; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-<div class="container">
-    <h2>💼 انضم لشركاء النجاح</h2>
-    <input type="text" id="mName" placeholder="اسمك الكريم">
-    <input type="text" id="mPhone" placeholder="رقم الهاتف (الواتساب)">
-    
-    <select id="mPlan">
-        <option value="الأساس|300">باقة الأساس (محافظة واحدة) - 300 ج</option>
-        <option value="النمو|500">باقة النمو (نصف المحافظات) - 500 ج</option>
-        <option value="الريادة|750">باقة الريادة (جميع المحافظات) - 750 ج</option>
-    </select>
-    
-    <button onclick="sendJoinRequest()">إرسال طلب الانضمام</button>
+<div class="container" id="step1">
+    <div class="card">
+        <h2>💼 انضم لشركاء النجاح</h2>
+        <input type="text" id="mName" placeholder="اسمك الكريم">
+        <input type="text" id="mPhone" placeholder="رقم الهاتف">
+        <select id="mPlan" style="width:100%; padding:12px; border-radius:10px;">
+            <option value="الأساس|300">باقة الأساس (محافظة واحدة) - 300 ج</option>
+            <option value="النمو|500">باقة النمو (نصف المحافظات) - 500 ج</option>
+            <option value="الريادة|750">باقة الريادة (جميع المحافظات) - 750 ج</option>
+        </select>
+        <button onclick="showPayment()" style="margin-top:15px;">عرض خيارات الدفع</button>
+    </div>
+</div>
+
+<div class="container" id="step2" style="display:none;">
+    <div class="card">
+        <h3>💳 خيارات الدفع</h3>
+        <p>يرجى التحويل يدوياً في التطبيق ثم الضغط على زر إرسال الإثبات</p>
+        <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#673ab7;">دفع عبر إنستا باي</a>
+        <a href="https://flous.page.link/bT9z" class="pay-btn" style="background:#e91e63;">دفع عبر اتصالات كاش</a>
+        <button onclick="sendReceipt()" style="background:#25D366;">💬 إرسال إثبات الدفع للواتساب</button>
+    </div>
 </div>
 
 <script>
-    async function sendJoinRequest() {
+    function showPayment() {
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('step2').style.display = 'block';
+    }
+
+    function sendReceipt() {
         const name = document.getElementById('mName').value;
-        const phone = document.getElementById('mPhone').value;
         const plan = document.getElementById('mPlan').value;
-        const msg = `مرحباً، أرغب في الانضمام لباقة ${plan.split('|')[0]}. اسمي: ${name}، ورقمي: ${phone}`;
+        const msg = `مرحباً، أنا ${name}، قمت بالدفع لباقة ${plan.split('|')[0]}. هذا هو إيصال الدفع. يرجى تفعيل حسابي.`;
         window.open(`https://wa.me/201150402031?text=${encodeURIComponent(msg)}`);
     }
 </script>
