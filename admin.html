@@ -1,22 +1,39 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>لوحة الإدارة</title>
-<style>body{font-family:Tahoma; background:#f4f9ff; padding:10px;} .box{background:white; padding:15px; border-radius:15px; margin-bottom:15px;} table{width:100%; border-collapse:collapse;} td{padding:8px; border-bottom:1px solid #eee; text-align:center;}</style></head>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8"><title>لوحة إدارة Future Tank</title>
+    <style>body { font-family: Tahoma; background: #f4f9ff; padding:10px; display:none; } .box { background: white; padding: 15px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); margin-bottom: 15px; } input { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ddd; border-radius: 5px; } table { width: 100%; border-collapse: collapse; } th { background: #0b6fc2; color: white; padding: 8px; } td { padding: 8px; border-bottom: 1px solid #eee; text-align: center; } button { padding: 8px 15px; background: #0b6fc2; color: white; border: none; border-radius: 5px; cursor: pointer; }</style>
+</head>
 <body>
-<div class="box"><h3>طلبات الانضمام</h3><div id="requestsTable">جاري التحميل...</div></div>
+<div class="box">
+    <h3>➕ إضافة منتج جديد</h3>
+    <input type="text" id="pName" placeholder="اسم المنتج">
+    <input type="text" id="pDesc" placeholder="الوصف">
+    <input type="number" id="pPrice" placeholder="السعر">
+    <button onclick="addProduct()">حفظ المنتج</button>
+</div>
+<div class="box">
+    <h3>📋 طلبات انضمام الشركاء</h3>
+    <div id="requestsTable">جاري التحميل...</div>
+</div>
 <script>
     const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-    async function load(){
+    async function loadRequests() {
         const res = await fetch(`${scriptURL}?action=getAdminOrders`);
         const data = await res.json();
-        let html = `<table>`;
-        data.orders.forEach(o => { html += `<tr><td>${o.name}</td><td>${o.phone}</td><td><button onclick="activate('${o.phone}','${o.name}')">✅ تفعيل</button></td></tr>`; });
+        let html = `<table><tr><th>الاسم</th><th>الهاتف</th><th>تفعيل</th></tr>`;
+        data.orders.forEach(o => {
+            html += `<tr><td>${o.name}</td><td>${o.phone}</td><td><button onclick="activate('${o.phone}', '${o.name}')" style="background:#25D366;">✅</button></td></tr>`;
+        });
         document.getElementById('requestsTable').innerHTML = html + `</table>`;
     }
-    function activate(phone, name){
+    function activate(phone, name) {
         fetch(`${scriptURL}?action=activateMerchant&phone=${phone}&name=${name}`).then(r=>r.json()).then(d=>{
-            window.open(`https://wa.me/20${phone.replace(/^0/,'')}?text=تم تفعيل اشتراكك، كود دخولك هو: ${d.code}`);
+            alert("تم التفعيل، الكود هو: " + d.code);
+            window.open(`https://wa.me/20${phone.replace(/^0/,'')}?text=تم تفعيلك في Future Tank، كود دخولك هو: ${d.code}`);
+            location.reload();
         });
     }
-    window.onload = () => { if(prompt("الباسورد")==="الحمدلله") load(); else window.location.href="about:blank"; }
+    window.onload = () => { if(prompt("كلمة المرور:") === "الحمدلله") { document.body.style.display = "block"; loadRequests(); } else window.location.href = "about:blank"; }
 </script>
 </body></html>
