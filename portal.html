@@ -1,44 +1,49 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8"><title>بوابة عملاء Future Tank</title>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>بوابة العملاء</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f0f4f8; padding: 20px; }
-        .portal-container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
-        .data-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
-        .days-box { background: #e3f2fd; color: #0b6fc2; text-align: center; padding: 15px; border-radius: 10px; font-weight: bold; margin: 15px 0; }
-        .pay-btn { display: block; width: 100%; padding: 12px; margin: 5px 0; text-align: center; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
+        body { font-family: Tahoma, sans-serif; background: #f4f7f6; padding: 15px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        .data-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; font-size: 14px; }
+        .label { color: #555; font-weight: bold; }
+        .value { color: #000; }
+        .days-box { background: #0b6fc2; color: white; text-align: center; padding: 12px; border-radius: 10px; margin: 15px 0; }
+        .pay-btn { display: block; width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; text-align: center; color: white; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
-<div class="portal-container">
-    <h2 style="color:#0b6fc2; text-align:center;">💧 بوابة العملاء</h2>
-    <input type="text" id="searchInput" placeholder="أدخل رقم الهاتف..." style="width:100%; padding:10px; box-sizing:border-box;">
-    <button onclick="searchClient()" style="width:100%; padding:10px; margin-top:10px; background:#0b6fc2; color:white; border:none; border-radius:8px;">بحث</button>
+<div class="container">
+    <h3 style="text-align:center; color:#0b6fc2;">💧 بوابة العملاء</h3>
+    <input type="text" id="searchInput" placeholder="رقم الهاتف" style="width:100%; padding:10px; box-sizing:border-box;">
+    <button onclick="searchClient()" style="width:100%; padding:10px; margin-top:5px; background:#0b6fc2; color:white; border:none; border-radius:8px;">بحث</button>
     
     <div id="clientData" style="display:none; margin-top:20px;">
-        <div class="data-row"><span>👤 الاسم:</span><span id="name"></span></div>
-        <div class="data-row"><span>📞 الهاتف:</span><span id="phone"></span></div>
-        <div class="data-row"><span>📍 العنوان:</span><span id="address"></span></div>
-        <div class="data-row"><span>🛠️ الخدمة:</span><span id="service"></span></div>
-        <div class="data-row"><span>📅 مدة العقد:</span><span id="months"></span></div>
-        <div class="data-row"><span>🔄 الزيارات:</span><span id="visits"></span></div>
-        <div class="data-row"><span>💰 التكلفة:</span><span id="cost"></span></div>
-        <div class="data-row"><span>📅 تاريخ البداية:</span><span id="start"></span></div>
-        <div class="data-row"><span>📅 تاريخ النهاية:</span><span id="end"></span></div>
-        <div class="data-row"><span>⏱️ آخر زيارة:</span><span id="last"></span></div>
-        <div class="data-row"><span>📅 الزيارة القادمة:</span><span id="next"></span></div>
-        <div class="data-row"><span>💳 نوع الاشتراك:</span><span id="sub_type"></span></div>
-        <div class="data-row"><span>💰 حالة الدفع:</span><span id="pay_status"></span></div>
-        <div class="data-row"><span>🧾 رقم العقد:</span><span id="contract_no"></span></div>
-        <div class="data-row"><span>🏧 طريقة الدفع:</span><span id="pay_method"></span></div>
-        <div class="data-row"><span>💵 قيمة القسط:</span><span id="installment"></span></div>
-        <div class="data-row"><span>📅 القسط القادم:</span><span id="next_installment"></span></div>
-        <div class="data-row"><span>📝 ملاحظات:</span><span id="notes"></span></div>
-        <div class="data-row"><span>👤 حالة الحساب:</span><span id="account_status"></span></div>
-        <div class="days-box">⏳ المتبقي على نهاية العقد: <span id="remaining"></span> يوم</div>
-        <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#8e24aa;">إنستا باي مباشر</a>
-        <a href="https://flous.page.link/bT9z" class="pay-btn" style="background:#e53935;">اتصالات كاش مباشر</a>
+        <div class="data-row"><span class="label">👤 الاسم:</span><span class="value" id="name"></span></div>
+        <div class="data-row"><span class="label">📞 الهاتف:</span><span class="value" id="phone"></span></div>
+        <div class="data-row"><span class="label">📍 العنوان:</span><span class="value" id="address"></span></div>
+        <div class="data-row"><span class="label">🛠️ الخدمة:</span><span class="value" id="service"></span></div>
+        <div class="data-row"><span class="label">📅 مدة العقد:</span><span class="value" id="months"></span></div>
+        <div class="data-row"><span class="label">🔄 الزيارات:</span><span class="value" id="visits"></span></div>
+        <div class="data-row"><span class="label">💰 التكلفة:</span><span class="value" id="cost"></span></div>
+        <div class="data-row"><span class="label">📅 تاريخ البداية:</span><span class="value" id="start"></span></div>
+        <div class="data-row"><span class="label">📅 تاريخ النهاية:</span><span class="value" id="end"></span></div>
+        <div class="data-row"><span class="label">⏱️ آخر زيارة:</span><span class="value" id="last"></span></div>
+        <div class="data-row"><span class="label">📅 الزيارة القادمة:</span><span class="value" id="next"></span></div>
+        <div class="data-row"><span class="label">💳 نوع الاشتراك:</span><span class="value" id="sub_type"></span></div>
+        <div class="data-row"><span class="label">💰 حالة الدفع:</span><span class="value" id="pay_status"></span></div>
+        <div class="data-row"><span class="label">🧾 رقم العقد:</span><span class="value" id="contract_no"></span></div>
+        <div class="data-row"><span class="label">🏧 طريقة الدفع:</span><span class="value" id="pay_method"></span></div>
+        <div class="data-row"><span class="label">💵 قيمة القسط:</span><span class="value" id="installment"></span></div>
+        <div class="data-row"><span class="label">📅 القسط القادم:</span><span class="value" id="next_installment"></span></div>
+        <div class="data-row"><span class="label">📝 ملاحظات:</span><span class="value" id="notes"></span></div>
+        <div class="data-row"><span class="label">👤 حالة الحساب:</span><span class="value" id="account_status"></span></div>
+        
+        <div class="days-box">⏳ المتبقي: <span id="remaining"></span> يوم</div>
+        
+        <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#8e24aa;">إنستا باي</a>
+        <a href="https://flous.page.link/bT9z" class="pay-btn" style="background:#e53935;">اتصالات كاش</a>
     </div>
 </div>
 <script>
@@ -47,7 +52,10 @@ async function searchClient() {
     const res = await fetch(`https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec?action=clientPortal&phone=${phone}`);
     const data = await res.json();
     if(data.success) {
-        for(let key in data) { if(document.getElementById(key)) document.getElementById(key).innerText = data[key]; }
+        for(let key in data) { 
+            let el = document.getElementById(key);
+            if(el) el.innerText = data[key] || "—";
+        }
         document.getElementById("clientData").style.display = "block";
     } else { alert("رقم الهاتف غير مسجل"); }
 }
