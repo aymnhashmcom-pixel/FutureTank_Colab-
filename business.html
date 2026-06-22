@@ -2,7 +2,14 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8"><title>بوابة الشركاء | Future Tank</title>
-    <style>body { font-family: Tahoma; background: #f4f7f6; padding: 15px; direction: rtl; } .container { max-width: 450px; margin: auto; } .card { background: white; padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-bottom: 20px; text-align: center; border: 2px solid #e1effa; } .pay-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #0b6fc2; color: white; border-radius: 10px; text-decoration: none; font-weight: bold; } input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 10px; box-sizing: border-box; } button { width: 100%; padding: 15px; background: #25D366; color: white; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }</style>
+    <style>
+        body { font-family: Tahoma; background: #f4f7f6; padding: 20px; direction: rtl; }
+        .container { max-width: 450px; margin: 50px auto; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; border: 2px solid #e1effa; }
+        .pay-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #0b6fc2; color: white; border-radius: 10px; text-decoration: none; font-weight: bold; }
+        input, select { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #25D366; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+    </style>
 </head>
 <body>
 <div class="container" id="step1">
@@ -10,8 +17,12 @@
         <h2>💼 انضم لشركاء النجاح</h2>
         <input type="text" id="mName" placeholder="اسمك الكريم">
         <input type="text" id="mPhone" placeholder="رقم الهاتف">
-        <select id="mPlan"><option value="باقة الأساس">باقة الأساس - 300 ج</option><option value="باقة النمو">باقة النمو - 500 ج</option><option value="باقة الريادة">باقة الريادة - 750 ج</option></select>
-        <button onclick="showPayment()" style="margin-top:15px;">عرض خيارات الدفع</button>
+        <select id="mPlan">
+            <option value="باقة الأساس">باقة الأساس - 300 ج</option>
+            <option value="باقة النمو">باقة النمو - 500 ج</option>
+            <option value="باقة الريادة">باقة الريادة - 750 ج</option>
+        </select>
+        <button onclick="showPayment()">عرض خيارات الدفع</button>
     </div>
 </div>
 <div class="container" id="step2" style="display:none;">
@@ -31,6 +42,7 @@
         const plan = document.getElementById('mPlan').value;
         await fetch(`${scriptURL}?action=saveMerchantRequest&name=${name}&phone=${phone}&plan=${plan}`);
         window.open(`https://wa.me/201150402031?text=مرحباً، أنا ${name}، قمت بالدفع لباقة ${plan}. يرجى تفعيل حسابي.`);
+        alert("تم إرسال طلبك بنجاح!");
     }
 </script>
 </body></html>
