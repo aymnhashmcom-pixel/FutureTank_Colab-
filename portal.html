@@ -1,128 +1,57 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة عملاء Future Tank</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f0f4f8; margin: 0; padding: 0; direction: rtl; text-align: right; }
-       .portal-container { max-width: 650px; margin: 30px auto; background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-       .search-section { display: flex; gap: 10px; margin-bottom: 20px; }
-       .search-section input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; text-align: center; }
-       .search-section button { background: #0b6fc2; color: #fff; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-       .data-card { display: none; }
-       .data-row { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid #f0f4f8; font-size: 15px; }
-       .data-row span:first-child { color: #666; font-weight: bold; }
-       .data-row span:last-child { color: #222; font-weight: bold; }
-       .days-box { background: #e3f2fd; color: #0b6fc2; text-align: center; padding: 15px; border-radius: 10px; margin-top: 15px; font-size: 18px; font-weight: bold; }
-       .pay-links { background: #fff8e1; border: 1px dashed #ffb300; border-radius: 12px; padding: 15px; margin-top: 15px; text-align: center; }
-       .pay-grid { display: flex; gap: 10px; justify-content: center; margin-top: 10px; }
-       .pay-btn { padding: 10px 15px; border-radius: 8px; text-decoration: none; color: #fff; font-weight: bold; font-size: 14px; display: inline-flex; align-items: center; gap: 5px; }
-       .instapay { background: #8e24aa; }
-       .vodafone { background: #e53935; }
-       .renew-btn { display: block; background: #25D366; color: #fff; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 15px; font-size: 16px; }
+        body { font-family: Tahoma, sans-serif; background: #f0f4f8; margin: 0; padding: 20px; direction: rtl; }
+        .portal-container { max-width: 650px; margin: auto; background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+        .search-section { display: flex; gap: 10px; margin-bottom: 20px; }
+        input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; text-align: center; }
+        button { background: #0b6fc2; color: #fff; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .data-card { display: none; }
+        .data-row { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid #f0f4f8; font-size: 15px; }
+        .data-row span:first-child { color: #666; font-weight: bold; }
+        .data-row span:last-child { color: #222; font-weight: bold; }
+        .days-box { background: #e3f2fd; color: #0b6fc2; text-align: center; padding: 15px; border-radius: 10px; margin-top: 15px; font-size: 18px; font-weight: bold; }
+        .pay-links { background: #fff8e1; border: 1px dashed #ffb300; border-radius: 12px; padding: 15px; margin-top: 15px; text-align: center; }
+        .pay-btn { display: block; width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; text-decoration: none; color: #fff; font-weight: bold; }
     </style>
 </head>
 <body>
-
 <div class="portal-container">
-    <h2 style="color:#0b6fc2; text-align:center; margin-top:0;">💧 بوابة العملاء الذكية لإدارة التعاقدات</h2>
-    <p style="text-align:center; color:#666;">أدخل رقم الهاتف المتعاقد به لعرض البيانات المحدثة مباشرة</p>
-    
+    <h2 style="color:#0b6fc2; text-align:center;">💧 بوابة العملاء</h2>
     <div class="search-section">
-        <input type="text" id="searchInput" placeholder="ضع رقم الهاتف المتعاقد به هنا">
-        <button onclick="searchClient()">🔍 بحث الآن</button>
+        <input type="text" id="searchInput" placeholder="رقم الهاتف">
+        <button onclick="searchClient()">بحث</button>
     </div>
-
     <div id="clientData" class="data-card">
-        <div class="data-row"><span>👤 اسم العميل:</span><span id="name">—</span></div>
-        <div class="data-row"><span>📞 رقم الهاتف:</span><span id="phone">—</span></div>
-        <div class="data-row"><span>📍 العنوان:</span><span id="address">—</span></div>
-        <div class="data-row"><span>🛠️ الخدمة المتعاقد عليها:</span><span id="service">—</span></div>
-        <div class="data-row"><span>📅 مدة التعاقد:</span><span id="months">—</span></div>
-        <div class="data-row"><span>🔄 عدد الزيارات المتاحة:</span><span id="visits">—</span></div>
-        <div class="data-row"><span>💰 التكلفة الإجمالية:</span><span id="cost">—</span></div>
-        <div class="data-row"><span>📅 تاريخ التعاقد:</span><span id="start">—</span></div>
-        <div class="data-row"><span>📅 تاريخ انتهاء العقد:</span><span id="end">—</span></div>
-        <div class="data-row"><span>⏱️ آخر زيارة صيانة:</span><span id="last">—</span></div>
-        <div class="data-row"><span>📅 الزيارة القادمة المقررة:</span><span id="next">—</span></div>
-        
-        <div class="data-row"><span>💳 نوع الاشتراك:</span><span id="sub_type">—</span></div>
-        <div class="data-row"><span>💰 حالة الدفع الحالية:</span><span id="pay_status">—</span></div>
-        <div class="data-row"><span>🧾 رقم العقد الرسمي:</span><span id="contract_no">—</span></div>
-        <div class="data-row"><span>🏧 طريقة الدفع المعتمَدة:</span><span id="pay_method">—</span></div>
-        <div class="data-row"><span>💵 قيمة القسط:</span><span id="installment">—</span></div>
-        <div class="data-row"><span>📅 تاريخ القسط القادم:</span><span id="next_installment">—</span></div>
-        <div class="data-row"><span>📝 ملاحظات التعاقد:</span><span id="notes">—</span></div>
-        <div class="data-row"><span>👤 حالة حساب العميل:</span><span id="account_status">—</span></div>
-
-        <div class="days-box">
-            ⏳ متبقي على نهاية العقد: <span id="remaining">0</span> يوم متبقي
-        </div>
-
+        <div class="data-row"><span>👤 الاسم:</span><span id="name"></span></div>
+        <div class="data-row"><span>📍 العنوان:</span><span id="address"></span></div>
+        <div class="data-row"><span>🛠️ الخدمة:</span><span id="service"></span></div>
+        <div class="data-row"><span>📅 انتهاء العقد:</span><span id="end"></span></div>
+        <div class="days-box">⏳ المتبقي: <span id="remaining"></span> يوم</div>
         <div class="pay-links">
-            <strong style="color: #b78103;"><i class="fa fa-credit-card"></i> روابط الدفع المباشرة الفورية</strong>
-            <div class="pay-grid">
-                <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" target="_blank" class="pay-btn instapay"><i class="fa fa-bolt"></i> إنستا باي مباشر</a>
-                <a href="https://flous.page.link/bT9z" target="_blank" class="pay-btn vodafone"><i class="fa fa-wallet"></i> اتصالات كاش مباشر</a>
-            </div>
+            <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#8e24aa;">إنستا باي مباشر</a>
+            <a href="https://flous.page.link/bT9z" class="pay-btn" style="background:#e53935;">اتصالات كاش مباشر</a>
         </div>
-
-        <a class="renew-btn" id="whatsappRenewBtn" href="#" target="_blank">🔁 تجديد التعاقد الفوري عبر واتساب</a>
     </div>
 </div>
-
 <script>
 async function searchClient() {
-    const phoneInput = document.getElementById("searchInput").value.trim();
-    if(!phoneInput) { alert("يرجى كتابة رقم الهاتف أولاً"); return; }
-    
-    const dataBox = document.getElementById("clientData");
-    const apiURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-    
-    try {
-        // إرسال كـ Simple text/plain لتخطي الـ CORS Block التمهيدي للمتصفحات بنجاح
-        const response = await fetch(`${apiURL}?action=clientPortal&phone=${encodeURIComponent(phoneInput)}`, {
-            method: "POST",
-            mode: "cors",
-            redirect: "follow",
-            headers: { "Content-Type": "text/plain;charset=utf-8" }
-        });
-        const data = await response.json();
-        
-        if(data.success) {
-            document.getElementById("name").innerText = data.name || "—";
-            document.getElementById("phone").innerText = data.phone || "—";
-            document.getElementById("address").innerText = data.address || "—";
-            document.getElementById("service").innerText = data.service || "—";
-            document.getElementById("months").innerText = data.contract_months || "—";
-            document.getElementById("visits").innerText = data.visits || "—";
-            document.getElementById("cost").innerText = data.cost || "—";
-            document.getElementById("start").innerText = data.contract_date || "—";
-            document.getElementById("end").innerText = data.end_date || "—";
-            document.getElementById("last").innerText = data.last_visit || "—";
-            document.getElementById("next").innerText = data.next_visit || "—";
-            
-            document.getElementById("sub_type").innerText = data.sub_type || "—";
-            document.getElementById("pay_status").innerText = data.pay_status || "—";
-            document.getElementById("contract_no").innerText = data.contract_no || "—";
-            document.getElementById("pay_method").innerText = data.pay_method || "—";
-            document.getElementById("installment").innerText = data.installment || "—";
-            document.getElementById("next_installment").innerText = data.next_installment || "—";
-            document.getElementById("notes").innerText = data.notes || "—";
-            document.getElementById("account_status").innerText = data.account_status || "—";
-            document.getElementById("remaining").innerText = data.remaining_days || "0";
-            
-            document.getElementById("whatsappRenewBtn").href = `https://wa.me/201150402031?text=${encodeURIComponent("مرحباً فيوتشر تانك، أرغب في تجديد تعاقدي الحالي المسجل باسم: " + (data.name || "") + " ورقم هاتف: " + phoneInput)}`;
-            dataBox.style.display = "block";
-        } else {
-            alert(data.message || "الرقم المدخل غير مسجل بالنظام الحسابي للتعاقدات");
-            dataBox.style.display = "none";
-        }
-    } catch(e) {
-        alert("حدث خطأ في الاتصال بالسيرفر، يرجى المحاولة لاحقاً");
-    }
+    const phone = document.getElementById("searchInput").value.trim();
+    const url = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+    const res = await fetch(`${url}?action=clientPortal&phone=${phone}`);
+    const data = await res.json();
+    if(data.success) {
+        document.getElementById("name").innerText = data.name;
+        document.getElementById("address").innerText = data.address;
+        document.getElementById("service").innerText = data.service;
+        document.getElementById("end").innerText = data.end_date;
+        document.getElementById("remaining").innerText = data.remaining_days;
+        document.getElementById("clientData").style.display = "block";
+    } else { alert("رقم الهاتف غير مسجل"); }
 }
 </script>
 </body>
