@@ -3,16 +3,15 @@
 <head>
     <meta charset="UTF-8"><title>بوابة الشركاء | Future Tank</title>
     <style>
-        body { font-family: Tahoma; background: #f4f7f6; margin: 0; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; direction: rtl; }
-        .container { width: 100%; max-width: 450px; }
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); text-align: center; border: 2px solid #e1effa; }
-        .pay-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #0b6fc2; color: white; border-radius: 10px; text-decoration: none; font-weight: bold; }
-        input, select { width: 100%; padding: 15px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; }
-        button { width: 100%; padding: 15px; background: #25D366; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        body { font-family: Tahoma; background: #f4f7f6; margin: 0; padding: 15px; direction: rtl; }
+        .card { background: white; padding: 20px; border-radius: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); margin-bottom: 15px; border: 1px solid #e1effa; }
+        .pay-btn { display: block; width: 100%; padding: 15px; margin: 10px 0; background: #0b6fc2; color: white; border-radius: 10px; text-decoration: none; font-weight: bold; text-align: center; box-sizing: border-box;}
+        input, select { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 15px; background: #25D366; color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
-<div class="container" id="step1">
+<div id="step1">
     <div class="card">
         <h2>💼 انضم لشركاء النجاح</h2>
         <input type="text" id="mName" placeholder="اسمك الكريم">
@@ -25,7 +24,7 @@
         <button onclick="showPayment()">عرض خيارات الدفع</button>
     </div>
 </div>
-<div class="container" id="step2" style="display:none;">
+<div id="step2" style="display:none;">
     <div class="card">
         <h3>💳 خيارات الدفع</h3>
         <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#673ab7;">دفع عبر إنستا باي</a>
