@@ -1,55 +1,53 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة عملاء Future Tank</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+    <meta charset="UTF-8"><title>بوابة عملاء Future Tank</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f0f4f8; margin: 0; padding: 20px; direction: rtl; }
-        .portal-container { max-width: 650px; margin: auto; background: #fff; padding: 25px; border-radius: 16px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
-        .search-section { display: flex; gap: 10px; margin-bottom: 20px; }
-        input { flex: 1; padding: 12px; border-radius: 8px; border: 1px solid #ccc; font-size: 16px; text-align: center; }
-        button { background: #0b6fc2; color: #fff; border: none; padding: 0 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .data-card { display: none; }
-        .data-row { display: flex; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid #f0f4f8; font-size: 15px; }
-        .data-row span:first-child { color: #666; font-weight: bold; }
-        .data-row span:last-child { color: #222; font-weight: bold; }
-        .days-box { background: #e3f2fd; color: #0b6fc2; text-align: center; padding: 15px; border-radius: 10px; margin-top: 15px; font-size: 18px; font-weight: bold; }
-        .pay-links { background: #fff8e1; border: 1px dashed #ffb300; border-radius: 12px; padding: 15px; margin-top: 15px; text-align: center; }
-        .pay-btn { display: block; width: 100%; padding: 12px; margin: 5px 0; border-radius: 8px; text-decoration: none; color: #fff; font-weight: bold; }
+        body { font-family: Tahoma, sans-serif; background: #f0f4f8; padding: 20px; }
+        .portal-container { max-width: 600px; margin: auto; background: #fff; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); }
+        .data-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #eee; }
+        .days-box { background: #e3f2fd; color: #0b6fc2; text-align: center; padding: 15px; border-radius: 10px; font-weight: bold; margin: 15px 0; }
+        .pay-btn { display: block; width: 100%; padding: 12px; margin: 5px 0; text-align: center; color: white; text-decoration: none; border-radius: 8px; font-weight: bold; }
     </style>
 </head>
 <body>
 <div class="portal-container">
     <h2 style="color:#0b6fc2; text-align:center;">💧 بوابة العملاء</h2>
-    <div class="search-section">
-        <input type="text" id="searchInput" placeholder="رقم الهاتف">
-        <button onclick="searchClient()">بحث</button>
-    </div>
-    <div id="clientData" class="data-card">
+    <input type="text" id="searchInput" placeholder="أدخل رقم الهاتف..." style="width:100%; padding:10px; box-sizing:border-box;">
+    <button onclick="searchClient()" style="width:100%; padding:10px; margin-top:10px; background:#0b6fc2; color:white; border:none; border-radius:8px;">بحث</button>
+    
+    <div id="clientData" style="display:none; margin-top:20px;">
         <div class="data-row"><span>👤 الاسم:</span><span id="name"></span></div>
+        <div class="data-row"><span>📞 الهاتف:</span><span id="phone"></span></div>
         <div class="data-row"><span>📍 العنوان:</span><span id="address"></span></div>
         <div class="data-row"><span>🛠️ الخدمة:</span><span id="service"></span></div>
-        <div class="data-row"><span>📅 انتهاء العقد:</span><span id="end"></span></div>
-        <div class="days-box">⏳ المتبقي: <span id="remaining"></span> يوم</div>
-        <div class="pay-links">
-            <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#8e24aa;">إنستا باي مباشر</a>
-            <a href="https://flous.page.link/bT9z" class="pay-btn" style="background:#e53935;">اتصالات كاش مباشر</a>
-        </div>
+        <div class="data-row"><span>📅 مدة العقد:</span><span id="months"></span></div>
+        <div class="data-row"><span>🔄 الزيارات:</span><span id="visits"></span></div>
+        <div class="data-row"><span>💰 التكلفة:</span><span id="cost"></span></div>
+        <div class="data-row"><span>📅 تاريخ البداية:</span><span id="start"></span></div>
+        <div class="data-row"><span>📅 تاريخ النهاية:</span><span id="end"></span></div>
+        <div class="data-row"><span>⏱️ آخر زيارة:</span><span id="last"></span></div>
+        <div class="data-row"><span>📅 الزيارة القادمة:</span><span id="next"></span></div>
+        <div class="data-row"><span>💳 نوع الاشتراك:</span><span id="sub_type"></span></div>
+        <div class="data-row"><span>💰 حالة الدفع:</span><span id="pay_status"></span></div>
+        <div class="data-row"><span>🧾 رقم العقد:</span><span id="contract_no"></span></div>
+        <div class="data-row"><span>🏧 طريقة الدفع:</span><span id="pay_method"></span></div>
+        <div class="data-row"><span>💵 قيمة القسط:</span><span id="installment"></span></div>
+        <div class="data-row"><span>📅 القسط القادم:</span><span id="next_installment"></span></div>
+        <div class="data-row"><span>📝 ملاحظات:</span><span id="notes"></span></div>
+        <div class="data-row"><span>👤 حالة الحساب:</span><span id="account_status"></span></div>
+        <div class="days-box">⏳ المتبقي على نهاية العقد: <span id="remaining"></span> يوم</div>
+        <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#8e24aa;">إنستا باي مباشر</a>
+        <a href="https://flous.page.link/bT9z" class="pay-btn" style="background:#e53935;">اتصالات كاش مباشر</a>
     </div>
 </div>
 <script>
 async function searchClient() {
     const phone = document.getElementById("searchInput").value.trim();
-    const url = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-    const res = await fetch(`${url}?action=clientPortal&phone=${phone}`);
+    const res = await fetch(`https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec?action=clientPortal&phone=${phone}`);
     const data = await res.json();
     if(data.success) {
-        document.getElementById("name").innerText = data.name;
-        document.getElementById("address").innerText = data.address;
-        document.getElementById("service").innerText = data.service;
-        document.getElementById("end").innerText = data.end_date;
-        document.getElementById("remaining").innerText = data.remaining_days;
+        for(let key in data) { if(document.getElementById(key)) document.getElementById(key).innerText = data[key]; }
         document.getElementById("clientData").style.display = "block";
     } else { alert("رقم الهاتف غير مسجل"); }
 }
