@@ -4,7 +4,7 @@
 <div id="productsGrid">جاري تحميل المنتجات...</div>
 <script>
 async function loadProducts() {
-    const res = await fetch('YOUR_SCRIPT_URL?action=getPublicProducts');
+    const res = await fetch('https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec');
     const data = await res.json();
     if(data.success) {
         document.getElementById('productsGrid').innerHTML = data.products.map(p => `
