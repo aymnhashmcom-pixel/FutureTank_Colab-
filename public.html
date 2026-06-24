@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+<div id="productsGrid">جاري تحميل المنتجات...</div>
+<script>
+async function loadProducts() {
+    const res = await fetch('YOUR_SCRIPT_URL?action=getPublicProducts');
+    const data = await res.json();
+    if(data.success) {
+        document.getElementById('productsGrid').innerHTML = data.products.map(p => `
+            <div>
+                <h3>${p[1]}</h3>
+                <p>السعر: ${p[2]}</p>
+                <a href="https://wa.me/${p[5]}">تواصل واتساب</a>
+            </div>
+        `).join('');
+    }
+}
+loadProducts();
+</script>
+</body>
+</html>
