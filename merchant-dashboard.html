@@ -4,22 +4,19 @@
     <meta charset="UTF-8">
     <title>لوحة تحكم التاجر</title>
     <style>
-        body { font-family: Tahoma, sans-serif; background: #f4f7f6; padding: 20px; }
-        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
-        input { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; border-radius: 8px; border: 1px solid #ccc; }
-        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .container { max-width: 500px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 15px; }
+        input { width: 100%; padding: 12px; margin: 8px 0; border: 1px solid #ddd; border-radius: 8px; }
+        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; }
     </style>
 </head>
 <body>
 <div class="container">
     <h3>💼 لوحة تحكم التاجر</h3>
-    
     <div id="mLoginForm">
         <input type="text" id="mPhone" placeholder="رقم الهاتف">
         <input type="password" id="mCode" placeholder="كود الدخول">
         <button onclick="loginMerchant()">دخول</button>
     </div>
-    
     <div id="mDashboard" style="display:none;">
         <h4>إضافة منتج جديد</h4>
         <input type="text" id="pName" placeholder="اسم المنتج">
@@ -56,9 +53,8 @@ async function saveProduct() {
             whatsapp: document.getElementById('pWhatsapp').value,
             image: e.target.result
         };
-        const res = await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
-        const result = await res.json();
-        if(result.success) alert("تم حفظ المنتج بنجاح!");
+        await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
+        alert("تم الحفظ بنجاح!");
     };
     reader.readAsDataURL(file);
 }
