@@ -1,17 +1,67 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl"><head><meta charset="UTF-8"><title>لوحة التاجر</title>
-<style>body{text-align:center; padding:50px; font-family:Tahoma;} input{padding:10px; margin:5px;}</style></head>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة تحكم التاجر</title>
+    <style>
+        body { font-family: Tahoma, sans-serif; background: #f4f7f6; padding: 20px; }
+        .container { max-width: 500px; margin: auto; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
+        input { width: 100%; padding: 10px; margin: 8px 0; box-sizing: border-box; border-radius: 8px; border: 1px solid #ccc; }
+        button { width: 100%; padding: 12px; background: #28a745; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
 <body>
-<div id="login"><input id="p" placeholder="الهاتف"><input id="c" placeholder="الكود"><button onclick="login()">دخول</button></div>
-<div id="dash" style="display:none;"><h1>أهلاً بك في لوحة تحكمك</h1></div>
+<div class="container">
+    <h3>💼 لوحة تحكم التاجر</h3>
+    
+    <div id="mLoginForm">
+        <input type="text" id="mPhone" placeholder="رقم الهاتف">
+        <input type="password" id="mCode" placeholder="كود الدخول">
+        <button onclick="loginMerchant()">دخول</button>
+    </div>
+    
+    <div id="mDashboard" style="display:none;">
+        <h4>إضافة منتج جديد</h4>
+        <input type="text" id="pName" placeholder="اسم المنتج">
+        <input type="text" id="pDesc" placeholder="الوصف">
+        <input type="number" id="pPrice" placeholder="السعر">
+        <input type="text" id="pWhatsapp" placeholder="رقم الواتساب">
+        <input type="file" id="pImage">
+        <button onclick="saveProduct()">حفظ المنتج</button>
+    </div>
+</div>
+
 <script>
-    const scriptURL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-    async function login(){
-        const phone = document.getElementById('p').value, code = document.getElementById('c').value;
-        const res = await fetch(`${scriptURL}?action=merchantLogin&phone=${phone}&code=${code}`);
-        const data = await res.json();
-        if(data.success){ document.getElementById('login').style.display='none'; document.getElementById('dash').style.display='block'; }
-        else alert("خطأ في البيانات");
-    }
+const URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+
+async function loginMerchant() {
+    const phone = document.getElementById("mPhone").value;
+    const code = document.getElementById("mCode").value;
+    const res = await fetch(`${URL}?action=merchantLogin&phone=${phone}&code=${code}`);
+    const data = await res.json();
+    if(data.success) {
+        document.getElementById('mLoginForm').style.display = 'none';
+        document.getElementById('mDashboard').style.display = 'block';
+    } else { alert("بيانات الدخول خاطئة"); }
+}
+
+async function saveProduct() {
+    const file = document.getElementById('pImage').files[0];
+    const reader = new FileReader();
+    reader.onload = async function(e) {
+        const data = {
+            name: document.getElementById('pName').value,
+            desc: document.getElementById('pDesc').value,
+            price: document.getElementById('pPrice').value,
+            whatsapp: document.getElementById('pWhatsapp').value,
+            image: e.target.result
+        };
+        const res = await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
+        const result = await res.json();
+        if(result.success) alert("تم حفظ المنتج بنجاح!");
+    };
+    reader.readAsDataURL(file);
+}
 </script>
-</body></html>
+</body>
+</html>
