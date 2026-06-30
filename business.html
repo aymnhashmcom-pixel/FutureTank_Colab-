@@ -5,48 +5,16 @@
     <title>قسم رجال الأعمال | Future Tank</title>
     <style>
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; direction: rtl; }
-        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; border: 1px solid #eef; }
-        h2 { color: #0b6fc2; text-align: center; }
-        h4 { color: #28a745; }
-        .pay-btn { display: block; width: 100%; padding: 16px; margin: 12px 0; background: #0b6fc2; color: white; border-radius: 12px; text-decoration: none; font-weight: bold; text-align: center; box-sizing: border-box;}
-        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; font-size: 16px; }
-        button { width: 100%; padding: 16px; background: #25D366; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        input, select { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; }
+        button { width: 100%; padding: 16px; background: #28a745; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
-<div id="step1">
-    <div class="card">
-        <h2>💼 انضم لشركاء النجاح</h2>
-        <input type="text" id="mName" placeholder="اسمك الكريم">
-        <input type="text" id="mPhone" placeholder="رقم الهاتف">
-        <select id="mPlan">
-            <option value="باقة الأساس">باقة الأساس - 300 ج</option>
-            <option value="باقة النمو">باقة النمو - 500 ج</option>
-            <option value="باقة الريادة">باقة الريادة - 750 ج</option>
-        </select>
-        <button style="background:#0b6fc2;" onclick="showPayment()">عرض خيارات الدفع</button>
-    </div>
-</div>
-
-<div id="step2" style="display:none;">
-    <div class="card">
-        <h3>💳 خيارات الدفع</h3>
-        <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#673ab7;">دفع عبر إنستا باي</a>
-        <a href="https://flous.page.link/bT9z" class="pay-btn" style="background:#e91e63;">دفع عبر اتصالات كاش</a>
-        <button onclick="sendReceipt()">💬 إرسال إثبات الدفع للواتساب</button>
-    </div>
-</div>
-
 <div class="card">
-    <h2 style="color:#28a745;">💼 لوحة تحكم رجال الأعمال</h2>
-    <div id="mLoginForm">
-        <input type="text" id="mPhoneLogin" placeholder="رقم الهاتف">
-        <input type="password" id="mCode" placeholder="كود الدخول">
-        <button style="background:#28a745;" onclick="loginMerchant()">دخول لوحة التحكم</button>
-    </div>
-    
-    <div id="mDashboard" style="display:none;">
+    <h2 style="color:#28a745; text-align:center;">💼 لوحة تحكم رجال الأعمال</h2>
+    <div id="mDashboard">
         <h4>إضافة منتج جديد</h4>
         <input type="text" id="pName" placeholder="اسم المنتج">
         <input type="text" id="pDesc" placeholder="الوصف">
@@ -74,33 +42,12 @@
         </select>
         
         <input type="file" id="pImage">
-        <button style="background:#28a745;" onclick="saveProduct()">حفظ المنتج</button>
+        <button onclick="saveProduct()">حفظ المنتج</button>
     </div>
 </div>
 
 <script>
     const URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
-
-    function showPayment() { document.getElementById('step1').style.display = 'none'; document.getElementById('step2').style.display = 'block'; }
-    
-    async function sendReceipt() {
-        const name = document.getElementById('mName').value;
-        const phone = document.getElementById('mPhone').value;
-        const plan = document.getElementById('mPlan').value;
-        await fetch(`${URL}?action=saveMerchantRequest&name=${name}&phone=${phone}&plan=${plan}`);
-        window.open(`https://wa.me/201150402031?text=مرحباً، أنا ${name}، قمت بالدفع لباقة ${plan}.`);
-    }
-
-    async function loginMerchant() {
-        const phone = document.getElementById("mPhoneLogin").value;
-        const code = document.getElementById("mCode").value;
-        const res = await fetch(`${URL}?action=merchantLogin&phone=${phone}&code=${code}`);
-        const data = await res.json();
-        if(data.success) {
-            document.getElementById('mLoginForm').style.display = 'none';
-            document.getElementById('mDashboard').style.display = 'block';
-        } else { alert("بيانات الدخول خاطئة"); }
-    }
 
     async function saveProduct() {
         const file = document.getElementById('pImage').files[0];
@@ -118,7 +65,11 @@
             };
             const res = await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
             const result = await res.json();
-            if(result.success) alert("تم حفظ المنتج بنجاح!");
+            if(result.success) {
+                alert("تم حفظ المنتج بنجاح!");
+            } else {
+                alert("حدث خطأ أثناء الحفظ");
+            }
         };
         reader.readAsDataURL(file);
     }
