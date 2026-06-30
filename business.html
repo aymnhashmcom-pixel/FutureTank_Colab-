@@ -39,7 +39,7 @@
 </div>
 
 <div class="card">
-    <h2 style="color:#28a745;">💼 لوحة تحكم التاجر</h2>
+    <h2 style="color:#28a745;">💼 لوحة تحكم رجال الأعمال</h2>
     <div id="mLoginForm">
         <input type="text" id="mPhoneLogin" placeholder="رقم الهاتف">
         <input type="password" id="mCode" placeholder="كود الدخول">
@@ -51,7 +51,28 @@
         <input type="text" id="pName" placeholder="اسم المنتج">
         <input type="text" id="pDesc" placeholder="الوصف">
         <input type="number" id="pPrice" placeholder="السعر">
-        <input type="text" id="pWhatsapp" placeholder="رقم الواتساب">
+        <input type="text" id="pWhatsapp" placeholder="رقم واتساب التاجر">
+        
+        <select id="pCity">
+            <option value="">اختر المحافظة</option>
+            <option value="القاهرة">🏢 محافظة القاهرة</option>
+            <option value="الجيزة">🕌 محافظة الجيزة</option>
+            <option value="الإسكندرية">🌊 محافظة الإسكندرية</option>
+            <option value="القليوبية">🌾 محافظة القليوبية</option>
+            <option value="الشرقية">🐎 محافظة الشرقية</option>
+            <option value="الدقهلية">🌴 محافظة الدقهلية</option>
+            <option value="الغربية">🏙️ محافظة الغربية</option>
+        </select>
+        
+        <select id="pCategory">
+            <option value="">اختر القسم</option>
+            <option value="ملابس وأزياء">👕 ملابس وأزياء</option>
+            <option value="ماركت ومواد غذائية">🏪 ماركت ومواد غذائية</option>
+            <option value="عقارات وشقق">🏠 عقارات وشقق</option>
+            <option value="سيارات ومواصلات">🚗 سيارات ومواصلات</option>
+            <option value="خدمات متنوعة">🛠️ خدمات متنوعة</option>
+        </select>
+        
         <input type="file" id="pImage">
         <button style="background:#28a745;" onclick="saveProduct()">حفظ المنتج</button>
     </div>
@@ -60,17 +81,16 @@
 <script>
     const URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-    // --- وظائف الانضمام للشركاء ---
     function showPayment() { document.getElementById('step1').style.display = 'none'; document.getElementById('step2').style.display = 'block'; }
+    
     async function sendReceipt() {
         const name = document.getElementById('mName').value;
         const phone = document.getElementById('mPhone').value;
         const plan = document.getElementById('mPlan').value;
         await fetch(`${URL}?action=saveMerchantRequest&name=${name}&phone=${phone}&plan=${plan}`);
-        window.open(`https://wa.me/201150402031?text=مرحباً، أنا ${name}، قمت بالدفع لباقة ${plan}. يرجى تفعيل حسابي.`);
+        window.open(`https://wa.me/201150402031?text=مرحباً، أنا ${name}، قمت بالدفع لباقة ${plan}.`);
     }
 
-    // --- وظائف لوحة التاجر ---
     async function loginMerchant() {
         const phone = document.getElementById("mPhoneLogin").value;
         const code = document.getElementById("mCode").value;
@@ -92,10 +112,13 @@
                 desc: document.getElementById('pDesc').value,
                 price: document.getElementById('pPrice').value,
                 whatsapp: document.getElementById('pWhatsapp').value,
+                city: document.getElementById('pCity').value,
+                category: document.getElementById('pCategory').value,
                 image: e.target.result
             };
-            await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
-            alert("تم حفظ المنتج بنجاح!");
+            const res = await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
+            const result = await res.json();
+            if(result.success) alert("تم حفظ المنتج بنجاح!");
         };
         reader.readAsDataURL(file);
     }
