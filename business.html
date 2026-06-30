@@ -6,14 +6,35 @@
     <style>
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; direction: rtl; }
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
+        h2, h3 { color: #0b6fc2; text-align: center; }
         input, select { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; }
-        button { width: 100%; padding: 16px; background: #28a745; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
+        button { width: 100%; padding: 16px; background: #28a745; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
+        .pay-btn { display: block; width: 100%; padding: 16px; margin: 12px 0; color: white; border-radius: 12px; text-decoration: none; font-weight: bold; text-align: center; }
+        .plan-sub { font-size: 0.85em; color: #666; font-weight: normal; }
     </style>
 </head>
 <body>
 
+<div id="step1" class="card">
+    <h2>💼 انضم لشركاء النجاح</h2>
+    <input type="text" id="mName" placeholder="اسمك الكريم">
+    <input type="text" id="mPhone" placeholder="رقم الهاتف">
+    <select id="mPlan">
+        <option value="باقة الأساس">باقة FutureTank <span class="plan-sub">محافظة واحدة - 500ج</span></option>
+        <option value="باقة النمو">باقة FutureTank <span class="plan-sub">GROUP جميع المحافظات - 1000ج</span></option>
+    </select>
+    <button style="background:#0b6fc2;" onclick="showPayment()">عرض خيارات الدفع</button>
+</div>
+
+<div id="step2" class="card" style="display:none;">
+    <h3>💳 خيارات الدفع</h3>
+    <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#673ab7;">دفع عبر إنستا باي</a>
+    <a href="https://flous.page.link/bT9z" class="pay-btn" style="background:#e91e63;">دفع عبر اتصالات كاش</a>
+    <button onclick="sendReceipt()">💬 إرسال إثبات الدفع للواتساب</button>
+</div>
+
 <div class="card">
-    <h2 style="color:#28a745; text-align:center;">💼 لوحة تحكم رجال الأعمال</h2>
+    <h2 style="color:#28a745;">💼 لوحة تحكم رجال الأعمال</h2>
     <div id="mDashboard">
         <h4>إضافة منتج جديد</h4>
         <input type="text" id="pName" placeholder="اسم المنتج">
@@ -23,6 +44,7 @@
         
         <select id="pCity">
             <option value="">اختر المحافظة</option>
+            <option value="جميع المحافظات">🌎 GROUP جميع المحافظات</option>
             <option value="القاهرة">🏢 محافظة القاهرة</option>
             <option value="الجيزة">🕌 محافظة الجيزة</option>
             <option value="الإسكندرية">🌊 محافظة الإسكندرية</option>
@@ -49,6 +71,16 @@
 <script>
     const URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
+    function showPayment() { document.getElementById('step1').style.display = 'none'; document.getElementById('step2').style.display = 'block'; }
+    
+    async function sendReceipt() {
+        const name = document.getElementById('mName').value;
+        const phone = document.getElementById('mPhone').value;
+        const plan = document.getElementById('mPlan').value;
+        await fetch(`${URL}?action=saveMerchantRequest&name=${name}&phone=${phone}&plan=${plan}`);
+        window.open(`https://wa.me/201150402031?text=مرحباً، أنا ${name}، قمت بالدفع لباقة ${plan}.`);
+    }
+
     async function saveProduct() {
         const file = document.getElementById('pImage').files[0];
         if(!file) return alert("يرجى اختيار صورة");
@@ -65,11 +97,7 @@
             };
             const res = await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
             const result = await res.json();
-            if(result.success) {
-                alert("تم حفظ المنتج بنجاح!");
-            } else {
-                alert("حدث خطأ أثناء الحفظ");
-            }
+            if(result.success) alert("تم حفظ المنتج بنجاح!");
         };
         reader.readAsDataURL(file);
     }
