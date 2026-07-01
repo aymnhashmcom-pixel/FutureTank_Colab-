@@ -4,81 +4,73 @@
     <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>قسم رجال الأعمال | Future Tank</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; margin: 0; padding: 20px; direction: rtl; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; padding: 20px; direction: rtl; }
         .card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
-        h2, h3 { color: #0b6fc2; text-align: center; }
         input, select { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; }
-        button { width: 100%; padding: 16px; background: #28a745; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top: 10px; }
-        .pay-btn { display: block; width: 100%; padding: 16px; margin: 12px 0; color: white; border-radius: 12px; text-decoration: none; font-weight: bold; text-align: center; }
-        .plan-sub { font-size: 0.85em; color: #666; font-weight: normal; }
+        button { width: 100%; padding: 16px; background: #28a745; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; }
     </style>
 </head>
 <body>
 
+<!-- قسم الاشتراك -->
 <div id="step1" class="card">
     <h2>💼 انضم لشركاء النجاح</h2>
     <input type="text" id="mName" placeholder="اسمك الكريم">
     <input type="text" id="mPhone" placeholder="رقم الهاتف">
     <select id="mPlan">
-        <option value="باقة الأساس">باقة FutureTank <span class="plan-sub">محافظة واحدة - 500ج</span></option>
-        <option value="باقة النمو">باقة FutureTank <span class="plan-sub">GROUP جميع المحافظات - 1000ج</span></option>
+        <option value="محافظة واحدة">باقة FutureTank - محافظة واحدة - 500ج</option>
+        <option value="جميع المحافظات">باقة FutureTank - جميع المحافظات - 1000ج</option>
     </select>
     <button style="background:#0b6fc2;" onclick="showPayment()">عرض خيارات الدفع</button>
 </div>
 
-<div id="step2" class="card" style="display:none;">
-    <h3>💳 خيارات الدفع</h3>
-    <a href="https://ipn.eg/S/aymnhashmebrahem/instapay/0fNr5K" class="pay-btn" style="background:#673ab7;">دفع عبر إنستا باي</a>
-    <a href="https://flous.page.link/bT9z" class="pay-btn" style="background:#e91e63;">دفع عبر اتصالات كاش</a>
-    <button onclick="sendReceipt()">💬 إرسال إثبات الدفع للواتساب</button>
+<!-- قسم الدخول -->
+<div id="loginSection" class="card">
+    <h2>🔑 تسجيل دخول لوحة التحكم</h2>
+    <input type="text" id="loginPhone" placeholder="رقم الهاتف">
+    <input type="password" id="loginCode" placeholder="كود الدخول">
+    <button style="background:#0b6fc2;" onclick="loginMerchant()">دخول</button>
 </div>
 
-<div class="card">
+<!-- لوحة التحكم (مخفية) -->
+<div id="mDashboard" class="card" style="display:none;">
     <h2 style="color:#28a745;">💼 لوحة تحكم رجال الأعمال</h2>
-    <div id="mDashboard">
-        <h4>إضافة منتج جديد</h4>
-        <input type="text" id="pName" placeholder="اسم المنتج">
-        <input type="text" id="pDesc" placeholder="الوصف">
-        <input type="number" id="pPrice" placeholder="السعر">
-        <input type="text" id="pWhatsapp" placeholder="رقم واتساب التاجر">
-        
-        <select id="pCity">
-            <option value="">اختر المحافظة</option>
-            <option value="جميع المحافظات">🌎 GROUP جميع المحافظات</option>
-            <option value="القاهرة">🏢 محافظة القاهرة</option>
-            <option value="الجيزة">🕌 محافظة الجيزة</option>
-            <option value="الإسكندرية">🌊 محافظة الإسكندرية</option>
-            <option value="القليوبية">🌾 محافظة القليوبية</option>
-            <option value="الشرقية">🐎 محافظة الشرقية</option>
-            <option value="الدقهلية">🌴 محافظة الدقهلية</option>
-            <option value="الغربية">🏙️ محافظة الغربية</option>
-        </select>
-        
-        <select id="pCategory">
-            <option value="">اختر القسم</option>
-            <option value="ملابس وأزياء">👕 ملابس وأزياء</option>
-            <option value="ماركت ومواد غذائية">🏪 ماركت ومواد غذائية</option>
-            <option value="عقارات وشقق">🏠 عقارات وشقق</option>
-            <option value="سيارات ومواصلات">🚗 سيارات ومواصلات</option>
-            <option value="خدمات متنوعة">🛠️ خدمات متنوعة</option>
-        </select>
-        
-        <input type="file" id="pImage">
-        <button onclick="saveProduct()">حفظ المنتج</button>
-    </div>
+    <h4>إضافة منتج جديد</h4>
+    <input type="text" id="pName" placeholder="اسم المنتج">
+    <input type="text" id="pDesc" placeholder="الوصف">
+    <input type="number" id="pPrice" placeholder="السعر">
+    <input type="text" id="pWhatsapp" placeholder="رقم واتساب التاجر">
+    
+    <select id="pCity">
+        <option value="">اختر المحافظة</option>
+        <option value="جميع المحافظات">🌎 جميع المحافظات</option>
+        <option value="القاهرة">🏢 القاهرة</option>
+        <option value="الجيزة">🕌 الجيزة</option>
+        <option value="الإسكندرية">🌊 الإسكندرية</option>
+    </select>
+    
+    <select id="pCategory">
+        <option value="">اختر القسم</option>
+        <option value="ملابس وأزياء">👕 ملابس وأزياء</option>
+        <option value="خدمات متنوعة">🛠️ خدمات متنوعة</option>
+    </select>
+    
+    <input type="file" id="pImage">
+    <button onclick="saveProduct()">حفظ المنتج</button>
 </div>
 
 <script>
     const URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-    function showPayment() { document.getElementById('step1').style.display = 'none'; document.getElementById('step2').style.display = 'block'; }
-    
-    async function sendReceipt() {
-        const name = document.getElementById('mName').value;
-        const phone = document.getElementById('mPhone').value;
-        const plan = document.getElementById('mPlan').value;
-        await fetch(`${URL}?action=saveMerchantRequest&name=${name}&phone=${phone}&plan=${plan}`);
-        window.open(`https://wa.me/201150402031?text=مرحباً، أنا ${name}، قمت بالدفع لباقة ${plan}.`);
+    async function loginMerchant() {
+        const phone = document.getElementById("loginPhone").value;
+        const code = document.getElementById("loginCode").value;
+        const res = await fetch(`${URL}?action=merchantLogin&phone=${phone}&code=${code}`);
+        const data = await res.json();
+        if(data.success) {
+            document.getElementById('mDashboard').style.display = 'block';
+            document.getElementById('loginSection').style.display = 'none';
+        } else { alert("بيانات الدخول غير صحيحة"); }
     }
 
     async function saveProduct() {
@@ -96,8 +88,7 @@
                 image: e.target.result
             };
             const res = await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
-            const result = await res.json();
-            if(result.success) alert("تم حفظ المنتج بنجاح!");
+            alert("تم حفظ المنتج بنجاح!");
         };
         reader.readAsDataURL(file);
     }
