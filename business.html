@@ -12,7 +12,6 @@
 </head>
 <body>
 
-<!-- قسم الاشتراك -->
 <div id="step1" class="card">
     <h2>💼 انضم لشركاء النجاح</h2>
     <input type="text" id="mName" placeholder="اسمك الكريم">
@@ -24,7 +23,6 @@
     <button style="background:#0b6fc2;" onclick="showPayment()">عرض خيارات الدفع</button>
 </div>
 
-<!-- قسم الدخول -->
 <div id="loginSection" class="card">
     <h2>🔑 تسجيل دخول لوحة التحكم</h2>
     <input type="text" id="loginPhone" placeholder="رقم الهاتف">
@@ -32,7 +30,6 @@
     <button style="background:#0b6fc2;" onclick="loginMerchant()">دخول</button>
 </div>
 
-<!-- لوحة التحكم (مخفية) -->
 <div id="mDashboard" class="card" style="display:none;">
     <h2 style="color:#28a745;">💼 لوحة تحكم رجال الأعمال</h2>
     <h4>إضافة منتج جديد</h4>
@@ -40,6 +37,7 @@
     <input type="text" id="pDesc" placeholder="الوصف">
     <input type="number" id="pPrice" placeholder="السعر">
     <input type="text" id="pWhatsapp" placeholder="رقم واتساب التاجر">
+    <input type="text" id="pImageUrl" placeholder="رابط صورة المنتج (URL)">
     
     <select id="pCity">
         <option value="">اختر المحافظة</option>
@@ -55,7 +53,6 @@
         <option value="خدمات متنوعة">🛠️ خدمات متنوعة</option>
     </select>
     
-    <input type="file" id="pImage">
     <button onclick="saveProduct()">حفظ المنتج</button>
 </div>
 
@@ -74,23 +71,17 @@
     }
 
     async function saveProduct() {
-        const file = document.getElementById('pImage').files[0];
-        if(!file) return alert("يرجى اختيار صورة");
-        const reader = new FileReader();
-        reader.onload = async function(e) {
-            const data = {
-                name: document.getElementById('pName').value,
-                desc: document.getElementById('pDesc').value,
-                price: document.getElementById('pPrice').value,
-                whatsapp: document.getElementById('pWhatsapp').value,
-                city: document.getElementById('pCity').value,
-                category: document.getElementById('pCategory').value,
-                image: e.target.result
-            };
-            const res = await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
-            alert("تم حفظ المنتج بنجاح!");
+        const data = {
+            name: document.getElementById('pName').value,
+            desc: document.getElementById('pDesc').value,
+            price: document.getElementById('pPrice').value,
+            whatsapp: document.getElementById('pWhatsapp').value,
+            city: document.getElementById('pCity').value,
+            category: document.getElementById('pCategory').value,
+            imageUrl: document.getElementById('pImageUrl').value // إرسال الرابط بدلاً من الصورة
         };
-        reader.readAsDataURL(file);
+        const res = await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
+        alert("تم حفظ المنتج بنجاح!");
     }
 </script>
 </body>
