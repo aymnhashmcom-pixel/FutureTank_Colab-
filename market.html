@@ -1,75 +1,37 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ماركت هرم سيتي وحدائق أكتوبر</title>
-<style>
-body{ font-family:Tahoma, sans-serif; background:#f4f7fb; padding:20px; margin:0; direction: rtl; }
-h1 { color: #0b6fc2; text-align: center; font-size: 24px; margin-bottom: 5px; }
-.sub-title { text-align: center; color: #666; margin-bottom: 25px; font-size: 14px; }
-.products-container { max-width: 600px; margin: 0 auto; }
-.card{ background:#fff; padding:15px; border-radius:18px; margin-bottom:20px; box-shadow:0 4px 14px rgba(0,0,0,.08); border: 1px solid #eaeaea; }
-img{ width:100%; height:220px; object-fit:cover; border-radius:14px; }
-.product-title { font-size: 18px; color: #333; margin: 12px 0 5px 0; }
-.merchant-name { color:#777; font-size:13px; margin: 0 0 10px 0; }
-.price { color: #e67e22; font-size: 16px; margin: 10px 0; }
-.desc { color: #555; font-size: 14px; line-height: 1.6; }
-.btn{ display:block; background:#25D366; color:#fff; padding:14px; text-align:center; border-radius:12px; text-decoration:none; margin-top:15px; font-weight:bold; transition: 0.3s; }
-.btn:hover { opacity: 0.9; }
-.error-msg { text-align: center; color: #d32f2f; padding: 20px; font-weight: bold; }
-.loading { text-align: center; color: #0b6fc2; padding: 20px; font-weight: bold; }
-</style>
-</head>
-<body>
-
-<h1>🛒 ماركت هرم سيتي وحدائق أكتوبر</h1>
-<p class="sub-title">عروض تجار المحلات والسوبرماركت واللحوم والصيدليات الحية</p>
-
-<div class="products-container" id="products">
-  <div class="loading">⏳ جاري استدعاء السلع والمتاجر المفتوحة بالمنطقة...</div>
-</div>
-
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 
-async function loadProducts(){
+async function loadProducts(city = "القاهرة"){ // يمكنك تمرير اسم المحافظة هنا
   const box = document.getElementById("products");
+  box.innerHTML = `<div class="loading">⏳ جاري تحميل العروض في ${city}...</div>`;
   try {
-    // إرسال الأكشن المحدث لـ 9.5 لتصفية السلع الخاصة بحدائق أكتوبر والماركت
-    const targetURL = `${API_URL}?action=getProductsByLocation&city=${encodeURIComponent("حدائق أكتوبر")}&subCat=${encodeURIComponent("ماركت هرم سيتي")}`;
-    
-    const res = await fetch(targetURL);
+    const res = await fetch(`${API_URL}?action=getProductsByLocation&city=${encodeURIComponent(city)}`);
     const data = await res.json();
     
     if(!data.success || !data.products || data.products.length === 0){
-      box.innerHTML = `<div class="card" style="text-align:center; color:#666;">لا توجد سلع معروضة حالياً لهرم سيتي وحدائق أكتوبر</div>`;
+      box.innerHTML = `<div class="card" style="text-align:center; color:#666;">لا توجد سلع معروضة حالياً في ${city}</div>`;
       return;
     }
     
     box.innerHTML = "";
     for(const p of data.products){
       const phone = String(p.whatsapp || "201150402031").replace(/\D/g,'');
-      const msg = encodeURIComponent("مرحباً يا تاجر، أرغب في شراء السلعة التالية من ماركت هرم سيتي: " + p.name);
+      const msg = encodeURIComponent("مرحباً يا تاجر، أرغب في شراء: " + p.name);
       
       box.innerHTML += `
         <div class="card">
           <img src="${p.image || 'https://via.placeholder.com/220'}" alt="${p.name}">
           <h2 class="product-title">${p.name}</h2>
-          <p class="merchant-name">🏬 المتجر العارض: ${p.merchant || 'تاجر محلي'}</p>
+          <p class="merchant-name">🏬 القسم: ${p.category}</p>
           <p class="price">💰 <b>${p.price} جنيه</b></p>
-          <p class="desc">${p.description || 'لا يوجد وصف متاح للسلعة'}</p>
+          <p class="desc">${p.desc}</p>
           <a class="btn" href="https://wa.me/${phone}?text=${msg}" target="_blank">📞 طلب السلعة وتوصيل للمنزل</a>
         </div>
       `;
     }
   } catch(e) {
-    console.error("Fetch Error:", e);
-    box.innerHTML = `<div class="error-msg">❌ خطأ في تحميل بيانات الماركت، يرجى المحاولة لاحقاً.</div>`;
+    box.innerHTML = `<div class="error-msg">❌ خطأ في تحميل البيانات.</div>`;
   }
 }
-
-loadProducts();
+loadProducts(); // استدعاء تلقائي
 </script>
-</body>
-</html>
