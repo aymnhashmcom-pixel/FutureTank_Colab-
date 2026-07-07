@@ -20,7 +20,7 @@
         <option value="محافظة واحدة">باقة FutureTank - محافظة واحدة - 500ج</option>
         <option value="جميع المحافظات">باقة FutureTank - جميع المحافظات - 1000ج</option>
     </select>
-    <button style="background:#0b6fc2;" onclick="showPayment()">عرض خيارات الدفع</button>
+    <button style="background:#0b6fc2;" onclick="alert('يرجى التواصل مع الإدارة للتفعيل')">عرض خيارات الدفع</button>
 </div>
 
 <div id="loginSection" class="card">
@@ -42,30 +42,30 @@
     <select id="pCity">
         <option value="">اختر المحافظة</option>
         <option value="جميع المحافظات">🌎 جميع المحافظات</option>
-        <option value="القاهرة">🏢 القاهرة</option>
-        <option value="الجيزة">🕌 الجيزة</option>
-        <option value="الإسكندرية">🌊 الإسكندرية</option>
+        <option value="القاهرة">القاهرة</option>
+        <option value="الجيزة">الجيزة</option>
+        <option value="الإسكندرية">الإسكندرية</option>
+        <option value="سوهاج">سوهاج</option>
+        <option value="أسيوط">أسيوط</option>
+        <option value="المنيا">المنيا</option>
+        <option value="قنا">قنا</option>
+        <option value="الأقصر">الأقصر</option>
+        <option value="أسوان">أسوان</option>
+        <option value="البحر الأحمر">البحر الأحمر</option>
+        <option value="القليوبية">القليوبية</option>
+        <option value="الشرقية">الشرقية</option>
+        <option value="الدقهلية">الدقهلية</option>
+        <option value="الغربية">الغربية</option>
     </select>
     
-    <<select id="pCity">
-    <option value="">اختر المحافظة</option>
-    <option value="القاهرة">القاهرة</option><option value="الجيزة">الجيزة</option>
-    <option value="الإسكندرية">الإسكندرية</option><option value="سوهاج">سوهاج</option>
-    <option value="أسيوط">أسيوط</option><option value="المنيا">المنيا</option>
-    <option value="قنا">قنا</option><option value="الأقصر">الأقصر</option>
-    <option value="أسوان">أسوان</option><option value="البحر الأحمر">البحر الأحمر</option>
-    <option value="القليوبية">القليوبية</option><option value="الشرقية">الشرقية</option>
-    <option value="الدقهلية">الدقهلية</option><option value="الغربية">الغربية</option>
-</select>
-
-<select id="pCategory">
-    <option value="ملابس وأزياء">👕 ملابس وأزياء</option>
-    <option value="خدمات متنوعة">🛠️ خدمات متنوعة</option>
-    <option value="مواد غذائية">🛒 مواد غذائية</option>
-    <option value="إلكترونيات">📱 إلكترونيات</option>
-    <option value="أدوات منزلية">🏠 أدوات منزلية</option>
-</select>
-
+    <select id="pCategory">
+        <option value="">اختر القسم</option>
+        <option value="ملابس وأزياء">👕 ملابس وأزياء</option>
+        <option value="خدمات متنوعة">🛠️ خدمات متنوعة</option>
+        <option value="مواد غذائية">🛒 مواد غذائية</option>
+        <option value="إلكترونيات">📱 إلكترونيات</option>
+        <option value="أدوات منزلية">🏠 أدوات منزلية</option>
+    </select>
     
     <button onclick="saveProduct()">حفظ المنتج</button>
 </div>
@@ -92,7 +92,7 @@
             whatsapp: document.getElementById('pWhatsapp').value,
             city: document.getElementById('pCity').value,
             category: document.getElementById('pCategory').value,
-            imageUrl: document.getElementById('pImageUrl').value // إرسال الرابط بدلاً من الصورة
+            imageUrl: document.getElementById('pImageUrl').value
         };
         const res = await fetch(`${URL}?action=saveProduct`, { method: "POST", body: JSON.stringify(data) });
         alert("تم حفظ المنتج بنجاح!");
