@@ -4,45 +4,49 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ماركت محافظات مصر</title>
 <style>
-body{ font-family:Tahoma, sans-serif; background:#f4f7fb; padding:20px; direction: rtl; }
-.products-container { max-width: 600px; margin: 0 auto; }
-button { width: 100%; padding: 12px; margin: 5px 0; border: none; border-radius: 12px; background: #0b6fc2; color: white; font-weight: bold; cursor: pointer; }
-.card{ background:#fff; padding:15px; border-radius:18px; margin-bottom:20px; box-shadow:0 4px 14px rgba(0,0,0,.08); }
-img{ width:100%; height:220px; object-fit:cover; border-radius:14px; }
-.btn{ display:block; background:#25D366; color:#fff; padding:14px; text-align:center; border-radius:12px; text-decoration:none; margin-top:15px; font-weight:bold; }
+body{ font-family: Tahoma, sans-serif; background: #f4f7fb; padding: 20px; direction: rtl; }
+.btn-city { display: inline-block; width: 45%; margin: 5px; padding: 10px; background: #0b6fc2; color: white; border: none; border-radius: 10px; cursor: pointer; }
+.card{ background: white; padding: 15px; border-radius: 15px; margin-top: 15px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+img{ width: 100%; border-radius: 10px; }
 </style>
 </head>
 <body>
 <h1>🛒 ماركت محافظات مصر</h1>
-<div class="products-container" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;">
-    <button onclick="loadProducts('القاهرة')">🏢 القاهرة</button>
-    <button onclick="loadProducts('الجيزة')">🕌 الجيزة</button>
-    <button onclick="loadProducts('الإسكندرية')">🌊 الإسكندرية</button>
-    <button onclick="loadProducts('سوهاج')">🌾 سوهاج</button>
-    <button onclick="loadProducts('أسيوط')">🏛️ أسيوط</button>
-    <button onclick="loadProducts('المنيا')">🌅 المنيا</button>
-    <button onclick="loadProducts('قنا')">🏺 قنا</button>
-    <button onclick="loadProducts('الأقصر')">☀️ الأقصر</button>
-    <button onclick="loadProducts('أسوان')">🌴 أسوان</button>
-    <button onclick="loadProducts('البحر الأحمر')">🏖️ البحر الأحمر</button>
-    <button onclick="loadProducts('القليوبية')">🏙️ القليوبية</button>
-    <button onclick="loadProducts('الشرقية')">🐎 الشرقية</button>
-    <button onclick="loadProducts('الدقهلية')">🛶 الدقهلية</button>
-    <button onclick="loadProducts('الغربية')">🌇 الغربية</button>
+<div>
+    <button class="btn-city" onclick="loadProducts('القاهرة')">القاهرة</button>
+    <button class="btn-city" onclick="loadProducts('الجيزة')">الجيزة</button>
+    <button class="btn-city" onclick="loadProducts('الإسكندرية')">الإسكندرية</button>
+    <button class="btn-city" onclick="loadProducts('سوهاج')">سوهاج</button>
+    <button class="btn-city" onclick="loadProducts('أسيوط')">أسيوط</button>
+    <button class="btn-city" onclick="loadProducts('المنيا')">المنيا</button>
 </div>
-<div class="products-container" id="products"></div>
+<div id="products"></div>
+
 <script>
 const API_URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
+
 async function loadProducts(city){
   const box = document.getElementById("products");
-  box.innerHTML = `<div style="text-align:center; padding:20px;">⏳ جاري تحميل منتجات ${city}...</div>`;
+  box.innerHTML = "⏳ جاري التحميل...";
   const res = await fetch(`${API_URL}?action=getProductsByLocation&city=${encodeURIComponent(city)}`);
   const data = await res.json();
-  if(!data.success || data.products.length === 0) { box.innerHTML = `<p style="text-align:center;">لا توجد سلع حالياً في ${city}</p>`; return; }
-  box.innerHTML = "";
-  for(const p of data.products){
-    box.innerHTML += `<div class="card"><img src="${p.image}"><h2>${p.name}</h2><p>💰 ${p.price} ج</p><a class="btn" href="https://wa.me/${String(p.whatsapp).replace(/\D/g,'')}">طلب السلعة</a></div>`;
+  
+  if(!data.success || data.products.length === 0) {
+    box.innerHTML = `<p style="text-align:center;">لا توجد منتجات في ${city} حالياً</p>`;
+    return;
   }
+  
+  box.innerHTML = "";
+  data.products.forEach(p => {
+    box.innerHTML += `
+      <div class="card">
+        <img src="${p.image}" style="width:100px;">
+        <h3>${p.name}</h3>
+        <p>💰 ${p.price} جنيه</p>
+        <p>القسم: ${p.category}</p>
+        <a href="https://wa.me/${String(p.whatsapp).replace(/\D/g,'')}">📞 طلب المنتج</a>
+      </div>`;
+  });
 }
 </script>
 </body>
