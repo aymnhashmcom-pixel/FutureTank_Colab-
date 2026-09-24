@@ -5,16 +5,14 @@
 <title>قسم رجال الأعمال | Future Tank</title>
 <style>
 body { font-family: 'Segoe UI', Tahoma, sans-serif; background: #f0f2f5; padding: 20px; direction: rtl; }
-.card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; display:none; }
-.card.active{ display:block; }
+.card { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.08); margin-bottom: 20px; }
 input, select { width: 100%; padding: 14px; margin: 10px 0; border: 1px solid #ddd; border-radius: 12px; box-sizing: border-box; }
 button { width: 100%; padding: 16px; background: #28a745; color: white; border: none; border-radius: 12px; font-weight: bold; cursor: pointer; margin-top:10px;}
 .pay-number{ font-size:22px; font-weight:bold; color:#0b6fc2; direction:ltr; text-align:center; margin:10px 0;}
-.notice{ background:#fff8e1; padding:15px; border-radius:12px; font-size:14px; line-height:1.9; border:1px solid #ffe082; margin-top:15px;}
 </style>
 </head>
 <body>
-<div id="step1" class="card active">
+<div id="step1" class="card">
 <h2>💼 انضم لشركاء النجاح</h2>
 <input type="text" id="mName" placeholder="اسمك الكريم">
 <input type="text" id="mPhone" placeholder="رقم الهاتف">
@@ -24,29 +22,28 @@ button { width: 100%; padding: 16px; background: #28a745; color: white; border: 
 </select>
 <button style="background:#0b6fc2;" onclick="goToPayment()">عرض خيارات الدفع</button>
 </div>
-<div id="step2" class="card">
+<div id="step2" class="card" style="display:none;">
 <h2>💳 إتمام الاشتراك</h2>
-<p>حول المبلغ على:</p>
+<p style="text-align:center">حول المبلغ على:</p>
 <div class="pay-number">01150402031</div>
 <p style="text-align:center">📲 اتصالات كاش / 💳 انستا باي</p>
-<img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=01150402031" style="display:block;margin:15px auto;border-radius:12px;border:1px solid #ddd;padding:8px;">
-<div class="notice">⚠️ بعد التحويل اضغط زر تأكيد الدفع وسيتم إرسال بياناتك للإدارة للمراجعة والتفعيل خلال دقائق.</div>
+<div style="text-align:center"><img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=01150402031" style="border:1px solid #ddd;padding:8px;border-radius:12px;"></div>
+<div style="background:#fff8e1;padding:15px;border-radius:12px;border:1px solid #ffe082;margin-top:15px;font-size:14px;">⚠️ بعد التحويل اضغط تأكيد الدفع وسيتم إرسال بياناتك للإدارة للمراجعة.</div>
 <button style="background:#25D366;" onclick="confirmPayment()">✅ تأكيد الدفع وإرسال الطلب</button>
 <button style="background:#777;" onclick="backToStep1()">رجوع</button>
 </div>
-<div id="step3" class="card">
+<div id="step3" class="card" style="display:none;">
 <h2>⏳ طلبك قيد المراجعة</h2>
-<p>تم استلام طلبك بنجاح. سيقوم الأدمن بمراجعة التحويل وتفعيل حسابك. ستصلك رسالة واتساب عند التفعيل.</p>
-<p>يمكنك الآن محاولة تسجيل الدخول بعد التفعيل.</p>
+<p>تم استلام طلبك بنجاح. سيقوم الأدمن بمراجعة التحويل وتفعيل حسابك.</p>
 </div>
-<div id="loginSection" class="card active">
+<div id="loginSection" class="card">
 <h2>🔑 تسجيل دخول لوحة التحكم</h2>
 <input type="text" id="loginPhone" placeholder="رقم الهاتف">
 <input type="password" id="loginCode" placeholder="كود الدخول (يرسل لك بعد التفعيل)">
 <button style="background:#0b6fc2;" onclick="loginMerchant()">دخول</button>
 <p id="loginMsg" style="color:red;text-align:center;margin-top:10px;"></p>
 </div>
-<div id="mDashboard" class="card">
+<div id="mDashboard" class="card" style="display:none;">
 <h2 style="color:#28a745;">💼 لوحة تحكم التاجر</h2>
 <p id="expiryInfo" style="background:#e8f5e9;padding:10px;border-radius:10px;text-align:center;"></p>
 <h4>إضافة منتج جديد</h4>
@@ -73,13 +70,13 @@ button { width: 100%; padding: 16px; background: #28a745; color: white; border: 
 <script>
 const URL = "https://script.google.com/macros/s/AKfycbyt89cTue2f-c1Fk1VM_2KEgBW0fhFXFyq6mckjRx3mCjWZ45TdNk1vZQIEVLuFDAA/exec";
 function goToPayment(){
-  if(!mName.value || !mPhone.value) return alert("أدخل الاسم ورقم الهاتف أولاً");
-  localStorage.setItem("ft_mName", mName.value);
-  localStorage.setItem("ft_mPhone", mPhone.value);
-  localStorage.setItem("ft_mPlan", mPlan.value);
-  document.getElementById("step1").classList.remove("active");
-  document.getElementById("step2").classList.add("active");
+  const name = document.getElementById("mName").value;
+  const phone = document.getElementById("mPhone").value;
+  if(!name || !phone) return alert("أدخل الاسم ورقم الهاتف أولاً");
+  localStorage.setItem("ft_mName", name);
+  localStorage.setItem("ft_mPhone", phone);
+  localStorage.setItem("ft_mPlan", document.getElementById("mPlan").value);
+  document.getElementById("step1").style.display='none';
+  document.getElementById("step2").style.display='block';
 }
-function backToStep1(){
-  document.getElementById("step2").classList.remove("active");
-  document.getElementById("step1").classList.ad
+f
